@@ -51,4 +51,18 @@ const profileSchema = new Schema(
   { timestamps: true }
 );
 
+profileSchema.methods.incrementViews = async function () {
+  this.views += 1;
+  await this.save();
+};
+
+profileSchema.methods.updateSocials = async function (socials: Partial<typeof this.socials>) {
+  Object.assign(this.socials, socials);
+  await this.save();
+};
+
+profileSchema.statics.findByUsername = function (username: string) {
+  return this.findOne({ username });
+};
+
 export default mongoose.model("Profile", profileSchema);

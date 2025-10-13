@@ -15,4 +15,14 @@ const linkSchema = new Schema(
   { timestamps: true }
 );
 
+linkSchema.statics.findByProfile = function (profileId: string) {
+  return this.find({ profile: profileId });
+};
+
+linkSchema.methods.updateLink = async function (title?: string, url?: string) {
+  if (title) this.title = title;
+  if (url) this.url = url;
+  await this.save();
+};
+
 export default mongoose.model("Link", linkSchema);
