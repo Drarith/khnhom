@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import validator from "validator";
+import type { IUser, IUserModel } from "./types/userModel.types.js";
 
 const { Schema } = mongoose;
 
@@ -17,6 +18,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
+      minlength: 6,
     },
     googleId: {
       type: String,
@@ -78,4 +80,5 @@ userSchema.statics.findByEmail = async function (email: string) {
   return this.findOne({ email });
 };
 
-export default mongoose.model("User", userSchema);
+const User = mongoose.model<IUser, IUserModel>("User", userSchema);
+export default User;

@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
-const linkSchema = new Schema(
+import type { ILink , ILinkModel} from "./types/linkModel.types.js";
+
+const linkSchema = new Schema<ILink>(
   {
     profile: {
       type: Schema.Types.ObjectId,
@@ -25,4 +27,6 @@ linkSchema.methods.updateLink = async function (title?: string, url?: string) {
   await this.save();
 };
 
-export default mongoose.model("Link", linkSchema);
+const Link = mongoose.model<ILink, ILinkModel>("Link", linkSchema)
+
+export default Link

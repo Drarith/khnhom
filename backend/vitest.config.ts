@@ -1,0 +1,14 @@
+/// <reference types="vitest" />
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  test: {
+    environment: "node",
+    globals: true,
+    setupFiles: [],
+    testTimeout: 30000,
+  },
+  esbuild: {
+    target: "node18",
+  },
+});

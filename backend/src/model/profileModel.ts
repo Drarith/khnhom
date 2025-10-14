@@ -1,4 +1,9 @@
 import mongoose from "mongoose";
+import type {
+  IProfile,
+  IProfileModel,
+  ISocials,
+} from "./types/profileModel.types.js";
 
 const { Schema } = mongoose;
 
@@ -14,10 +19,16 @@ const profileSchema = new Schema(
       required: true,
       unique: true,
       trim: true,
+      maxlength: 30,
+      minlength: 3,
+      match: [/^[a-zA-Z0-9_]+$/, "is invalid"],
     },
     displayName: {
       type: String,
       required: true,
+      trim: true,
+      maxlength: 30,
+      minlength: 3,
     },
     bio: {
       type: String,
@@ -56,7 +67,9 @@ profileSchema.methods.incrementViews = async function () {
   await this.save();
 };
 
-profileSchema.methods.updateSocials = async function (socials: Partial<typeof this.socials>) {
+profileSchema.methods.updateSocials = async function (
+  socials: Partial<ISocials>
+) {
   // Object.assign will copy the properties from socials to this.socials and overwrite existing ones
   Object.assign(this.socials, socials);
   await this.save();
@@ -66,4 +79,8 @@ profileSchema.statics.findByUsername = function (username: string) {
   return this.findOne({ username });
 };
 
-export default mongoose.model("Profile", profileSchema);
+const Profile = mongoose.model<IProfile, IProfileModel>(
+  "Profile",
+  profileSchema
+);
+export default Profile;
