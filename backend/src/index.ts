@@ -33,7 +33,7 @@ app.get('/', async (req, res) => {
   res.send('Hello from Express + TypeScript!');
 });
 
-// Start the server
+
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
