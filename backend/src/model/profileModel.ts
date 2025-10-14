@@ -57,6 +57,7 @@ profileSchema.methods.incrementViews = async function () {
 };
 
 profileSchema.methods.updateSocials = async function (socials: Partial<typeof this.socials>) {
+  // Object.assign will copy the properties from socials to this.socials and overwrite existing ones
   Object.assign(this.socials, socials);
   await this.save();
 };
