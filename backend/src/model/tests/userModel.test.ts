@@ -10,11 +10,11 @@ import {
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import User from "../userModel.js";
-import type { IUser } from "../types/userModel.types.js";
+import type { IUser } from "../types-for-models/userModel.types.js";
 
 describe("UserModel", () => {
   let mongoServer: MongoMemoryServer;
-  let user:IUser
+  let user: IUser;
 
   beforeAll(async () => {
     // Start in-memory MongoDB instance
@@ -42,7 +42,6 @@ describe("UserModel", () => {
   });
 
   describe("User Schema Validation", () => {
-    
     it("should create a user with valid email and password", async () => {
       const userData = {
         email: "test@example.com",
@@ -112,7 +111,7 @@ describe("UserModel", () => {
       await user.save();
 
       // Try to create second user with same email
-      const user2:IUser = new User(userData);
+      const user2: IUser = new User(userData);
 
       await expect(user2.save()).rejects.toThrow();
     });
@@ -168,11 +167,11 @@ describe("UserModel", () => {
       };
 
       // Create first user
-      const user1:IUser = new User(userData1);
+      const user1: IUser = new User(userData1);
       await user1.save();
 
       // Try to create second user with same googleId
-      const user2:IUser = new User(userData2);
+      const user2: IUser = new User(userData2);
 
       await expect(user2.save()).rejects.toThrow();
     });

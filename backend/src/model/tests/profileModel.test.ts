@@ -11,9 +11,12 @@ import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import Profile from "../profileModel.js";
 import User from "../userModel.js";
-import type { IProfile, ISocials } from "../types/profileModel.types.js";
-import type { IUser } from "../types/userModel.types.js";
-import type { ProfileCreationInput } from "../../types/general.types.js";
+import type {
+  IProfile,
+  ISocials,
+} from "../types-for-models/profileModel.types.js";
+import type { IUser } from "../types-for-models/userModel.types.js";
+import type { ProfileCreationInput } from "../../types/user-input.types.js";
 
 describe("ProfileModel", () => {
   let mongoServer: MongoMemoryServer;

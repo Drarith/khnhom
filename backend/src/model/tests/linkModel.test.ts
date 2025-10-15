@@ -12,13 +12,15 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import Link from "../linkModel.js";
 import Profile from "../profileModel.js";
 import User from "../userModel.js";
-import type { IUser } from "../types/userModel.types.js";
-import type { ProfileCreationInput } from "../../types/general.types.js";
+import type { IUser } from "../types-for-models/userModel.types.js";
+import type { ProfileCreationInput } from "../../types/user-input.types.js";
+import type { IProfile } from "../types-for-models/profileModel.types.js";
 
 describe("LinkModel", () => {
   let mongoServer: MongoMemoryServer;
   let testUser: IUser;
-  let testProfile: ProfileCreationInput;
+  let testProfile: IProfile;
+  let testProfileData: ProfileCreationInput;
 
   beforeAll(async () => {
     // Start in-memory MongoDB instance
@@ -42,7 +44,7 @@ describe("LinkModel", () => {
 
     // Create a test user for profile tests
     testUser = await User.createUser("test@example.com", "password123");
-    testProfile = {
+    testProfileData = {
       user: testUser._id,
       username: "testuser",
       displayName: "Test User",
@@ -62,6 +64,7 @@ describe("LinkModel", () => {
       theme: "default",
       views: 0,
     };
+    testProfile = await Profile.createProfile(testProfileData);
   });
 
   afterEach(async () => {
@@ -106,6 +109,23 @@ describe("LinkModel", () => {
       const link = new Link(linkData);
 
       await expect(link.save()).rejects.toThrow();
+    });
+    
+    it("should create and save a valid link", async () => {
+      const linkData = {
+        title: "Test Link",
+        url: "https://example.com",
+        description: "A link for testing",
+        profile: testProfile._id,
+      };
+
+      const link = await Link.createLink(linkData);
+
+      expect(link).toBeDefined();
+      expect(link.title).toBe(linkData.title);
+      expect(link.url).toBe(linkData.url);
+      expect(link.description).toBe(linkData.description);
+      expect(link.profile).toBe(linkData.profile);
     });
   });
 });

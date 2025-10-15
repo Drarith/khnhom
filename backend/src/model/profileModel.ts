@@ -3,11 +3,11 @@ import type {
   IProfile,
   IProfileModel,
   ISocials,
-} from "./types/profileModel.types.js";
+} from "./types-for-models/profileModel.types.js";
 
 const { Schema } = mongoose;
 
-import type { ProfileCreationInput } from "../types/general.types.js";
+import type { ProfileCreationInput } from "../types/user-input.types.js";
 
 const profileSchema = new Schema(
   {
@@ -81,7 +81,9 @@ profileSchema.statics.findByUsername = function (username: string) {
   return this.findOne({ username });
 };
 
-profileSchema.statics.createProfile = async function ( profileData: ProfileCreationInput ) {
+profileSchema.statics.createProfile = async function (
+  profileData: ProfileCreationInput
+) {
   try {
     const profile = new this(profileData);
     await profile.save();

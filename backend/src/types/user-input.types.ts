@@ -26,3 +26,10 @@ export type ProfileCreationInput = {
   theme?: string;
   views?: number;
 };
+
+export type LinkCreationInput = {
+  profile: Types.ObjectId;
+  title: string;
+  url: string;
+  description?: string;
+};

@@ -1,6 +1,7 @@
 import { Document, Model, Types } from "mongoose";
 
 // Interface for the User document
+// Interface for the User document and model in case your dumbass forgets
 export interface IUser extends Document {
   _id: Types.ObjectId;
   email: string;

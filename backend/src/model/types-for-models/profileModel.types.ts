@@ -1,6 +1,7 @@
 import { Document, Model, Types } from "mongoose";
-import type { ProfileCreationInput } from "../../types/general.types.js";
+import type { ProfileCreationInput } from "../../types/user-input.types.js";
 
+// Interface for the Profile document and model in case your dumbass forgets
 // Interface for social media links
 export interface ISocials {
   facebook: string;
