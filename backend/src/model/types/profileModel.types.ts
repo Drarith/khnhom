@@ -1,4 +1,5 @@
 import { Document, Model, Types } from "mongoose";
+import type { ProfileCreationInput } from "../../types/general.types.js";
 
 // Interface for social media links
 export interface ISocials {
@@ -35,4 +36,5 @@ export interface IProfile extends Document {
 // Interface for the Profile model (static methods)
 export interface IProfileModel extends Model<IProfile> {
   findByUsername(username: string): Promise<IProfile | null>;
+  createProfile(profileData: ProfileCreationInput): Promise<IProfile>;
 }

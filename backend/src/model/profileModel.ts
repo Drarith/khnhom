@@ -7,6 +7,8 @@ import type {
 
 const { Schema } = mongoose;
 
+import type { ProfileCreationInput } from "../types/general.types.js";
+
 const profileSchema = new Schema(
   {
     user: {
@@ -77,6 +79,16 @@ profileSchema.methods.updateSocials = async function (
 
 profileSchema.statics.findByUsername = function (username: string) {
   return this.findOne({ username });
+};
+
+profileSchema.statics.createProfile = async function ( profileData: ProfileCreationInput ) {
+  try {
+    const profile = new this(profileData);
+    await profile.save();
+    return profile;
+  } catch (error) {
+    throw new Error("Error creating profile, " + error);
+  }
 };
 
 const Profile = mongoose.model<IProfile, IProfileModel>(

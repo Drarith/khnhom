@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 import type { Env } from "./types/myENV.js";
-import User from "./model/userModel.js";
 
 // Initialize the Express application
 const app = express();
@@ -31,6 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Define a simple route
 app.get("/", async (req, res) => {
+
   res.send("Hello from Express + TypeScript ");
 });
 

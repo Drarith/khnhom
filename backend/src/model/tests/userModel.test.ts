@@ -14,6 +14,7 @@ import type { IUser } from "../types/userModel.types.js";
 
 describe("UserModel", () => {
   let mongoServer: MongoMemoryServer;
+  let user:IUser
 
   beforeAll(async () => {
     // Start in-memory MongoDB instance
@@ -41,13 +42,14 @@ describe("UserModel", () => {
   });
 
   describe("User Schema Validation", () => {
+    
     it("should create a user with valid email and password", async () => {
       const userData = {
         email: "test@example.com",
         password: "password123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       const savedUser = await user.save();
 
       expect(savedUser.email).toBe("test@example.com");
@@ -62,7 +64,7 @@ describe("UserModel", () => {
         password: "password123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
 
       await expect(user.save()).rejects.toThrow();
     });
@@ -72,7 +74,7 @@ describe("UserModel", () => {
         email: "test@example.com",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
 
       await expect(user.save()).rejects.toThrow();
     });
@@ -83,7 +85,7 @@ describe("UserModel", () => {
         password: "password123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
 
       await expect(user.save()).rejects.toThrow();
     });
@@ -94,7 +96,7 @@ describe("UserModel", () => {
         password: "123", // Too short
       };
 
-      const user = new User(userData);
+      user = new User(userData);
 
       await expect(user.save()).rejects.toThrow();
     });
@@ -106,11 +108,11 @@ describe("UserModel", () => {
       };
 
       // Create first user
-      const user1 = new User(userData);
-      await user1.save();
+      user = new User(userData);
+      await user.save();
 
       // Try to create second user with same email
-      const user2 = new User(userData);
+      const user2:IUser = new User(userData);
 
       await expect(user2.save()).rejects.toThrow();
     });
@@ -121,7 +123,7 @@ describe("UserModel", () => {
         password: "password123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       const savedUser = await user.save();
 
       expect(savedUser.email).toBe("test@example.com");
@@ -133,7 +135,7 @@ describe("UserModel", () => {
         password: "password123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       const savedUser = await user.save();
 
       expect(savedUser.email).toBe("test@example.com");
@@ -146,7 +148,7 @@ describe("UserModel", () => {
         googleId: "google123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       const savedUser = await user.save();
 
       expect(savedUser.googleId).toBe("google123");
@@ -166,11 +168,11 @@ describe("UserModel", () => {
       };
 
       // Create first user
-      const user1 = new User(userData1);
+      const user1:IUser = new User(userData1);
       await user1.save();
 
       // Try to create second user with same googleId
-      const user2 = new User(userData2);
+      const user2:IUser = new User(userData2);
 
       await expect(user2.save()).rejects.toThrow();
     });
@@ -184,7 +186,7 @@ describe("UserModel", () => {
         password: plainPassword,
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       const savedUser = await user.save();
 
       expect(savedUser.password).not.toBe(plainPassword);
@@ -197,7 +199,7 @@ describe("UserModel", () => {
         password: "password123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       const savedUser = await user.save();
       const originalHashedPassword = savedUser.password;
 
@@ -214,7 +216,7 @@ describe("UserModel", () => {
         password: "password123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       const savedUser = await user.save();
       const originalHashedPassword = savedUser.password;
 
@@ -234,7 +236,7 @@ describe("UserModel", () => {
         password: plainPassword,
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       const savedUser = await user.save();
 
       const isMatch = await savedUser.comparePassword(plainPassword);
@@ -247,7 +249,7 @@ describe("UserModel", () => {
         password: "password123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       const savedUser = await user.save();
 
       const isMatch = await savedUser.comparePassword("wrongpassword");
@@ -260,7 +262,7 @@ describe("UserModel", () => {
       const email = "test@example.com";
       const password = "password123";
 
-      const user = await User.createUser(email, password);
+      user = await User.createUser(email, password);
 
       expect(user.email).toBe(email);
       expect(user.password).not.toBe(password); // Should be hashed
@@ -299,7 +301,7 @@ describe("UserModel", () => {
         googleId: "google123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       const savedUser = await user.save();
 
       const foundUser = await User.findByGoogleId("google123");
@@ -322,7 +324,7 @@ describe("UserModel", () => {
         password: "password123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       await user.save();
 
       const exists = await User.emailExists("test@example.com");
@@ -340,7 +342,7 @@ describe("UserModel", () => {
         password: "password123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       await user.save();
 
       const exists = await User.emailExists("TEST@EXAMPLE.COM");
@@ -355,7 +357,7 @@ describe("UserModel", () => {
         password: "password123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       const savedUser = await user.save();
       const originalPassword = savedUser.password;
 
@@ -381,7 +383,7 @@ describe("UserModel", () => {
         password: "password123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       const savedUser = await user.save();
 
       const foundUser = await User.findByEmail("test@example.com");
@@ -402,7 +404,7 @@ describe("UserModel", () => {
         password: "password123",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       await user.save();
 
       const foundUser = await User.findByEmail("TEST@EXAMPLE.COM");
@@ -418,7 +420,7 @@ describe("UserModel", () => {
       const password = "password123";
       const newPassword = "newpassword456";
 
-      const user = await User.createUser(email, password);
+      user = await User.createUser(email, password);
       expect(user.email).toBe(email);
 
       // Verify email exists
@@ -454,7 +456,7 @@ describe("UserModel", () => {
         googleId: "google123456",
       };
 
-      const user = new User(userData);
+      user = new User(userData);
       const savedUser = await user.save();
 
       // Find by googleId

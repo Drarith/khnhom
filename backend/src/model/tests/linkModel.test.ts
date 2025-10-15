@@ -13,10 +13,12 @@ import Link from "../linkModel.js";
 import Profile from "../profileModel.js";
 import User from "../userModel.js";
 import type { IUser } from "../types/userModel.types.js";
+import type { ProfileCreationInput } from "../../types/general.types.js";
 
 describe("LinkModel", () => {
   let mongoServer: MongoMemoryServer;
   let testUser: IUser;
+  let testProfile: ProfileCreationInput;
 
   beforeAll(async () => {
     // Start in-memory MongoDB instance
@@ -40,6 +42,26 @@ describe("LinkModel", () => {
 
     // Create a test user for profile tests
     testUser = await User.createUser("test@example.com", "password123");
+    testProfile = {
+      user: testUser._id,
+      username: "testuser",
+      displayName: "Test User",
+      bio: "This is a test user.",
+      profilePictureUrl: "",
+      paymentQrCodeUrl: "",
+      socials: {
+        facebook: "",
+        instagram: "",
+        telegram: "",
+        youtube: "",
+        linkedIn: "",
+        x: "",
+        tiktok: "",
+        github: "",
+      },
+      theme: "default",
+      views: 0,
+    };
   });
 
   afterEach(async () => {
