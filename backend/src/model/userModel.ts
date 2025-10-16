@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import type { IUser, IUserModel } from "./types-for-models/userModel.types.js";
+import type { I } from "vitest/dist/chunks/reporters.d.BFLkQcL6.js";
 
 const { Schema } = mongoose;
 
@@ -62,8 +63,36 @@ userSchema.statics.createUser = async function (
   }
 };
 
-userSchema.statics.findByGoogleId = async function (googleId: string) {
+userSchema.statics.createGoogleUser = async function (
+  email: string,
+  googleId: string
+) {
+  try {
+    const user = new this({ email, googleId });
+    await user.save();
+    return user;
+  } catch (error) {
+    console.log("Error creating Google user: ", error);
+    throw new Error("Error creating Google user: " + error);
+  }
+};
+
+userSchema.statics.findByGoogleId = async function (googleId: IUser["googleId"]) {
   return this.findOne({ googleId });
+};
+
+userSchema.statics.findOrCreate = async function (googleId: IUser["googleId"]) {
+  try {
+    let user = await this.findOne({ googleId });
+    if (!user) {
+      user = new this({ googleId });
+      await user.save();
+    }
+    return user;
+  } catch (error) {
+    console.log("Error finding or creating user: ", error);
+    throw new Error("Error finding or creating user: " + error);
+  }
 };
 
 userSchema.statics.emailExists = async function (email: string) {
@@ -79,6 +108,8 @@ userSchema.methods.updatePassword = async function (newPassword: string) {
 userSchema.statics.findByEmail = async function (email: string) {
   return this.findOne({ email });
 };
+
+
 
 const User = mongoose.model<IUser, IUserModel>("User", userSchema);
 export default User;
