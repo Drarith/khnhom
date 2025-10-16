@@ -9,14 +9,14 @@ import {
 } from "vitest";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import Profile from "../profileModel.js";
-import User from "../userModel.js";
+import Profile from "../../src/model/profileModel.js";
+import User from "../../src/model/userModel.js";
 import type {
   IProfile,
   ISocials,
-} from "../types-for-models/profileModel.types.js";
-import type { IUser } from "../types-for-models/userModel.types.js";
-import type { ProfileCreationInput } from "../../types/user-input.types.js";
+} from "../../src/model/types-for-models/profileModel.types.js";
+import type { IUser } from "../../src/model/types-for-models/userModel.types.js";
+import type { ProfileCreationInput } from "../../src/types/user-input.types.js";
 
 describe("ProfileModel", () => {
   let mongoServer: MongoMemoryServer;

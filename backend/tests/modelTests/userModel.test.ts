@@ -9,8 +9,8 @@ import {
 } from "vitest";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import User from "../userModel.js";
-import type { IUser } from "../types-for-models/userModel.types.js";
+import User from "../../src/model/userModel.js";
+import type { IUser } from "../../src/model/types-for-models/userModel.types.js";
 
 describe("UserModel", () => {
   let mongoServer: MongoMemoryServer;

@@ -9,12 +9,12 @@ import {
 } from "vitest";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import Link from "../linkModel.js";
-import Profile from "../profileModel.js";
-import User from "../userModel.js";
-import type { IUser } from "../types-for-models/userModel.types.js";
-import type { ProfileCreationInput } from "../../types/user-input.types.js";
-import type { IProfile } from "../types-for-models/profileModel.types.js";
+import Link from "../../src/model/linkModel.js";
+import Profile from "../../src/model/profileModel.js";
+import User from "../../src/model/userModel.js";
+import type { IUser } from "../../src/model/types-for-models/userModel.types.js";
+import type { ProfileCreationInput } from "../../src/types/user-input.types.js";
+import type { IProfile } from "../../src/model/types-for-models/profileModel.types.js";
 
 describe("LinkModel", () => {
   let mongoServer: MongoMemoryServer;
@@ -110,22 +110,49 @@ describe("LinkModel", () => {
 
       await expect(link.save()).rejects.toThrow();
     });
-    
-    it("should create and save a valid link", async () => {
-      const linkData = {
-        title: "Test Link",
-        url: "https://example.com",
-        description: "A link for testing",
-        profile: testProfile._id,
-      };
 
-      const link = await Link.createLink(linkData);
+    describe("creating and update links", () => {
+      it("should create and save a valid link", async () => {
+        const linkData = {
+          title: "Test Link",
+          url: "https://example.com",
+          description: "A link for testing",
+          profile: testProfile._id,
+        };
 
-      expect(link).toBeDefined();
-      expect(link.title).toBe(linkData.title);
-      expect(link.url).toBe(linkData.url);
-      expect(link.description).toBe(linkData.description);
-      expect(link.profile).toBe(linkData.profile);
+        const link = await Link.createLink(linkData);
+
+        expect(link).toBeDefined();
+        expect(link.title).toBe(linkData.title);
+        expect(link.url).toBe(linkData.url);
+        expect(link.description).toBe(linkData.description);
+        expect(link.profile).toBe(linkData.profile);
+      });
+
+      it("should update and save a valid link", async () => {
+        const linkData = {
+          title: "Test Link",
+          url: "https://example.com",
+          description: "A link for testing",
+          profile: testProfile._id,
+        };
+
+        const link = await Link.createLink(linkData);
+
+        expect(link).toBeDefined();
+
+        // Update the link
+        link.title = "Updated Test Link";
+        link.url = "https://updated-example.com";
+        link.description = "An updated link for testing";
+
+        const updatedLink = await link.save();
+
+        expect(updatedLink.title).toBe("Updated Test Link");
+        expect(updatedLink.url).toBe("https://updated-example.com");
+        expect(updatedLink.description).toBe("An updated link for testing");
+        expect(updatedLink.profile).toBe(linkData.profile);
+      });
     });
   });
 });
