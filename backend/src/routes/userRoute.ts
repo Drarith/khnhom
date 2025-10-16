@@ -42,6 +42,14 @@ userRouter.get(
 );
 
 userRouter.get(
+  "/api/auth/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/login",
+    successRedirect: "/",
+  })
+);
+
+userRouter.get(
   "/api/logout",
   (req: Request, res: Response, next: NextFunction) => {
     req.logout((err: Error | null) => {

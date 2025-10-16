@@ -10,7 +10,7 @@ const userSchema = new Schema(
   {
     email: {
       type: String,
-      required: true,
+      required: false,
       unique: true,
       lowercase: true,
       trim: true,
@@ -18,7 +18,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: false,
       minlength: 6,
     },
     googleId: {
@@ -39,6 +39,7 @@ userSchema.pre("save", async function (next) {
   // if not we return and go next
   if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
+  if (!this.password) return next();
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
@@ -54,6 +55,10 @@ userSchema.statics.createUser = async function (
   password: string
 ) {
   try {
+    if (!email || !password) {
+      throw new Error("Email and password are required");
+      
+    }
     const user = new this({ email, password });
     await user.save();
     return user;
@@ -81,11 +86,13 @@ userSchema.statics.findByGoogleId = async function (googleId: IUser["googleId"])
   return this.findOne({ googleId });
 };
 
-userSchema.statics.findOrCreate = async function (googleId: IUser["googleId"]) {
+userSchema.statics.findOrCreate = async function (profile) {
+  console.log(profile);
   try {
-    let user = await this.findOne({ googleId });
+    let user = await this.findOne({ googleId: profile.id });
     if (!user) {
-      user = new this({ googleId });
+      console.log();
+      user = new this({ googleId: profile.id, email: profile.emails[0].value });
       await user.save();
     }
     return user;

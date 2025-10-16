@@ -58,7 +58,6 @@ app.use(userRouter);
 
 
 app.get("/", async (req, res) => {
-
   res.send("Hello from Express + TypeScript ");
 });
 

@@ -22,6 +22,6 @@ export interface IUserModel extends Model<IUser> {
   findByGoogleId(googleId: string): Promise<IUser | null>;
   emailExists(email: string): Promise<boolean>;
   findByEmail(email: string): Promise<IUser | null>;
-  findOrCreate(googleId: IUser["googleId"]): Promise<IUser>;
+  findOrCreate(profile: unknown): Promise<IUser>;
   createGoogleUser(email: string, googleId: string): Promise<IUser>;
 }
