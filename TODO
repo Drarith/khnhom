@@ -1,2 +1,2 @@
-- Express session and passport js
 - validate user url in link
+-profile endpoint - keep getting unauthorized 

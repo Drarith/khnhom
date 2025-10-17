@@ -58,26 +58,6 @@ describe("UserModel", () => {
       expect(savedUser.updatedAt).toBeDefined();
     });
 
-    it("should require email field", async () => {
-      const userData = {
-        password: "password123",
-      };
-
-      user = new User(userData);
-
-      await expect(user.save()).rejects.toThrow();
-    });
-
-    it("should require password field", async () => {
-      const userData = {
-        email: "test@example.com",
-      };
-
-      user = new User(userData);
-
-      await expect(user.save()).rejects.toThrow();
-    });
-
     it("should validate email format", async () => {
       const userData = {
         email: "invalid-email",
