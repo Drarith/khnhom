@@ -32,6 +32,10 @@ export interface IProfile extends Document {
   // Instance methods
   incrementViews(): Promise<void>;
   updateSocials(socials: Partial<ISocials>): Promise<void>;
+  updateProfile(
+    this: IProfile,
+    updateData: Partial<ProfileCreationInput>
+  ): Promise<void>;
 }
 
 // Interface for the Profile model (static methods)

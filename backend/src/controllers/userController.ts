@@ -1,7 +1,12 @@
-import type {Request, Response, NextFunction} from "express";
+import type { Request, Response, NextFunction } from "express";
 import passport from "passport";
 import User from "../model/userModel.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
+import type {
+  CreateProfile,
+  ProfileCreationInput,
+} from "../types/user-input.types.js";
+import Profile from "../model/profileModel.js";
 
 export const createUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -12,7 +17,9 @@ export const createUser = async (req: Request, res: Response) => {
   try {
     const userExists = await User.emailExists(email);
     if (userExists) {
-      return res.status(400).json({ error: "Email already exists, please log in instead." });
+      return res
+        .status(400)
+        .json({ error: "Email already exists, please log in instead." });
     }
     const user: IUser = await User.createUser(email, password);
     res.status(201).json(user);
@@ -22,49 +29,74 @@ export const createUser = async (req: Request, res: Response) => {
 };
 
 export const loginUser = (req: Request, res: Response, next: NextFunction) => {
-    passport.authenticate(
-      "local",
-      (err: Error, user: IUser | false, info?: { message: string }) => {
-        if (err) {
-          return next(err);
-        }
-        if (!user) {
-          return res
-            .status(401)
-            .json({ message: info?.message || "Login failed" });
-        }
-        req.logIn(user, (err: Error | null) => {
-          if (err) {
-            return next(err);
-          }
-          return res
-            .status(200)
-            .json({ message: "Logged in successfully", user });
-        });
-      }
-    )(req, res, next);
-  }
-
-  export const logoutUser = (req: Request, res: Response, next: NextFunction) => {
-    req.logout((err: Error | null) => {
+  passport.authenticate(
+    "local",
+    (err: Error, user: IUser | false, info?: { message: string }) => {
       if (err) {
         return next(err);
       }
-      //   Destroy session and clear cookie
-      req.session.destroy((err: Error | null) => {
+      if (!user) {
+        return res
+          .status(401)
+          .json({ message: info?.message || "Login failed" });
+      }
+      req.logIn(user, (err: Error | null) => {
         if (err) {
           return next(err);
         }
-        res.clearCookie("connect.sid");
-        res.redirect("/");
+        return res
+          .status(200)
+          .json({ message: "Logged in successfully", user });
       });
-    });
-  }
-
-  export const createProfile = async (req: Request, res: Response) => {
-    if(!req.user){
-      return res.status(401).json({ error: "Unauthorized" });
     }
-    const { username, displayName, bio, profilePictureUrl, paymentQrCodeUrl, socials, theme } = req.body;
-    console.log({ username, displayName, bio, profilePictureUrl, paymentQrCodeUrl, socials, theme });
+  )(req, res, next);
+};
+
+export const logoutUser = (req: Request, res: Response, next: NextFunction) => {
+  req.logout((err: Error | null) => {
+    if (err) {
+      return next(err);
+    }
+    //   Destroy session and clear cookie
+    req.session.destroy((err: Error | null) => {
+      if (err) {
+        return next(err);
+      }
+      res.clearCookie("connect.sid");
+      res.redirect("/");
+    });
+  });
+};
+
+export const createProfile = async (req: Request, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Unauthorized" });
   }
+  const {
+    username,
+    displayName,
+    bio,
+    profilePictureUrl,
+    paymentQrCodeUrl,
+    socials,
+    theme,
+  } = req.body as CreateProfile;
+  try {
+    console.log(req.user);
+    const userId = (req.user as IUser)._id;
+    console.log(userId);
+    const profileData: ProfileCreationInput = {
+      user: userId,
+      username: username || "",
+      displayName: displayName || "",
+      bio: bio || "",
+      profilePictureUrl: profilePictureUrl || "",
+      paymentQrCodeUrl: paymentQrCodeUrl || "",
+      socials: socials || {},
+      theme: theme || "",
+    };
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Unable to create profile." });
+  }
+};

@@ -93,6 +93,14 @@ profileSchema.statics.createProfile = async function (
   }
 };
 
+profileSchema.methods.updateProfile = async function (
+  this: IProfile,
+  updateData: Partial<ProfileCreationInput>
+) {
+  Object.assign(this, updateData);
+  await this.save();
+};
+
 const Profile = mongoose.model<IProfile, IProfileModel>(
   "Profile",
   profileSchema

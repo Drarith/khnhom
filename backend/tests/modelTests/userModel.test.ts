@@ -392,6 +392,46 @@ describe("UserModel", () => {
     });
   });
 
+  describe("Google-related Static Methods", () => {
+    it("should create a google user with createGoogleUser", async () => {
+      const email = "googleuser@example.com";
+      const googleId = "google-unique-123";
+
+      const created = await User.createGoogleUser(email, googleId);
+
+      expect(created).toBeDefined();
+      expect(created.email).toBe(email);
+      expect(created.googleId).toBe(googleId);
+
+      // Verify saved to DB
+      const found = await User.findById(created._id);
+      expect(found).toBeTruthy();
+      expect(found?.googleId).toBe(googleId);
+    });
+
+    it("findOrCreate should find existing user by profile or create new one", async () => {
+      const profile = {
+        id: "profile-google-456",
+        emails: [{ value: "profile@example.com" }],
+      } as any;
+
+      // Ensure no user exists yet
+      let pre = await User.findByGoogleId(profile.id);
+      expect(pre).toBeNull();
+
+      // First call should create
+      const first = await User.findOrCreate(profile);
+      expect(first).toBeDefined();
+      expect(first.googleId).toBe(profile.id);
+      expect(first.email).toBe(profile.emails[0].value);
+
+      // Second call should find the same user
+      const second = await User.findOrCreate(profile);
+      expect(second).toBeDefined();
+      expect(second._id.toString()).toBe(first._id.toString());
+    });
+  });
+
   describe("Integration Tests", () => {
     it("should handle complete user lifecycle", async () => {
       // Create user

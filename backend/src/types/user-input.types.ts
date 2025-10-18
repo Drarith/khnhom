@@ -1,12 +1,12 @@
 import { Types } from "mongoose";
 
-export type UserCreationInput = {
+export interface UserCreationInput {
   email: string;
   password: string;
   isSupporter?: boolean;
 }
 
-export type ProfileCreationInput = {
+export interface ProfileCreationInput {
   user: Types.ObjectId;
   username: string;
   displayName: string;
@@ -25,11 +25,23 @@ export type ProfileCreationInput = {
   };
   theme?: string;
   views?: number;
-};
+}
 
-export type LinkCreationInput = {
+export interface LinkCreationInput {
   profile: Types.ObjectId;
   title: string;
   url: string;
   description?: string;
-};
+}
+
+type Socials = Record<string, string>;
+
+export interface CreateProfile {
+  username?: string;
+  displayName?: string;
+  bio?: string;
+  profilePictureUrl?: string;
+  paymentQrCodeUrl?: string;
+  socials?: Socials;
+  theme?: string;
+}
