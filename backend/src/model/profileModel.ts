@@ -59,6 +59,10 @@ const profileSchema = new Schema(
       type: String,
       default: "default",
     },
+    selectedTemplate: {
+      type: String,
+      default: "default",
+    },
     views: { type: Number, default: 0 },
   },
   { timestamps: true }
