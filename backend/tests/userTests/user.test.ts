@@ -113,7 +113,6 @@ describe("createUser controller", () => {
   });
 
   it("Should update the existing data", async () => {
-    // username must match /^[a-zA-Z0-9_]+$/ (no spaces)
     const username = "testuser";
     const displayName = "testName";
     const socials = { facebook: "testuser" };
