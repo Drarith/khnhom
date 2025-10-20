@@ -1,4 +1,5 @@
 import passport, { type Profile } from "passport";
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import User from "../model/userModel.js";
@@ -14,6 +15,30 @@ if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
     "Google OAuth credentials are not defined in environment variables"
   );
 }
+
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET is not defined in environment variables');
+}
+
+const options = {
+  // This tells passport to extract the token from the
+  // 'Authorization: Bearer <token>' header
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: JWT_SECRET
+};
+
+passport.use(new JwtStrategy(options, async (jwt_payload: { id: string }, done: (error: Error | null, user: IUser | false | null) => void) => {
+  try {
+    const user = await User.findById(jwt_payload.id);
+    if (user) {
+      return done(null, user);
+    }
+    return done(null, false);
+  } catch (err) {
+    return done(err as Error, false);
+  }
+}));
 
 passport.use(
   new LocalStrategy(
