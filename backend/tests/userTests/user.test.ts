@@ -8,12 +8,15 @@ import User from "../../src/model/userModel.js";
 import type { ProfileCreationInput } from "../../src/types/user-input.types.js";
 import type { IUser } from "../../src/model/types-for-models/userModel.types.js";
 import Profile from "../../src/model/profileModel.js";
-import { execPath } from "process";
+import Link from "../../src/model/linkModel.js";
+import { execPath, title } from "process";
 import type {
   IProfileModel,
   IProfile,
 } from "../../src/model/types-for-models/profileModel.types.js";
 import e from "express";
+import type { ILink } from "../../src/model/types-for-models/linkModel.types.js";
+import type { LinkCreationInput } from "../../src/types/user-input.types.js";
 
 const app = express();
 app.use(express.json());
@@ -134,5 +137,55 @@ describe("createUser controller", () => {
     };
     await profileData.updateProfile(updateData);
     expect(profileData.displayName).toBe("New displayName");
+  });
+
+  it("should get the user profile by their username", async () => {
+    const username = "testuser";
+    const displayName = "testName";
+
+    const data: ProfileCreationInput = {
+      user: testUser._id,
+      username: username,
+      displayName: displayName,
+    };
+    await Profile.createProfile(data);
+    const res = await supertest(app).get(`/api/profile/${username}`);
+    expect(res.status).toBe(200);
+    expect(res.body.user.email).toBe("test1@example.com");
+    console.log(res.body);
+  });
+
+  it("should create links for user profile", async () => {
+    const username = "testuser";
+    const displayName = "testName";
+
+    const data: ProfileCreationInput = {
+      user: testUser._id,
+      username: username,
+      displayName: displayName,
+    };
+    const profile = await Profile.createProfile(data);
+
+    const link1: LinkCreationInput = {
+      title: "google",
+      url: "https://www.google.com/...",
+      description: "image of google",
+    };
+
+    const link2: LinkCreationInput = {
+      title: "fortnite",
+      url: "https://www.google.com/...",
+      description: "fortnite picture",
+    };
+    // await the async operations
+    await profile.addLink(link1);
+    await profile.addLink(link2);
+
+    // assert links exist in Link collection and are attached to profile
+    const linksInDb = await Link.find({ profile: profile._id });
+    expect(linksInDb.length).toBe(2);
+    const refreshed = await Profile.findById(profile._id).populate("links");
+    expect(refreshed).toBeTruthy();
+    expect((refreshed!.links as any[]).length).toBe(2);
   });
 });

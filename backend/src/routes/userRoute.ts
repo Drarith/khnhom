@@ -2,6 +2,7 @@ import express from "express";
 import {
   createProfile,
   createUser,
+  getProfileByUsername,
   loginUser,
   logoutUser,
 } from "../controllers/userController.js";
@@ -15,7 +16,13 @@ userRouter.post("/api/create-user", createUser);
 
 userRouter.post("/api/create-profile", isAuthenticated, createProfile);
 
+userRouter.post("/api/create-link", isAuthenticated)
+
 userRouter.post("/api/login", loginUser);
+
+userRouter.get("/api/profile/:username", getProfileByUsername);
+import { getProfileLinks } from "../controllers/userController.js";
+userRouter.get("/api/profile/:username/links", getProfileLinks);
 
 userRouter.get(
   "/api/auth/google",

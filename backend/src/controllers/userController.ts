@@ -9,7 +9,12 @@ import type {
   ProfileCreationInput,
 } from "../types/user-input.types.js";
 import Profile from "../model/profileModel.js";
+import Link from "../model/linkModel.js";
 import { json } from "stream/consumers";
+import type {
+  IProfile,
+  IProfileModel,
+} from "../model/types-for-models/profileModel.types.js";
 
 dotenv.config();
 
@@ -62,16 +67,19 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
         .status(200)
         .json({ message: "Logged in successfully.", token: token });
     }
-  )
-  // invoke the returned function immediately with req, res, next
-  (req, res, next);
+  )(
+    // invoke the returned function immediately with req, res, next
+    req,
+    res,
+    next
+  );
 };
 
 export const logoutUser = (_req: Request, res: Response) => {
-  
-  return res.status(200).json({ 
-    success: true, 
-    message: "Successfully logged out. Please remove the token from your client." 
+  return res.status(200).json({
+    success: true,
+    message:
+      "Successfully logged out. Please remove the token from your client.",
   });
 };
 
@@ -89,7 +97,6 @@ export const createProfile = async (req: Request, res: Response) => {
     theme,
   } = req.body as CreateProfile;
   try {
-
     const userId = (req.user as IUser)._id;
 
     const profileData: ProfileCreationInput = {
@@ -102,10 +109,56 @@ export const createProfile = async (req: Request, res: Response) => {
       socials: socials || {},
       theme: theme || "",
     };
-    await Profile.createProfile(profileData)
-    return res.status(200).json({success: true, message: "Profile created successfully!" })
+    await Profile.createProfile(profileData);
+    return res
+      .status(200)
+      .json({ success: true, message: "Profile created successfully!" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Unable to create profile." });
   }
 };
+
+export const getProfileByUsername = async (req: Request, res: Response) => {
+  const username = req.params.username;
+  if (!username) return res.status(400).json({ error: "Username is required" });
+  try {
+    const profile = (await Profile.findOne({ username }).populate(
+      "user",
+      "email"
+    )) as IProfile | null;
+    if (!profile) return res.status(404).json({ error: "Profile not found" });
+    return res.status(200).json(profile);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
+export const getProfileLinks = async (req: Request, res: Response) => {
+  const username = req.params.username;
+  if (!username) return res.status(400).json({ error: "Username is required" });
+  try {
+    const profile = (await Profile.findOne({ username })) as IProfile | null;
+    if (!profile) return res.status(404).json({ error: "Profile not found" });
+    const links = await Link.findByProfile(profile._id.toString());
+    return res.status(200).json(links);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
+// (Duplicate removed)
+
+// export const getProfileLinks = async (req: Request, res: Response) => {
+//   const username = req.params.username;
+//   try {
+//     const profile = await Profile.findByUsername(username);
+//     if (!profile) return res.status(404).json({ error: "Profile not found" });
+//     const links = await Link.findByProfile(profile._id.toString());
+//     return res.status(200).json(links);
+//   } catch (err) {
+//     return res.status(500).json({ error: "Server error" });
+//   }
+// };

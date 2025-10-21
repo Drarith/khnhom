@@ -1,5 +1,6 @@
 import { Document, Model, Types } from "mongoose";
-import type { ProfileCreationInput } from "../../types/user-input.types.js";
+import type { ProfileCreationInput, LinkCreationInput } from "../../types/user-input.types.js";
+import type { ILink } from "./linkModel.types.js";
 
 // Interface for the Profile document and model in case your dumbass forgets
 // Interface for social media links
@@ -24,6 +25,7 @@ export interface IProfile extends Document {
   profilePictureUrl: string;
   paymentQrCodeUrl: string;
   socials: ISocials;
+  links: Types.ObjectId[];
   theme: string;
   views: number;
   createdAt: Date;
@@ -36,6 +38,7 @@ export interface IProfile extends Document {
     this: IProfile,
     updateData: Partial<ProfileCreationInput>
   ): Promise<void>;
+  addLink(this: IProfile, linkData: LinkCreationInput): Promise<ILink>;
 }
 
 // Interface for the Profile model (static methods)

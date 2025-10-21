@@ -5,9 +5,14 @@ import type {
   ISocials,
 } from "./types-for-models/profileModel.types.js";
 
-const { Schema } = mongoose;
+import type {
+  LinkCreationInput,
+  ProfileCreationInput,
+} from "../types/user-input.types.js";
 
-import type { ProfileCreationInput } from "../types/user-input.types.js";
+import Link from "./linkModel.js";
+
+const { Schema } = mongoose;
 
 const profileSchema = new Schema(
   {
@@ -55,6 +60,7 @@ const profileSchema = new Schema(
       tiktok: { type: String, default: "" },
       github: { type: String, default: "" },
     },
+    links: [{ type: Schema.Types.ObjectId, ref: "Link" }],
     theme: {
       type: String,
       default: "default",
@@ -103,6 +109,24 @@ profileSchema.methods.updateProfile = async function (
 ) {
   Object.assign(this, updateData);
   await this.save();
+};
+
+profileSchema.methods.addLink = async function (
+  this: IProfile,
+  linkData: LinkCreationInput
+) {
+  // We need to clean this link somehow but for now just store it
+  try {
+    // spreading data so it stays on the same level
+    const link = await Link.createLink({ ...linkData, profile: this._id });
+    this.links = this.links || [];
+    this.links.push(link._id);
+    await this.save();
+    return link;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Error creating link" + error);
+  }
 };
 
 const Profile = mongoose.model<IProfile, IProfileModel>(

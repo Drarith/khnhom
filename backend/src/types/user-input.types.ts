@@ -28,7 +28,7 @@ export interface ProfileCreationInput {
 }
 
 export interface LinkCreationInput {
-  profile: Types.ObjectId;
+  profile?: Types.ObjectId;
   title: string;
   url: string;
   description?: string;
