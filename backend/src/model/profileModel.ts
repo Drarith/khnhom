@@ -97,7 +97,7 @@ profileSchema.statics.createProfile = async function (
   try {
     const profile = new this(profileData);
     await profile.save();
-    return profile;
+    return profile; 
   } catch (error) {
     throw new Error("Error creating profile, " + error);
   }

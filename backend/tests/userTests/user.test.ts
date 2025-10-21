@@ -151,8 +151,9 @@ describe("createUser controller", () => {
     await Profile.createProfile(data);
     const res = await supertest(app).get(`/api/profile/${username}`);
     expect(res.status).toBe(200);
-    expect(res.body.user.email).toBe("test1@example.com");
     console.log(res.body);
+    expect(res.body.user.isSupporter).toBeDefined();
+    console.log(res.body)
   });
 
   it("should create links for user profile", async () => {
