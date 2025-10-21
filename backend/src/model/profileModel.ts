@@ -60,7 +60,7 @@ const profileSchema = new Schema(
       tiktok: { type: String, default: "" },
       github: { type: String, default: "" },
     },
-    links: [{ type: Schema.Types.ObjectId, ref: "Link" }],
+    links: [{ type: Schema.Types.ObjectId, ref: "Link" , default:[]}],
     theme: {
       type: String,
       default: "default",
@@ -119,7 +119,6 @@ profileSchema.methods.addLink = async function (
   try {
     // spreading data so it stays on the same level
     const link = await Link.createLink({ ...linkData, profile: this._id });
-    this.links = this.links || [];
     this.links.push(link._id);
     await this.save();
     return link;

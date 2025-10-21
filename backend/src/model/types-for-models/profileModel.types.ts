@@ -1,5 +1,8 @@
 import { Document, Model, Types } from "mongoose";
-import type { ProfileCreationInput, LinkCreationInput } from "../../types/user-input.types.js";
+import type {
+  ProfileCreationInput,
+  LinkCreationInput,
+} from "../../types/user-input.types.js";
 import type { ILink } from "./linkModel.types.js";
 
 // Interface for the Profile document and model in case your dumbass forgets
@@ -45,4 +48,5 @@ export interface IProfile extends Document {
 export interface IProfileModel extends Model<IProfile> {
   findByUsername(username: string): Promise<IProfile | null>;
   createProfile(profileData: ProfileCreationInput): Promise<IProfile>;
+  
 }

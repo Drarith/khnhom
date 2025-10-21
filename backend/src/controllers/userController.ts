@@ -126,7 +126,7 @@ export const getProfileByUsername = async (req: Request, res: Response) => {
   if (!username) return res.status(400).json({ error: "Username is required" });
   try {
     const profile = (await Profile.findOne({ username }).populate(
-      "user", 
+      "user",
       "isSupporter"
     )) as IProfile | null;
     if (!profile) return res.status(404).json({ error: "Profile not found" });
@@ -171,8 +171,7 @@ export const createAndAddLinkToProfile = async (
     const profile = await Profile.findOne({ user: userId });
     if (!profile) return res.status(404).json({ message: "Profile not found" });
 
-    const newLink = await Link.create({
-      profile: profile._id,
+    const newLink = await profile.addLink({
       title,
       url,
       description,
