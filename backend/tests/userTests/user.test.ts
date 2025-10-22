@@ -4,6 +4,7 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import express from "express";
 import supertest from "supertest";
 import userRouter from "../../src/routes/userRoute.js";
+import profileRouter from "../../src/routes/profileRoute.js";
 import User from "../../src/model/userModel.js";
 import UserRole from "../../src/model/roleModel.js";
 import type { ProfileCreationInput } from "../../src/types/user-input.types.js";
@@ -16,6 +17,7 @@ import type { LinkCreationInput } from "../../src/types/user-input.types.js";
 const app = express();
 app.use(express.json());
 app.use(userRouter);
+app.use(profileRouter)
 
 describe("createUser controller", () => {
   let mongoServer: MongoMemoryServer;
@@ -43,6 +45,12 @@ describe("createUser controller", () => {
       await collection.deleteMany({});
     }
     testUser = await User.createUser("test1@example.com", "password123");
+    // const profileData = {
+    //   user: testUser._id,
+    //   username: "rith",
+    //   displayName: "dara"
+    // }
+    // await Profile.createProfile(profileData)
   });
 
   it("should create a new user with valid email and password and a user role", async () => {

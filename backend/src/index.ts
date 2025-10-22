@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import type { Env } from "./types/myENV.js";
 
 import userRouter from "./routes/userRoute.js";
+import profileRouter from "./routes/profileRoute.js";
 
 dotenv.config();
 
@@ -38,6 +39,9 @@ app.use(express.json());
 
 // User routes
 app.use(userRouter);
+
+// Profile routes
+app.use(profileRouter)
 
 
 app.get("/", async (req, res) => {
