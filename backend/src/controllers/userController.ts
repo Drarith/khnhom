@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import User from "../model/userModel.js";
+import UserRole from "../model/roleModel.js";
 import dotenv from "dotenv";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 import type {
@@ -35,6 +36,10 @@ export const createUser = async (req: Request, res: Response) => {
         .json({ error: "Email already exists, please log in instead." });
     }
     const user: IUser = await User.createUser(email, password);
+    const userData = {
+      user: user._id,
+    };
+    await UserRole.createUserRole(userData);
     res.status(201).json(user);
   } catch (error) {
     res.status(500).json({ error: error });

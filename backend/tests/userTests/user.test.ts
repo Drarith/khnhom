@@ -5,17 +5,12 @@ import express from "express";
 import supertest from "supertest";
 import userRouter from "../../src/routes/userRoute.js";
 import User from "../../src/model/userModel.js";
+import UserRole from "../../src/model/roleModel.js";
 import type { ProfileCreationInput } from "../../src/types/user-input.types.js";
 import type { IUser } from "../../src/model/types-for-models/userModel.types.js";
 import Profile from "../../src/model/profileModel.js";
 import Link from "../../src/model/linkModel.js";
-import { execPath, title } from "process";
-import type {
-  IProfileModel,
-  IProfile,
-} from "../../src/model/types-for-models/profileModel.types.js";
-import e from "express";
-import type { ILink } from "../../src/model/types-for-models/linkModel.types.js";
+import type { IProfile } from "../../src/model/types-for-models/profileModel.types.js";
 import type { LinkCreationInput } from "../../src/types/user-input.types.js";
 
 const app = express();
@@ -33,28 +28,24 @@ describe("createUser controller", () => {
   });
 
   afterAll(async () => {
+    if (mongoose.connection.db) {
+      await mongoose.connection.db.dropDatabase();
+    }
     await mongoose.disconnect();
     await mongoServer.stop();
   });
 
   beforeEach(async () => {
-    await User.deleteMany({});
-    await Profile.deleteMany({});
+    const collections = mongoose.connection.collections;
+    for (const key in collections) {
+      const collection = collections[key];
+      if (!collection) continue;
+      await collection.deleteMany({});
+    }
     testUser = await User.createUser("test1@example.com", "password123");
-    // const profileData: ProfileCreationInput = {
-    //   user: testUser._id,
-    //   username: "testuser",
-    //   displayName: "Test User",
-    //   bio: "This is a test bio",
-    //   profilePictureUrl: "http://example.com/pic.jpg",
-    //   paymentQrCodeUrl: "http://example.com/qr.jpg",
-    //   socials: { facebook: "testuser" },
-    //   theme: "light",
-    // };
-    // await Profile.createProfile(profileData);
   });
 
-  it("should create a new user with valid email and password", async () => {
+  it("should create a new user with valid email and password and a user role", async () => {
     const res = await supertest(app)
       .post("/api/create-user")
       .send({ email: "test@example.com", password: "password123" });
@@ -74,6 +65,19 @@ describe("createUser controller", () => {
 
     expect(res.status).toBe(400);
     expect(res.body.error).toMatch(/Email already exists/i);
+  });
+
+  it('should give the user a default "user" role', async () => {
+    await supertest(app)
+      .post("/api/create-user")
+      .send({ email: "test@example.com", password: "password123" });
+
+    const user = await User.findOne({ email: "test@example.com" });
+    if (!user) throw new Error("User not created");
+
+    const role = await UserRole.findOne({ user: user._id });
+    expect(role).not.toBeNull();
+    expect(role!.role).toBe("user");
   });
 
   it("should return 500 if there is a server error", async () => {
@@ -151,9 +155,7 @@ describe("createUser controller", () => {
     await Profile.createProfile(data);
     const res = await supertest(app).get(`/api/profile/${username}`);
     expect(res.status).toBe(200);
-    console.log(res.body);
     expect(res.body.user.isSupporter).toBeDefined();
-    console.log(res.body)
   });
 
   it("should create links for user profile", async () => {

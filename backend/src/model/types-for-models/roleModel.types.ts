@@ -5,3 +5,7 @@ export interface IRole extends Document {
     user: Types.ObjectId
     role: string
 }
+
+export interface IRoleModel extends Model<IRole> {
+    createUserRole(userData:unknown):Promise<void>
+}
