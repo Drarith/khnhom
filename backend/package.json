@@ -8,8 +8,8 @@
     "start": "node dist/index.js",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "dev": "node --watch --loader ts-node/esm src/index.ts",
-    "dev:docker": "nodemon --exec \"node --loader ts-node/esm src/index.ts\" --ext ts,js,json --watch src --polling-interval 1000"
+    "dev": "tsx src/index.ts",
+    "dev:docker": "tsx watch src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -31,8 +31,10 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
+    "tsx": "^4.20.6",
     "validator": "^13.15.15",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
