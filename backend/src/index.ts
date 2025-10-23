@@ -36,6 +36,8 @@ mongoose
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.json({ limit: "100kb" }));
+
 
 // User routes
 app.use(userRouter);
