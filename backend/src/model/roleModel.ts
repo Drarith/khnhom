@@ -17,7 +17,8 @@ const roleSchema = new Schema({
 roleSchema.statics.createUserRole = async function (userData) {
   try {
     const userRole = new this(userData);
-    userRole.save();
+    const savedUser = await userRole.save();
+    return savedUser
   } catch (error) {
     throw new Error("Error creating role for user, " + error);
   }

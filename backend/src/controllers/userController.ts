@@ -6,7 +6,6 @@ import UserRole from "../model/roleModel.js";
 import dotenv from "dotenv";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 
-
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -29,7 +28,14 @@ export const createUser = async (req: Request, res: Response) => {
       user: user._id,
     };
     await UserRole.createUserRole(userData);
-    res.status(201).json(user);
+    const payload = {
+      id: user._id,
+      email: user.email,
+    };
+    const token = jwt.sign(payload, JWT_SECRET as string, {
+      expiresIn: "1d",
+    });
+    res.status(201).json({ user: user, token: token });
   } catch (error) {
     res.status(500).json({ error: error });
   }
@@ -70,6 +76,35 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
   );
 };
 
+export const googleCallback = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  passport.authenticate(
+    "google",
+    { session: false },
+    (err: Error, user: IUser | false, info?: { message: string }) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res
+          .status(401)
+          .json({ message: info?.message || "Authentication failed" });
+      }
+      const payload = {
+        id: user._id,
+        email: user.email,
+      };
+      const token = jwt.sign(payload, JWT_SECRET as string, {
+        expiresIn: "1d",
+      });
+      return res.json({ token: token });
+    }
+  )(req, res, next);
+};
+
 export const logoutUser = (_req: Request, res: Response) => {
   return res.status(200).json({
     success: true,
@@ -77,5 +112,3 @@ export const logoutUser = (_req: Request, res: Response) => {
       "Successfully logged out. Please remove the token from your client.",
   });
 };
-
-

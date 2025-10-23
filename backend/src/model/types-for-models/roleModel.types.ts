@@ -7,5 +7,5 @@ export interface IRole extends Document {
 }
 
 export interface IRoleModel extends Model<IRole> {
-    createUserRole(userData:unknown):Promise<void>
+    createUserRole(userData:unknown):Promise<IRole>
 }

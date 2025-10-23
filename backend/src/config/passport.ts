@@ -74,7 +74,6 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        console.log('hi');
         await User.findOrCreate(profile);
         const user = await User.findByGoogleId(profile.id);
         if (user) {

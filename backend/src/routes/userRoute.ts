@@ -1,11 +1,9 @@
 import express from "express";
 import {
-
   createUser,
-
+  googleCallback,
   loginUser,
   logoutUser,
-
 } from "../controllers/userController.js";
 import { authenticateToken } from "../middleware/auth.js";
 import passport from "passport";
@@ -15,7 +13,6 @@ const userRouter = express.Router();
 
 userRouter.post("/api/create-user", createUser);
 
-
 userRouter.post("/api/login", loginUser);
 
 userRouter.get(
@@ -24,13 +21,7 @@ userRouter.get(
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-userRouter.get(
-  "/api/auth/google/callback",
-  passport.authenticate("google", {
-    failureRedirect: "/login",
-    successRedirect: "/",
-  })
-);
+userRouter.get("/api/auth/google/callback", googleCallback);
 
 userRouter.get("/api/logout", logoutUser);
 
