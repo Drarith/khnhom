@@ -7,7 +7,7 @@ export interface UserCreationInput {
 }
 
 export interface ProfileCreationInput {
-  user: Types.ObjectId;
+  user: string;
   username: string;
   displayName: string;
   bio?: string;

@@ -1,4 +1,6 @@
 import { z } from "zod";
+import type { ProfileCreationInput } from "../types/user-input.types.js";
+import { Types } from "mongoose";
 
 // Escape HTML special characters to prevent XSS
 export function escapeHtml(str: string): string {
@@ -85,6 +87,7 @@ export const SocialsSchema = z
 
 
 export const CreateProfileSchema = z.object({
+  user: z.string(),
   username: SanitizedString(30),
   displayName: SanitizedString(30),
   bio: SanitizedString(1000),
@@ -99,7 +102,7 @@ export type SanitizedCreateProfile = z.infer<typeof CreateProfileSchema>;
 
 
 export function sanitizeCreateProfile(
-  input: Record<string, unknown>
+  input: ProfileCreationInput
 ): SanitizedCreateProfile {
   const result = CreateProfileSchema.safeParse(input);
   if (!result.success) {

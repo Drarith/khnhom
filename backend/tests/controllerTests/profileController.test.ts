@@ -55,7 +55,7 @@ describe("Profile Routes", () => {
   describe("POST /api/create-profile", () => {
     it("should create a new profile for an authenticated user", async () => {
       const profileData: ProfileCreationInput = {
-        user: testUser._id,
+        user: testUser._id.toString(),
         username: "testuser",
         displayName: "Test User",
         bio: "This is a test bio.",
@@ -99,7 +99,7 @@ describe("Profile Routes", () => {
   describe("GET /api/profile/:username", () => {
     it("should return a profile by username", async () => {
       const profileData: ProfileCreationInput = {
-        user: testUser._id,
+        user: testUser._id.toString(),
         username: "testuser",
         displayName: "Test User",
       };
@@ -121,7 +121,7 @@ describe("Profile Routes", () => {
   describe("GET /api/profile/:username/links", () => {
     it("should return links for a profile", async () => {
       const profileData: ProfileCreationInput = {
-        user: testUser._id,
+        user: testUser._id.toString(),
         username: "testuser",
         displayName: "Test User",
       };
@@ -140,7 +140,7 @@ describe("Profile Routes", () => {
   describe("POST /api/create-link", () => {
     it("should create a new link for an authenticated user", async () => {
       const profileData: ProfileCreationInput = {
-        user: testUser._id,
+        user: testUser._id.toString(),
         username: "testuser",
         displayName: "Test User",
       };

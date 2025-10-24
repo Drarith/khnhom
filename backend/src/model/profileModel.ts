@@ -11,6 +11,7 @@ import type {
 } from "../types/user-input.types.js";
 
 import Link from "./linkModel.js";
+import type { SanitizedCreateProfile } from "../utils/sanitizeUtils.js";
 
 const { Schema } = mongoose;
 
@@ -92,7 +93,7 @@ profileSchema.statics.findByUsername = function (username: string) {
 };
 
 profileSchema.statics.createProfile = async function (
-  profileData: ProfileCreationInput
+  profileData: SanitizedCreateProfile
 ) {
   try {
     const profile = new this(profileData);

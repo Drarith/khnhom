@@ -6,6 +6,7 @@ import type {
 } from "../types/user-input.types.js";
 import Profile from "../model/profileModel.js";
 import Link from "../model/linkModel.js";
+import { sanitizeCreateProfile, type SanitizedCreateProfile } from "../utils/sanitizeUtils.js";
 import type {
   IProfile,
 } from "../model/types-for-models/profileModel.types.js";
@@ -30,7 +31,7 @@ export const createProfile = async (req: Request, res: Response) => {
     if (!userId) return res.status(400).json({ message: "User id not found!" });
 
     const profileData: ProfileCreationInput = {
-      user: userId,
+      user: userId.toString(),
       username: username || "",
       displayName: displayName || "",
       bio: bio || "",
@@ -39,7 +40,11 @@ export const createProfile = async (req: Request, res: Response) => {
       socials: socials || {},
       theme: theme || "",
     };
-    await Profile.createProfile(profileData);
+    const cleanedProfileData: SanitizedCreateProfile = sanitizeCreateProfile(profileData);
+    // if (!cleanedProfileData) {
+    //   return res.status(400).json({ error: "Invalid profile data" });
+    // }
+    await Profile.createProfile(cleanedProfileData);
     return res
       .status(200)
       .json({ success: true, message: "Profile created successfully!" });
