@@ -1,5 +1,8 @@
 import { z } from "zod";
-import type { ProfileCreationInput } from "../types/user-input.types.js";
+import type {
+  LinkCreationInput,
+  ProfileCreationInput,
+} from "../types/user-input.types.js";
 
 // Escape HTML special characters to prevent XSS
 export function escapeHtml(str: string): string {
@@ -53,6 +56,12 @@ export const SanitizedUrl = () =>
     .transform((val) => (isValidHttpUrl(val) ? val : ""))
     .default("");
 
+export const SanitizedListOfUrls = () =>
+  z.array(z.object({
+    url: SanitizedUrl(),
+    title: SanitizedString(50),
+    description: SanitizedString(300)
+  }));
 
 const ALLOWED_SOCIAL_KEYS = new Set([
   "twitter",
@@ -84,7 +93,6 @@ export const SocialsSchema = z
     return out;
   });
 
-
 export const CreateProfileSchema = z.object({
   user: z.string(),
   username: SanitizedString(30),
@@ -93,12 +101,11 @@ export const CreateProfileSchema = z.object({
   profilePictureUrl: SanitizedUrl(),
   paymentQrCodeUrl: SanitizedUrl(),
   socials: SocialsSchema,
+  links: SanitizedListOfUrls(),
   theme: SanitizedString(50),
 });
 
 export type SanitizedCreateProfile = z.infer<typeof CreateProfileSchema>;
-
-
 
 export function sanitizeCreateProfile(
   input: ProfileCreationInput

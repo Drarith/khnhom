@@ -31,6 +31,7 @@ export const createProfile = async (req: Request, res: Response) => {
     profilePictureUrl,
     paymentQrCodeUrl,
     socials,
+    links,
     theme,
   } = req.body as CreateProfile;
 
@@ -45,6 +46,7 @@ export const createProfile = async (req: Request, res: Response) => {
     profilePictureUrl: profilePictureUrl || "",
     paymentQrCodeUrl: paymentQrCodeUrl || "",
     socials: socials || {},
+    links: links || [],
     theme: theme || "",
   };
 
@@ -63,7 +65,7 @@ export const createProfile = async (req: Request, res: Response) => {
     // Distinguish validation errors from server errors
     const msg = getErrorMessage(err);
     if (msg === "Invalid profile data") {
-      return res.status(400).json({ error: msg });
+      return res.status(400).json({ message: msg, error:err });
     }
     // Mongoose validation errors often have a 'name' or are a ValidationError:
     if ((err as any)?.name === "ValidationError") {

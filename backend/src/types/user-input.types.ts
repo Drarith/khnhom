@@ -23,6 +23,7 @@ export interface ProfileCreationInput {
     tiktok?: string;
     github?: string;
   };
+  links?: { title: string; url: string; description?: string }[];
   theme?: string;
   views?: number;
 }
@@ -43,5 +44,6 @@ export interface CreateProfile {
   profilePictureUrl?: string;
   paymentQrCodeUrl?: string;
   socials?: Socials;
+  links?: { title: string; url: string; description: string }[];
   theme?: string;
 }

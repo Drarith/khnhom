@@ -13,9 +13,9 @@ const linkSchema = new Schema<ILink>(
       ref: "Profile",
       required: true,
     },
-    title: { type: String, required: true },
+    title: { type: String, required: true, max: 50 },
     url: { type: String, required: true },
-    description: { type: String, default: "" },
+    description: { type: String, default: "", max: 300 },
   },
   { timestamps: true }
 );

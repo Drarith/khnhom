@@ -54,11 +54,13 @@ describe("Profile Routes", () => {
 
   describe("POST /api/create-profile", () => {
     it("should create a new profile for an authenticated user", async () => {
+      const links = [{title:"test", url:"testtest.com"},{title:"test2", url:"test3.com"}]
       const profileData: ProfileCreationInput = {
         user: testUser._id.toString(),
         username: "testuser",
         displayName: "Test User",
         bio: "This is a test bio.",
+        links:links
       };
 
       const token = jwt.sign(
@@ -80,6 +82,7 @@ describe("Profile Routes", () => {
       const profileInDb = await Profile.findOne({ user: testUser._id });
       expect(profileInDb).not.toBeNull();
       expect(profileInDb?.username).toBe("testuser");
+      expect(profileInDb?.links).toBeDefined()
     });
 
     it("should return 401 if user is not authenticated", async () => {
