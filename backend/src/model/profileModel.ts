@@ -61,7 +61,7 @@ const profileSchema = new Schema(
       tiktok: { type: String, default: "" },
       github: { type: String, default: "" },
     },
-    links: [{ type: Schema.Types.ObjectId, ref: "Link" , default:[]}],
+    links: [{ type: Schema.Types.ObjectId, ref: "Link", default: [] }],
     theme: {
       type: String,
       default: "default",
@@ -84,8 +84,13 @@ profileSchema.methods.updateSocials = async function (
   socials: Partial<ISocials>
 ) {
   // Object.assign will copy the properties from socials to this.socials and overwrite existing ones
-  Object.assign(this.socials, socials);
-  await this.save();
+
+  try {
+    Object.assign(this.socials, socials);
+    await this.save();
+  } catch (err) {
+    throw err;
+  }
 };
 
 profileSchema.statics.findByUsername = function (username: string) {
@@ -98,7 +103,7 @@ profileSchema.statics.createProfile = async function (
   try {
     const profile = new this(profileData);
     await profile.save();
-    return profile; 
+    return profile;
   } catch (error) {
     throw new Error("Error creating profile, " + error);
   }
@@ -108,8 +113,12 @@ profileSchema.methods.updateProfile = async function (
   this: IProfile,
   updateData: Partial<ProfileCreationInput>
 ) {
-  Object.assign(this, updateData);
-  await this.save();
+  try {
+    Object.assign(this, updateData);
+    await this.save();
+  } catch (err) {
+    throw err;
+  }
 };
 
 profileSchema.methods.addLink = async function (

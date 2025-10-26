@@ -25,15 +25,23 @@ linkSchema.statics.findByProfile = function (profileId: string) {
 };
 
 linkSchema.statics.createLink = async function (linkData: LinkCreationInput) {
-  const link = new this(linkData);
-  await link.save();
-  return link;
+  try {
+    const link = new this(linkData);
+    await link.save();
+    return link;
+  } catch (err) {
+    throw err;
+  }
 };
 
 linkSchema.methods.updateLink = async function (title?: string, url?: string) {
-  if (title) this.title = title;
-  if (url) this.url = url;
-  await this.save();
+  try {
+    if (title) this.title = title;
+    if (url) this.url = url;
+    await this.save();
+  } catch (err) {
+    throw err;
+  }
 };
 
 const Link = mongoose.model<ILink, ILinkModel>("Link", linkSchema);

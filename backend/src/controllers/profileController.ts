@@ -19,8 +19,7 @@ import { getErrorMessage } from "../utils/getErrorMessage.js";
 
 import type { IProfile } from "../model/types-for-models/profileModel.types.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
-
-
+import { error } from "console";
 
 export const createProfile = async (req: Request, res: Response) => {
   if (!req.user) {
@@ -86,7 +85,7 @@ export const getProfileByUsername = async (req: Request, res: Response) => {
     if (!profile) return res.status(404).json({ error: "Profile not found" });
     return res.status(200).json(profile);
   } catch (err) {
-    return res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ message: "Server error", error: err });
   }
 };
 
@@ -99,7 +98,7 @@ export const getProfileLinks = async (req: Request, res: Response) => {
     const links = await Link.findByProfile(profile._id.toString());
     return res.status(200).json(links);
   } catch (err) {
-    return res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ message: "Server error", error: err });
   }
 };
 
@@ -109,12 +108,12 @@ export const createAndAddLinkToProfile = async (
 ) => {
   const { title, url, description } = req.body;
   const user = req.user;
-  if (!user) return res.status(401).json({ message: "Unauthorized." });
+  if (!user) return res.status(401).json({ error: "Unauthorized." });
 
   if (!title || !url)
     return res
       .status(400)
-      .json({ message: "Please include both title and url." });
+      .json({ error: "Please include both title and url." });
 
   try {
     const userId = (user as IUser).id;
@@ -133,12 +132,12 @@ export const createAndAddLinkToProfile = async (
       safeDescription = SanitizedString(200).parse(description);
     } catch (zErr) {
       // zErr is a ZodError -> client input invalid
-      return res.status(400).json({ error: "Invalid link data" });
+      return res.status(400).json({ message: "Invalid link data", error:zErr });
     }
 
     // SanitizedUrl transforms invalid URLs into empty string — reject empty url
     if (!safeLink || safeLink.trim() === "") {
-      return res.status(400).json({ error: "Invalid or unsupported URL" });
+      return res.status(400).json({ message: "Invalid or unsupported URL" });
     }
 
     const newLink = await profile.addLink({

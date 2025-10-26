@@ -13,7 +13,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 export const createUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({ error: "Email and password are required" });
+    return res.status(400).json({ message: "Email and password are required" });
   }
 
   try {
@@ -37,7 +37,7 @@ export const createUser = async (req: Request, res: Response) => {
     });
     res.status(201).json({ user: user, token: token });
   } catch (error) {
-    res.status(500).json({ error: error });
+    res.status(500).json({ message: "Unable to create user.", error: error });
   }
 };
 
