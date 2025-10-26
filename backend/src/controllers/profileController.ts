@@ -19,7 +19,6 @@ import { getErrorMessage } from "../utils/getErrorMessage.js";
 
 import type { IProfile } from "../model/types-for-models/profileModel.types.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
-import { error } from "console";
 
 export const createProfile = async (req: Request, res: Response) => {
   if (!req.user) {
@@ -132,7 +131,9 @@ export const createAndAddLinkToProfile = async (
       safeDescription = SanitizedString(200).parse(description);
     } catch (zErr) {
       // zErr is a ZodError -> client input invalid
-      return res.status(400).json({ message: "Invalid link data", error:zErr });
+      return res
+        .status(400)
+        .json({ message: "Invalid link data", error: zErr });
     }
 
     // SanitizedUrl transforms invalid URLs into empty string — reject empty url
@@ -156,4 +157,10 @@ export const createAndAddLinkToProfile = async (
   }
 };
 
-// TODO: Update profile
+export const updateProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const {username,displayName,bio,profilePictureUrl,paymentQrCodeUrl,socials} = req.body
+};
