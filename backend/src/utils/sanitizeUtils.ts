@@ -1,6 +1,5 @@
 import { z } from "zod";
 import type { ProfileCreationInput } from "../types/user-input.types.js";
-import { Types } from "mongoose";
 
 // Escape HTML special characters to prevent XSS
 export function escapeHtml(str: string): string {
@@ -34,8 +33,8 @@ export const SanitizedString = (maxLength: number) =>
     .string()
     .default("")
     .transform((s) => normalizeWhitespace(s))
-    .transform((s) => s.slice(0, maxLength))
-    .transform((s) => escapeHtml(s));
+    .transform((s) => escapeHtml(s))
+    .transform((s) => s.slice(0, maxLength));
 
 // Strictly valid HTTP/S URL (fails if invalid)
 export const ValidHttpUrl = () =>
@@ -106,9 +105,9 @@ export function sanitizeCreateProfile(
 ): SanitizedCreateProfile {
   const result = CreateProfileSchema.safeParse(input);
   if (!result.success) {
+    // Log details for debugging and throw a clear error the controller can map to 400
     console.error("Validation failed:", result.error.flatten());
-    // Parse empty to apply defaults safely
-    return CreateProfileSchema.parse({});
+    throw new Error("Invalid profile data");
   }
   return result.data;
 }

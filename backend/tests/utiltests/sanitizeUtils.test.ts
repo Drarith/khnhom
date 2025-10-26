@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { sanitizeCreateProfile } from "../../src/utils/sanitizeUtils.js";
+import {
+  sanitizeCreateProfile,
+  SanitizedUrl,
+  SanitizedString,
+} from "../../src/utils/sanitizeUtils.js";
 import type { SanitizedCreateProfile } from "../../src/utils/sanitizeUtils.js";
 
 describe("sanitizeCreateProfile", () => {
@@ -15,7 +19,7 @@ describe("sanitizeCreateProfile", () => {
     const out = sanitizeCreateProfile(input) as SanitizedCreateProfile;
 
     // username trimmed, whitespace normalized and HTML escaped
-    expect(out.username).toBe("foo &lt;script&gt;alert(1)&lt;/script&gt;");
+    expect(out.username).toBe("foo &lt;script&gt;alert(1)&lt;");
     // displayName whitespace normalized
     expect(out.displayName).toBe("A B");
     // bio trimmed & normalized
@@ -59,7 +63,9 @@ describe("sanitizeCreateProfile", () => {
     // github was not a URL; it should be escaped and normalized
     expect(out.socials.github).toBe("&lt;img src=x onerror=alert(1)&gt;");
     // disallowed key should be absent
-    expect((out.socials as Record<string, string>).notAllowedKey).toBeUndefined();
+    expect(
+      (out.socials as Record<string, string>).notAllowedKey
+    ).toBeUndefined();
   });
 
   it("applies defaults for optional fields when omitted", () => {
@@ -77,5 +83,31 @@ describe("sanitizeCreateProfile", () => {
     expect(out.socials).toBeDefined();
     // theme should default to empty string
     expect(out.theme).toBeDefined();
+  });
+
+ 
+  it("SanitizedUrl: returns trimmed url for valid input and empty string for invalid input", () => {
+    const valid = SanitizedUrl().parse("  https://example.com/path  ");
+    expect(valid).toBe("https://example.com/path");
+
+    const invalid = SanitizedUrl().parse("notaurl");
+  
+    expect(invalid).toBe("");
+  });
+
+  it("SanitizedString: trims, normalizes whitespace and escapes HTML and caps length", () => {
+    const s = SanitizedString(10).parse(
+      "   <b>Hello   <script>bad</script>   "
+    );
+   
+    expect(s).toContain("&lt;");
+    expect(s.length).toBeLessThanOrEqual(10);
+  });
+
+  it("controller-like behavior: reject empty sanitized URL (should be treated as invalid)", () => {
+    const raw = "not-a-valid-url";
+    const safe = SanitizedUrl().parse(raw);
+ 
+    expect(safe).toBe("");
   });
 });
