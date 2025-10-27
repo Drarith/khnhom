@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken"; // <-- added
 import profileRouter from "../../src/routes/profileRoute.js";
 import User from "../../src/model/userModel.js";
 import Profile from "../../src/model/profileModel.js";
+import Link from "../../src/model/linkModel.js";
 import type { IUser } from "../../src/model/types-for-models/userModel.types.js";
 import type {
   LinkCreationInput,
@@ -17,11 +18,28 @@ const app = express();
 app.use(express.json());
 
 // Mock authentication middleware
+// - Accepts either a raw user id in the Authorization header (legacy tests), or
+// - a "Bearer <jwt>" token signed with process.env.JWT_SECRET containing { id, email }
 app.use((req, res, next) => {
-  // Directly set req.user for authenticated routes
-  if (req.headers.authorization) {
-    const userId = req.headers.authorization;
-    req.user = { id: userId };
+  const authHeader = (req.headers.authorization as string) || "";
+  if (authHeader) {
+    if (authHeader.startsWith("Bearer ")) {
+      const token = authHeader.split(" ")[1];
+      if (token == null) {
+        // 401 Unauthorized
+        return res.status(401).json({ message: "No token provided" });
+      }
+      try {
+        const payload = jwt.verify(
+          token,
+          process.env.JWT_SECRET as string
+        ) as any;
+        // payload should contain { id, email } as created in tests
+        req.user = { id: payload.id, email: payload.email };
+      } catch (err) {}
+    } else {
+      req.user = { id: authHeader };
+    }
   }
   next();
 });
@@ -49,18 +67,19 @@ describe("Profile Routes", () => {
   beforeEach(async () => {
     await User.deleteMany({});
     await Profile.deleteMany({});
+    await Link.deleteMany({});
     testUser = await User.createUser("test@example.com", "password123");
   });
 
   describe("POST /api/create-profile", () => {
     it("should create a new profile for an authenticated user", async () => {
-      const links = [{title:"test", url:"testtest.com"},{title:"test2", url:"test3.com"}]
+      const link = { title: "test", url: "https://testtest.com" };
       const profileData: ProfileCreationInput = {
         user: testUser._id.toString(),
         username: "testuser",
         displayName: "Test User",
         bio: "This is a test bio.",
-        links:links
+        link: link,
       };
 
       const token = jwt.sign(
@@ -73,16 +92,22 @@ describe("Profile Routes", () => {
 
       const res = await supertest(app)
         .post("/api/create-profile")
-        .set("Authorization", `Bearer ${token}`) 
+        .set("Authorization", `Bearer ${token}`)
         .send(profileData);
 
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(201);
       expect(res.body.message).toBe("Profile created successfully!");
 
       const profileInDb = await Profile.findOne({ user: testUser._id });
       expect(profileInDb).not.toBeNull();
       expect(profileInDb?.username).toBe("testuser");
-      expect(profileInDb?.links).toBeDefined()
+      expect(profileInDb?.links).toBeDefined();
+      expect(profileInDb?.links.length).toBe(1);
+
+      // extra assertion: the created Link exists and has the expected title
+      const createdLink = await Link.findById(profileInDb?.links[0]);
+      expect(createdLink).not.toBeNull();
+      expect(createdLink?.title).toBe("test");
     });
 
     it("should return 401 if user is not authenticated", async () => {
@@ -166,7 +191,7 @@ describe("Profile Routes", () => {
 
       const res = await supertest(app)
         .post("/api/create-link")
-        .set("Authorization", `Bearer ${token}`) // <-- changed to Bearer token
+        .set("Authorization", `Bearer ${token}`)
         .send(linkData);
 
       expect(res.status).toBe(201);

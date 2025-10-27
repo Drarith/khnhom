@@ -56,12 +56,18 @@ export const SanitizedUrl = () =>
     .transform((val) => (isValidHttpUrl(val) ? val : ""))
     .default("");
 
+
+// not utilized currently but may be useful in future
 export const SanitizedListOfUrls = () =>
-  z.array(z.object({
-    url: SanitizedUrl(),
-    title: SanitizedString(50),
-    description: SanitizedString(300)
-  }));
+  z
+    .array(
+      z.object({
+        url: SanitizedUrl(),
+        title: SanitizedString(300),
+        description: SanitizedString(300).optional(),
+      })
+    )
+    .transform((arr) => arr.filter((item) => (item.url || "").trim() !== ""));
 
 const ALLOWED_SOCIAL_KEYS = new Set([
   "twitter",
@@ -101,7 +107,6 @@ export const CreateProfileSchema = z.object({
   profilePictureUrl: SanitizedUrl(),
   paymentQrCodeUrl: SanitizedUrl(),
   socials: SocialsSchema,
-  links: SanitizedListOfUrls(),
   theme: SanitizedString(50),
 });
 

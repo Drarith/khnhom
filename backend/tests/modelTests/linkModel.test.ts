@@ -45,7 +45,7 @@ describe("LinkModel", () => {
     // Create a test user for profile tests
     testUser = await User.createUser("test@example.com", "password123");
     testProfileData = {
-      user: testUser._id,
+      user: testUser._id.toString(),
       username: "testuser",
       displayName: "Test User",
       bio: "This is a test user.",

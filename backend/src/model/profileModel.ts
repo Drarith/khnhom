@@ -61,7 +61,10 @@ const profileSchema = new Schema(
       tiktok: { type: String, default: "" },
       github: { type: String, default: "" },
     },
-    links: [{ type: Schema.Types.ObjectId, ref: "Link", default: [] }],
+    links: {
+      type: [{ type: Schema.Types.ObjectId, ref: "Link" }],
+      default: [],
+    },
     theme: {
       type: String,
       default: "default",

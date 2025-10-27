@@ -23,13 +23,13 @@ export interface ProfileCreationInput {
     tiktok?: string;
     github?: string;
   };
-  links?: { title: string; url: string; description?: string }[];
+  link?: { title: string; url: string; description?: string };
   theme?: string;
   views?: number;
 }
 
 export interface LinkCreationInput {
-  profile?: Types.ObjectId;
+  profile?: string | Types.ObjectId;
   title: string;
   url: string;
   description?: string;
@@ -44,6 +44,6 @@ export interface CreateProfile {
   profilePictureUrl?: string;
   paymentQrCodeUrl?: string;
   socials?: Socials;
-  links?: { title: string; url: string; description: string }[];
+  link?: { title: string; url: string; description: string };
   theme?: string;
 }

@@ -31,7 +31,7 @@ export const createProfile = async (req: Request, res: Response) => {
     profilePictureUrl,
     paymentQrCodeUrl,
     socials,
-    links,
+    link,
     theme,
   } = req.body as CreateProfile;
 
@@ -46,28 +46,78 @@ export const createProfile = async (req: Request, res: Response) => {
     profilePictureUrl: profilePictureUrl || "",
     paymentQrCodeUrl: paymentQrCodeUrl || "",
     socials: socials || {},
-    links: links || [],
     theme: theme || "",
   };
 
   try {
-    // Will throw a descriptive Error("Invalid profile data") when validation fails
     const cleanedProfileData: SanitizedCreateProfile =
       sanitizeCreateProfile(profileData);
 
+    let validatedLink:
+      | { title: string; url: string; description?: string }
+      | undefined = undefined;
+
+    if (link) {
+      if (!link.title || !link.url) {
+        return res
+          .status(400)
+          .json({ message: "If providing link, title and url are required." });
+      }
+
+      const safeTitle = SanitizedString(30).parse(link.title);
+      const safeDescription = link.description
+        ? SanitizedString(300).parse(link.description)
+        : "";
+      const safeUrl = SanitizedUrl().parse(link.url);
+
+      if (!safeTitle || safeTitle.trim().length === 0) {
+        return res.status(400).json({ message: "Invalid link title." });
+      }
+      if (!safeUrl || safeUrl.trim() === "") {
+        return res.status(400).json({ message: "Invalid link URL." });
+      }
+
+      validatedLink = {
+        title: safeTitle,
+        url: safeUrl,
+        description: safeDescription,
+      };
+    }
+
     const profile = await Profile.createProfile(cleanedProfileData);
-    return res.status(200).json({
+
+    if (validatedLink) {
+      try {
+        const linkData = {
+          profile: profile._id.toString(),
+          title: validatedLink.title,
+          url: validatedLink.url,
+          description: validatedLink.description || "",
+        };
+        const createdLink = await Link.createLink(linkData);
+        profile.links.push(createdLink._id);
+        await profile.save();
+      } catch (linkErr) {
+        console.error("Failed to create link while creating profile:", linkErr);
+        return res.status(201).json({
+          success: true,
+          message: "Profile created successfully, but link creation failed. Please try adding the link separately.",
+          profile,
+        });
+      }
+    }
+
+    return res.status(201).json({
       success: true,
       message: "Profile created successfully!",
       profile,
     });
   } catch (err) {
-    // Distinguish validation errors from server errors
     const msg = getErrorMessage(err);
     if (msg === "Invalid profile data") {
-      return res.status(400).json({ message: msg, error:err });
+      console.error(err);
+      return res.status(400).json({ message: msg });
     }
-    // Mongoose validation errors often have a 'name' or are a ValidationError:
     if ((err as any)?.name === "ValidationError") {
       return res.status(400).json({ error: (err as any).message });
     }
@@ -164,5 +214,12 @@ export const updateProfile = async (
   res: Response,
   next: NextFunction
 ) => {
-  const {username,displayName,bio,profilePictureUrl,paymentQrCodeUrl,socials} = req.body
+  const {
+    username,
+    displayName,
+    bio,
+    profilePictureUrl,
+    paymentQrCodeUrl,
+    socials,
+  } = req.body;
 };
