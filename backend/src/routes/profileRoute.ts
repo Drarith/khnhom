@@ -13,7 +13,8 @@ const profileRouter = express.Router();
 
 profileRouter.post("/api/create-profile", authenticateToken, createProfile);
 
-profileRouter.put("/api/update-profile", authenticateToken, updateProfile);
+// use this path to update profile or delete profile data
+profileRouter.put("/api/update-profile", authenticateToken, updateProfile); 
 
 profileRouter.get("/api/profile/:username", getProfileByUsername);
 

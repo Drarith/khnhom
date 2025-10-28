@@ -223,7 +223,7 @@ describe("Profile Routes", () => {
 
       const updateBody = {
         displayName: "New Name",
-        bio: "Updated bio",
+        bio: "",
         profilePictureUrl: "https://example.com/pic.jpg",
         paymentQrCodeUrl: "https://example.com/qr.png",
         socials: { x: "newhandle" },
@@ -241,7 +241,7 @@ describe("Profile Routes", () => {
       const updated = await Profile.findOne({ user: testUser._id });
       expect(updated).not.toBeNull();
       expect(updated?.displayName).toBe("New Name");
-      expect(updated?.bio).toBe("Updated bio");
+      expect(updated?.bio).toBe("");
       expect(updated?.profilePictureUrl).toBe("https://example.com/pic.jpg");
       expect(updated?.paymentQrCodeUrl).toBe("https://example.com/qr.png");
       expect(updated?.socials?.x).toBe("newhandle");

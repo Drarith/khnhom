@@ -185,13 +185,10 @@ export const createAndAddLinkToProfile = async (
       safeTitle = SanitizedString(30).parse(title);
       safeDescription = SanitizedString(200).parse(description);
     } catch (zErr) {
-      // zErr is a ZodError -> client input invalid
       return res
         .status(400)
         .json({ message: "Invalid link data", error: zErr });
     }
-
-    // SanitizedUrl transforms invalid URLs into empty string — reject empty url
     if (!safeLink || safeLink.trim() === "") {
       return res.status(400).json({ message: "Invalid or unsupported URL" });
     }
@@ -212,6 +209,7 @@ export const createAndAddLinkToProfile = async (
   }
 };
 
+// use this controller to delete or update profile
 export const updateProfile = async (
   req: Request,
   res: Response,
@@ -260,24 +258,6 @@ export const updateProfile = async (
       updates.paymentQrCodeUrl = safeQr;
     }
 
-    // socials (object of string values) - sanitize each value
-    // if (profileData.socials !== undefined) {
-    //   const sanitizedSocials: Record<string, string> = {};
-    //   const socialsObj = profileData.socials || {};
-    //   for (const [key, value] of Object.entries(socialsObj)) {
-    //     if (typeof value !== "string") continue;
-    //     // allow handles or URLs in socials; use a reasonable length
-    //     try {
-    //       const safe = SanitizedString(200).parse(value);
-    //       if (safe !== undefined && safe.trim() !== "") {
-    //         sanitizedSocials[key] = safe;
-    //       }
-    //     } catch {
-    //       // skip invalid social entry
-    //     }
-    //   }
-    //   updates.socials = sanitizedSocials;
-    // }
     if (profileData.socials !== undefined) {
       try {
         // const sanitizedSocials = SocialsSchema.parse(profileData.socials);
