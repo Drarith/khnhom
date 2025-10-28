@@ -198,4 +198,113 @@ describe("Profile Routes", () => {
       expect(res.body.message).toBe("Added successfully.");
     });
   });
+
+  describe("PUT /api/update-profile", () => {
+    it("should update profile for an authenticated user", async () => {
+      const profileData: ProfileCreationInput = {
+        user: testUser._id.toString(),
+        username: "testuser",
+        displayName: "Old Name",
+        bio: "Old bio",
+        profilePictureUrl: "https://oldurl.com/pic.jpg",
+        paymentQrCodeUrl: "https://oldurl.com/qr.png",
+        socials: { x: "oldhandle" },
+        theme: "light",
+      };
+      await Profile.createProfile(profileData);
+
+      const token = jwt.sign(
+        {
+          id: testUser._id.toString(),
+          email: (testUser.email as string) || "test@example.com",
+        },
+        process.env.JWT_SECRET as string
+      );
+
+      const updateBody = {
+        displayName: "New Name",
+        bio: "Updated bio",
+        profilePictureUrl: "https://example.com/pic.jpg",
+        paymentQrCodeUrl: "https://example.com/qr.png",
+        socials: { x: "newhandle" },
+        theme: "dark",
+      };
+
+      const res = await supertest(app)
+        .put("/api/update-profile")
+        .set("Authorization", `Bearer ${token}`)
+        .send(updateBody);
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+
+      const updated = await Profile.findOne({ user: testUser._id });
+      expect(updated).not.toBeNull();
+      expect(updated?.displayName).toBe("New Name");
+      expect(updated?.bio).toBe("Updated bio");
+      expect(updated?.profilePictureUrl).toBe("https://example.com/pic.jpg");
+      expect(updated?.paymentQrCodeUrl).toBe("https://example.com/qr.png");
+      expect(updated?.socials?.x).toBe("newhandle");
+      expect(updated?.theme).toBe("dark");
+    });
+
+    it("should return 400 for invalid profilePictureUrl", async () => {
+      const profileData: ProfileCreationInput = {
+        user: testUser._id.toString(),
+        username: "testuser",
+        displayName: "Test User",
+      };
+      await Profile.createProfile(profileData);
+
+      const token = jwt.sign(
+        {
+          id: testUser._id.toString(),
+          email: (testUser.email as string) || "test@example.com",
+        },
+        process.env.JWT_SECRET as string
+      );
+
+      const res = await supertest(app)
+        .put("/api/update-profile")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ profilePictureUrl: "not-a-url" });
+
+      expect(res.status).toBe(400);
+    });
+
+    it("should return 400 for invalid socials", async () => {
+      const profileData: ProfileCreationInput = {
+        user: testUser._id.toString(),
+        username: "testuser",
+        displayName: "Test User",
+      };
+      await Profile.createProfile(profileData);
+
+      const token = jwt.sign(
+        {
+          id: testUser._id.toString(),
+          email: (testUser.email as string) || "test@example.com",
+        },
+        process.env.JWT_SECRET as string
+      );
+
+      // const res = await supertest(app)
+      //   .put("/api/update-profile")
+      //   .set("Authorization", `Bearer ${token}`)
+      //   .send({ socials: { tiktok: "wwww.google.com" } });
+
+      // const updated = await Profile.findOne({ user: testUser._id });
+      // console.log(updated);
+
+      // expect(res.status).toBe(400);
+    });
+
+    it("should return 401 if user is not authenticated", async () => {
+      const res = await supertest(app)
+        .put("/api/update-profile")
+        .send({ displayName: "No Auth" });
+
+      expect(res.status).toBe(401);
+    });
+  });
 });

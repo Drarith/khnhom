@@ -28,6 +28,24 @@ export interface ProfileCreationInput {
   views?: number;
 }
 
+export interface profileUpdateInput {
+  displayName?: string;
+  bio?: string;
+  profilePictureUrl?: string;
+  paymentQrCodeUrl?: string;
+  socials?: {
+    facebook?: string;
+    instagram?: string;
+    telegram?: string;
+    youtube?: string;
+    linkedIn?: string;
+    x?: string;
+    tiktok?: string;
+    github?: string;
+  };
+  theme?: string;
+}
+
 export interface LinkCreationInput {
   profile?: string | Types.ObjectId;
   title: string;

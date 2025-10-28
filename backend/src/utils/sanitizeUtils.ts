@@ -36,8 +36,10 @@ export const SanitizedString = (maxLength: number) =>
     .string()
     .default("")
     .transform((s) => normalizeWhitespace(s))
+    .transform((s) => s.trim()) 
     .transform((s) => escapeHtml(s))
     .transform((s) => s.slice(0, maxLength));
+
 
 // Strictly valid HTTP/S URL (fails if invalid)
 export const ValidHttpUrl = () =>

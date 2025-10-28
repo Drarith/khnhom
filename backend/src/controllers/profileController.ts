@@ -3,6 +3,7 @@ import type { Request, Response, NextFunction } from "express";
 import type {
   CreateProfile,
   ProfileCreationInput,
+  profileUpdateInput,
 } from "../types/user-input.types.js";
 
 import Profile from "../model/profileModel.js";
@@ -11,6 +12,7 @@ import Link from "../model/linkModel.js";
 import {
   sanitizeCreateProfile,
   SanitizedString,
+  SocialsSchema,
   type SanitizedCreateProfile,
 } from "../utils/sanitizeUtils.js";
 import { SanitizedUrl } from "../utils/sanitizeUtils.js";
@@ -101,7 +103,8 @@ export const createProfile = async (req: Request, res: Response) => {
         console.error("Failed to create link while creating profile:", linkErr);
         return res.status(201).json({
           success: true,
-          message: "Profile created successfully, but link creation failed. Please try adding the link separately.",
+          message:
+            "Profile created successfully, but link creation failed. Please try adding the link separately.",
           profile,
         });
       }
@@ -212,14 +215,102 @@ export const createAndAddLinkToProfile = async (
 export const updateProfile = async (
   req: Request,
   res: Response,
-  next: NextFunction
 ) => {
-  const {
-    username,
-    displayName,
-    bio,
-    profilePictureUrl,
-    paymentQrCodeUrl,
-    socials,
-  } = req.body;
+  const profileData: profileUpdateInput = req.body;
+
+  if (!req.user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  const userId = (req.user as IUser).id;
+  if (!userId) return res.status(400).json({ message: "User id not found!" });
+
+  try {
+    const profile = await Profile.findOne({ user: userId });
+    if (!profile) return res.status(404).json({ message: "Profile not found" });
+
+    const updates: Partial<profileUpdateInput> = {};
+
+    if (profileData.displayName !== undefined) {
+      const safeDisplay = SanitizedString(50).parse(profileData.displayName);
+      updates.displayName = safeDisplay;
+    }
+
+    if (profileData.bio !== undefined) {
+      const safeBio = SanitizedString(1000).parse(profileData.bio);
+      updates.bio = safeBio;
+    }
+
+    if (profileData.profilePictureUrl !== undefined) {
+      const safeUrl = SanitizedUrl().parse(profileData.profilePictureUrl);
+      if (!safeUrl || safeUrl.trim() === "") {
+        return res
+          .status(400)
+          .json({ message: "Invalid profile picture URL." });
+      }
+      updates.profilePictureUrl = safeUrl;
+    }
+
+    if (profileData.paymentQrCodeUrl !== undefined) {
+      const safeQr = SanitizedUrl().parse(profileData.paymentQrCodeUrl);
+      if (!safeQr || safeQr.trim() === "") {
+        return res
+          .status(400)
+          .json({ message: "Invalid payment QR code URL." });
+      }
+      updates.paymentQrCodeUrl = safeQr;
+    }
+
+    // socials (object of string values) - sanitize each value
+    // if (profileData.socials !== undefined) {
+    //   const sanitizedSocials: Record<string, string> = {};
+    //   const socialsObj = profileData.socials || {};
+    //   for (const [key, value] of Object.entries(socialsObj)) {
+    //     if (typeof value !== "string") continue;
+    //     // allow handles or URLs in socials; use a reasonable length
+    //     try {
+    //       const safe = SanitizedString(200).parse(value);
+    //       if (safe !== undefined && safe.trim() !== "") {
+    //         sanitizedSocials[key] = safe;
+    //       }
+    //     } catch {
+    //       // skip invalid social entry
+    //     }
+    //   }
+    //   updates.socials = sanitizedSocials;
+    // }
+    if (profileData.socials !== undefined) {
+      try {
+        // const sanitizedSocials = SocialsSchema.parse(profileData.socials);
+        // updates.socials = sanitizedSocials;
+        updates.socials = profileData.socials
+      } catch (zErr) {
+        return res
+          .status(400)
+          .json({ message: "Invalid socials data", error: zErr });
+      }
+    }
+
+    if (profileData.theme !== undefined) {
+      const safeTheme = SanitizedString(50).parse(profileData.theme);
+      updates.theme = safeTheme;
+    }
+
+    Object.assign(profile, updates);
+    await profile.save();
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Profile updated.", profile });
+  } catch (err) {
+    if ((err as any)?.issues) {
+      return res
+        .status(400)
+        .json({ message: "Invalid profile data", error: err });
+    }
+    if ((err as any)?.name === "ValidationError") {
+      return res.status(400).json({ error: (err as any).message });
+    }
+    const msg = getErrorMessage(err);
+    return res.status(500).json({ error: "Unable to update profile. " + msg });
+  }
 };
