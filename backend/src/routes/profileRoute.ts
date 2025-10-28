@@ -3,9 +3,10 @@ import {
   createProfile,
   getProfileByUsername,
   createAndAddLinkToProfile,
-  updateProfile
+  updateProfile,
+  deleteLinkFromProfile,
+  getProfileLinks,
 } from "../controllers/profileController.js";
-import { getProfileLinks } from "../controllers/profileController.js";
 import { authenticateToken } from "../middleware/auth.js";
 import "../config/passport.js";
 
@@ -14,7 +15,13 @@ const profileRouter = express.Router();
 profileRouter.post("/api/create-profile", authenticateToken, createProfile);
 
 // use this path to update profile or delete profile data
-profileRouter.put("/api/update-profile", authenticateToken, updateProfile); 
+profileRouter.put("/api/update-profile", authenticateToken, updateProfile);
+
+profileRouter.delete(
+  "/api/profile/links/:linkId",
+  authenticateToken,
+  deleteLinkFromProfile
+);
 
 profileRouter.get("/api/profile/:username", getProfileByUsername);
 

@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
+import mongoose from "mongoose";
 
 import type {
   CreateProfile,
@@ -176,7 +177,6 @@ export const createAndAddLinkToProfile = async (
     const profile = await Profile.findOne({ user: userId });
     if (!profile) return res.status(404).json({ message: "Profile not found" });
 
-    // Use zod parsing inside try and map validation errors to 400
     let safeLink: string;
     let safeTitle: string;
     let safeDescription: string;
@@ -293,7 +293,13 @@ export const updateProfile = async (req: Request, res: Response) => {
 };
 
 export const deleteLinkFromProfile = async (req: Request, res: Response) => {
-  const { linkId } = req.body;
+  const linkId = req.params.linkId
+  if (!linkId) {
+    return res.status(400).json({ message: "linkId is required" });
+  }
+  if (!mongoose.Types.ObjectId.isValid(linkId)) {
+    return res.status(400).json({ message: "Invalid linkId format" });
+  }
   if (!req.user) {
     return res.status(401).json({ error: "Unauthorized" });
   }
@@ -311,7 +317,6 @@ export const deleteLinkFromProfile = async (req: Request, res: Response) => {
   }
 
   try {
-
     userProfile.links = userProfile.links.filter((l) => String(l) !== linkId);
     await userProfile.save();
 

@@ -307,4 +307,48 @@ describe("Profile Routes", () => {
       expect(res.status).toBe(401);
     });
   });
+
+  describe("/api/profile/links/:linkId", () => {
+    it("should delete the link given the id", async () => {
+      const linkData: LinkCreationInput = {
+        title: "new link",
+        url: "https://chatgpt.com/",
+      };
+      const profileData: ProfileCreationInput = {
+        user: testUser._id.toString(),
+        username: "testuser",
+        displayName: "Test User",
+        bio: "This is a test bi.",
+        link: linkData,
+      };
+
+      const token = jwt.sign(
+        {
+          id: testUser._id.toString(),
+          email: (testUser.email as string) || "test@example.com",
+        },
+        process.env.JWT_SECRET as string
+      );
+
+      const res = await supertest(app)
+        .post("/api/create-profile")
+        .set("Authorization", `Bearer ${token}`)
+        .send(profileData);
+
+      expect(res.body.profile.links).toBeDefined();
+
+      const resDel = await supertest(app)
+        .delete(`/api/profile/links/${res.body.profile.links[0]}`)
+        .set("Authorization", `Bearer ${token}`);
+
+      expect(resDel.status).toBe(200)
+
+      const userProfile = await Profile.findOne({user: testUser.id})
+      if(!userProfile) throw new Error("no profile found.")
+      expect(userProfile.links.length).toBe(0)
+      
+    });
+
+    
+  });
 });
