@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import type { IUser, IUserModel } from "./types-for-models/userModel.types.js";
-import type { I } from "vitest/dist/chunks/reporters.d.BFLkQcL6.js";
 
 const { Schema } = mongoose;
 
@@ -30,7 +29,12 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
+
   { timestamps: true }
 );
 
@@ -57,7 +61,6 @@ userSchema.statics.createUser = async function (
   try {
     if (!email || !password) {
       throw new Error("Email and password are required");
-      
     }
     const user = new this({ email, password });
     await user.save();
@@ -82,7 +85,9 @@ userSchema.statics.createGoogleUser = async function (
   }
 };
 
-userSchema.statics.findByGoogleId = async function (googleId: IUser["googleId"]) {
+userSchema.statics.findByGoogleId = async function (
+  googleId: IUser["googleId"]
+) {
   return this.findOne({ googleId });
 };
 
@@ -115,8 +120,6 @@ userSchema.methods.updatePassword = async function (newPassword: string) {
 userSchema.statics.findByEmail = async function (email: string) {
   return this.findOne({ email });
 };
-
-
 
 const User = mongoose.model<IUser, IUserModel>("User", userSchema);
 export default User;

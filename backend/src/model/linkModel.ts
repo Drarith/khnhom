@@ -5,6 +5,7 @@ const { Schema } = mongoose;
 import type { ILink, ILinkModel } from "./types-for-models/linkModel.types.js";
 
 import type { LinkCreationInput } from "../types/user-input.types.js";
+import { link } from "fs";
 
 const linkSchema = new Schema<ILink>(
   {
@@ -21,7 +22,11 @@ const linkSchema = new Schema<ILink>(
 );
 
 linkSchema.statics.findByProfile = function (profileId: string) {
-  return this.find({ profile: profileId });
+  try {
+    return this.find({ profile: profileId });
+  } catch (err) {
+    throw err;
+  }
 };
 
 linkSchema.statics.createLink = async function (linkData: LinkCreationInput) {
@@ -39,6 +44,16 @@ linkSchema.methods.updateLink = async function (title?: string, url?: string) {
     if (title) this.title = title;
     if (url) this.url = url;
     await this.save();
+  } catch (err) {
+    throw err;
+  }
+};
+
+linkSchema.methods.deleteLinkFromProfile = async function (
+  linkId: string
+) {
+  try {
+    const linkToDelete = this.findOne({})
   } catch (err) {
     throw err;
   }

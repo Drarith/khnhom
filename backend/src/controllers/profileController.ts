@@ -210,10 +210,7 @@ export const createAndAddLinkToProfile = async (
 };
 
 // use this controller to delete or update profile
-export const updateProfile = async (
-  req: Request,
-  res: Response,
-) => {
+export const updateProfile = async (req: Request, res: Response) => {
   const profileData: profileUpdateInput = req.body;
 
   if (!req.user) {
@@ -262,7 +259,7 @@ export const updateProfile = async (
       try {
         // const sanitizedSocials = SocialsSchema.parse(profileData.socials);
         // updates.socials = sanitizedSocials;
-        updates.socials = profileData.socials
+        updates.socials = profileData.socials;
       } catch (zErr) {
         return res
           .status(400)
@@ -292,5 +289,18 @@ export const updateProfile = async (
     }
     const msg = getErrorMessage(err);
     return res.status(500).json({ error: "Unable to update profile. " + msg });
+  }
+};
+
+export const deleteLinkFromProfile = async (req: Request, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  const userId = (req.user as IUser).id;
+  if (!userId) return res.status(400).json({ message: "User id not found!" });
+
+  const userProfile = await Profile.findOne({ user: userId });
+  if (!userProfile) {
+    return res.status(400).json({ message: "User profile not found" });
   }
 };
