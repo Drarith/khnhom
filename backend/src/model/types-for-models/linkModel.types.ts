@@ -1,5 +1,6 @@
 import { Document, Model, Types } from "mongoose";
 import type { LinkCreationInput } from "../../types/user-input.types.js";
+import type { deleteLinkFromProfile } from "../../controllers/profileController.js";
 
 // Interface for the Link document and model in case your dumbass forgets
 export interface ILink extends Document {
@@ -16,4 +17,5 @@ export interface ILink extends Document {
 export interface ILinkModel extends Model<ILink> {
   findByProfile(profileId: string): Promise<ILink[]>;
   createLink(linkData: LinkCreationInput): Promise<ILink>;
+  deleteLink(linkId:string):Promise<Boolean>
 }

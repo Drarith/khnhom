@@ -293,6 +293,7 @@ export const updateProfile = async (req: Request, res: Response) => {
 };
 
 export const deleteLinkFromProfile = async (req: Request, res: Response) => {
+  const { linkId } = req.body;
   if (!req.user) {
     return res.status(401).json({ error: "Unauthorized" });
   }
@@ -302,5 +303,25 @@ export const deleteLinkFromProfile = async (req: Request, res: Response) => {
   const userProfile = await Profile.findOne({ user: userId });
   if (!userProfile) {
     return res.status(400).json({ message: "User profile not found" });
+  }
+
+  const linkExists = userProfile.links.map(String).includes(linkId);
+  if (!linkExists) {
+    return res.status(404).json({ message: "Link not found in user profile" });
+  }
+
+  try {
+
+    userProfile.links = userProfile.links.filter((l) => String(l) !== linkId);
+    await userProfile.save();
+
+    await Link.findByIdAndDelete(linkId);
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Link deleted from profile." });
+  } catch (err) {
+    const msg = getErrorMessage(err);
+    return res.status(500).json({ error: "Unable to delete link. " + msg });
   }
 };

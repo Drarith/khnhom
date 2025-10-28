@@ -5,7 +5,6 @@ const { Schema } = mongoose;
 import type { ILink, ILinkModel } from "./types-for-models/linkModel.types.js";
 
 import type { LinkCreationInput } from "../types/user-input.types.js";
-import { link } from "fs";
 
 const linkSchema = new Schema<ILink>(
   {
@@ -48,12 +47,13 @@ linkSchema.methods.updateLink = async function (title?: string, url?: string) {
     throw err;
   }
 };
-
-linkSchema.methods.deleteLinkFromProfile = async function (
-  linkId: string
-) {
+// okay apparently mongoose have findByIdAndDelete i am just a dumbass
+linkSchema.statics.deleteLink = async function (linkId: string) {
   try {
-    const linkToDelete = this.findOne({})
+    const linkToDelete = await this.findById(linkId);
+    if (!linkToDelete) return false;
+    await linkToDelete.deleteOne();
+    return true;
   } catch (err) {
     throw err;
   }
