@@ -122,8 +122,8 @@ export const createProfile = async (req: Request, res: Response) => {
       console.error(err);
       return res.status(400).json({ message: msg });
     }
-    if ((err as any)?.name === "ValidationError") {
-      return res.status(400).json({ error: (err as any).message });
+    if ((err as Error)?.name === "ValidationError") {
+      return res.status(400).json({ error: (err as Error).message });
     }
     return res.status(500).json({ error: "Unable to create profile." + msg });
   }
@@ -279,13 +279,8 @@ export const updateProfile = async (req: Request, res: Response) => {
       .status(200)
       .json({ success: true, message: "Profile updated.", profile });
   } catch (err) {
-    if ((err as any)?.issues) {
-      return res
-        .status(400)
-        .json({ message: "Invalid profile data", error: err });
-    }
-    if ((err as any)?.name === "ValidationError") {
-      return res.status(400).json({ error: (err as any).message });
+    if ((err as Error)?.name === "ValidationError") {
+      return res.status(400).json({ error: (err as Error).message });
     }
     const msg = getErrorMessage(err);
     return res.status(500).json({ error: "Unable to update profile. " + msg });
