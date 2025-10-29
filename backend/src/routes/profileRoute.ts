@@ -9,6 +9,7 @@ import {
 } from "../controllers/profileController.js";
 import { authenticateToken } from "../middleware/auth.js";
 import "../config/passport.js";
+import { trackProfileView } from "../middleware/viewProfile.js";
 
 const profileRouter = express.Router();
 
@@ -23,9 +24,14 @@ profileRouter.delete(
   deleteLinkFromProfile
 );
 
-profileRouter.get("/api/profile/:username", getProfileByUsername);
-
+// move the more specific route before the generic :username route
 profileRouter.get("/api/profile/:username/links", getProfileLinks);
+
+profileRouter.get(
+  "/api/profile/:username",
+  trackProfileView,
+  getProfileByUsername
+);
 
 profileRouter.post(
   "/api/create-link",
