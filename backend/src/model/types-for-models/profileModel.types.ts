@@ -42,11 +42,11 @@ export interface IProfile extends Document {
     updateData: Partial<ProfileCreationInput>
   ): Promise<void>;
   addLink(this: IProfile, linkData: LinkCreationInput): Promise<ILink>;
+  incrementViews(this: IProfile): Promise<void>;
 }
 
 // Interface for the Profile model (static methods)
 export interface IProfileModel extends Model<IProfile> {
   findByUsername(username: string): Promise<IProfile | null>;
   createProfile(profileData: ProfileCreationInput): Promise<IProfile>;
-  
 }

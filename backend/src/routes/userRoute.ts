@@ -5,7 +5,6 @@ import {
   loginUser,
   logoutUser,
 } from "../controllers/userController.js";
-import { authenticateToken } from "../middleware/auth.js";
 import passport from "passport";
 import "../config/passport.js";
 

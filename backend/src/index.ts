@@ -5,6 +5,8 @@ import passport from "passport";
 
 import dotenv from "dotenv";
 
+import cookieParser from 'cookie-parser'
+
 import type { Env } from "./types/myENV.js";
 
 import userRouter from "./routes/userRoute.js";
@@ -20,6 +22,9 @@ const env: Env = {
   MONGO_URI: process.env.MONGO_URI || "",
   PORT: Number(process.env.PORT) || 3000,
 };
+
+// cookie parse middleware
+app.use(cookieParser())
 
 // Initialize Passport.js
 app.use(passport.initialize());
