@@ -9,41 +9,41 @@ export const trackProfileView = async (
 ) => {
   try {
     const username = req.params.username;
-    // if (!username) {
-    //   return next();
-    // }
+    if (!username) {
+      return next();
+    }
 
-    const userProfile = await Profile.findOne({ user:username });
+    const userProfile = await Profile.findOne({ username });
     if (!userProfile) {
       return next();
     }
 
-    // const cookieKey = "viewedProfile";
-    // let viewedProfiles: string[] = [];
+    const cookieKey = "viewedProfile";
+    let viewedProfiles: string[] = [];
 
-    // const raw =
-    //   (req as any).cookies?.[cookieKey] ?? (req.cookies as any)?.[cookieKey];
-    // if (raw) {
-    //   try {
-    //     const parsed = JSON.parse(raw);
-    //     if (Array.isArray(parsed)) viewedProfiles = parsed as string[];
-    //   } catch (err) {
-    //     // ignore malformed cookie
-    //   }
-    // }
+    const raw =
+      (req as any).cookies?.[cookieKey] ?? (req.cookies as any)?.[cookieKey];
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) viewedProfiles = parsed as string[];
+      } catch (err) {
+        // ignore malformed cookie
+      }
+    }
 
-    // if (!viewedProfiles.includes(username)) {
-    //   viewedProfiles.push(username);
-    //   res.cookie(cookieKey, JSON.stringify(viewedProfiles), {
-    //     maxAge: 24 * 60 * 60 * 1000,
-    //     httpOnly: true,
-    //     sameSite: "lax",
-    //   });
+    if (!viewedProfiles.includes(username)) {
+      viewedProfiles.push(username);
+      res.cookie(cookieKey, JSON.stringify(viewedProfiles), {
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        sameSite: "lax",
+      });
 
       await userProfile.incrementViews();
-    // }
+    }
 
-    // (req as any).profile = userProfile;
+    (req as any).profile = userProfile;
   } catch (err) {
     console.error("trackProfileView error:", err);
   } finally {
