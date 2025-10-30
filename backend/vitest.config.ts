@@ -7,6 +7,7 @@ export default defineConfig({
     globals: true,
     setupFiles: [],
     testTimeout: 30000,
+
   },
   esbuild: {
     target: "node18",

@@ -23,6 +23,9 @@ import { getErrorMessage } from "../utils/getErrorMessage.js";
 import type { IProfile } from "../model/types-for-models/profileModel.types.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 
+import { checkUrlSafe } from "../utils/googleSafeBrowsing.js";
+import { isLinkSafe } from "../utils/isLinkSafe.js";
+
 export const createProfile = async (req: Request, res: Response) => {
   if (!req.user) {
     return res.status(401).json({ error: "Unauthorized" });
@@ -40,6 +43,8 @@ export const createProfile = async (req: Request, res: Response) => {
 
   const userId = (req.user as IUser).id;
   if (!userId) return res.status(400).json({ message: "User id not found!" });
+
+  let isSafe = false;
 
   const profileData: ProfileCreationInput = {
     user: userId.toString(),
@@ -72,6 +77,20 @@ export const createProfile = async (req: Request, res: Response) => {
         ? SanitizedString(300).parse(link.description)
         : "";
       const safeUrl = SanitizedUrl().parse(link.url);
+      try {
+        isSafe = await checkUrlSafe(safeUrl);
+      } catch (err) {
+        isSafe = false;
+        return res
+          .status(400)
+          .json({ message: "Unable to verify links safety." });
+      }
+
+      if (!isSafe) {
+        return res
+          .status(401)
+          .json({ message: "Provided link URL is unsafe or blocked." });
+      }
 
       if (!safeTitle || safeTitle.trim().length === 0) {
         return res.status(400).json({ message: "Invalid link title." });
@@ -163,6 +182,7 @@ export const createAndAddLinkToProfile = async (
 ) => {
   const { title, url, description } = req.body;
   const user = req.user;
+  let isLinkSafe = false;
   if (!user) return res.status(401).json({ error: "Unauthorized." });
 
   if (!title || !url)
@@ -189,6 +209,7 @@ export const createAndAddLinkToProfile = async (
         .status(400)
         .json({ message: "Invalid link data", error: zErr });
     }
+    
     if (!safeLink || safeLink.trim() === "") {
       return res.status(400).json({ message: "Invalid or unsupported URL" });
     }
@@ -287,7 +308,7 @@ export const updateProfile = async (req: Request, res: Response) => {
 };
 
 export const deleteLinkFromProfile = async (req: Request, res: Response) => {
-  const linkId = req.params.linkId
+  const linkId = req.params.linkId;
   if (!linkId) {
     return res.status(400).json({ message: "linkId is required" });
   }

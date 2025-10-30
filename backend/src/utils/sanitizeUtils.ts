@@ -1,8 +1,9 @@
 import { z } from "zod";
 import type {
-  LinkCreationInput,
   ProfileCreationInput,
 } from "../types/user-input.types.js";
+
+import { checkUrlSafe } from "./googleSafeBrowsing.js";
 
 // Escape HTML special characters to prevent XSS
 export function escapeHtml(str: string): string {
