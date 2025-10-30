@@ -257,9 +257,8 @@ export const updateProfile = async (req: Request, res: Response) => {
 
     if (profileData.socials !== undefined) {
       try {
-        // const sanitizedSocials = SocialsSchema.parse(profileData.socials);
-        // updates.socials = sanitizedSocials;
-        updates.socials = profileData.socials;
+        const sanitizedSocials = SocialsSchema.parse(profileData.socials);
+        updates.socials = sanitizedSocials;
       } catch (zErr) {
         return res
           .status(400)

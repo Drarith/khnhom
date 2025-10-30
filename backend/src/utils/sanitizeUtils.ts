@@ -72,10 +72,10 @@ export const SanitizedListOfUrls = () =>
     .transform((arr) => arr.filter((item) => (item.url || "").trim() !== ""));
 
 const ALLOWED_SOCIAL_KEYS = new Set([
-  "twitter",
+  "x",
   "instagram",
   "github",
-  "website",
+  "telegram",
   "tiktok",
   "youtube",
   "linkedin",
@@ -91,7 +91,7 @@ export const SocialsSchema = z
       if (!ALLOWED_SOCIAL_KEYS.has(key)) continue;
       if (typeof value === "string" && value.trim() !== "") {
         const trimmed = value.trim();
-        if (isValidHttpUrl(trimmed)) {
+        if (SanitizedUrl().parse(trimmed)) {
           out[key] = trimmed;
         } else {
           out[key] = escapeHtml(normalizeWhitespace(trimmed).slice(0, 100));

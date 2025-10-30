@@ -50,7 +50,7 @@ describe("sanitizeCreateProfile", () => {
       username: "socialuser",
       displayName: "Social User",
       socials: {
-        twitter: "  https://twitter.com/test  ",
+        x: "  https://x.com/test  ",
         github: "<img src=x onerror=alert(1)>",
         notAllowedKey: "shouldNotAppear",
       },
@@ -58,8 +58,8 @@ describe("sanitizeCreateProfile", () => {
 
     const out = sanitizeCreateProfile(input) as SanitizedCreateProfile;
 
-    // twitter was a valid URL, kept and trimmed
-    expect(out.socials.twitter).toBe("https://twitter.com/test");
+    // x was a valid URL, kept and trimmed
+    expect(out.socials.x).toBe("https://x.com/test");
     // github was not a URL; it should be escaped and normalized
     expect(out.socials.github).toBe("&lt;img src=x onerror=alert(1)&gt;");
     // disallowed key should be absent

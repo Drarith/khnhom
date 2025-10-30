@@ -208,7 +208,7 @@ describe("Profile Routes", () => {
         bio: "Old bio",
         profilePictureUrl: "https://oldurl.com/pic.jpg",
         paymentQrCodeUrl: "https://oldurl.com/qr.png",
-        socials: { x: "oldhandle" },
+        socials: { x: "https://www.google.com/" },
         theme: "light",
       };
       await Profile.createProfile(profileData);
@@ -226,7 +226,7 @@ describe("Profile Routes", () => {
         bio: "",
         profilePictureUrl: "https://example.com/pic.jpg",
         paymentQrCodeUrl: "https://example.com/qr.png",
-        socials: { x: "newhandle" },
+        socials: { x: "https://www.yahoo.com/" },
         theme: "dark",
       };
 
@@ -239,12 +239,13 @@ describe("Profile Routes", () => {
       expect(res.body.success).toBe(true);
 
       const updated = await Profile.findOne({ user: testUser._id });
+      console.log(updated);
       expect(updated).not.toBeNull();
       expect(updated?.displayName).toBe("New Name");
       expect(updated?.bio).toBe("");
       expect(updated?.profilePictureUrl).toBe("https://example.com/pic.jpg");
       expect(updated?.paymentQrCodeUrl).toBe("https://example.com/qr.png");
-      expect(updated?.socials?.x).toBe("newhandle");
+      expect(updated?.socials?.x).toBe("https://www.yahoo.com/");
       expect(updated?.theme).toBe("dark");
     });
 
