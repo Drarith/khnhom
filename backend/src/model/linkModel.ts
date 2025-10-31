@@ -30,6 +30,13 @@ linkSchema.statics.findByProfile = function (profileId: string) {
 
 linkSchema.statics.createLink = async function (linkData: LinkCreationInput) {
   try {
+    const existingTitle = await this.findOne({
+      profile: linkData.profile,
+      title: linkData.title,
+    });
+    if (existingTitle) {
+      throw new Error("Link title must be unique");
+    }
     const link = new this(linkData);
     await link.save();
     return link;

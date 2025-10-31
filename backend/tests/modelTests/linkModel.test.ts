@@ -153,6 +153,30 @@ describe("LinkModel", () => {
         expect(updatedLink.description).toBe("An updated link for testing");
         expect(updatedLink.profile).toBe(linkData.profile);
       });
+
+      it("should reject creation of a link with an existing title for the same profile", async () => {
+        const linkData = {
+          title: "Duplicate Title",
+          url: "https://example.com/one",
+          description: "First link",
+          profile: testProfile._id,
+        };
+
+        const first = await Link.createLink(linkData);
+        expect(first).toBeDefined();
+        expect(first.title).toBe(linkData.title);
+
+        const duplicate = {
+          title: "Duplicate Title",
+          url: "https://example.com/two",
+          description: "Second link with same title",
+          profile: testProfile._id,
+        };
+
+        await expect(Link.createLink(duplicate)).rejects.toThrow(
+          "Link title must be unique"
+        );
+      });
     });
   });
 });

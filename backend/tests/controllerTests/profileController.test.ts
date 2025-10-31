@@ -226,6 +226,40 @@ describe("Profile Routes", () => {
       expect(res.status).toBe(201);
       expect(res.body.message).toBe("Added successfully.");
     });
+
+    it("should return 500 when adding a duplicate link title for the user's profile", async () => {
+      const profileData: ProfileCreationInput = {
+        user: testUser._id.toString(),
+        username: "testuser",
+        displayName: "Test User",
+      };
+
+      const newProfile = await Profile.createProfile(profileData);
+
+      const token = jwt.sign(
+        {
+          id: testUser._id.toString(),
+          email: (testUser.email as string) || "test@example.com",
+        },
+        process.env.JWT_SECRET as string
+      );
+
+      const firstRes = await supertest(app)
+        .post("/api/create-link")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ title: "New Link", url: "https://newlink.com" });
+
+      expect(firstRes.status).toBe(201);
+      expect(firstRes.body.message).toBe("Added successfully.");
+
+      const secondRes = await supertest(app)
+        .post("/api/create-link")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ title: "New Link", url: "https://another.com" });
+
+      expect(secondRes.status).toBe(500);
+      expect(secondRes.body.message).toBeDefined();
+    });
   });
 
   describe("PUT /api/update-profile", () => {
