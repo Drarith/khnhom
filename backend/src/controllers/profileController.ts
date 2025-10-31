@@ -28,7 +28,7 @@ import { getErrorMessage } from "../utils/getErrorMessage.js";
 import type { IProfile } from "../model/types-for-models/profileModel.types.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 
-import { areLinkSafe, isLinkSafe } from "../utils/isLinkSafe.js";
+import { areLinkSafe, isLinkSafe } from "../helpers/checkLinkSafety.js";
 
 export const createProfile = async (req: Request, res: Response) => {
   if (!req.user) {

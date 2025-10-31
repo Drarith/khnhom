@@ -1,9 +1,9 @@
-import { checkUrlSafe } from "./googleSafeBrowsing.js";
-import { checkUrlsSafe } from "./googleSBBatchCheck.js";
+import { checkUrlSafe } from "../utils/googleSafeBrowsing.js";
+import { checkUrlsSafe } from "../utils/googleSBBatchCheck.js";
 
 export const isLinkSafe = async (url: string): Promise<void> => {
   if (!url) {
-    return; 
+    return;
   }
 
   let isSafe;
@@ -20,9 +20,9 @@ export const isLinkSafe = async (url: string): Promise<void> => {
   }
 };
 
-export const areLinkSafe = async (urls:string[]): Promise<void> => {
-    if (!urls) {
-    return; 
+export const areLinkSafe = async (urls: string[]): Promise<void> => {
+  if (!urls) {
+    return;
   }
 
   let isSafe;
@@ -37,4 +37,4 @@ export const areLinkSafe = async (urls:string[]): Promise<void> => {
       "One or more provided links URL are unsafe or blocked by security policy."
     );
   }
-}
+};
