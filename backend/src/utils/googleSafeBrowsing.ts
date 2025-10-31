@@ -3,9 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const GOOGLE_SB_API = process.env.GOOGLE_SB_API;
-if (!GOOGLE_SB_API) {
-  throw new Error("No Google safe browsing key found.");
-}
+
 const GOOGLE_SAFE_BROWSING_ENDPOINT = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${GOOGLE_SB_API}`;
 
 /**

@@ -56,7 +56,7 @@ const profileSchema = new Schema(
       instagram: { type: String, default: "" },
       telegram: { type: String, default: "" },
       youtube: { type: String, default: "" },
-      linkedIn: { type: String, default: "" },
+      linkedin: { type: String, default: "" },
       x: { type: String, default: "" },
       tiktok: { type: String, default: "" },
       github: { type: String, default: "" },
