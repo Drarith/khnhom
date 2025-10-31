@@ -122,6 +122,35 @@ describe("Profile Routes", () => {
 
       expect(res.status).toBe(401);
     });
+
+    it("should return 400 if social links are unsafe", async () => {
+      const profileData = {
+        user: testUser._id.toString(),
+        username: "testuser",
+        displayName: "Test User",
+        socials: {
+          x: "http://malware.testing.google.test/testing/malware/",
+        },
+      };
+
+      const token = jwt.sign(
+        {
+          id: testUser._id.toString(),
+          email: (testUser.email as string) || "test@example.com",
+        },
+        process.env.JWT_SECRET as string
+      );
+
+      const res = await supertest(app)
+        .post("/api/create-profile")
+        .set("Authorization", `Bearer ${token}`)
+        .send(profileData);
+
+      expect(res.status).toBe(400);
+      expect(res.body.msg).toContain(
+        "One or more provided links URL are unsafe"
+      );
+    });
   });
 
   describe("GET /api/profile/:username", () => {
@@ -342,14 +371,11 @@ describe("Profile Routes", () => {
         .delete(`/api/profile/links/${res.body.profile.links[0]}`)
         .set("Authorization", `Bearer ${token}`);
 
-      expect(resDel.status).toBe(200)
+      expect(resDel.status).toBe(200);
 
-      const userProfile = await Profile.findOne({user: testUser.id})
-      if(!userProfile) throw new Error("no profile found.")
-      expect(userProfile.links.length).toBe(0)
-      
+      const userProfile = await Profile.findOne({ user: testUser.id });
+      if (!userProfile) throw new Error("no profile found.");
+      expect(userProfile.links.length).toBe(0);
     });
-
-    
   });
 });

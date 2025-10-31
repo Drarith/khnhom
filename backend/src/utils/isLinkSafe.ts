@@ -1,23 +1,40 @@
-import type { Request, Response, NextFunction } from "express";
 import { checkUrlSafe } from "./googleSafeBrowsing.js";
+import { checkUrlsSafe } from "./googleSBBatchCheck.js";
 
-export const isUrlSafe = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-  safeUrl: string
-) => {
+export const isLinkSafe = async (url: string): Promise<void> => {
+  if (!url) {
+    return; 
+  }
+
   let isSafe;
   try {
-    isSafe = await checkUrlSafe(safeUrl);
+    isSafe = await checkUrlSafe(url);
   } catch (err) {
-    return res.status(400).json({ message: "Unable to verify links safety." });
+    throw new Error("Unable to verify link's safety.");
   }
 
   if (!isSafe) {
-    return res
-      .status(401)
-      .json({ message: "Provided link URL is unsafe or blocked." });
+    throw new Error(
+      "Provided link URL is unsafe or blocked by security policy."
+    );
   }
-  next();
 };
+
+export const areLinkSafe = async (urls:string[]): Promise<void> => {
+    if (!urls) {
+    return; 
+  }
+
+  let isSafe;
+  try {
+    isSafe = await checkUrlsSafe(urls);
+  } catch (err) {
+    throw new Error("Unable to verify links' safety.");
+  }
+
+  if (!isSafe) {
+    throw new Error(
+      "One or more provided links URL are unsafe or blocked by security policy."
+    );
+  }
+}

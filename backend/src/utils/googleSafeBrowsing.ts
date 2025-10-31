@@ -8,6 +8,11 @@ if (!GOOGLE_SB_API) {
 }
 const GOOGLE_SAFE_BROWSING_ENDPOINT = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${GOOGLE_SB_API}`;
 
+/**
+ * Checks a URL against the Google Safe Browsing API.
+ * * @param {string} url - A string of url
+ * @returns {Promise<boolean>} - Resolves to `true` if URL is safe, `false` if URL is unsafe.
+ */
 export async function checkUrlSafe(url: string) {
   if (!url) {
     return true; // An empty list is considered "safe"

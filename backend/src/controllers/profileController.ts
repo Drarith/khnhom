@@ -1,4 +1,9 @@
-import type { Request, Response, NextFunction } from "express";
+import {
+  type Request,
+  type Response,
+  type NextFunction,
+  response,
+} from "express";
 import mongoose from "mongoose";
 
 import type {
@@ -23,8 +28,7 @@ import { getErrorMessage } from "../utils/getErrorMessage.js";
 import type { IProfile } from "../model/types-for-models/profileModel.types.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 
-import { checkUrlSafe } from "../utils/googleSafeBrowsing.js";
-import { isLinkSafe } from "../utils/isLinkSafe.js";
+import { areLinkSafe, isLinkSafe } from "../utils/isLinkSafe.js";
 
 export const createProfile = async (req: Request, res: Response) => {
   if (!req.user) {
@@ -44,8 +48,6 @@ export const createProfile = async (req: Request, res: Response) => {
   const userId = (req.user as IUser).id;
   if (!userId) return res.status(400).json({ message: "User id not found!" });
 
-  let isSafe = false;
-
   const profileData: ProfileCreationInput = {
     user: userId.toString(),
     username: username || "",
@@ -60,6 +62,19 @@ export const createProfile = async (req: Request, res: Response) => {
   try {
     const cleanedProfileData: SanitizedCreateProfile =
       sanitizeCreateProfile(profileData);
+
+    // Check social links for safety
+    if (cleanedProfileData.socials) {
+      const socialValues = Object.values(cleanedProfileData.socials);
+      if (socialValues.length > 0) {
+        try {
+          await areLinkSafe(socialValues);
+        } catch (err) {
+          const msg = getErrorMessage(err);
+          return res.status(400).json({ msg });
+        }
+      }
+    }
 
     let validatedLink:
       | { title: string; url: string; description?: string }
@@ -77,19 +92,13 @@ export const createProfile = async (req: Request, res: Response) => {
         ? SanitizedString(300).parse(link.description)
         : "";
       const safeUrl = SanitizedUrl().parse(link.url);
-      try {
-        isSafe = await checkUrlSafe(safeUrl);
-      } catch (err) {
-        isSafe = false;
-        return res
-          .status(400)
-          .json({ message: "Unable to verify links safety." });
-      }
 
-      if (!isSafe) {
-        return res
-          .status(401)
-          .json({ message: "Provided link URL is unsafe or blocked." });
+      // will return with 400 if link found to be not safe with google safe browsing.
+      try {
+        await isLinkSafe(safeUrl);
+      } catch (err) {
+        const msg = getErrorMessage(err);
+        return res.status(400).json({ msg });
       }
 
       if (!safeTitle || safeTitle.trim().length === 0) {
@@ -182,7 +191,9 @@ export const createAndAddLinkToProfile = async (
 ) => {
   const { title, url, description } = req.body;
   const user = req.user;
-  let isLinkSafe = false;
+  let safeLink: string;
+  let safeTitle: string;
+  let safeDescription: string;
   if (!user) return res.status(401).json({ error: "Unauthorized." });
 
   if (!title || !url)
@@ -197,9 +208,6 @@ export const createAndAddLinkToProfile = async (
     const profile = await Profile.findOne({ user: userId });
     if (!profile) return res.status(404).json({ message: "Profile not found" });
 
-    let safeLink: string;
-    let safeTitle: string;
-    let safeDescription: string;
     try {
       safeLink = SanitizedUrl().parse(url);
       safeTitle = SanitizedString(30).parse(title);
@@ -209,7 +217,13 @@ export const createAndAddLinkToProfile = async (
         .status(400)
         .json({ message: "Invalid link data", error: zErr });
     }
-    
+    try {
+      await isLinkSafe(safeLink);
+    } catch (err) {
+      const msg = getErrorMessage(err);
+      return res.status(400).json({ msg });
+    }
+
     if (!safeLink || safeLink.trim() === "") {
       return res.status(400).json({ message: "Invalid or unsupported URL" });
     }
@@ -279,6 +293,16 @@ export const updateProfile = async (req: Request, res: Response) => {
     if (profileData.socials !== undefined) {
       try {
         const sanitizedSocials = SocialsSchema.parse(profileData.socials);
+        const linksEntries = Object.values(sanitizedSocials);
+
+        try {
+          if (linksEntries.length > 0) {
+            await areLinkSafe(linksEntries);
+          }
+        } catch (err) {
+          const msg = getErrorMessage(err);
+          return res.status(400).json({ message: msg });
+        }
         updates.socials = sanitizedSocials;
       } catch (zErr) {
         return res

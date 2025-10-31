@@ -33,6 +33,7 @@ export interface profileUpdateInput {
   bio?: string;
   profilePictureUrl?: string;
   paymentQrCodeUrl?: string;
+  link?: Record<string,string>[];
   socials?: {
     facebook?: string;
     instagram?: string;

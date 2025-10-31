@@ -102,6 +102,7 @@ export const SocialsSchema = z
     return out;
   });
 
+  // Sanitize link separately because link is an object 
 export const CreateProfileSchema = z.object({
   user: z.string(),
   username: SanitizedString(30),

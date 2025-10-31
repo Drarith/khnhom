@@ -12,7 +12,6 @@ const GOOGLE_SAFE_BROWSING_ENDPOINT = `https://safebrowsing.googleapis.com/v4/th
 
 /**
  * Checks an array of URLs against the Google Safe Browsing API.
- * This is intended for non-commercial use only.
  * * @param {string[]} urls - An array of URLs to check for threats.
  * @returns {Promise<boolean>} - Resolves to `true` if all URLs are safe, `false` if any URL is unsafe.
  */
