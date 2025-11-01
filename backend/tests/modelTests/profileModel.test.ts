@@ -115,7 +115,7 @@ describe("ProfileModel", () => {
       expect(savedProfile.socials.instagram).toBe("");
       expect(savedProfile.socials.telegram).toBe("");
       expect(savedProfile.socials.youtube).toBe("");
-      expect(savedProfile.socials.linkedIn).toBe("");
+      expect(savedProfile.socials.linkedin).toBe("");
       expect(savedProfile.socials.x).toBe("");
       expect(savedProfile.socials.tiktok).toBe("");
       expect(savedProfile.socials.github).toBe("");
@@ -298,7 +298,7 @@ describe("ProfileModel", () => {
           instagram: "https://instagram.com/testuser",
           telegram: "@testuser",
           youtube: "https://youtube.com/@testuser",
-          linkedIn: "https://linkedin.com/in/testuser",
+          linkedin: "https://linkedin.com/in/testuser",
           x: "https://x.com/testuser",
           tiktok: "https://tiktok.com/@testuser",
           github: "https://github.com/testuser",
@@ -318,7 +318,7 @@ describe("ProfileModel", () => {
       expect(savedProfile.socials.youtube).toBe(
         "https://youtube.com/@testuser"
       );
-      expect(savedProfile.socials.linkedIn).toBe(
+      expect(savedProfile.socials.linkedin).toBe(
         "https://linkedin.com/in/testuser"
       );
       expect(savedProfile.socials.x).toBe("https://x.com/testuser");
@@ -455,7 +455,7 @@ describe("ProfileModel", () => {
         instagram: "https://instagram.com/testuser",
         telegram: "@testuser",
         youtube: "https://youtube.com/@testuser",
-        linkedIn: "https://linkedin.com/in/testuser",
+        linkedin: "https://linkedin.com/in/testuser",
         x: "https://x.com/testuser",
         tiktok: "https://tiktok.com/@testuser",
         github: "https://github.com/testuser",

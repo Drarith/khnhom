@@ -12,7 +12,7 @@ export interface ISocials {
   instagram: string;
   telegram: string;
   youtube: string;
-  linkedIn: string;
+  linkedin: string;
   x: string;
   tiktok: string;
   github: string;

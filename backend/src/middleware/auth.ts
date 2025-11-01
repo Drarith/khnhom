@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import Profile from "../model/profileModel.js";
 
 dotenv.config();
 
@@ -27,7 +28,7 @@ export const authenticateToken = (
   }
 
   // 3. Verify the token
-  jwt.verify(token, JWT_SECRET, (err, userPayload) => {
+  jwt.verify(token, JWT_SECRET, async (err, userPayload) => {
     if (err) {
       // 403 Forbidden (token is no longer valid)
       return res.status(403).json({ message: "Invalid token" });
@@ -36,6 +37,17 @@ export const authenticateToken = (
     // 4. Success! Attach the user payload to the request object
     req.user = userPayload;
 
+    // Fetch and attach the profile if it exists
+    if (userPayload && typeof userPayload === "object" && "id" in userPayload) {
+      try {
+        const profile = await Profile.findOne({ user: userPayload.id });
+        if (profile) {
+          req.profile = profile;
+        }
+      } catch (err) {
+        console.error("Error fetching profile in authenticateToken:", err);
+      }
+    }
     // 5. Continue to the next middleware or the route handler
     next();
   });
