@@ -205,7 +205,7 @@ export const createAndAddLinkToProfile = async (
     const userId = (user as IUser).id;
     if (!userId) return res.status(400).json({ message: "User id not found!" });
 
-    const profile = await Profile.findOne({ user: userId });
+    const profile = req.profile as IProfile | null;
     if (!profile) return res.status(404).json({ message: "Profile not found" });
 
     try {
@@ -255,7 +255,7 @@ export const updateProfile = async (req: Request, res: Response) => {
   if (!userId) return res.status(400).json({ message: "User id not found!" });
 
   try {
-    const profile = await Profile.findOne({ user: userId });
+    const profile = req.profile as IProfile | null;
     if (!profile) return res.status(404).json({ message: "Profile not found" });
 
     const updates: Partial<profileUpdateInput> = {};
@@ -345,7 +345,7 @@ export const deleteLinkFromProfile = async (req: Request, res: Response) => {
   const userId = (req.user as IUser).id;
   if (!userId) return res.status(400).json({ message: "User id not found!" });
 
-  const userProfile = await Profile.findOne({ user: userId });
+  const userProfile = req.profile as IProfile | null;
   if (!userProfile) {
     return res.status(400).json({ message: "User profile not found" });
   }
