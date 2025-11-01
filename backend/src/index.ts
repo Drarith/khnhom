@@ -7,21 +7,15 @@ import dotenv from "dotenv";
 
 import cookieParser from 'cookie-parser'
 
-import type { Env } from "./types/myENV.js";
-
 import userRouter from "./routes/userRoute.js";
 import profileRouter from "./routes/profileRoute.js";
+import {env} from "../src/config/myEnv.js";
 
 dotenv.config();
 
 // Initialize the Express application
 const app = express();
-const port = process.env.PORT || 3000;
-
-const env: Env = {
-  MONGO_URI: process.env.MONGO_URI || "",
-  PORT: Number(process.env.PORT) || 3000,
-};
+const port = env.PORT || 3000;
 
 // cookie parse middleware
 app.use(cookieParser())

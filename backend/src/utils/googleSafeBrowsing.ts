@@ -1,8 +1,6 @@
-import dotenv from "dotenv";
+import { env } from "../config/myEnv.js";
 
-dotenv.config();
-
-const GOOGLE_SB_API = process.env.GOOGLE_SB_API;
+const GOOGLE_SB_API = env.GOOGLE_SB_API;
 
 const GOOGLE_SAFE_BROWSING_ENDPOINT = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${GOOGLE_SB_API}`;
 

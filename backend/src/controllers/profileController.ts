@@ -1,8 +1,6 @@
 import {
   type Request,
   type Response,
-  type NextFunction,
-  response,
 } from "express";
 import mongoose from "mongoose";
 

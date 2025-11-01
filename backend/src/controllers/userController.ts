@@ -3,12 +3,11 @@ import passport from "passport";
 import jwt from "jsonwebtoken";
 import User from "../model/userModel.js";
 import UserRole from "../model/roleModel.js";
-import dotenv from "dotenv";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 
-dotenv.config();
+import { env } from "../config/myEnv.js";
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = env.JWT_SECRET;
 
 export const createUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;

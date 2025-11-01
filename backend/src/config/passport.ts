@@ -4,12 +4,11 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import User from "../model/userModel.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
-import dotenv from "dotenv";
 
-dotenv.config();
+import { env } from "../config/myEnv.js";
 
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const GOOGLE_CLIENT_ID = env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = env.GOOGLE_CLIENT_SECRET;
 if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
   throw new Error(
     "Google OAuth credentials are not defined in environment variables"

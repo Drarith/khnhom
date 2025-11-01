@@ -3,12 +3,9 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import Profile from "../model/profileModel.js";
 
-dotenv.config();
+import { env } from "../config/myEnv.js";
 
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) {
-  throw new Error("JWT SECRET NOT FOUND!");
-}
+const JWT_SECRET = env.JWT_SECRET;
 
 // This is your "login required" function
 export const authenticateToken = (
