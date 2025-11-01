@@ -16,6 +16,7 @@ const linkSchema = new Schema<ILink>(
     title: { type: String, required: true, max: 50 },
     url: { type: String, required: true },
     description: { type: String, default: "", max: 300 },
+    imageUrl: { type: String, default: "" },
   },
   { timestamps: true }
 );

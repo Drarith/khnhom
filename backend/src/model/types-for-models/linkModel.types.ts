@@ -9,6 +9,7 @@ export interface ILink extends Document {
   title: string;
   url: string;
   description?: string;
+  imageUrl?: string;
   createdAt: Date;
   updatedAt: Date;
   updateLink(title?: string, url?: string): Promise<ILink>;
