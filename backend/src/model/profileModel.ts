@@ -74,6 +74,7 @@ const profileSchema = new Schema(
       default: "default",
     },
     views: { type: Number, default: 0 },
+    isActive: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
