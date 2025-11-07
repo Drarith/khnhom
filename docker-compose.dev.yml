@@ -1,0 +1,29 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      # --- KEY ---
+      # Tells Docker to build *only* the 'base' stage
+      # (which has node_modules) and stop.
+      # The 'production' stage (with 'npm run build') is skipped.
+      target: base
+    container_name: domnor-backend-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount local code for hot-reloading
+      - ./backend:/app
+      # Anonymous volume prevents local node_modules from
+      # overwriting the container's node_modules.
+      - /app/node_modules
+    # --- KEY ---
+    # Override the Dockerfile's 'CMD' to run the dev server
+    command: npm run dev:docker
+    env_file:
+      - ./backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - domnor-net

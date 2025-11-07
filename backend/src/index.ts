@@ -46,7 +46,7 @@ app.use(profileRouter)
 
 
 app.get("/", async (req, res) => {
-  res.send("Hello from Express + TypeScript!");
+  res.send("Hello from Express + TypeScript!!");
 });
 
 

@@ -1,0 +1,24 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      # --- KEY ---
+      # No 'target' is specified, so Docker builds the
+      # *final* stage ('production') by default.
+    container_name: domnor-backend-prod
+    ports:
+      - "3000:3000"
+    # --- KEY ---
+    # NO volume mount for source code.
+    # The code is already baked into the image.
+    env_file:
+      - ./backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - domnor-net
+    # --- KEY ---
+    # NO 'command' override. This will use the
+    # CMD ["npm", "run", "start"] from your Dockerfile.
