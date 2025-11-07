@@ -3,7 +3,7 @@ dotenv.config();
 
 export const env = {
   MONGO_URI: process.env.MONGO_URI || "",
-  PORT: Number(process.env.PORT) || 3000,
+  PORT: Number(process.env.PORT) || 4000,
   JWT_SECRET: process.env.JWT_SECRET || "",
   GOOGLE_SB_API: process.env.GOOGLE_SB_API || "",
   NODE_ENV: process.env.NODE_ENV || "development",

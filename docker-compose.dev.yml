@@ -10,7 +10,7 @@ services:
       target: base
     container_name: domnor-backend-dev
     ports:
-      - "3000:3000"
+      - "4000:4000"
     volumes:
       # Mount local code for hot-reloading
       - ./backend:/app
@@ -27,3 +27,22 @@ services:
         condition: service_healthy
     networks:
       - domnor-net
+
+  frontend:
+    build:
+      context: ./frontend/domnor
+      dockerfile: Dockerfile
+      target: deps
+    container_name: domnor-frontend-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - TURBOPACK_WATCH_POLLING=true
+    volumes:
+      - ./frontend/domnor:/app
+      - /app/node_modules
+    command: npm run dev:docker
+    networks:
+      - domnor-net
+    depends_on:
+      - backend

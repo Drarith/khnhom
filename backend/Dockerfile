@@ -27,6 +27,6 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser
 RUN chown -R appuser:appuser /app
 USER appuser
 
-EXPOSE 3000
+EXPOSE 4000
 
 CMD ["npm", "run", "start"]
