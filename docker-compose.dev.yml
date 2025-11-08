@@ -32,15 +32,16 @@ services:
     build:
       context: ./frontend/domnor
       dockerfile: Dockerfile
-      target: deps
+      target: base
     container_name: domnor-frontend-dev
     ports:
       - "3000:3000"
     environment:
-      - TURBOPACK_WATCH_POLLING=true
+        - WATCHPACK_POLLING=true
     volumes:
       - ./frontend/domnor:/app
       - /app/node_modules
+      - /app/.next
     command: npm run dev:docker
     networks:
       - domnor-net
