@@ -28,22 +28,20 @@ services:
     networks:
       - domnor-net
 
-  frontend:
-    build:
-      context: ./frontend/domnor
-      dockerfile: Dockerfile
-      target: base
-    container_name: domnor-frontend-dev
-    ports:
-      - "3000:3000"
-    environment:
-        - WATCHPACK_POLLING=true
-    volumes:
-      - ./frontend/domnor:/app
-      - /app/node_modules
-      - /app/.next
-    command: npm run dev:docker
-    networks:
-      - domnor-net
-    depends_on:
-      - backend
+  # frontend:
+  #   build:
+  #     context: ./frontend/domnor
+  #     dockerfile: Dockerfile
+  #     target: deps
+  #   container_name: domnor-frontend-dev
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./frontend/domnor:/app
+  #     - /app/node_modules
+  #     - /app/.next
+  #   command: npm run dev:docker
+  #   networks:
+  #     - domnor-net
+  #   depends_on:
+  #     - backend

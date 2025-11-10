@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:docker": "next dev --turbo",
+    "dev:docker": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
