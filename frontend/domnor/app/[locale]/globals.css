@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/* Light theme tokens */
+:root {
+  --color-primary: #222831;
+  --color-secondary: #393e46;
+  --color-accent: #00adb5;
+  --color-background: #eeeeee;
+  --color-foreground: #222831;
+}
+
+/* Dark theme tokens (class-based) */
+.dark {
+  --color-primary: #ededed; /* adjust as needed */
+  --color-secondary: #aab0b6;
+  --color-accent: #00e5ff;
+  --color-background: #0b0b0c;
+  --color-foreground: #e6e6e6;
+}
+
+/* Base utilities */
+html,
+body {
+  height: 100%;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
