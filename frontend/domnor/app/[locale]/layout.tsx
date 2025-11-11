@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { inter, dancingScript } from "@/lib/font";
 import "./globals.css";
-import { NextIntlClientProvider, useMessages } from "next-intl";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
+
+import type { Props } from "@/types/rootLayout/rootLayout";
 
 export const metadata: Metadata = {
   title: "Domnor",
@@ -13,16 +18,13 @@ export function generateStaticParams() {
   return [{ locale: "en" }, { locale: "kh" }];
 }
 
-export default function RootLayout({
-  children,
-  params: { locale },
-}: Readonly<{
-  children: React.ReactNode;
-  params: { locale: string };
-}>) {
-  const messages = useMessages();
+export default async function RootLayout({ children, params }: Props) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
+  const messages = await getMessages({ locale });
+
   return (
-    <html lang="en" className="antialiased">
+    <html lang={locale} className="antialiased">
       <body className={`${inter.variable} ${dancingScript.variable}`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
