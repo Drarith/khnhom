@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+
 const config: import("tailwindcss").Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
@@ -16,16 +17,7 @@ const config: import("tailwindcss").Config = {
         foreground: "var(--color-foreground)",
       },
       fontFamily: {
-        sans: [
-          "var(--font-sans)",
-          "ui-sans-serif",
-          "system-ui",
-          "Segoe UI",
-          "Roboto",
-          "Helvetica",
-          "Arial",
-        ],
-        cursive: ["var(--font-cursive)", "cursive"],
+        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui"],
         mono: [
           "ui-monospace",
           "SFMono-Regular",
@@ -33,6 +25,7 @@ const config: import("tailwindcss").Config = {
           "Monaco",
           "Segoe UI Mono",
         ],
+        cursive: ["var(--font-cursive)", "cursive"],
       },
     },
   },

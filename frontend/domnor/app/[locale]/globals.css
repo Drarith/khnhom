@@ -1,12 +1,16 @@
 @import "tailwindcss";
 
-/* Light theme tokens */
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-cursive: var(--font-dancing-script);
+}
+
 :root {
   --color-primary: #222831;
   --color-secondary: #393e46;
   --color-accent: #00adb5;
-  --color-background: #eeeeee;
-  --color-foreground: #222831;
+  --color-background: #222831;
+  --color-foreground: #eeeeee;
 }
 
 /* Dark theme tokens (class-based) */
@@ -24,6 +28,5 @@ body {
   height: 100%;
   background-color: var(--color-background);
   color: var(--color-foreground);
-  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

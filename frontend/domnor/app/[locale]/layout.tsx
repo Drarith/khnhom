@@ -24,8 +24,11 @@ export default async function RootLayout({ children, params }: Props) {
   const messages = await getMessages({ locale });
 
   return (
-    <html lang={locale} className="antialiased">
-      <body className={`${inter.variable} ${dancingScript.variable}`}>
+    <html
+      lang={locale}
+      className={`${inter.variable} ${dancingScript.variable} antialiased`}
+    >
+      <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
         </NextIntlClientProvider>
