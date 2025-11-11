@@ -7,6 +7,8 @@ import dotenv from "dotenv";
 
 import cookieParser from "cookie-parser";
 
+import cors from "cors";
+
 import userRouter from "./routes/userRoute.js";
 import profileRouter from "./routes/profileRoute.js";
 import { env } from "../src/config/myEnv.js";
@@ -16,12 +18,20 @@ dotenv.config();
 // Initialize the Express application
 const app = express();
 const port = env.PORT || 4000;
+const FRONTEND_URL = process.env.FRONTEND_URL;
 
 // cookie parse middleware
 app.use(cookieParser());
 
 // Initialize Passport.js
 app.use(passport.initialize());
+
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+  })
+);
 
 // Connect to MongoDB
 mongoose
