@@ -23,14 +23,14 @@ services:
     # NO 'command' override. This will use the
     # CMD ["npm", "run", "start"] from your Dockerfile.
 
-  frontend:
-    build:
-      context: ./frontend/domnor
-      dockerfile: Dockerfile
-    container_name: domnor-frontend-prod
-    ports:
-      - "3000:3000"
-    networks:
-      - domnor-net
-    depends_on:
-      - backend
+  # frontend:
+  #   build:
+  #     context: ./frontend/domnor
+  #     dockerfile: Dockerfile
+  #   container_name: domnor-frontend-prod
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - domnor-net
+  #   depends_on:
+  #     - backend
