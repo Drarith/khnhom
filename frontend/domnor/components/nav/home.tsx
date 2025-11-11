@@ -1,8 +1,7 @@
-'use client';
-import { useTranslations } from "use-intl";
+import { getTranslations } from "next-intl/server";
 
-export default function Home() {
-  const t = useTranslations("homepage");
+export default async function Home() {
+  const t = await getTranslations("homepage");
   return (
     <div>
       <h1 className=" text-4xl font-cursive">{t("title")}</h1>
