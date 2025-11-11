@@ -1,3 +1,4 @@
+'use client';
 import { GoogleLoginButtonProps } from "@/types/google/button";
 
 export default function GoogleLoginButton({
@@ -5,8 +6,15 @@ export default function GoogleLoginButton({
   fullWidth = false,
   className = "",
 }: GoogleLoginButtonProps) {
+
+  const handleGoogleLogin = () => {
+    console.log("Google login initiated");
+  };
+
+  
   return (
     <button
+      onClick={handleGoogleLogin}
       type="button"
       aria-label={label}
       className={`group relative inline-flex items-center gap-3 rounded-xl cursor-pointer border-foreground bg-foreground px-5 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition
