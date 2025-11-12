@@ -10,15 +10,21 @@ export const sendAuthHttpOnlyCookie = (
     statusCode = 200,
     maxAgeMs = 24 * 60 * 60 * 1000,
     secure = true,
+    redirectTo, 
   }: CookieOptions = {}
 ) => {
-  res
-    .status(statusCode)
-    .cookie(name, token, {
-      httpOnly: true,
-      secure: secure,
-      sameSite: "lax",
-      maxAge: maxAgeMs,
-    })
-    .json({ message });
+  const cookieOptions = {
+    httpOnly: true,
+    secure,
+    sameSite: "lax" as const,
+    maxAge: maxAgeMs,
+  };
+
+  res.cookie(name, token, cookieOptions);
+
+  if (redirectTo) {
+    return res.status(statusCode).redirect(redirectTo);
+  }
+
+  return res.status(statusCode).json({ message });
 };

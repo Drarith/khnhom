@@ -92,11 +92,9 @@ userSchema.statics.findByGoogleId = async function (
 };
 
 userSchema.statics.findOrCreate = async function (profile) {
-  console.log(profile);
   try {
     let user = await this.findOne({ googleId: profile.id });
     if (!user) {
-      console.log();
       user = new this({ googleId: profile.id, email: profile.emails[0].value });
       await user.save();
     }

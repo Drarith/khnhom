@@ -4,4 +4,5 @@ export interface CookieOptions {
   statusCode?: number;
   maxAgeMs?: number;
   secure?: boolean;
+  redirectTo?: string; 
 }

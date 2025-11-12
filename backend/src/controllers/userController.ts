@@ -9,10 +9,12 @@ import { sendAuthHttpOnlyCookie } from "../helpers/httpOnlyCookie.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 
 import { env } from "../config/myEnv.js";
+import Profile from "../model/profileModel.js";
 
 const JWT_SECRET = env.JWT_SECRET;
 const secureCookie = env.NODE_ENV === "production";
 
+// For when we implement user registration with email/password
 export const createUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   if (!email || !password) {
@@ -92,7 +94,8 @@ export const googleCallback = (
   passport.authenticate(
     "google",
     { session: false },
-    (err: Error, user: IUser | false, info?: { message: string }) => {
+    // make callback async so we can await DB calls
+    async (err: Error, user: IUser | false, info?: { message: string }) => {
       if (err) {
         return next(err);
       }
@@ -101,17 +104,39 @@ export const googleCallback = (
           .status(401)
           .json({ message: info?.message || "Authentication failed" });
       }
-      const payload = {
-        id: user._id,
-        email: user.email,
-      };
-      const token = jwt.sign(payload, JWT_SECRET as string, {
-        expiresIn: "1d",
-      });
-      sendAuthHttpOnlyCookie(res, token, {
-        message: "Google authentication successful.",
-        secure: secureCookie,
-      });
+
+      try {
+        const payload = {
+          id: user._id,
+          email: user.email,
+        };
+        const token = jwt.sign(payload, JWT_SECRET as string, {
+          expiresIn: "1d",
+        });
+
+
+        const existingProfile = await Profile.findOne({ user: user._id });
+
+        const base = env.FRONTEND_URL;
+        const redirectTo = existingProfile
+          ? `${base}/dashboard`
+          : `${base}/create-profile`;
+
+        sendAuthHttpOnlyCookie(res, token, {
+          message: existingProfile
+            ? "Google authentication successful."
+            : "Google authentication successful. Please create your profile.",
+          secure: secureCookie,
+          redirectTo,
+        });
+      } catch (dbErr) {
+        console.error("Profile lookup failed:", dbErr);
+       
+        return res.status(200).json({
+          message:
+            "Authenticated, but profile check failed. Please refresh or try again.",
+        });
+      }
     }
   )(req, res, next);
 };
