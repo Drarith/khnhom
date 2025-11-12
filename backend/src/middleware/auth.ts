@@ -1,51 +1,55 @@
 import type { Request, Response, NextFunction } from "express";
-import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import Profile from "../model/profileModel.js";
-
 import { env } from "../config/myEnv.js";
 
 const JWT_SECRET = env.JWT_SECRET;
 
-// This is your "login required" function
-export const authenticateToken = (
+function getTokenFromRequest(req: Request): string | null {
+  const cookieToken = (req as any).cookies?.auth_token; 
+  if (cookieToken) return cookieToken;
+
+  const authHeader = req.headers["authorization"];
+  if (authHeader?.startsWith("Bearer ")) {
+    return authHeader.slice("Bearer ".length);
+  }
+  return null;
+}
+
+//** Authentication middleware */
+export const authenticateToken = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  // 1. Get the token from the header
-  const authHeader = req.headers["authorization"];
-  // The header format is "Bearer TOKEN"
-  const token = authHeader && authHeader.split(" ")[1];
+  const token = getTokenFromRequest(req);
 
-  // 2. Check if the token exists
-  if (token == null) {
-    // 401 Unauthorized
+  if (!token) {
     return res.status(401).json({ message: "No token provided" });
   }
 
-  // 3. Verify the token
   jwt.verify(token, JWT_SECRET, async (err, userPayload) => {
     if (err) {
-      // 403 Forbidden (token is no longer valid)
+      if ((err as any).name === "TokenExpiredError") {
+        return res.status(401).json({ message: "Token expired" });
+      }
       return res.status(403).json({ message: "Invalid token" });
     }
 
-    // 4. Success! Attach the user payload to the request object
-    req.user = userPayload;
+    req.user = userPayload as any;
 
-    // Fetch and attach the profile if it exists
+
     if (userPayload && typeof userPayload === "object" && "id" in userPayload) {
       try {
-        const profile = await Profile.findOne({ user: userPayload.id });
+        const profile = await Profile.findOne({ user: (userPayload as any).id });
         if (profile) {
           req.profile = profile;
         }
-      } catch (err) {
-        console.error("Error fetching profile in authenticateToken:", err);
+      } catch (e) {
+        console.error("Error fetching profile in authenticateToken:", e);
       }
     }
-    // 5. Continue to the next middleware or the route handler
+
     next();
   });
 };

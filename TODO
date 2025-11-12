@@ -6,3 +6,5 @@ MUST: Need to add prefix to socials
 
 
 FIX REPEATING CODES
+
+change token local storage to http only cookie

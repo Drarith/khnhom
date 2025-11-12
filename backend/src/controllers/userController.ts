@@ -3,11 +3,15 @@ import passport from "passport";
 import jwt from "jsonwebtoken";
 import User from "../model/userModel.js";
 import UserRole from "../model/roleModel.js";
+
+import { sendAuthHttpOnlyCookie } from "../helpers/httpOnlyCookie.js";
+
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 
 import { env } from "../config/myEnv.js";
 
 const JWT_SECRET = env.JWT_SECRET;
+const secureCookie = env.NODE_ENV === "production";
 
 export const createUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
@@ -34,7 +38,11 @@ export const createUser = async (req: Request, res: Response) => {
     const token = jwt.sign(payload, JWT_SECRET as string, {
       expiresIn: "1d",
     });
-    res.status(201).json({ user: user, token: token });
+    sendAuthHttpOnlyCookie(res, token, {
+      statusCode: 201,
+      message: "User created successfully.",
+      secure: secureCookie,
+    });
   } catch (error) {
     res.status(500).json({ message: "Unable to create user.", error: error });
   }
@@ -63,9 +71,10 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
         expiresIn: "1d",
       });
 
-      return res
-        .status(200)
-        .json({ message: "Logged in successfully.", token: token });
+      sendAuthHttpOnlyCookie(res, token, {
+        message: "Logged in successfully.",
+        secure: secureCookie,
+      });
     }
   )(
     // invoke the returned function immediately with req, res, next
@@ -99,15 +108,24 @@ export const googleCallback = (
       const token = jwt.sign(payload, JWT_SECRET as string, {
         expiresIn: "1d",
       });
-      return res.json({ token: token });
+      sendAuthHttpOnlyCookie(res, token, {
+        message: "Google authentication successful.",
+        secure: secureCookie,
+      });
     }
   )(req, res, next);
 };
 
 export const logoutUser = (_req: Request, res: Response) => {
-  return res.status(200).json({
-    success: true,
-    message:
-      "Successfully logged out. Please remove the token from your client.",
-  });
+  res
+    .clearCookie("auth_token", {
+      httpOnly: true,
+      secure: secureCookie,
+      sameSite: "lax",
+    })
+    .status(200)
+    .json({
+      success: true,
+      message: "Logged out. Cookie cleared.",
+    });
 };
