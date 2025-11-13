@@ -5,6 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { profileFormInputSchema } from "@/validationSchema/ProfileInputSchema";
 import { z } from "zod";
 
+import ProfileFormInput from "../profieInput/profileInput";
+
 type FormInputValues = z.infer<typeof profileFormInputSchema>;
 
 export default function ProfileForm() {
@@ -34,10 +36,27 @@ export default function ProfileForm() {
 
   return (
     <form action="">
-      <div>
+      {/* <div>
         <label htmlFor="username">Username</label>
         <input id="username" {...register("username")} />
-      </div>
+        <div style={{ fontSize: 12, color: errors.username ? "red" : "#666" }}>
+          {errors.username ? (
+            // error message from Zod will be in errors.username.message
+            <span role="alert">{errors.username.message}</span>
+          ) : (
+            <span>{username.length}/30</span>
+          )}
+        </div>
+      </div> */}
+      <ProfileFormInput
+        register={register}
+        fieldId="username"
+        fieldInput="username"
+        fieldStateError={errors.username}
+        fieldWatchValue={username}
+        label="Username"
+        maxLength={30}
+      />
     </form>
   );
 }
