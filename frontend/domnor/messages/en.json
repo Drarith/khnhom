@@ -1,7 +1,16 @@
 {
-    "homepage": {
-        "title": "Domnor",
-        "slogan": "Just Connect",
-        "googleLabel": "Continue with Google"
-    }
+  "homepage": {
+    "title": "Domnor",
+    "slogan": "Just Connect",
+    "googleLabel": "Continue with Google"
+  },
+  "profileInputLabel": {
+    "username": "Username",
+    "displayName": "Display Name",
+    "bio": "Bio",
+    "socials": "Social Media Links",
+    "link": "Link",
+    "theme": "Theme",
+    "template": "Template" 
+  }
 }

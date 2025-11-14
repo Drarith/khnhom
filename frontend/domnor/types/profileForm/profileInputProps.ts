@@ -1,4 +1,9 @@
-import { Path, FieldError, UseFormRegister, FieldValues } from "react-hook-form";
+import {
+  Path,
+  FieldError,
+  UseFormRegister,
+  FieldValues,
+} from "react-hook-form";
 
 export interface ProfileFormInputProps<T extends FieldValues> {
   fieldId: string;
@@ -8,4 +13,6 @@ export interface ProfileFormInputProps<T extends FieldValues> {
   register: UseFormRegister<T>; // Correctly type the register function
   label: string;
   maxLength?: number;
+  textArea?: boolean;
+  hasInput?: boolean;
 }

@@ -5,11 +5,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { profileFormInputSchema } from "@/validationSchema/ProfileInputSchema";
 import { z } from "zod";
 
+import { useTranslations } from "next-intl";
+
 import ProfileFormInput from "../profieInput/profileInput";
 
 type FormInputValues = z.infer<typeof profileFormInputSchema>;
 
 export default function ProfileForm() {
+  const t = useTranslations("profileInputLabel");
   const {
     register,
     watch,
@@ -35,28 +38,38 @@ export default function ProfileForm() {
   const bio = watch("bio");
 
   return (
-    <form action="">
-      {/* <div>
-        <label htmlFor="username">Username</label>
-        <input id="username" {...register("username")} />
-        <div style={{ fontSize: 12, color: errors.username ? "red" : "#666" }}>
-          {errors.username ? (
-            // error message from Zod will be in errors.username.message
-            <span role="alert">{errors.username.message}</span>
-          ) : (
-            <span>{username.length}/30</span>
-          )}
-        </div>
-      </div> */}
-      <ProfileFormInput
-        register={register}
-        fieldId="username"
-        fieldInput="username"
-        fieldStateError={errors.username}
-        fieldWatchValue={username}
-        label="Username"
-        maxLength={30}
-      />
-    </form>
+    <div className="bg-foreground">
+      {" "}
+      <form action="">
+        <ProfileFormInput
+          register={register}
+          fieldId="username"
+          fieldInput="username"
+          fieldStateError={errors.username}
+          fieldWatchValue={username}
+          label={t("username")}
+          maxLength={30}
+        />
+        <ProfileFormInput
+          register={register}
+          fieldId="displayName"
+          fieldInput="displayName"
+          fieldStateError={errors.displayName}
+          fieldWatchValue={displayName}
+          label={t("displayName")}
+          maxLength={30}
+        />
+        <ProfileFormInput
+          register={register}
+          fieldId="bio"
+          fieldInput="bio"
+          fieldStateError={errors.bio}
+          fieldWatchValue={bio}
+          label={t("bio")}
+          maxLength={1000}
+          textArea={true}
+        />
+      </form>
+    </div>
   );
 }
