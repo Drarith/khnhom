@@ -14,14 +14,14 @@ export default function ProfileFormInput<T extends FieldValues>({
 }: ProfileFormInputProps<T>) {
   const labelFloatClass = hasInput
     ? "text-secondary text-sm -translate-y-4"
-    : "text-xl tracking-wide";
+    : "text-md tracking-wide";
 
   return (
     <div className="py-3">
       <label htmlFor={fieldId} className="relative text-primary">
         {textArea ? (
           <textarea
-            className="px-4 py-2 border-primary border-2 rounded-sm text-primary outline-none duration-200 peer focus:border-secondary"
+            className="px-8 py-2 border-primary border-2 rounded-sm text-primary outline-none duration-200 peer focus:border-secondary"
             id={fieldId}
             {...register(fieldInput)}
             rows={4}
@@ -36,7 +36,7 @@ export default function ProfileFormInput<T extends FieldValues>({
           />
         )}
         <span
-          className={`absolute left-3 mt-1.5 px-1 pointer-events-none duration-200 bg-foreground
+          className={`absolute left-3 mt-2 px-1 pointer-events-none duration-200 bg-foreground
             ${labelFloatClass}
             peer-focus:text-secondary peer-focus:text-sm peer-focus:-translate-y-4`}
         >

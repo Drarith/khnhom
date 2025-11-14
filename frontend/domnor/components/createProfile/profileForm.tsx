@@ -38,7 +38,7 @@ export default function ProfileForm() {
   const bio = watch("bio");
 
   return (
-    <div className="bg-foreground">
+    <div className="bg-foreground flex flex-col py-3 items-center rounded-2xl mx-7 my-7 min-h-screen">
       {" "}
       <form action="">
         <ProfileFormInput
