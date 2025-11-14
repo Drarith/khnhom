@@ -4,13 +4,25 @@
     "slogan": "Just Connect",
     "googleLabel": "Continue with Google"
   },
-  "profileInputLabel": {
-    "username": "Username",
-    "displayName": "Display Name",
-    "bio": "Bio",
-    "socials": "Social Media Links",
-    "link": "Link",
-    "theme": "Theme",
-    "template": "Template" 
+  "profileSetupPage": {
+    "common": {
+      "page": "PROFILE SETUP",
+      "title": "Craft your public profile",
+      "about": "Let's get you started with the essential set up.",
+      "basic": "Basic",
+      "basicInfo": "Username and display name appear on your profile.",
+      "preSave": "You're just a button away.",
+      "socialAndLink": "Socials & Link",
+      "socialAndLinkInfo": "Add your social media and website here.",
+      "saveProfile": "Save Profile"
+
+    },
+    "profileInputLabel": {
+      "username": "Username",
+      "displayName": "Display Name",
+      "bio": "Bio(*optional)",
+      "socials": "Social Media Links",
+      "link": "Your Link(*optional)"
+    }
   }
 }

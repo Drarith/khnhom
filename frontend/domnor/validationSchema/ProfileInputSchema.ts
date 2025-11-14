@@ -102,8 +102,6 @@ export const profileFormInputSchema = z.object({
   ),
   displayName: SanitizedString(30, 3),
   bio: SanitizedString(1000),
-  profilePictureUrl: SanitizedUrl(),
-  paymentQrCodeUrl: SanitizedUrl(),
   socials: SocialsSchema,
-  theme: SanitizedString(50),
+  link: SanitizedUrl(),
 });

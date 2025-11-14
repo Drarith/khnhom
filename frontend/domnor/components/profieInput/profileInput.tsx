@@ -17,11 +17,11 @@ export default function ProfileFormInput<T extends FieldValues>({
     : "text-md tracking-wide";
 
   return (
-    <div className="py-3">
-      <label htmlFor={fieldId} className="relative text-primary">
+    <div className="">
+      <label htmlFor={fieldId} className="relative text-primary/70">
         {textArea ? (
           <textarea
-            className="px-8 py-2 border-primary border-2 rounded-sm text-primary outline-none duration-200 peer focus:border-secondary"
+            className="px-8 py-2 border-primary/70 border-2 rounded-sm text-primary outline-none duration-200 peer focus:border-primary"
             id={fieldId}
             {...register(fieldInput)}
             rows={4}
@@ -29,7 +29,7 @@ export default function ProfileFormInput<T extends FieldValues>({
           />
         ) : (
           <input
-            className="px-4 py-2 border-primary border-2 rounded-sm text-primary outline-none duration-200 peer focus:border-secondary"
+            className="px-4 py-2 border-primary/70 border-2 rounded-sm text-primary outline-none duration-200 peer focus:border-primary"
             id={fieldId}
             {...register(fieldInput)}
             maxLength={maxLength}
