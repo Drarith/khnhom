@@ -2,7 +2,7 @@
 
 import { useForm, useWatch, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { profileFormInputSchema } from "@/validationSchema/inputValidationSchema";
+import { createProfileFormInputSchema } from "@/validationSchema/inputValidationSchema";
 import { z } from "zod";
 
 import { useTranslations } from "next-intl";
@@ -10,10 +10,12 @@ import { useTranslations } from "next-intl";
 import ProfileFormInput from "../profileInput/profileInput";
 import SocialMediaForm from "./socialMediaForm";
 
-type FormInputValues = z.infer<typeof profileFormInputSchema>;
-
 export default function ProfileForm() {
   const t = useTranslations("profileSetupPage");
+
+  const profileFormInputSchema = createProfileFormInputSchema(t);
+  type FormInputValues = z.infer<typeof profileFormInputSchema>;
+
   const {
     register,
     control,
@@ -55,7 +57,7 @@ export default function ProfileForm() {
   const onSubmit = (values: FormInputValues) => {
     // TODO: wire this up to the real create/update profile mutation
     console.table(values);
-    console.log(values)
+    console.log(values);
   };
 
   return (
@@ -98,7 +100,6 @@ export default function ProfileForm() {
                 label={t("profileInputLabel.username")}
                 maxLength={30}
                 hasInput={hasValue(username)}
-                
               />
               <ProfileFormInput
                 register={register}

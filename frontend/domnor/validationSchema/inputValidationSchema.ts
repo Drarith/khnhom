@@ -28,18 +28,20 @@ export const SanitizedString = (
   maxLength: number,
   minLength = 0,
   pattern?: RegExp,
-  patternMessage?: string
+  patternMessage?: string,
+  minMessage?: string,
+  maxMessage?: string
 ) => {
   let schema = z.string();
 
   if (minLength > 0) {
     schema = schema.min(minLength, {
-      message: `Must be at least ${minLength} characters`,
+      message: minMessage || `Must be at least ${minLength} characters`,
     });
   }
 
   schema = schema.max(maxLength, {
-    message: `Must be at most ${maxLength} characters`,
+    message: maxMessage || `Must be at most ${maxLength} characters`,
   });
 
   if (pattern) {
@@ -55,7 +57,6 @@ export const SanitizedString = (
     .transform((s) => escapeHtml(s))
     .transform((s) => s.slice(0, maxLength));
 };
-
 export const SocialsSchema = z
   .record(z.string(), z.unknown())
   .default({})
@@ -85,17 +86,54 @@ export function isValidHttpUrl(value: unknown): value is string {
   }
 }
 
-export const SanitizedUrl = () => {
-  return z.string()
+export const SanitizedUrl = (errorMessage?: string) => {
+  return z
+    .string()
     .trim()
     .refine((val) => val === "" || isValidHttpUrl(val), {
-      message: "Must be a valid HTTPS URL. Example: https://domnor.com"
+      message:
+        errorMessage ||
+        "Must be a valid HTTPS URL. Example: https://domnor.com",
     })
     .transform((val) => (isValidHttpUrl(val) ? val : ""))
     .default("");
 };
 
-// Use explicit min for username/displayName (3), keep max same as before
+// Factory function to create schema with translations
+export const createProfileFormInputSchema = (
+  t: (key: string, values?: Record<string, string | number>) => string
+) => {
+  return z.object({
+    username: SanitizedString(
+      30,
+      3,
+      /^[a-zA-Z0-9_]+$/,
+      t("validation.usernamePattern"),
+      t("validation.minLength", { min: 3 }),
+      t("validation.maxLength", { max: 30 })
+    ),
+    displayName: SanitizedString(
+      30,
+      3,
+      undefined,
+      undefined,
+      t("validation.minLength", { min: 3 }),
+      t("validation.maxLength", { max: 30 })
+    ),
+    bio: SanitizedString(
+      1000,
+      0,
+      undefined,
+      undefined,
+      undefined,
+      t("validation.maxLength", { max: 1000 })
+    ),
+    socials: SocialsSchema,
+    link: SanitizedUrl(t("validation.invalidUrl")),
+  });
+};
+
+// Default schema without translations (for backwards compatibility)
 export const profileFormInputSchema = z.object({
   username: SanitizedString(
     30,

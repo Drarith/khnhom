@@ -29,6 +29,13 @@ const messages = {
       addSocialLink: "Add Social Link",
       added: "Added",
     },
+    validation: {
+      minLength: "Must be at least {min} characters",
+      maxLength: "Must be at most {max} characters",
+      usernamePattern:
+        "Username can contain only letters, numbers and underscores",
+      invalidUrl: "Must be a valid HTTPS URL. Example: https://domnor.com",
+    },
   },
 };
 
