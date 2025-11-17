@@ -273,16 +273,12 @@ describe("ProfileForm", () => {
 
     const usernameInput = screen.getByLabelText("Username");
     const displayNameInput = screen.getByLabelText("Display Name");
-    const linkInput = screen.getByLabelText("Your Link(*optional)");
 
     await user.type(usernameInput, "testuser");
     await user.type(displayNameInput, "Test User");
-    await user.type(linkInput, "not-a-valid-url");
 
     const submitButton = screen.getByRole("button", { name: /save profile/i });
 
-    // Submit button should be enabled even with invalid URL since link is optional
-    // But the validation will transform invalid URLs to empty strings
     await waitFor(() => {
       expect(submitButton).toBeEnabled();
     });

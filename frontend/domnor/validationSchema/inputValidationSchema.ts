@@ -79,18 +79,21 @@ export function isValidHttpUrl(value: unknown): value is string {
   if (typeof value !== "string" || !value.trim()) return false;
   try {
     const url = new URL(value);
-    return url.protocol === "http:" || url.protocol === "https:";
+    return url.protocol === "https:";
   } catch {
     return false;
   }
 }
 
-export const SanitizedUrl = () =>
-  z
-    .string()
+export const SanitizedUrl = () => {
+  return z.string()
     .trim()
+    .refine((val) => val === "" || isValidHttpUrl(val), {
+      message: "Must be a valid HTTPS URL. Example: https://domnor.com"
+    })
     .transform((val) => (isValidHttpUrl(val) ? val : ""))
     .default("");
+};
 
 // Use explicit min for username/displayName (3), keep max same as before
 export const profileFormInputSchema = z.object({
