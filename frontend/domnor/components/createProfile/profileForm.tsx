@@ -2,12 +2,13 @@
 
 import { useForm, useWatch, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { profileFormInputSchema } from "@/validationSchema/ProfileInputSchema";
+import { profileFormInputSchema } from "@/validationSchema/inputValidationSchema";
 import { z } from "zod";
 
 import { useTranslations } from "next-intl";
 
-import ProfileFormInput from "../profieInput/profileInput";
+import ProfileFormInput from "../profileInput/profileInput";
+import SocialMediaForm from "./socialMediaForm";
 
 type FormInputValues = z.infer<typeof profileFormInputSchema>;
 
@@ -17,6 +18,7 @@ export default function ProfileForm() {
     register,
     control,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm<FormInputValues>({
     resolver: zodResolver(profileFormInputSchema) as Resolver<FormInputValues>,
@@ -46,11 +48,14 @@ export default function ProfileForm() {
     useWatch({ control, name: "link", defaultValue: "" })
   );
 
+  const socials = useWatch({ control, name: "socials", defaultValue: {} });
+
   const hasValue = (value: string) => value.trim().length > 0;
 
   const onSubmit = (values: FormInputValues) => {
     // TODO: wire this up to the real create/update profile mutation
     console.table(values);
+    console.log(values)
   };
 
   return (
@@ -63,9 +68,7 @@ export default function ProfileForm() {
           <h1 className="text-2xl font-semibold text-primary md:text-3xl">
             {t("common.title")}
           </h1>
-          <p className="text-sm text-primary/70">
-            {t("common.about")}
-          </p>
+          <p className="text-sm text-primary/70">{t("common.about")}</p>
         </header>
 
         <form
@@ -83,9 +86,6 @@ export default function ProfileForm() {
                   {t("common.basicInfo")}
                 </p>
               </div>
-              {/* <span className="text-xs text-primary/60">
-                {isValid ? "All good" : "Keep editing"}
-              </span> */}
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
@@ -98,6 +98,7 @@ export default function ProfileForm() {
                 label={t("profileInputLabel.username")}
                 maxLength={30}
                 hasInput={hasValue(username)}
+                
               />
               <ProfileFormInput
                 register={register}
@@ -145,12 +146,12 @@ export default function ProfileForm() {
                 hasInput={hasValue(link)}
               />
             </div>
+
+            <SocialMediaForm socials={socials} setValue={setValue} />
           </section>
 
           <footer className="flex flex-col gap-4 border-t border-primary/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm text-primary/70">
-              {t("common.preSave")}
-            </p>
+            <p className="text-sm text-primary/70">{t("common.preSave")}</p>
             <button
               type="submit"
               disabled={!isValid}

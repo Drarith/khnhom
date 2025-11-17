@@ -23,6 +23,12 @@
       "bio": "Bio(*optional)",
       "socials": "Social Media Links",
       "link": "Your Link(*optional)"
+    },
+
+    "socialMediaInput": {
+      "addedSocialLink": "Added Social Links",
+      "addSocialLink": "Add Social Link",
+      "added": "Added"
     }
   }
 }

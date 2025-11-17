@@ -105,3 +105,7 @@ export const profileFormInputSchema = z.object({
   socials: SocialsSchema,
   link: SanitizedUrl(),
 });
+
+export const socialHandleInputSchema = z.object({
+  socialHandle: SanitizedString(30, 3),
+});
