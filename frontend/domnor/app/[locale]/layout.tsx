@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { inter, dancingScript } from "@/lib/font";
+import { inter, dancingScript, notoSansKhmer, bokor } from "@/lib/font";
 import "./globals.css";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
@@ -26,7 +26,7 @@ export default async function RootLayout({ children, params }: Props) {
   return (
     <html
       lang={locale}
-      className={`${inter.variable} ${dancingScript.variable} antialiased`}
+      className={`${inter.variable} ${dancingScript.variable} ${notoSansKhmer.variable} ${bokor.variable} antialiased`}
     >
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>

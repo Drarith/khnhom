@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-inter);
-  --font-cursive: var(--font-dancing-script);
+  --font-sans: var(--font-inter), var(--font-khmer);
+  --font-cursive: var(--font-dancing-script), var(--font-khmer-cursive);
 
   --color-primary: #222831;
   --color-secondary: #393e46;
