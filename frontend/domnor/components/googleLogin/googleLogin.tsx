@@ -1,7 +1,7 @@
 import GoogleLoginButton from "./googleButton";
 import { getTranslations } from "next-intl/server";
 
-const API_BASE = process.env.PUBLIC_API_BASE_URL || "";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
 export default async function GoogleLogin() {
   const t = await getTranslations("homepage");
