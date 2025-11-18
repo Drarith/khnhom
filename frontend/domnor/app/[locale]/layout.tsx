@@ -6,6 +6,8 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 
+import ReactQueryProvider from "@/providers/reactQueryProvider";
+
 import type { Props } from "@/types/rootLayout/rootLayout";
 
 export const metadata: Metadata = {
@@ -30,7 +32,7 @@ export default async function RootLayout({ children, params }: Props) {
     >
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
+          <ReactQueryProvider>{children}</ReactQueryProvider>
         </NextIntlClientProvider>
       </body>
     </html>

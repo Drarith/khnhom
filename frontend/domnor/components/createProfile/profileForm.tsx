@@ -3,18 +3,21 @@
 import { useForm, useWatch, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createProfileFormInputSchema } from "@/validationSchema/inputValidationSchema";
-import { z } from "zod";
 
 import { useTranslations } from "next-intl";
 
 import ProfileFormInput from "../profileInput/profileInput";
 import SocialMediaForm from "./socialMediaForm";
 
+import { useMutation } from "@tanstack/react-query";
+import { postJSON } from "@/https/https";
+
+import { ProfileFormInputValues } from "@/types/profileForm/profileFormInput";
+
 export default function ProfileForm() {
   const t = useTranslations("profileSetupPage");
 
   const profileFormInputSchema = createProfileFormInputSchema(t);
-  type FormInputValues = z.infer<typeof profileFormInputSchema>;
 
   const {
     register,
@@ -22,8 +25,10 @@ export default function ProfileForm() {
     handleSubmit,
     setValue,
     formState: { errors, isValid },
-  } = useForm<FormInputValues>({
-    resolver: zodResolver(profileFormInputSchema) as Resolver<FormInputValues>,
+  } = useForm<ProfileFormInputValues>({
+    resolver: zodResolver(
+      profileFormInputSchema
+    ) as Resolver<ProfileFormInputValues>,
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
@@ -54,22 +59,33 @@ export default function ProfileForm() {
 
   const hasValue = (value: string) => value.trim().length > 0;
 
-  const onSubmit = (values: FormInputValues) => {
-    // TODO: wire this up to the real create/update profile mutation
+  const mutation = useMutation({
+    mutationFn: (values: ProfileFormInputValues) => postJSON("/create-profile", values),
+    onSuccess: (data) => {
+      console.log("Profile created successfully", data);
+    },
+    onError: (error) => {
+      console.log("Error creating profile", error);
+    },
+  });
+
+  const onSubmit = (values: ProfileFormInputValues) => {
     console.table(values);
     console.log(values);
+    mutation.mutate(values);
   };
 
   return (
     <section className="min-h-screen w-full bg-foreground px-4 py-8">
       <div className="mx-auto w-full max-w-4xl rounded-3xl border border-primary/10 bg-foreground px-6 py-8 shadow-2xl md:px-10 md:py-12">
         <header className="space-y-2 border-b border-primary/10 pb-6">
+          <h1 className="text-primary text-2xl">DOMNOR</h1>
           <p className="text-sm uppercase tracking-[0.2em] text-primary/70">
             {t("common.page")}
           </p>
-          <h1 className="text-2xl font-semibold text-primary md:text-3xl">
+          <h2 className="text-2xl font-semibold text-primary md:text-3xl">
             {t("common.title")}
-          </h1>
+          </h2>
           <p className="text-sm text-primary/70">{t("common.about")}</p>
         </header>
 

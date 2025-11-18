@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { createProfileFormInputSchema } from "@/validationSchema/inputValidationSchema";
+
 export interface profileFormInput {
   username: string;
   displayName: string;
@@ -9,3 +12,8 @@ export interface profileFormInput {
   theme: string;
   selectedTemplate?: string;
 }
+
+
+export type ProfileFormInputValues = z.infer<
+  ReturnType<typeof createProfileFormInputSchema>
+>;
