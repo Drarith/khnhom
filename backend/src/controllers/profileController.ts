@@ -46,7 +46,7 @@ export const createProfile = async (req: Request, res: Response) => {
   const userId = (req.user as IUser).id;
   if (!userId) return res.status(400).json({ message: "User id not found!" });
 
-  const existingUser = req.profile.id 
+  const existingUser = req.profile?.id 
   if(existingUser) return res.status(400).json({message: "Profile already existed."})
 
   const profileData: ProfileCreationInput = {

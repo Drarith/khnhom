@@ -18,8 +18,11 @@ import { Bounce, toast } from "react-toastify";
 import { useState } from "react";
 import { AxiosError } from "axios";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
+import { useRouter } from "next/navigation";
 
 export default function ProfileForm() {
+  const router = useRouter();
+
   const t = useTranslations("profileSetupPage");
 
   const profileFormInputSchema = createProfileFormInputSchema(t);
@@ -72,29 +75,40 @@ export default function ProfileForm() {
     onSuccess: (data) => {
       console.log("Profile created successfully", data);
       setIsSubmitting(false);
+      router.push("/dashboard");
     },
     onError: (error: AxiosError<{ message?: string }>) => {
-      toast.error(getAxiosErrorMessage(error) + "Please try again later.", {
-        position: "top-right",
-        autoClose: 10000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "colored",
-        transition: Bounce,
-      });
-      setIsSubmitting(false);
-      console.log("Error creating profile", error);
+      const errorMessage = getAxiosErrorMessage(error);
+      if (errorMessage?.includes("Profile already existed")) {
+        toast.error(errorMessage + " redirecting...", {
+          position: "top-right",
+          autoClose: 3000,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored",
+          transition: Bounce,
+        });
+        setTimeout(() => {
+          setIsSubmitting(false);
+          router.push("/dashboard");
+        }, 3000);
+      } else {
+        toast.error(errorMessage + " Please try again later.", {
+          position: "top-right",
+          autoClose: 10000,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored",
+          transition: Bounce,
+        });
+        setIsSubmitting(false);
+      }
     },
   });
 
   const onSubmit = (values: ProfileFormInputValues) => {
     setIsSubmitting(true);
-    setTimeout(() => {
-      mutation.mutate(values);
-    }, 2000);
-    // console.table(values);
-    // console.log(values);
-    // mutation.mutate(values);
+    mutation.mutate(values);
   };
 
   return (
