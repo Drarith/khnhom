@@ -15,6 +15,9 @@ export const postJSON = async (url: string, data: ProfileFormInputValues) => {
     return response.data;
   } catch (error) {
     console.error("Error posting JSON:", error);
+    if (axios.isAxiosError(error)) {
+      throw error;
+    }
     throw error;
   }
 };

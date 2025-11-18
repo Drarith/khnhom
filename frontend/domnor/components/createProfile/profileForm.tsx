@@ -16,6 +16,8 @@ import { ProfileFormInputValues } from "@/types/profileForm/profileFormInput";
 import { Bounce, toast } from "react-toastify";
 
 import { useState } from "react";
+import { AxiosError } from "axios";
+import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 
 export default function ProfileForm() {
   const t = useTranslations("profileSetupPage");
@@ -71,8 +73,8 @@ export default function ProfileForm() {
       console.log("Profile created successfully", data);
       setIsSubmitting(false);
     },
-    onError: (error) => {
-      toast.error(`${error.message}, Please try again later.`, {
+    onError: (error: AxiosError<{ message?: string }>) => {
+      toast.error(getAxiosErrorMessage(error) + "Please try again later.", {
         position: "top-right",
         autoClose: 10000,
         pauseOnHover: true,
