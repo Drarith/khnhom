@@ -13,11 +13,16 @@ import { useMutation } from "@tanstack/react-query";
 import { postJSON } from "@/https/https";
 
 import { ProfileFormInputValues } from "@/types/profileForm/profileFormInput";
+import { Bounce, toast } from "react-toastify";
+
+import { useState } from "react";
 
 export default function ProfileForm() {
   const t = useTranslations("profileSetupPage");
 
   const profileFormInputSchema = createProfileFormInputSchema(t);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -60,19 +65,34 @@ export default function ProfileForm() {
   const hasValue = (value: string) => value.trim().length > 0;
 
   const mutation = useMutation({
-    mutationFn: (values: ProfileFormInputValues) => postJSON("/create-profile", values),
+    mutationFn: (values: ProfileFormInputValues) =>
+      postJSON("/create-profile", values),
     onSuccess: (data) => {
       console.log("Profile created successfully", data);
+      setIsSubmitting(false);
     },
     onError: (error) => {
+      toast.error(`${error.message}, Please try again later.`, {
+        position: "top-right",
+        autoClose: 10000,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+        transition: Bounce,
+      });
+      setIsSubmitting(false);
       console.log("Error creating profile", error);
     },
   });
 
   const onSubmit = (values: ProfileFormInputValues) => {
-    console.table(values);
-    console.log(values);
-    mutation.mutate(values);
+    setIsSubmitting(true);
+    setTimeout(() => {
+      mutation.mutate(values);
+    }, 2000);
+    // console.table(values);
+    // console.log(values);
+    // mutation.mutate(values);
   };
 
   return (
@@ -171,10 +191,10 @@ export default function ProfileForm() {
             <p className="text-sm text-primary/70">{t("common.preSave")}</p>
             <button
               type="submit"
-              disabled={!isValid}
+              disabled={isSubmitting ? true : !isValid}
               className="w-full rounded-full bg-primary px-8 py-3 text-center text-sm font-semibold uppercase tracking-wide text-foreground transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary/60 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
             >
-              {t("common.saveProfile")}
+              {isSubmitting ? "Submitting" : t("common.saveProfile")}
             </button>
           </footer>
         </form>
