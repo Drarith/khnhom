@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { ToastContainer } from "react-toastify";
+// import { ToastContainer } from "react-toastify";
 
 import ProfileForm from "@/components/createProfile/profileForm";
 
@@ -14,7 +14,7 @@ export default async function CreateProfile() {
   return (
     <div>
       <ProfileForm />;
-      <ToastContainer/>
+      {/* <ToastContainer/> */}
     </div>
   );
 }

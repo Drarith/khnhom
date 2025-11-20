@@ -1,7 +1,4 @@
-import {
-  type Request,
-  type Response,
-} from "express";
+import { type Request, type Response } from "express";
 import mongoose from "mongoose";
 
 import type {
@@ -46,8 +43,9 @@ export const createProfile = async (req: Request, res: Response) => {
   const userId = (req.user as IUser).id;
   if (!userId) return res.status(400).json({ message: "User id not found!" });
 
-  const existingUser = req.profile?.id 
-  if(existingUser) return res.status(400).json({message: "Profile already existed."})
+  const existingUser = req.profile?.id;
+  if (existingUser)
+    return res.status(400).json({ message: "Profile already existed." });
 
   const profileData: ProfileCreationInput = {
     user: userId.toString(),
@@ -369,4 +367,15 @@ export const deleteLinkFromProfile = async (req: Request, res: Response) => {
     const msg = getErrorMessage(err);
     return res.status(500).json({ error: "Unable to delete link. " + msg });
   }
+};
+
+export const currentUserProfile = (req: Request, res: Response) => {
+  if (!req.user && !req.profile)
+    return res
+      .status(400)
+      .json({ message: "Something went wrong, profile not found." });
+  const currentUserProfile = req.profile
+  console.log(currentUserProfile);
+  return res.status(200).json({data:currentUserProfile})
+
 };

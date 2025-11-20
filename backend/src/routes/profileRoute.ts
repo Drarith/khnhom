@@ -6,6 +6,7 @@ import {
   updateProfile,
   deleteLinkFromProfile,
   getProfileLinks,
+  currentUserProfile,
 } from "../controllers/profileController.js";
 import { authenticateToken } from "../middleware/auth.js";
 import "../config/passport.js";
@@ -38,5 +39,7 @@ profileRouter.post(
   authenticateToken,
   createAndAddLinkToProfile
 );
+
+profileRouter.get("/api/me", authenticateToken, currentUserProfile);
 
 export default profileRouter;

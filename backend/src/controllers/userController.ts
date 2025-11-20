@@ -117,7 +117,7 @@ export const googleCallback = (
 
         const existingProfile = await Profile.findOne({ user: user._id });
 
-        const base = env.FRONTEND_URL;
+        const base = process.env.FRONTEND_URL;
         const redirectTo = existingProfile
           ? `${base}/dashboard`
           : `${base}/create-profile`;

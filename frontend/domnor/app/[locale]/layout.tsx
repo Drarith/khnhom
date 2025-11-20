@@ -6,6 +6,8 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 
+import { ToastContainer } from "react-toastify";
+
 import ReactQueryProvider from "@/providers/reactQueryProvider";
 
 import type { Props } from "@/types/rootLayout/rootLayout";
@@ -32,7 +34,9 @@ export default async function RootLayout({ children, params }: Props) {
     >
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <ReactQueryProvider>{children}</ReactQueryProvider>
+          <ReactQueryProvider>
+            {children} <ToastContainer />
+          </ReactQueryProvider>
         </NextIntlClientProvider>
       </body>
     </html>

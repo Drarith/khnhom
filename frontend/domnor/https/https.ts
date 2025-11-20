@@ -13,11 +13,21 @@ export const postJSON = async (url: string, data: ProfileFormInputValues) => {
   try {
     const response = await apiClient.post(url, data);
     return response.data;
-  } catch (error) {
-    console.error("Error posting JSON:", error);
-    if (axios.isAxiosError(error)) {
-      throw error;
+  } catch (err) {
+    console.error("Error posting JSON:", err);
+    if (axios.isAxiosError(err)) {
+      throw err;
     }
-    throw error;
+    throw err;
   }
 };
+
+export const getJSON = async (url:string) => {
+  try{
+    const response = await apiClient.get(url)
+    return response.data
+  }catch(err){
+    console.error("Axios get request error" + err);
+    throw err
+  }
+}
