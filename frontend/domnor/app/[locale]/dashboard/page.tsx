@@ -1,7 +1,9 @@
-'use client'
+"use client";
 import { useQuery } from "@tanstack/react-query";
 
 import { getJSON } from "@/https/https";
+
+import { toast } from "react-toastify";
 
 export default function Dashboard() {
   const { isPending, error, data } = useQuery({
@@ -9,7 +11,11 @@ export default function Dashboard() {
     queryFn: () => getJSON("/me"),
   });
 
-  console.log(data)
+  if (error) {
+    toast.error(error.message);
+  }
+
+  console.log(data);
 
   return <h1>hi</h1>;
 }

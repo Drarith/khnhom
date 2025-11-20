@@ -13,7 +13,7 @@ import { useMutation } from "@tanstack/react-query";
 import { postJSON } from "@/https/https";
 
 import { ProfileFormInputValues } from "@/types/profileForm/profileFormInput";
-import { Bounce, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 import { useState } from "react";
 import { AxiosError } from "axios";
@@ -81,26 +81,14 @@ export default function ProfileForm() {
       const errorMessage = getAxiosErrorMessage(error);
       if (errorMessage?.includes("Profile already existed")) {
         toast.error(errorMessage + " redirecting...", {
-          position: "top-right",
           autoClose: 3000,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "colored",
-          transition: Bounce,
         });
         setTimeout(() => {
           setIsSubmitting(false);
           router.push("/dashboard");
         }, 3000);
       } else {
-        toast.error(errorMessage + " Please try again later.", {
-          position: "top-right",
-          autoClose: 10000,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "colored",
-          transition: Bounce,
-        });
+        toast.error(errorMessage + " Please try again later.", {});
         setIsSubmitting(false);
       }
     },

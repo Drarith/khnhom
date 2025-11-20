@@ -6,7 +6,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 
-import { ToastContainer } from "react-toastify";
+import { Bounce, ToastContainer } from "react-toastify";
 
 import ReactQueryProvider from "@/providers/reactQueryProvider";
 
@@ -35,7 +35,15 @@ export default async function RootLayout({ children, params }: Props) {
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ReactQueryProvider>
-            {children} <ToastContainer />
+            {children}{" "}
+            <ToastContainer
+              position="top-right"
+              autoClose={10000}
+              pauseOnHover={true}
+              draggable={true}
+              theme={"colored"}
+              transition={Bounce}
+            />
           </ReactQueryProvider>
         </NextIntlClientProvider>
       </body>
