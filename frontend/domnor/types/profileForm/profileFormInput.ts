@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createProfileFormInputSchema } from "@/validationSchema/inputValidationSchema";
 
-export interface profileFormInput {
+export interface ProfileFormInputs {
   username: string;
   displayName: string;
   bio?: string;
@@ -9,7 +9,7 @@ export interface profileFormInput {
   paymentQrCodeUrl?: string;
   socials?: Record<string, string>[];
   link?: Record<string, string>;
-  theme: string;
+  theme?: string;
   selectedTemplate?: string;
 }
 

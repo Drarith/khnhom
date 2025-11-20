@@ -1,14 +1,14 @@
 "use client";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { Camera, Link as LinkIcon, Palette, Eye, User } from "lucide-react";
 import type { ProfileData } from "@/types/profileData/profileData";
 import { SOCIAL_PLATFORMS } from "@/config/socials";
 import ProfileFormInput from "../profileInput/profileInput";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { profileFormInputSchema } from "@/validationSchema/inputValidationSchema";
-import { Resolver } from "dns";
 import { ProfileFormInputValues } from "@/types/profileForm/profileFormInput";
+import type { ProfileFormInputs } from "@/types/profileForm/profileFormInput";
 
 interface ProfileEditorProps {
   initialData?: ProfileData["data"];
@@ -18,14 +18,8 @@ type ProfileFormData = {
   username: string;
   displayName: string;
   bio: string;
-  facebook: string;
-  instagram: string;
-  telegram: string;
-  youtube: string;
-  linkedin: string;
-  x: string;
-  tiktok: string;
-  github: string;
+  socials: Record<string, string>;
+  link: string;
 };
 
 export default function ProfileEditor({ initialData }: ProfileEditorProps) {
@@ -38,19 +32,13 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
     watch,
     formState: { errors },
   } = useForm<ProfileFormData>({
-    resolver: zodResolver(profileFormInputSchema) as Resolver<ProfileFormData>,
+    resolver: zodResolver(profileFormInputSchema) as Resolver<ProfileFormInputs>,
     defaultValues: {
       username: initialData?.username || "",
       displayName: initialData?.displayName || "",
       bio: initialData?.bio || "",
-      facebook: initialData?.socials.facebook || "",
-      instagram: initialData?.socials.instagram || "",
-      telegram: initialData?.socials.telegram || "",
-      youtube: initialData?.socials.youtube || "",
-      linkedin: initialData?.socials.linkedin || "",
-      x: initialData?.socials.x || "",
-      tiktok: initialData?.socials.tiktok || "",
-      github: initialData?.socials.github || "",
+      socials: initialData?.socials,
+      link: initialData?.links,
     },
   });
 
