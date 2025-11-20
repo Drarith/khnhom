@@ -35,5 +35,16 @@
       "usernamePattern": "Username can contain only letters, numbers and underscores",
       "invalidUrl": "Must be a valid HTTPS URL. Example: https://domnor.com"
     }
+  },
+
+  "profileEditorPage": {
+    "editProfile": "Edit Profile",
+    "headerP": "Customize your profile and manage your links",
+    "preview": "Preview",
+    "profileInfo": "Profile information",
+    "profilePic": "Profile Picture",
+    "profilePicP": "Upload a profile picture that represent you",
+    "uploadPhoto": "Upload Photo",
+    "username": "username"
   }
 }
