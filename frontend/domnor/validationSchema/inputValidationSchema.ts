@@ -147,19 +147,6 @@ export const profileFormInputSchema = z.object({
   link: SanitizedUrl(),
 });
 
-export const profileFormEditorSchema = z.object({
-  username: SanitizedString(
-    30,
-    3,
-    /^[a-zA-Z0-9_]+$/,
-    "Username can contain only letters, numbers and underscores"
-  ),
-  displayName: SanitizedString(30, 3),
-  bio: SanitizedString(1000),
-  socials: SocialsSchema,
-  link: SanitizedUrl(),
-});
-
 export const socialHandleInputSchema = z.object({
   socialHandle: SanitizedString(30, 3),
 });

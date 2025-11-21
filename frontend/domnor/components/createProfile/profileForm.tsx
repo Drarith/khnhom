@@ -20,6 +20,8 @@ import { AxiosError } from "axios";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 import { useRouter } from "next/navigation";
 
+import { normalizeValue } from "@/helpers/normalizeVal";
+
 export default function ProfileForm() {
   const router = useRouter();
 
@@ -50,7 +52,7 @@ export default function ProfileForm() {
     },
   });
 
-  const normalizeValue = (value?: string | null) => value ?? "";
+
   const username = normalizeValue(
     useWatch({ control, name: "username", defaultValue: "" })
   );

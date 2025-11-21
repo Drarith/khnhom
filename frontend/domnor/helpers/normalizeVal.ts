@@ -1,0 +1,1 @@
+export const normalizeValue = (value?: string | null) => value ?? "";

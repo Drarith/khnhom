@@ -7,7 +7,7 @@ export interface ProfileData {
     bio: string;
     profilePictureUrl: string;
     paymentQrCodeUrl: string;
-    links: string[];
+    links: string;
     theme: string;
     selectedTemplate: string;
     views: number;
