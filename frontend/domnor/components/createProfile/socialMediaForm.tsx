@@ -4,10 +4,10 @@ import { z } from "zod";
 
 import { useTranslations } from "next-intl";
 
-import { profileFormInputSchema } from "@/validationSchema/inputValidationSchema";
+import { profileFormEditorInputSchema } from "@/validationSchema/inputValidationSchema";
 import { SOCIAL_PLATFORMS } from "@/config/socials";
 
-type FormInputValues = z.infer<typeof profileFormInputSchema>;
+type FormInputValues = z.infer<typeof profileFormEditorInputSchema>;
 
 interface SocialMediaFormProps {
   socials: Record<string, string>;

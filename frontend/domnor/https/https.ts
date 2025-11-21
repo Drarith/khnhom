@@ -1,5 +1,8 @@
 import axios from "axios";
-import { ProfileFormInputValues } from "@/types/profileForm/profileFormInput";
+import {
+  ProfileFormInputValues,
+  ProfileFormEditorInputValues,
+} from "@/types/profileForm/profileFormInput";
 
 const PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
@@ -22,12 +25,24 @@ export const postJSON = async (url: string, data: ProfileFormInputValues) => {
   }
 };
 
-export const getJSON = async (url:string) => {
-  try{
-    const response = await apiClient.get(url)
-    return response.data
-  }catch(err){
-    console.error("Axios get request error" + err);
-    throw err
+export const putJSON = async (
+  url: string,
+  data: ProfileFormEditorInputValues
+) => {
+  try {
+    const response = await apiClient.put(url, data);
+    return response.data;
+  } catch (err) {
+    throw err;
   }
-}
+};
+
+export const getJSON = async (url: string) => {
+  try {
+    const response = await apiClient.get(url);
+    return response.data;
+  } catch (err) {
+    console.error("Axios get request error" + err);
+    throw err;
+  }
+};

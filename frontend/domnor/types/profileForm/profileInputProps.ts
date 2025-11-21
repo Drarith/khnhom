@@ -15,4 +15,5 @@ export interface ProfileFormInputProps<T extends FieldValues> {
   maxLength?: number;
   textArea?: boolean;
   hasInput?: boolean;
+  initialValue?: string;
 }
