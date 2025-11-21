@@ -133,6 +133,31 @@ export const createProfileFormInputSchema = (
   });
 };
 
+export const editProfileFormInputSchema = (
+  t: (key: string, values?: Record<string, string | number>) => string
+) => {
+  return z.object({
+    displayName: SanitizedString(
+      30,
+      3,
+      undefined,
+      undefined,
+      t("validation.minLength", { min: 3 }),
+      t("validation.maxLength", { max: 30 })
+    ),
+    bio: SanitizedString(
+      1000,
+      0,
+      undefined,
+      undefined,
+      undefined,
+      t("validation.maxLength", { max: 1000 })
+    ),
+    socials: SocialsSchema,
+    link: SanitizedUrl(t("validation.invalidUrl")),
+  });
+};
+
 // Default schema without translations (for backwards compatibility)
 export const profileFormInputSchema = z.object({
   username: SanitizedString(
@@ -141,6 +166,13 @@ export const profileFormInputSchema = z.object({
     /^[a-zA-Z0-9_]+$/,
     "Username can contain only letters, numbers and underscores"
   ),
+  displayName: SanitizedString(30, 3),
+  bio: SanitizedString(1000),
+  socials: SocialsSchema,
+  link: SanitizedUrl(),
+});
+
+export const profileFormEditorInputSchema = z.object({
   displayName: SanitizedString(30, 3),
   bio: SanitizedString(1000),
   socials: SocialsSchema,

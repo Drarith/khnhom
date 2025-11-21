@@ -6,8 +6,8 @@ import type { ProfileData } from "@/types/profileData/profileData";
 import { SOCIAL_PLATFORMS } from "@/config/socials";
 import ProfileFormInput from "../profileInput/profileInput";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ProfileFormInputValues } from "@/types/profileForm/profileFormInput";
-import { profileFormInputSchema } from "@/validationSchema/inputValidationSchema";
+import { ProfileFormEditorInputValues } from "@/types/profileForm/profileFormInput";
+import { profileFormEditorInputSchema } from "@/validationSchema/inputValidationSchema";
 import { normalizeValue } from "@/helpers/normalizeVal";
 import SocialMediaForm from "../createProfile/socialMediaForm";
 
@@ -26,18 +26,17 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<ProfileFormInputValues>({
+  } = useForm<ProfileFormEditorInputValues>({
     resolver: zodResolver(
-      profileFormInputSchema
-    ) as Resolver<ProfileFormInputValues>,
+      profileFormEditorInputSchema
+    ) as Resolver<ProfileFormEditorInputValues>,
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
-      username: initialData?.username || "",
       displayName: initialData?.displayName || "",
       bio: initialData?.bio || "",
       socials: initialData?.socials,
-      link: initialData?.links,
+      link: "",
     },
   });
 
@@ -91,9 +90,9 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
     { id: "appearance", label: "Appearance", icon: Palette },
   ] as const;
 
-  const onSubmit = (values: ProfileFormInputValues) => {
+  const onSubmit = (values: ProfileFormEditorInputValues) => {
     console.log("Form submitted with values:", values);
-  }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -109,7 +108,10 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                 Customize your profile and manage your links
               </p>
             </div>
-            <button className="flex items-center gap-2 px-4 py-2 bg-primary text-foreground rounded-lg hover:bg-primary/90 transition-colors">
+            <button
+              type="button"
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-foreground rounded-lg hover:bg-primary/90 transition-colors"
+            >
               <Eye size={18} />
               Preview
             </button>
@@ -125,6 +127,7 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                   const Icon = tab.icon;
                   return (
                     <button
+                      type="button"
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
                       className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
@@ -143,8 +146,9 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
           </div>
 
           {/* Main Content */}
-          <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <div className="lg:col-span-9">
+
+          <div className="lg:col-span-9">
+            <form onSubmit={handleSubmit(onSubmit)} noValidate>
               <div className="bg-foreground rounded-lg shadow-sm border border-primary/10">
                 {/* Profile Tab */}
                 {activeTab === "profile" && (
@@ -161,7 +165,10 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                         <div className="w-24 h-24 rounded-full bg-linear-to-br from-purple-400 to-pink-600 flex items-center justify-center text-foreground text-3xl font-bold">
                           {mockData.displayName?.[0]?.toUpperCase() || "U"}
                         </div>
-                        <button className="absolute bottom-0 right-0 p-2 bg-foreground rounded-full shadow-lg border-2 border-primary/10 hover:bg-primary/5 transition-colors">
+                        <button
+                          type="button"
+                          className="absolute bottom-0 right-0 p-2 bg-foreground rounded-full shadow-lg border-2 border-primary/10 hover:bg-primary/5 transition-colors"
+                        >
                           <Camera size={16} className="text-primary" />
                         </button>
                       </div>
@@ -172,7 +179,10 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                         <p className="text-sm text-primary/60 mb-3">
                           Upload a profile picture that represents you
                         </p>
-                        <button className="px-4 py-2 border border-primary/20 rounded-lg text-sm font-medium text-primary hover:bg-primary/5 transition-colors">
+                        <button
+                          type="button"
+                          className="px-4 py-2 border border-primary/20 rounded-lg text-sm font-medium text-primary hover:bg-primary/5 transition-colors"
+                        >
                           Upload Photo
                         </button>
                       </div>
@@ -212,7 +222,10 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                           {mockData.paymentQrCodeUrl ? (
                             <div className="space-y-3">
                               <div className="w-32 h-32 mx-auto bg-primary/5 rounded-lg"></div>
-                              <button className="text-sm text-primary hover:text-primary/80">
+                              <button
+                                type="button"
+                                className="text-sm text-primary hover:text-primary/80"
+                              >
                                 Change QR Code
                               </button>
                             </div>
@@ -224,7 +237,10 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                               <p className="text-sm text-primary/60">
                                 Upload payment QR code
                               </p>
-                              <button className="text-sm text-primary hover:text-primary/80">
+                              <button
+                                type="button"
+                                className="text-sm text-primary hover:text-primary/80"
+                              >
                                 Browse files
                               </button>
                             </div>
@@ -247,7 +263,7 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                       </p>
                     </div>
 
-                    <SocialMediaForm socials={socials} setValue={setValue} />
+                    {/* <SocialMediaForm socials={socials} setValue={setValue} /> */}
                   </div>
                 )}
 
@@ -263,7 +279,10 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                           Add custom links to your profile
                         </p>
                       </div>
-                      <button className="px-4 py-2 bg-primary text-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium">
+                      <button
+                        type="button"
+                        className="px-4 py-2 bg-primary text-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+                      >
                         + Add Link
                       </button>
                     </div>
@@ -280,7 +299,10 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                         <p className="text-sm text-primary/60 mb-4">
                           Start adding custom links to share with your audience
                         </p>
-                        <button className="px-4 py-2 bg-primary text-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium">
+                        <button
+                          type="button"
+                          className="px-4 py-2 bg-primary text-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+                        >
                           Add Your First Link
                         </button>
                       </div>
@@ -319,6 +341,7 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                           "classic",
                         ].map((template) => (
                           <button
+                            type="button"
                             key={template}
                             className={`p-4 border-2 rounded-lg text-center transition-all ${
                               mockData.selectedTemplate === template
@@ -350,12 +373,16 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                           "#EF4444",
                         ].map((color) => (
                           <button
+                            type="button"
                             key={color}
                             className="w-12 h-12 rounded-full border-2 border-primary/20 hover:scale-110 transition-transform"
                             style={{ backgroundColor: color }}
                           />
                         ))}
-                        <button className="w-12 h-12 rounded-full border-2 border-primary/20 hover:scale-110 transition-transform bg-linear-to-br from-purple-400 to-pink-600" />
+                        <button
+                          type="button"
+                          className="w-12 h-12 rounded-full border-2 border-primary/20 hover:scale-110 transition-transform bg-linear-to-br from-purple-400 to-pink-600"
+                        />
                       </div>
                     </div>
 
@@ -373,6 +400,7 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                           </p>
                         </div>
                         <button
+                          type="button"
                           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                             mockData.isActive ? "bg-primary" : "bg-primary/30"
                           }`}
@@ -393,17 +421,23 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                 {/* Save Button */}
                 <div className="px-6 py-4 border-t border-primary/10 bg-primary/5">
                   <div className="flex justify-end gap-3">
-                    <button className="px-6 py-2 border border-primary/20 rounded-lg text-primary hover:bg-primary/5 transition-colors font-medium">
+                    <button
+                      type="button"
+                      className="px-6 py-2 border border-primary/20 rounded-lg text-primary hover:bg-primary/5 transition-colors font-medium"
+                    >
                       Cancel
                     </button>
-                    <button type="submit" className="px-6 py-2 bg-primary text-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium">
+                    <button
+                      type="submit"
+                      className="px-6 py-2 bg-primary text-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
+                    >
                       Save Changes
                     </button>
                   </div>
                 </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>

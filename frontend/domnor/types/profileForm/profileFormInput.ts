@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { createProfileFormInputSchema } from "@/validationSchema/inputValidationSchema";
+import {
+  createProfileFormInputSchema,
+  editProfileFormInputSchema,
+} from "@/validationSchema/inputValidationSchema";
 
 export interface ProfileFormInputs {
   username: string;
@@ -13,7 +16,10 @@ export interface ProfileFormInputs {
   selectedTemplate?: string;
 }
 
-
 export type ProfileFormInputValues = z.infer<
   ReturnType<typeof createProfileFormInputSchema>
+>;
+
+export type ProfileFormEditorInputValues = z.infer<
+  ReturnType<typeof editProfileFormInputSchema>
 >;
