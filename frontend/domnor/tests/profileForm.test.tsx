@@ -1,6 +1,18 @@
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    prefetch: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+  }),
+}));
+
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NextIntlClientProvider } from "next-intl";
 import ProfileForm from "@/components/createProfile/profileForm";
 
@@ -39,11 +51,15 @@ const messages = {
   },
 };
 
+const queryClient = new QueryClient();
+
 const renderWithIntl = (component: React.ReactElement) => {
   return render(
-    <NextIntlClientProvider locale="en" messages={messages}>
-      {component}
-    </NextIntlClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <NextIntlClientProvider locale="en" messages={messages}>
+        {component}
+      </NextIntlClientProvider>
+    </QueryClientProvider>
   );
 };
 

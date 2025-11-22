@@ -1,39 +1,34 @@
 import { useState } from "react";
-import { UseFormSetValue } from "react-hook-form";
-import { z } from "zod";
-
+import { UseFormSetValue, FieldValues, Path , PathValue} from "react-hook-form";
 import { useTranslations } from "next-intl";
 
-import { profileFormEditorInputSchema } from "@/validationSchema/inputValidationSchema";
 import { SOCIAL_PLATFORMS } from "@/config/socials";
 
-type FormInputValues = z.infer<typeof profileFormEditorInputSchema>;
-
-interface SocialMediaFormProps {
+// Make the component generic
+interface SocialMediaFormProps<T extends FieldValues> {
   socials: Record<string, string>;
-  setValue: UseFormSetValue<FormInputValues>;
+  setValue: UseFormSetValue<T>;
 }
 
-export default function SocialMediaForm({
+export default function SocialMediaForm<T extends FieldValues>({
   socials,
   setValue,
-}: SocialMediaFormProps) {
+}: SocialMediaFormProps<T>) {
   const [selected, setSelected] = useState<string>(SOCIAL_PLATFORMS[0].key);
   const [inputValue, setInputValue] = useState("");
-
-  const t = useTranslations("profileSetupPage")
-
+  const t = useTranslations("profileSetupPage");
   const currentPlatform = SOCIAL_PLATFORMS.find((p) => p.key === selected);
 
   const handleAddSocial = () => {
     if (inputValue.trim().length >= 3) {
       const fullUrl = `${currentPlatform?.prefix}${inputValue.trim()}`;
+
       setValue(
-        "socials",
+        "socials" as Path<T>,
         {
           ...socials,
           [selected]: fullUrl,
-        },
+        } as PathValue<T, Path<T>>,
         { shouldValidate: true }
       );
       setInputValue("");
@@ -43,10 +38,13 @@ export default function SocialMediaForm({
   const handleRemoveSocial = (key: string) => {
     const newSocials = { ...socials };
     delete newSocials[key];
-    setValue("socials", newSocials, { shouldValidate: true });
+
+    setValue("socials" as Path<T>, newSocials as PathValue<T, Path<T>>, {
+      shouldValidate: true,
+    });
   };
 
-  const isAlreadyAdded = selected in socials;
+  const isAlreadyAdded = selected in socials && socials[selected].trim() !== "";
   const isValidInput =
     inputValue.trim().length >= 3 && inputValue.trim().length <= 30;
 
@@ -119,7 +117,9 @@ export default function SocialMediaForm({
           disabled={!isValidInput || isAlreadyAdded}
           className="rounded-lg bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isAlreadyAdded ? t("socialMediaInput.added") : t("socialMediaInput.addSocialLink")}
+          {isAlreadyAdded
+            ? t("socialMediaInput.added")
+            : t("socialMediaInput.addSocialLink")}
         </button>
       </div>
 
@@ -127,9 +127,11 @@ export default function SocialMediaForm({
       {Object.keys(socials).length > 0 && (
         <div className="space-y-2">
           <p className="text-xs font-medium uppercase tracking-wide text-primary/70">
-            {t("socialMediaInput.addedSocialLink")} ({Object.keys(socials).length})
+            {t("socialMediaInput.addedSocialLink")} (
+            {Object.keys(socials).length})
           </p>
           {Object.entries(socials).map(([key, url]) => {
+            if (url.trim() === "") return null;
             const platform = SOCIAL_PLATFORMS.find((p) => p.key === key);
             return (
               <div

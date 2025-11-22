@@ -12,7 +12,6 @@ import SocialMediaForm from "../createProfile/socialMediaForm";
 import { useMutation } from "@tanstack/react-query";
 import { putJSON } from "@/https/https";
 import { toast } from "react-toastify";
-import { is } from "zod/locales";
 
 interface ProfileEditorProps {
   initialData?: ProfileData["data"];
@@ -44,7 +43,7 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
       link: "",
     },
   });
-
+  console.log("Initial Data:", initialData);
   const displayName = normalizeValue(
     useWatch({
       control,
