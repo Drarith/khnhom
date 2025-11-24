@@ -33,6 +33,7 @@ export default function ProfilePicture({
         <div className="relative">
           <div className=" w-24 h-24 rounded-full overflow-hidden bg-linear-to-br from-purple-400 to-pink-600 flex items-center justify-center text-foreground text-3xl font-bold">
             {croppedImageUrl ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 src={croppedImageUrl}
                 alt="Profile"

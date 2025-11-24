@@ -215,6 +215,7 @@ export default function UploadImageModal({
                 circularCrop
                 locked={true}
               >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   ref={imgRef}
                   alt="Crop me"
