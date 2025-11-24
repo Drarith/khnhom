@@ -21,6 +21,7 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-hook-form": "^7.66.0",
+    "react-image-crop": "^11.0.10",
     "react-toastify": "^11.0.5",
     "zod": "^4.1.12"
   },

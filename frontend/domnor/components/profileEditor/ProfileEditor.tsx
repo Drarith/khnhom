@@ -13,6 +13,8 @@ import { useMutation } from "@tanstack/react-query";
 import { putJSON } from "@/https/https";
 import { toast } from "react-toastify";
 
+import ProfilePicture from "./ProfilePicture";
+
 interface ProfileEditorProps {
   initialData?: ProfileData["data"];
 }
@@ -157,33 +159,12 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                     </div>
 
                     {/* Profile Picture */}
-                    <div className="flex items-start gap-6">
-                      <div className="relative">
-                        <div className="w-24 h-24 rounded-full bg-linear-to-br from-purple-400 to-pink-600 flex items-center justify-center text-foreground text-3xl font-bold">
-                          {initialData?.displayName?.[0]?.toUpperCase() || "U"}
-                        </div>
-                        <button
-                          type="button"
-                          className="absolute bottom-0 right-0 p-2 bg-foreground rounded-full shadow-lg border-2 border-primary/10 hover:bg-primary/5 transition-colors"
-                        >
-                          <Camera size={16} className="text-primary" />
-                        </button>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-medium text-primary mb-2">
-                          Profile Picture
-                        </h3>
-                        <p className="text-sm text-primary/60 mb-3">
-                          Upload a profile picture that represents you
-                        </p>
-                        <button
-                          type="button"
-                          className="px-4 py-2 border border-primary/20 rounded-lg text-sm font-medium text-primary hover:bg-primary/5 transition-colors"
-                        >
-                          Upload Photo
-                        </button>
-                      </div>
-                    </div>
+                    {initialData?.displayName && (
+                      <ProfilePicture
+                        displayName={initialData?.displayName}
+                        Camera={Camera}
+                      />
+                    )}
                     <div className="border-t border-primary/10 pt-6 space-y-6">
                       {/* Display Name */}
                       <ProfileFormInput
