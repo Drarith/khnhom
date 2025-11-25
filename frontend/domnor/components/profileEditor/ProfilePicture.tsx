@@ -19,7 +19,6 @@ export default function ProfilePicture({
   const [showModal, setShowModal] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
 
-
   async function handleSaveImage(imageUrl: string, imageFile: File) {
     setCroppedImageUrl(imageUrl);
     try {
@@ -47,13 +46,24 @@ export default function ProfilePicture({
         CLOUDINARY_UPLOAD_ENDPOINT,
         formData
       );
-
+      // Set image then post to backend to update
       if (response && response.secure_url) {
         setImageUrl(response.secure_url);
         toast.success("Profile picture uploaded successfully");
       } else {
         throw new Error("Invalid response from Cloudinary");
       }
+      //       if (response && response.secure_url) {
+      //   try {
+      //     await postJSON("profile/picture", response.secure_url);
+      //     setImageUrl(response.secure_url);
+      //     toast.success("Profile picture uploaded successfully");
+      //   } catch (err) {
+      //     throw err;
+      //   }
+      // } else {
+      //   throw new Error("Invalid response from Cloudinary");
+      // }
     } catch (err) {
       toast.error(
         `Unable to upload your image: ${

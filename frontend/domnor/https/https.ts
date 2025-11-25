@@ -42,13 +42,20 @@ export const getJSON = async (url: string) => {
   }
 };
 
+export const patchJSON = async (url: string, newUrl: string) => {
+  try {
+    const response = await apiClient.patch(url, newUrl);
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const uploadToCloudinary = async (url: string, formData: FormData) => {
   try {
     const response = await axios.post(url, formData, {
-      timeout: 30000, 
-      headers: {
-        
-      },
+      timeout: 30000,
+      headers: {},
     });
     return response.data;
   } catch (err) {
