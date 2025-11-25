@@ -4,6 +4,7 @@ import type {
   LinkCreationInput,
 } from "../../types/user-input.types.js";
 import type { ILink } from "./linkModel.types.js";
+import { updateProfilePictureUrl } from "../../controllers/profileController.js";
 
 // Interface for the Profile document and model in case your dumbass forgets
 // Interface for social media links
@@ -43,6 +44,7 @@ export interface IProfile extends Document {
   ): Promise<void>;
   addLink(this: IProfile, linkData: LinkCreationInput): Promise<ILink>;
   incrementViews(this: IProfile): Promise<void>;
+  updateProfilePictureUrl(this: IProfile, newUrl: string): Promise<void>;
 }
 
 // Interface for the Profile model (static methods)

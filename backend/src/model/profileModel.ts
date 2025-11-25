@@ -12,6 +12,7 @@ import type {
 
 import Link from "./linkModel.js";
 import type { SanitizedCreateProfile } from "../utils/sanitizeUtils.js";
+import { profile } from "console";
 
 const { Schema } = mongoose;
 
@@ -119,6 +120,18 @@ profileSchema.methods.updateProfile = async function (
 ) {
   try {
     Object.assign(this, updateData);
+    await this.save();
+  } catch (err) {
+    throw err;
+  }
+};
+
+profileSchema.methods.updateProfilePictureUrl = async function (
+  this: IProfile,
+  newUrl: string
+) {
+  try {
+    this.profilePictureUrl = newUrl;
     await this.save();
   } catch (err) {
     throw err;

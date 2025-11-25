@@ -19,7 +19,7 @@ export default function ProfilePicture({
   const [showModal, setShowModal] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
 
-  
+
   async function handleSaveImage(imageUrl: string, imageFile: File) {
     setCroppedImageUrl(imageUrl);
     try {

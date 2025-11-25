@@ -374,8 +374,20 @@ export const currentUserProfile = (req: Request, res: Response) => {
     return res
       .status(400)
       .json({ message: "Something went wrong, profile not found." });
-  const currentUserProfile = req.profile
+  const currentUserProfile = req.profile;
   console.log(currentUserProfile);
-  return res.status(200).json({data:currentUserProfile})
+  return res.status(200).json({ data: currentUserProfile });
+};
 
+export const updateProfilePictureUrl = async (req: Request, res: Response) => {
+  if (!req.user && !req.profile) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  const { profilePictureUrl } = req.body;
+  if (!profilePictureUrl) {
+    return res.status(400).json({ message: "profilePictureUrl is required." });
+  }
+  const userProfile = req.profile as IProfile;
+  await userProfile.updateProfilePictureUrl(profilePictureUrl);
+  return res.status(201).json({ message: "Profile picture updated." });
 };

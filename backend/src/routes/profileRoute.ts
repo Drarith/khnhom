@@ -7,6 +7,7 @@ import {
   deleteLinkFromProfile,
   getProfileLinks,
   currentUserProfile,
+  updateProfilePictureUrl,
 } from "../controllers/profileController.js";
 import { authenticateToken } from "../middleware/auth.js";
 import "../config/passport.js";
@@ -15,6 +16,14 @@ import { trackProfileView } from "../middleware/viewProfile.js";
 const profileRouter = express.Router();
 
 profileRouter.post("/api/create-profile", authenticateToken, createProfile);
+
+profileRouter.post(
+  "/api/create-link",
+  authenticateToken,
+  createAndAddLinkToProfile
+);
+
+profileRouter.patch("/api/profile/picture", authenticateToken, updateProfilePictureUrl);
 
 // use this path to update profile or delete profile data
 profileRouter.put("/api/update-profile", authenticateToken, updateProfile);
@@ -32,12 +41,6 @@ profileRouter.get(
   "/api/profile/:username",
   trackProfileView,
   getProfileByUsername
-);
-
-profileRouter.post(
-  "/api/create-link",
-  authenticateToken,
-  createAndAddLinkToProfile
 );
 
 profileRouter.get("/api/me", authenticateToken, currentUserProfile);
