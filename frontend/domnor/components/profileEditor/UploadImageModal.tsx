@@ -98,7 +98,10 @@ export default function UploadImageModal({
   async function onImageSaveClick() {
     if (!imgRef.current) return;
     const image = imgRef.current;
+    // Our final cropped area will be from this canvas
     const canvas = previewCanvasRef.current;
+    // Limit max dimensions for profile pictures
+    const MAX_DIMENSION = 800;
 
     if (!image || !canvas || !completedCrop) {
       return;
@@ -112,55 +115,70 @@ export default function UploadImageModal({
       return;
     }
 
-    const pixelRatio = window.devicePixelRatio || 1;
+    const cropWidth = completedCrop.width * scaleX;
+    const cropHeight = completedCrop.height * scaleY;
 
-    canvas.width = Math.floor(completedCrop.width * scaleX * pixelRatio);
-    canvas.height = Math.floor(completedCrop.height * scaleY * pixelRatio);
+    let outputWidth = cropWidth;
+    let outputHeight = cropHeight;
 
-    ctx.scale(pixelRatio, pixelRatio);
+    if (cropWidth > MAX_DIMENSION || cropHeight > MAX_DIMENSION) {
+      const scale = MAX_DIMENSION / Math.max(cropWidth, cropHeight);
+      outputWidth = cropWidth * scale;
+      outputHeight = cropHeight * scale;
+    }
+
+    canvas.width = Math.floor(outputWidth);
+    canvas.height = Math.floor(outputHeight);
+
+    ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
 
     const cropX = completedCrop.x * scaleX;
     const cropY = completedCrop.y * scaleY;
 
-    ctx.save();
-
-    ctx.translate(-cropX, -cropY);
+    // Draw scaled image
     ctx.drawImage(
       image,
+      cropX,
+      cropY,
+      cropWidth,
+      cropHeight,
       0,
       0,
-      image.naturalWidth,
-      image.naturalHeight,
-      0,
-      0,
-      image.naturalWidth,
-      image.naturalHeight
+      outputWidth,
+      outputHeight
     );
 
-    ctx.restore();
+    // Convert canvas to blob and then to File for upload
+    canvas.toBlob(
+      (blob) => {
+        if (!blob) {
+          console.error("Failed to create blob");
+          return;
+        }
 
-    canvas.toBlob((blob) => {
-      if (!blob) {
-        console.error("Failed to create blob");
-        return;
-      }
+        // Convert blob to File object with proper name
+        const croppedFile = new File(
+          [blob],
+          imageFile?.name.replace(/\.\w+$/, ".jpg") || "profile.jpg",
+          {
+            type: "image/jpeg",
+            lastModified: Date.now(),
+          }
+        );
 
-      // Convert blob to File object with proper name
-      const croppedFile = new File([blob], imageFile?.name || "profile.png", {
-        type: "image/png",
-        lastModified: Date.now(),
-      });
+        const url = URL.createObjectURL(blob);
+        onSave(url, croppedFile);
 
-      const url = URL.createObjectURL(blob);
-      onSave(url, croppedFile); 
-
-      // Reset state
-      setImgSrc("");
-      setCrop(undefined);
-      setCompletedCrop(undefined);
-      onClose();
-    }, "image/png");
+        // Reset state
+        setImgSrc("");
+        setCrop(undefined);
+        setCompletedCrop(undefined);
+        onClose();
+      },
+      "image/jpeg",
+      0.85 
+    );
   }
 
   function handleClose() {
@@ -191,7 +209,7 @@ export default function UploadImageModal({
 
         {/* Content */}
         <div className="p-6">
-          <canvas ref={previewCanvasRef} style={{ display: "none" }} />
+          <canvas ref={previewCanvasRef} />
 
           {!imgSrc ? (
             <div className="space-y-4">

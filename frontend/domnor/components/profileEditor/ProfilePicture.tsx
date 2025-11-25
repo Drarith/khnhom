@@ -1,7 +1,7 @@
 import { ProfileData } from "@/types/profileData/profileData";
 import { useState } from "react";
 import UploadImageModal from "./UploadImageModal";
-import { getJSON, uploadToCloudinary } from "@/https/https";
+import { getJSON, patchJSON, uploadToCloudinary } from "@/https/https";
 import { toast } from "react-toastify";
 
 export default function ProfilePicture({
@@ -47,23 +47,23 @@ export default function ProfilePicture({
         formData
       );
       // Set image then post to backend to update
-      if (response && response.secure_url) {
-        setImageUrl(response.secure_url);
-        toast.success("Profile picture uploaded successfully");
-      } else {
-        throw new Error("Invalid response from Cloudinary");
-      }
-      //       if (response && response.secure_url) {
-      //   try {
-      //     await postJSON("profile/picture", response.secure_url);
-      //     setImageUrl(response.secure_url);
-      //     toast.success("Profile picture uploaded successfully");
-      //   } catch (err) {
-      //     throw err;
-      //   }
+      // if (response && response.secure_url) {
+      //   setImageUrl(response.secure_url);
+      //   toast.success("Profile picture uploaded successfully");
       // } else {
       //   throw new Error("Invalid response from Cloudinary");
       // }
+      if (response && response.secure_url) {
+        try {
+          await patchJSON("profile/picture", response.secure_url);
+          setImageUrl(response.secure_url);
+          toast.success("Profile picture uploaded successfully");
+        } catch (err) {
+          throw err;
+        }
+      } else {
+        throw new Error("Invalid response from Cloudinary");
+      }
     } catch (err) {
       toast.error(
         `Unable to upload your image: ${
