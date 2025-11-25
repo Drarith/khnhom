@@ -146,8 +146,14 @@ export default function UploadImageModal({
         return;
       }
 
+      // Convert blob to File object with proper name
+      const croppedFile = new File([blob], imageFile?.name || "profile.png", {
+        type: "image/png",
+        lastModified: Date.now(),
+      });
+
       const url = URL.createObjectURL(blob);
-      if (imageFile) onSave(url, imageFile);
+      onSave(url, croppedFile); 
 
       // Reset state
       setImgSrc("");

@@ -1,6 +1,8 @@
 import { ProfileData } from "@/types/profileData/profileData";
 import { useState } from "react";
 import UploadImageModal from "./UploadImageModal";
+import { getJSON, uploadToCloudinary } from "@/https/https";
+import { toast } from "react-toastify";
 
 export default function ProfilePicture({
   displayName,
@@ -9,16 +11,58 @@ export default function ProfilePicture({
   displayName: ProfileData["data"]["displayName"];
   Camera: React.ComponentType<{ size?: number; className?: string }>;
 }) {
+  const CLOUDINARY_UPLOAD_ENDPOINT =
+    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_ENDPOINT || "";
+  const CLOUDINARY_API_KEY = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || "";
+
   const [croppedImageUrl, setCroppedImageUrl] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
 
-  function handleSaveImage(imageUrl: string, imageFile: File) {
+  
+  async function handleSaveImage(imageUrl: string, imageFile: File) {
     setCroppedImageUrl(imageUrl);
-    console.log(imageFile);
-    // TODO: Upload to server
-    // const formData = new FormData();
-    // formData.append('profilePicture', blob, 'profile.png');
-    // await uploadProfilePicture(formData);
+    try {
+      // Get signature from backend
+      const signatureResponse = await getJSON("/sign-upload");
+      if (!signatureResponse) {
+        toast.error("Failed to get upload signature");
+        setCroppedImageUrl("");
+        return;
+      }
+
+      const { signature, timestamp, publicId } = signatureResponse;
+
+      // Prepare form data for Cloudinary
+      const formData = new FormData();
+      formData.append("file", imageFile);
+      formData.append("api_key", CLOUDINARY_API_KEY);
+      formData.append("timestamp", timestamp.toString());
+      formData.append("signature", signature);
+      formData.append("public_id", publicId);
+      formData.append("folder", "profile_pictures");
+
+      // Upload to Cloudinary
+      const response = await uploadToCloudinary(
+        CLOUDINARY_UPLOAD_ENDPOINT,
+        formData
+      );
+
+      if (response && response.secure_url) {
+        setImageUrl(response.secure_url);
+        toast.success("Profile picture uploaded successfully");
+      } else {
+        throw new Error("Invalid response from Cloudinary");
+      }
+    } catch (err) {
+      toast.error(
+        `Unable to upload your image: ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`
+      );
+      console.error(err);
+      setCroppedImageUrl("");
+    }
   }
 
   return (

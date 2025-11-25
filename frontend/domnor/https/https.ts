@@ -12,15 +12,11 @@ const apiClient = axios.create({
   withCredentials: true,
 });
 
-export const postJSON = async (url: string, data: ProfileFormInputValues) => {
+export const postJSON = async (url: string, data?: ProfileFormInputValues) => {
   try {
     const response = await apiClient.post(url, data);
     return response.data;
   } catch (err) {
-    console.error("Error posting JSON:", err);
-    if (axios.isAxiosError(err)) {
-      throw err;
-    }
     throw err;
   }
 };
@@ -42,7 +38,21 @@ export const getJSON = async (url: string) => {
     const response = await apiClient.get(url);
     return response.data;
   } catch (err) {
-    console.error("Axios get request error" + err);
+    throw err;
+  }
+};
+
+export const uploadToCloudinary = async (url: string, formData: FormData) => {
+  try {
+    const response = await axios.post(url, formData, {
+      timeout: 30000, 
+      headers: {
+        
+      },
+    });
+    return response.data;
+  } catch (err) {
+    console.error("Cloudinary upload error:", err);
     throw err;
   }
 };

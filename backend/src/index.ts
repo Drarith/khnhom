@@ -9,8 +9,11 @@ import cookieParser from "cookie-parser";
 
 import cors from "cors";
 
+import { v2 as cloudinary } from "cloudinary";
+
 import userRouter from "./routes/userRoute.js";
 import profileRouter from "./routes/profileRoute.js";
+import cloudinaryRouter from "./routes/cloudinary.js";
 import { env } from "../src/config/myEnv.js";
 
 dotenv.config();
@@ -19,6 +22,12 @@ dotenv.config();
 const app = express();
 const port = env.PORT || 4000;
 const FRONTEND_URL = process.env.FRONTEND_URL;
+
+cloudinary.config({
+  cloud_name: env.CLOUDINARY_CLOUD_NAME,
+  api_key: env.CLOUDINARY_API_KEY,
+  api_secret: env.CLOUDINARY_API_SECRET,
+});
 
 // cookie parse middleware
 app.use(cookieParser());
@@ -52,6 +61,10 @@ app.use(userRouter);
 
 // Profile routes
 app.use(profileRouter);
+
+// Cloudinary routes
+
+app.use(cloudinaryRouter);
 
 app.get("/", async (req, res) => {
   res.send("Hello from Express + TypeScript!!!");
