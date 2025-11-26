@@ -17,11 +17,11 @@ import ProfilePicture from "./ProfilePicture";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 import { AxiosError } from "axios";
 
-interface ProfileEditorProps {
-  initialData?: ProfileData["data"];
-}
-
-export default function ProfileEditor({ initialData }: ProfileEditorProps) {
+export default function ProfileEditor({
+  initialData,
+}: {
+  initialData?: ProfileData;
+}) {
   const [activeTab, setActiveTab] = useState<
     "profile" | "socials" | "links" | "appearance"
   >("profile");
@@ -45,7 +45,7 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
       displayName: initialData?.displayName,
       bio: initialData?.bio,
       socials: initialData?.socials || {},
-      link: {},
+      link: { title: "", url: "" },
     },
   });
   console.log("Initial Data:", initialData);
@@ -61,13 +61,11 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
     useWatch({ control, name: "bio", defaultValue: initialData?.bio || "" })
   );
 
-  const link = normalizeValue(
-    useWatch({ control, name: "link", defaultValue: "" })
-  );
-
-  const linkDescription = normalizeValue(
-    useWatch({ control, name: "linkDescription", defaultValue: "" })
-  );
+  const link = useWatch({
+    control,
+    name: "link",
+    defaultValue: { title: "", url: "" },
+  });
 
   const socials = useWatch({ control, name: "socials", defaultValue: {} });
 
@@ -271,17 +269,26 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                         </p>
                       </div>
                     </div>
-                    <div className="flex flex-col">
+                    <div className="flex flex-col space-y-4">
                       <ProfileFormInput
                         register={register}
-                        fieldId="link"
-                        fieldInput="link"
-                        // initialValue={initialData?.link}
-                        fieldStateError={errors.link}
-                        fieldWatchValue={link}
-                        label="Link"
+                        fieldId="linkTitle"
+                        fieldInput="link.title"
+                        fieldStateError={errors.link?.title}
+                        fieldWatchValue={link?.title || ""}
+                        label="Link Title"
+                        maxLength={50}
+                        hasInput={!!link?.title}
+                      />
+                      <ProfileFormInput
+                        register={register}
+                        fieldId="linkUrl"
+                        fieldInput="link.url"
+                        fieldStateError={errors.link?.url}
+                        fieldWatchValue={link?.url || ""}
+                        label="Link URL"
                         maxLength={200}
-                        hasInput={!!link}
+                        hasInput={!!link?.url}
                       />
                       <button
                         onClick={onAddLinkCLick}

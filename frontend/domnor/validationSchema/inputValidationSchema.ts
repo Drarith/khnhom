@@ -154,7 +154,7 @@ export const editProfileFormInputSchema = (
       t("validation.maxLength", { max: 1000 })
     ),
     socials: SocialsSchema,
-    link: SanitizedUrl(t("validation.invalidUrl")),
+    link: SocialsSchema,
   });
 };
 
@@ -176,7 +176,10 @@ export const profileFormEditorInputSchema = z.object({
   displayName: SanitizedString(30, 3),
   bio: SanitizedString(1000),
   socials: SocialsSchema,
-  link: SocialsSchema,
+  link: z.object({
+    title: SanitizedString(30, 3),
+    url: SanitizedUrl(),
+  }),
 });
 
 export const socialHandleInputSchema = z.object({

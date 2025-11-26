@@ -1,8 +1,4 @@
-- validate user url in link
-
-implement unique link titles
-
-MUST: Need to add prefix to socials
+need to refator how we handle links
 
 
-make an error component for forms
+upload profile picture still needs work
