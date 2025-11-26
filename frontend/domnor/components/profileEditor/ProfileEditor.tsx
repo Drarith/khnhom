@@ -14,6 +14,8 @@ import { putJSON } from "@/https/https";
 import { toast } from "react-toastify";
 
 import ProfilePicture from "./ProfilePicture";
+import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
+import { AxiosError } from "axios";
 
 interface ProfileEditorProps {
   initialData?: ProfileData["data"];
@@ -25,6 +27,7 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
   >("profile");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAddLinkModalOpen, setIsAddLinkModalOpen] = useState(false);
 
   const {
     register,
@@ -42,7 +45,7 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
       displayName: initialData?.displayName,
       bio: initialData?.bio,
       socials: initialData?.socials || {},
-      link: "",
+      link: {},
     },
   });
   console.log("Initial Data:", initialData);
@@ -62,6 +65,10 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
     useWatch({ control, name: "link", defaultValue: "" })
   );
 
+  const linkDescription = normalizeValue(
+    useWatch({ control, name: "linkDescription", defaultValue: "" })
+  );
+
   const socials = useWatch({ control, name: "socials", defaultValue: {} });
 
   const tabs = [
@@ -77,13 +84,15 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
     onSuccess: () => {
       toast.success("Profile updated successfully!");
     },
-    onError: (error) => {
-      console.error("Error updating profile", error);
+    onError: (error: AxiosError<{ message?: string }>) => {
+      const errorMessage = getAxiosErrorMessage(error);
+      toast.error("Error updating profile" + errorMessage);
     },
   });
 
   const onSubmit = (values: ProfileFormEditorInputValues) => {
     setIsSubmitting(true);
+    console.log("Submitting values:", values);
     setTimeout(() => {
       mutation.mutate(values, {
         onSettled: () => {
@@ -91,6 +100,10 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
         },
       });
     }, 1000);
+  };
+
+  const onAddLinkCLick = () => {
+    console.log("add link");
   };
 
   return (
@@ -257,11 +270,25 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                           Add custom links to your profile
                         </p>
                       </div>
+                    </div>
+                    <div className="flex flex-col">
+                      <ProfileFormInput
+                        register={register}
+                        fieldId="link"
+                        fieldInput="link"
+                        // initialValue={initialData?.link}
+                        fieldStateError={errors.link}
+                        fieldWatchValue={link}
+                        label="Link"
+                        maxLength={200}
+                        hasInput={!!link}
+                      />
                       <button
+                        onClick={onAddLinkCLick}
                         type="button"
-                        className="px-4 py-2 bg-primary text-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+                        className="rounded-lg bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:cursor-not-allowed disabled:opacity-50"
                       >
-                        + Add Link
+                        Add Link
                       </button>
                     </div>
 
@@ -277,12 +304,6 @@ export default function ProfileEditor({ initialData }: ProfileEditorProps) {
                         <p className="text-sm text-primary/60 mb-4">
                           Start adding custom links to share with your audience
                         </p>
-                        <button
-                          type="button"
-                          className="px-4 py-2 bg-primary text-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
-                        >
-                          Add Your First Link
-                        </button>
                       </div>
                     ) : (
                       <div className="space-y-3">

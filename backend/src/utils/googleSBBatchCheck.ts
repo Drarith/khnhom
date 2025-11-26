@@ -21,8 +21,7 @@ export async function checkUrlsSafe(urls:string[]) {
 
   const payload = {
     client: {
-      // IMPORTANT: Replace "your-app-name" with a unique identifier for your project
-      clientId: "my-user-profile-app", 
+      clientId: "innate-bucksaw-476711-t1", 
       clientVersion: "1.0.0",
     },
     threatInfo: {

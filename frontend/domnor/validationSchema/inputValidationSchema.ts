@@ -176,7 +176,7 @@ export const profileFormEditorInputSchema = z.object({
   displayName: SanitizedString(30, 3),
   bio: SanitizedString(1000),
   socials: SocialsSchema,
-  link: SanitizedUrl(),
+  link: SocialsSchema,
 });
 
 export const socialHandleInputSchema = z.object({
