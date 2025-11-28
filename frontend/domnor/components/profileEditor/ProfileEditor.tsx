@@ -16,7 +16,7 @@ import {
 import { normalizeValue } from "@/helpers/normalizeVal";
 import SocialMediaForm from "../createProfile/socialMediaForm";
 import { useMutation } from "@tanstack/react-query";
-import { putJSON } from "@/https/https";
+import { putJSON, postJSON } from "@/https/https";
 import { toast } from "react-toastify";
 
 import ProfilePicture from "./ProfilePicture";
@@ -106,7 +106,7 @@ export default function ProfileEditor({
     { id: "appearance", label: "Appearance", icon: Palette },
   ] as const;
 
-  const mutation = useMutation({
+  const profileMutation = useMutation({
     mutationFn: (values: ProfileFormEditorInputValues) =>
       putJSON("/update-profile", values),
     onSuccess: () => {
@@ -118,11 +118,23 @@ export default function ProfileEditor({
     },
   });
 
+  const linkMutation = useMutation({
+    mutationFn: (values: linkFormEditorInputValues) =>
+      postJSON("/create-link", { title: values.link.title, url: values.link.url }),
+    onSuccess: () => {
+      toast.success("Link added successfully!");
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      const errorMessage = getAxiosErrorMessage(error);
+      toast.error("Error adding link: " + errorMessage);
+    },
+  })
+
   const onSubmit = (values: ProfileFormEditorInputValues) => {
     setIsSubmitting(true);
     console.log("Submitting values:", values);
     setTimeout(() => {
-      mutation.mutate(values, {
+      profileMutation.mutate(values, {
         onSettled: () => {
           setIsSubmitting(false);
         },
@@ -130,8 +142,9 @@ export default function ProfileEditor({
     }, 1000);
   };
 
-  const onAddLinkCLick = () => {
-    console.log("add link");
+  const onAddLinkCLick = (values: linkFormEditorInputValues) => {
+    console.log(values);
+    linkMutation.mutate(values);
   };
 
   return (
