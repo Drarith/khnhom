@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { UseFormSetValue, FieldValues, Path , PathValue} from "react-hook-form";
+import { UseFormSetValue, FieldValues, Path, PathValue } from "react-hook-form";
 import { useTranslations } from "next-intl";
 
 import { SOCIAL_PLATFORMS } from "@/config/socials";
+import Button from "../ui/Button";
 
 // Make the component generic
 interface SocialMediaFormProps<T extends FieldValues> {
@@ -111,16 +112,15 @@ export default function SocialMediaForm<T extends FieldValues>({
           </div>
         </div>
 
-        <button
+        <Button
           type="button"
           onClick={handleAddSocial}
           disabled={!isValidInput || isAlreadyAdded}
-          className="rounded-lg bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isAlreadyAdded
             ? t("socialMediaInput.added")
             : t("socialMediaInput.addSocialLink")}
-        </button>
+        </Button>
       </div>
 
       {/* Added Socials List */}

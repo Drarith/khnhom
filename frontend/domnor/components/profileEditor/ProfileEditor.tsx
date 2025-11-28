@@ -5,8 +5,14 @@ import { Camera, Link as LinkIcon, Palette, Eye, User } from "lucide-react";
 import type { ProfileData } from "@/types/profileData/profileData";
 import ProfileFormInput from "../profileInput/profileInput";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ProfileFormEditorInputValues } from "@/types/profileForm/profileFormInput";
-import { profileFormEditorInputSchema } from "@/validationSchema/inputValidationSchema";
+import {
+  ProfileFormEditorInputValues,
+  linkFormEditorInputValues,
+} from "@/types/profileForm/profileFormInput";
+import {
+  profileFormEditorInputSchema,
+  linkFormEditorInputSchema,
+} from "@/validationSchema/inputValidationSchema";
 import { normalizeValue } from "@/helpers/normalizeVal";
 import SocialMediaForm from "../createProfile/socialMediaForm";
 import { useMutation } from "@tanstack/react-query";
@@ -16,6 +22,7 @@ import { toast } from "react-toastify";
 import ProfilePicture from "./ProfilePicture";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 import { AxiosError } from "axios";
+import Button from "../ui/Button";
 
 export default function ProfileEditor({
   initialData,
@@ -27,14 +34,13 @@ export default function ProfileEditor({
   >("profile");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isAddLinkModalOpen, setIsAddLinkModalOpen] = useState(false);
 
   const {
-    register,
-    control,
-    setValue,
-    handleSubmit,
-    formState: { errors, isValid },
+    register: profileRegister,
+    control: profileControl,
+    setValue: profileSetValue,
+    handleSubmit: profileHandleSubmit,
+    formState: { errors: profileErrors, isValid: profileIsValid },
   } = useForm<ProfileFormEditorInputValues>({
     resolver: zodResolver(
       profileFormEditorInputSchema
@@ -45,29 +51,53 @@ export default function ProfileEditor({
       displayName: initialData?.displayName,
       bio: initialData?.bio,
       socials: initialData?.socials || {},
+    },
+  });
+
+  const {
+    register: linkRegister,
+    control: linkControl,
+    handleSubmit: linkHandleSubmit,
+    formState: { errors: linkErrors, isValid: LinkIsValid },
+  } = useForm<linkFormEditorInputValues>({
+    resolver: zodResolver(
+      linkFormEditorInputSchema
+    ) as Resolver<linkFormEditorInputValues>,
+    mode: "onChange",
+    reValidateMode: "onChange",
+    defaultValues: {
       link: { title: "", url: "" },
     },
   });
+
   console.log("Initial Data:", initialData);
   const displayName = normalizeValue(
     useWatch({
-      control,
+      control: profileControl,
       name: "displayName",
       defaultValue: initialData?.displayName || "",
     })
   );
 
   const bio = normalizeValue(
-    useWatch({ control, name: "bio", defaultValue: initialData?.bio || "" })
+    useWatch({
+      control: profileControl,
+      name: "bio",
+      defaultValue: initialData?.bio || "",
+    })
   );
 
   const link = useWatch({
-    control,
+    control: linkControl,
     name: "link",
     defaultValue: { title: "", url: "" },
   });
 
-  const socials = useWatch({ control, name: "socials", defaultValue: {} });
+  const socials = useWatch({
+    control: profileControl,
+    name: "socials",
+    defaultValue: {},
+  });
 
   const tabs = [
     { id: "profile", label: "Profile", icon: User },
@@ -118,13 +148,10 @@ export default function ProfileEditor({
                 Customize your profile and manage your links
               </p>
             </div>
-            <button
-              type="button"
-              className="flex items-center gap-2 px-4 py-2 bg-primary text-foreground rounded-lg hover:bg-primary/90 transition-colors"
-            >
+            <Button type="button" className="flex items-center gap-2">
               <Eye size={18} />
               Preview
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -158,7 +185,7 @@ export default function ProfileEditor({
           {/* Main Content */}
 
           <div className="lg:col-span-9">
-            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <form onSubmit={profileHandleSubmit(onSubmit)} noValidate>
               <div className="bg-foreground rounded-lg shadow-sm border border-primary/10">
                 {/* Profile Tab */}
                 {activeTab === "profile" && (
@@ -179,11 +206,11 @@ export default function ProfileEditor({
                     <div className="border-t border-primary/10 pt-6 space-y-6">
                       {/* Display Name */}
                       <ProfileFormInput
-                        register={register}
+                        register={profileRegister}
                         fieldId="displayName"
                         fieldInput="displayName"
                         initialValue={initialData?.displayName}
-                        fieldStateError={errors.displayName}
+                        fieldStateError={profileErrors.displayName}
                         fieldWatchValue={displayName}
                         label="Display Name"
                         maxLength={30}
@@ -192,11 +219,11 @@ export default function ProfileEditor({
 
                       {/* Bio */}
                       <ProfileFormInput
-                        register={register}
+                        register={profileRegister}
                         fieldId="bio"
                         fieldInput="bio"
                         initialValue={initialData?.bio}
-                        fieldStateError={errors.bio}
+                        fieldStateError={profileErrors.bio}
                         fieldWatchValue={bio}
                         label="Bio"
                         maxLength={1000}
@@ -252,7 +279,10 @@ export default function ProfileEditor({
                       </p>
                     </div>
 
-                    <SocialMediaForm socials={socials} setValue={setValue} />
+                    <SocialMediaForm
+                      socials={socials}
+                      setValue={profileSetValue}
+                    />
                   </div>
                 )}
 
@@ -271,32 +301,32 @@ export default function ProfileEditor({
                     </div>
                     <div className="flex flex-col space-y-4">
                       <ProfileFormInput
-                        register={register}
+                        register={linkRegister}
                         fieldId="linkTitle"
                         fieldInput="link.title"
-                        fieldStateError={errors.link?.title}
+                        fieldStateError={linkErrors.link?.title}
                         fieldWatchValue={link?.title || ""}
                         label="Link Title"
                         maxLength={50}
                         hasInput={!!link?.title}
                       />
                       <ProfileFormInput
-                        register={register}
+                        register={linkRegister}
                         fieldId="linkUrl"
                         fieldInput="link.url"
-                        fieldStateError={errors.link?.url}
+                        fieldStateError={linkErrors.link?.url}
                         fieldWatchValue={link?.url || ""}
                         label="Link URL"
                         maxLength={200}
                         hasInput={!!link?.url}
                       />
-                      <button
-                        onClick={onAddLinkCLick}
+                      <Button
+                        onClick={linkHandleSubmit(onAddLinkCLick)}
+                        disabled={!LinkIsValid}
                         type="button"
-                        className="rounded-lg bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition hover:bg-primary/20 focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         Add Link
-                      </button>
+                      </Button>
                     </div>
 
                     {initialData?.links.length === 0 ? (
@@ -432,19 +462,16 @@ export default function ProfileEditor({
                 ) : (
                   <div className="px-6 py-4 border-t border-primary/10 bg-primary/5">
                     <div className="flex justify-end gap-3">
-                      <button
-                        type="button"
-                        className="px-6 py-2 border border-primary/20 rounded-lg text-primary hover:bg-primary/5 transition-colors font-medium"
-                      >
+                      <Button type="button" variant="secondary">
                         Cancel
-                      </button>
-                      <button
-                        disabled={isSubmitting || !isValid}
+                      </Button>
+                      <Button
+                        disabled={!profileIsValid}
                         type="submit"
-                        className="px-6 py-2 bg-primary text-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium disabled:cursor-not-allowed disabled:opacity-50"
+                        isLoading={isSubmitting}
                       >
-                        {isSubmitting ? "Saving..." : "Save Changes"}
-                      </button>
+                        Save Changes
+                      </Button>
                     </div>
                   </div>
                 )}

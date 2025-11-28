@@ -17,7 +17,13 @@ const config: import("tailwindcss").Config = {
         foreground: "var(--color-foreground)",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui"],
+        sans: [
+          "var(--font-sans)",
+          "ui-sans-serif",
+          "system-ui",
+          "Noto Sans Khmer",
+          "Khmer OS",
+        ],
         mono: [
           "ui-monospace",
           "SFMono-Regular",
@@ -25,7 +31,12 @@ const config: import("tailwindcss").Config = {
           "Monaco",
           "Segoe UI Mono",
         ],
-        cursive: ["var(--font-cursive)", "cursive"],
+        cursive: [
+          "var(--font-cursive)",
+          "cursive",
+          "Noto Sans Khmer",
+          "Khmer OS",
+        ],
       },
     },
   },

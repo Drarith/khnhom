@@ -176,10 +176,25 @@ export const profileFormEditorInputSchema = z.object({
   displayName: SanitizedString(30, 3),
   bio: SanitizedString(1000),
   socials: SocialsSchema,
-  link: z.object({
-    title: SanitizedString(30, 3),
-    url: SanitizedUrl(),
-  }),
+});
+
+export const linkFormEditorInputSchema = z.object({
+  link: z
+    .object({
+      title: SanitizedString(30, 3),
+      url: SanitizedUrl(),
+    })
+    .refine(
+      (data) => {
+        const hasTitle = data.title.length > 3;
+        const hasUrl = data.url.length > 8;
+        return (hasTitle && hasUrl);
+      },
+      {
+        message: "Must have both title and valid URL.",
+        path: ["link"],
+      }
+    ),
 });
 
 export const socialHandleInputSchema = z.object({
