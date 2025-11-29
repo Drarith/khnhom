@@ -200,6 +200,16 @@ export const createAndAddLinkToProfile = async (
       .json({ error: "Please include both title and url." });
 
   try {
+    const links = await Link.findByProfile(req.profile.id);
+    if (links.length >= 10) {
+      return res.status(403).json({ message: "Links limit has been reached." });
+    }
+  } catch (err) {
+    const msg = getErrorMessage(err);
+    return res.status(400).json({ msg });
+  }
+
+  try {
     const userId = (user as IUser).id;
     if (!userId) return res.status(400).json({ message: "User id not found!" });
 
@@ -366,14 +376,25 @@ export const deleteLinkFromProfile = async (req: Request, res: Response) => {
   }
 };
 
-export const currentUserProfile = (req: Request, res: Response) => {
+export const currentUserProfile = async (req: Request, res: Response) => {
   if (!req.user && !req.profile)
     return res
       .status(400)
       .json({ message: "Something went wrong, profile not found." });
-  const currentUserProfile = req.profile;
-  console.log(currentUserProfile);
-  return res.status(200).json({ data: currentUserProfile });
+
+  try {
+    await req.profile.populate({
+      path: "links",
+      model: "Link",
+    });
+
+    const currentUserProfile = req.profile;
+    console.log(currentUserProfile);
+
+    return res.status(200).json({ data: currentUserProfile });
+  } catch (error) {
+    return res.status(500).json({ message: "Population failed" });
+  }
 };
 
 export const updateProfilePictureUrl = async (req: Request, res: Response) => {

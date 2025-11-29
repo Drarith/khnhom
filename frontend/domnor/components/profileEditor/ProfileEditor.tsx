@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useForm, useWatch, type Resolver } from "react-hook-form";
-import { Camera, Link as LinkIcon, Palette, Eye, User } from "lucide-react";
+import { Camera, Link as LinkIcon, Palette, Eye, User, X } from "lucide-react";
 import type { ProfileData } from "@/types/profileData/profileData";
 import ProfileFormInput from "../profileInput/profileInput";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -151,7 +151,7 @@ export default function ProfileEditor({
       linkMutation.mutate(values, {
         onSettled: () => {
           setIsAddingLink(false);
-          linkReset()
+          linkReset();
         },
       });
     }, 2000);
@@ -332,7 +332,6 @@ export default function ProfileEditor({
                         label="Link Title"
                         maxLength={50}
                         hasInput={!!link?.title}
-                        
                       />
                       <ProfileFormInput
                         register={linkRegister}
@@ -368,7 +367,17 @@ export default function ProfileEditor({
                       </div>
                     ) : (
                       <div className="space-y-3">
-                        placeholder for links list
+                        {initialData?.links.map((link, index) => (
+                          <div
+                            key={index}
+                            className="p-4 border text-primary border-primary/10 rounded-lg flex items-center justify-between"
+                          >
+                            <h4 className="font-medium">
+                              {link.title}
+                            </h4>
+                            <X size={16} />
+                          </div>
+                        ))}
                       </div>
                     )}
                   </div>

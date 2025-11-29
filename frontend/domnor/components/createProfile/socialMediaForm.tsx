@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { UseFormSetValue, FieldValues, Path, PathValue } from "react-hook-form";
 import { useTranslations } from "next-intl";
+import { X } from "lucide-react";
 
 import { SOCIAL_PLATFORMS } from "@/config/socials";
 import Button from "../ui/Button";
@@ -157,16 +158,7 @@ export default function SocialMediaForm<T extends FieldValues>({
                   className="rounded-md p-1.5 text-primary/60 transition hover:bg-red-500/10 hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-red-500/30"
                   aria-label={`Remove ${platform?.label}`}
                 >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M18 6L6 18M6 6l12 12" />
-                  </svg>
+                  <X size={16} />
                 </button>
               </div>
             );
