@@ -401,6 +401,7 @@ export const updateProfilePictureUrl = async (req: Request, res: Response) => {
   if (!req.user && !req.profile) {
     return res.status(401).json({ error: "Unauthorized" });
   }
+  console.log(req.body);
   const { profilePictureUrl } = req.body;
   if (!profilePictureUrl) {
     return res.status(400).json({ message: "profilePictureUrl is required." });

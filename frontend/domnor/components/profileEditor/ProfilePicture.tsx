@@ -57,7 +57,9 @@ export default function ProfilePicture({
       // }
       if (response && response.secure_url) {
         try {
-          await patchJSON("profile/picture", response.secure_url);
+          await patchJSON("profile/picture", {
+            profilePictureUrl: response.secure_url,
+          });
           toast.success("Profile picture uploaded successfully");
         } catch (err) {
           throw err;
