@@ -24,8 +24,6 @@ import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 import { AxiosError } from "axios";
 import Button from "../ui/Button";
 
-import { LinkRequest, LinkResponse } from "@/types/profileForm/linkInput";
-
 export default function ProfileEditor({
   initialData,
 }: {
@@ -36,6 +34,7 @@ export default function ProfileEditor({
   >("profile");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAddingLink, setIsAddingLink] = useState(false);
 
   const {
     register: profileRegister,
@@ -59,6 +58,7 @@ export default function ProfileEditor({
   const {
     register: linkRegister,
     control: linkControl,
+    reset: linkReset,
     handleSubmit: linkHandleSubmit,
     formState: { errors: linkErrors, isValid: LinkIsValid },
   } = useForm<linkFormEditorInputValues>({
@@ -122,7 +122,7 @@ export default function ProfileEditor({
 
   const linkMutation = useMutation({
     mutationFn: (values: linkFormEditorInputValues) =>
-      postJSON<LinkResponse, LinkRequest>("/create-link", values),
+      postJSON("/create-link", values),
     onSuccess: () => {
       toast.success("Link added successfully!");
     },
@@ -145,8 +145,16 @@ export default function ProfileEditor({
   };
 
   const onAddLinkCLick = (values: linkFormEditorInputValues) => {
-    console.log(values);
-    linkMutation.mutate(values);
+    setIsAddingLink(true);
+    setTimeout(() => {
+      console.log("Adding link:", values);
+      linkMutation.mutate(values, {
+        onSettled: () => {
+          setIsAddingLink(false);
+          linkReset()
+        },
+      });
+    }, 2000);
   };
 
   return (
@@ -324,6 +332,7 @@ export default function ProfileEditor({
                         label="Link Title"
                         maxLength={50}
                         hasInput={!!link?.title}
+                        
                       />
                       <ProfileFormInput
                         register={linkRegister}
@@ -337,10 +346,10 @@ export default function ProfileEditor({
                       />
                       <Button
                         onClick={linkHandleSubmit(onAddLinkCLick)}
-                        disabled={!LinkIsValid}
+                        disabled={!LinkIsValid || isAddingLink}
                         type="button"
                       >
-                        Add Link
+                        {isAddingLink ? "Adding Link..." : "Add Link"}
                       </Button>
                     </div>
 

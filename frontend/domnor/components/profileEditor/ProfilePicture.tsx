@@ -3,12 +3,13 @@ import { useState } from "react";
 import UploadImageModal from "./UploadImageModal";
 import { getJSON, patchJSON, uploadToCloudinary } from "@/https/https";
 import { toast } from "react-toastify";
+import { SignatureResponse } from "@/types/profileForm/PDResponse";
 
 export default function ProfilePicture({
   displayName,
   Camera,
 }: {
-  displayName: ProfileData["data"]["displayName"];
+  displayName: ProfileData["displayName"];
   Camera: React.ComponentType<{ size?: number; className?: string }>;
 }) {
   const CLOUDINARY_UPLOAD_ENDPOINT =
@@ -17,13 +18,14 @@ export default function ProfilePicture({
 
   const [croppedImageUrl, setCroppedImageUrl] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
 
   async function handleSaveImage(imageUrl: string, imageFile: File) {
     setCroppedImageUrl(imageUrl);
     try {
       // Get signature from backend
-      const signatureResponse = await getJSON("/sign-upload");
+      const signatureResponse = await getJSON<SignatureResponse>(
+        "/sign-upload"
+      );
       if (!signatureResponse) {
         toast.error("Failed to get upload signature");
         setCroppedImageUrl("");
@@ -56,7 +58,6 @@ export default function ProfilePicture({
       if (response && response.secure_url) {
         try {
           await patchJSON("profile/picture", response.secure_url);
-          setImageUrl(response.secure_url);
           toast.success("Profile picture uploaded successfully");
         } catch (err) {
           throw err;
