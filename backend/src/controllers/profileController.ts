@@ -188,11 +188,10 @@ export const createAndAddLinkToProfile = async (
   req: Request,
   res: Response
 ) => {
-  const { title, url, description } = req.body;
+  const { title, url } = req.body.link;
   const user = req.user;
   let safeLink: string;
   let safeTitle: string;
-  let safeDescription: string;
   if (!user) return res.status(401).json({ error: "Unauthorized." });
 
   if (!title || !url)
@@ -210,7 +209,6 @@ export const createAndAddLinkToProfile = async (
     try {
       safeLink = SanitizedUrl().parse(url);
       safeTitle = SanitizedString(30).parse(title);
-      safeDescription = SanitizedString(200).parse(description);
     } catch (zErr) {
       return res
         .status(400)
@@ -230,7 +228,6 @@ export const createAndAddLinkToProfile = async (
     const newLink = await profile.addLink({
       title: safeTitle,
       url: safeLink,
-      description: safeDescription,
     });
 
     return res

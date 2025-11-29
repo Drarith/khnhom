@@ -24,6 +24,8 @@ import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 import { AxiosError } from "axios";
 import Button from "../ui/Button";
 
+import { LinkRequest, LinkResponse } from "@/types/profileForm/linkInput";
+
 export default function ProfileEditor({
   initialData,
 }: {
@@ -120,7 +122,7 @@ export default function ProfileEditor({
 
   const linkMutation = useMutation({
     mutationFn: (values: linkFormEditorInputValues) =>
-      postJSON("/create-link", { title: values.link.title, url: values.link.url }),
+      postJSON<LinkResponse, LinkRequest>("/create-link", values),
     onSuccess: () => {
       toast.success("Link added successfully!");
     },
@@ -128,7 +130,7 @@ export default function ProfileEditor({
       const errorMessage = getAxiosErrorMessage(error);
       toast.error("Error adding link: " + errorMessage);
     },
-  })
+  });
 
   const onSubmit = (values: ProfileFormEditorInputValues) => {
     setIsSubmitting(true);
