@@ -1,6 +1,6 @@
 import { Camera } from "lucide-react";
-import ProfileFormInput from "../profileInput/profileInput";
-import ProfilePicture from "./ProfilePicture";
+import ProfileFormInput from "../../profileInput/profileInput";
+import ProfilePicture from "../components/ProfilePicture";
 import type { ProfileData } from "@/types/profileData/profileData";
 import type { UseFormRegister, FieldErrors } from "react-hook-form";
 import type { ProfileFormEditorInputValues } from "@/types/profileForm/profileFormInput";

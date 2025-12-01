@@ -19,10 +19,10 @@ import { toast } from "react-toastify";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 import { AxiosError } from "axios";
 import Button from "../ui/Button";
-import ProfileTab from "./ProfileTab";
-import SocialsTab from "./SocialsTab";
-import LinksTab from "./LinksTab";
-import AppearanceTab from "./AppearanceTab";
+import ProfileTab from "./components/ProfileTab";
+import SocialsTab from "./components/SocialsTab";
+import LinksTab from "./components/LinksTab";
+import AppearanceTab from "./components/AppearanceTab";
 
 export default function ProfileEditor({
   initialData,

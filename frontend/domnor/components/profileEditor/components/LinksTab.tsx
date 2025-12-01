@@ -1,6 +1,6 @@
 import { Link as LinkIcon, X } from "lucide-react";
-import ProfileFormInput from "../profileInput/profileInput";
-import Button from "../ui/Button";
+import ProfileFormInput from "../../profileInput/profileInput";
+import Button from "../../ui/Button";
 import type {
   UseFormRegister,
   FieldErrors,

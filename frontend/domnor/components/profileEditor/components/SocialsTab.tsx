@@ -1,4 +1,4 @@
-import SocialMediaForm from "../createProfile/socialMediaForm";
+import SocialMediaForm from "../../createProfile/socialMediaForm";
 import type { UseFormSetValue } from "react-hook-form";
 import type { ProfileFormEditorInputValues } from "@/types/profileForm/profileFormInput";
 
