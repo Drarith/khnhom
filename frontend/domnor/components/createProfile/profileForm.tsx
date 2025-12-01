@@ -71,6 +71,7 @@ export default function ProfileForm() {
 
   const hasValue = (value: string) => value.trim().length > 0;
 
+  // create profile mutation
   const mutation = useMutation({
     mutationFn: (values: ProfileFormInputValues) =>
       postJSON("/create-profile", values),
@@ -96,6 +97,7 @@ export default function ProfileForm() {
     },
   });
 
+  // form submit handler for create profile
   const onSubmit = (values: ProfileFormInputValues) => {
     setIsSubmitting(true);
     mutation.mutate(values);
@@ -131,7 +133,7 @@ export default function ProfileForm() {
                 </p>
               </div>
             </div>
-
+            {/* username */}
             <div className="grid gap-6 md:grid-cols-2">
               <ProfileFormInput
                 register={register}
@@ -143,6 +145,7 @@ export default function ProfileForm() {
                 maxLength={30}
                 hasInput={hasValue(username)}
               />
+              {/* display name */}
               <ProfileFormInput
                 register={register}
                 fieldId="displayName"
@@ -154,7 +157,7 @@ export default function ProfileForm() {
                 hasInput={hasValue(displayName)}
               />
             </div>
-
+            {/* bio */}
             <ProfileFormInput
               register={register}
               fieldId="bio"
@@ -178,6 +181,7 @@ export default function ProfileForm() {
               </p>
             </div>
             <div className="grid gap-6 md:grid-cols-2">
+              {/* link input */}
               <ProfileFormInput
                 register={register}
                 fieldId="link"
@@ -189,7 +193,7 @@ export default function ProfileForm() {
                 hasInput={hasValue(link)}
               />
             </div>
-
+            {/* social media tab */}
             <SocialMediaForm socials={socials} setValue={setValue} />
           </section>
 

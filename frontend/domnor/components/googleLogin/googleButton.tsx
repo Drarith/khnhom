@@ -2,11 +2,7 @@
 import { GoogleLoginButtonProps } from "@/types/google/button";
 import { GoogleIcon } from "@/config/googleIcon";
 import Link from "next/link";
-// import dotenv from "dotenv";
 
-// dotenv.config();
-
-// const API_BASE = process.env.PUBLIC_API_BASE_URL || "";
 
 export default function GoogleLoginButton({
   label = "Continue with Google",

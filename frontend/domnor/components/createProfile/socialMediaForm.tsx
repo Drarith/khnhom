@@ -1,16 +1,13 @@
 import { useState } from "react";
-import { UseFormSetValue, FieldValues, Path, PathValue } from "react-hook-form";
+import {FieldValues, Path, PathValue } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { X } from "lucide-react";
 
 import { SOCIAL_PLATFORMS } from "@/config/socials";
 import Button from "../ui/Button";
 
-// Make the component generic
-interface SocialMediaFormProps<T extends FieldValues> {
-  socials: Record<string, string>;
-  setValue: UseFormSetValue<T>;
-}
+import type { SocialMediaFormProps } from "@/types/socialMedia/SocialMediaForm";
+
 
 export default function SocialMediaForm<T extends FieldValues>({
   socials,
