@@ -6,7 +6,7 @@ export interface ProfileData {
   bio: string;
   profilePictureUrl: string;
   paymentQrCodeUrl: string;
-  links: { title: string; link: string }[];
+  links: { title: string; link: string, _id:string}[];
   theme: string;
   selectedTemplate: string;
   views: number;

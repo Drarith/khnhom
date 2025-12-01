@@ -14,6 +14,7 @@ interface LinksTabProps {
   errors: FieldErrors<linkFormEditorInputValues>;
   handleSubmit: UseFormHandleSubmit<linkFormEditorInputValues>;
   onAddLink: (values: linkFormEditorInputValues) => void;
+  onDelete: (id: string) => void;
   linkTitle: string;
   linkUrl: string;
   isValid: boolean;
@@ -26,12 +27,15 @@ export default function LinksTab({
   errors,
   handleSubmit,
   onAddLink,
+  onDelete,
   linkTitle,
   linkUrl,
   isValid,
   isAdding,
   initialData,
 }: LinksTabProps) {
+
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -93,7 +97,10 @@ export default function LinksTab({
               className="p-4 border text-primary border-primary/10 rounded-lg flex items-center justify-between"
             >
               <h4 className="font-medium">{link.title}</h4>
-              <X size={16} />
+              <button type="button" onClick={() => onDelete(link?._id)}>
+                {/* delete link */}
+                <X size={16} />
+              </button>
             </div>
           ))}
         </div>

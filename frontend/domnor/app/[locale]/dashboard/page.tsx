@@ -10,7 +10,7 @@ import ProfileEditor from "@/components/profileEditor/ProfileEditor";
 
 export default function Dashboard() {
   const { isPending, error, data } = useQuery<ProfileData>({
-    queryKey: ["placeHolder"],
+    queryKey: ["profile"],
     queryFn: () => getJSON("/me"),
   });
 

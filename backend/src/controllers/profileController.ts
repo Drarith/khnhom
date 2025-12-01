@@ -355,7 +355,7 @@ export const deleteLinkFromProfile = async (req: Request, res: Response) => {
   if (!userProfile) {
     return res.status(400).json({ message: "User profile not found" });
   }
-
+  console.log(linkId);
   const linkExists = userProfile.links.map(String).includes(linkId);
   if (!linkExists) {
     return res.status(404).json({ message: "Link not found in user profile" });

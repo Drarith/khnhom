@@ -80,6 +80,21 @@ export async function patchJSON<TRequest = unknown, TResponse = unknown>(
   }
 }
 
+export async function deleteLink(url: string) {
+  try {
+    const response = await apiClient.delete(url);
+    return response.data;
+  } catch (err) {
+    const axiosError = err as AxiosError;
+    console.error(`[API Error] PATCH ${url}`, {
+      status: axiosError.response?.status,
+      message: axiosError.message,
+      errorData: axiosError.response?.data,
+    });
+    throw err;
+  }
+}
+
 export const uploadToCloudinary = async (url: string, formData: FormData) => {
   try {
     const response = await axios.post(url, formData, {

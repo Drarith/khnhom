@@ -13,8 +13,8 @@ import {
   linkFormEditorInputSchema,
 } from "@/validationSchema/inputValidationSchema";
 import { normalizeValue } from "@/helpers/normalizeVal";
-import { useMutation } from "@tanstack/react-query";
-import { putJSON, postJSON } from "@/https/https";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { putJSON, postJSON, deleteLink } from "@/https/https";
 import { toast } from "react-toastify";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 import { AxiosError } from "axios";
@@ -35,6 +35,8 @@ export default function ProfileEditor({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAddingLink, setIsAddingLink] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const {
     register: profileRegister,
@@ -120,7 +122,7 @@ export default function ProfileEditor({
     },
   });
 
-  const linkMutation = useMutation({
+  const linkAddMutation = useMutation({
     mutationFn: (values: linkFormEditorInputValues) =>
       postJSON("/create-link", values),
     onSuccess: () => {
@@ -131,6 +133,24 @@ export default function ProfileEditor({
       toast.error("Error adding link: " + errorMessage);
     },
   });
+
+  const linkDeleteMutation = useMutation({
+    mutationFn: (id: string) => {
+      return deleteLink(`/profile/links/${id}`);
+    },
+    onSuccess: () => {
+      toast.success("Link deleted successfully!");
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      const errorMessage = getAxiosErrorMessage(error);
+      toast.error("Error deleting link: " + errorMessage);
+    },
+  });
+
+  const onDelete = (id: string) => {
+    linkDeleteMutation.mutate(id);
+  };
 
   const onSubmit = (values: ProfileFormEditorInputValues) => {
     setIsSubmitting(true);
@@ -148,7 +168,7 @@ export default function ProfileEditor({
     setIsAddingLink(true);
     setTimeout(() => {
       console.log("Adding link:", values);
-      linkMutation.mutate(values, {
+      linkAddMutation.mutate(values, {
         onSettled: () => {
           setIsAddingLink(false);
           linkReset();
@@ -229,6 +249,7 @@ export default function ProfileEditor({
                     errors={linkErrors}
                     handleSubmit={linkHandleSubmit}
                     onAddLink={onAddLinkCLick}
+                    onDelete={onDelete}
                     linkTitle={link?.title || ""}
                     linkUrl={link?.url || ""}
                     isValid={LinkIsValid}
