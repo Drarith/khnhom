@@ -1,5 +1,5 @@
 import { ProfileData } from "@/types/profileData/profileData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UploadImageModal from "./UploadImageModal";
 import { getJSON, patchJSON, uploadToCloudinary } from "@/https/https";
 import { toast } from "react-toastify";
@@ -8,9 +8,11 @@ import { SignatureResponse } from "@/types/profileForm/PDResponse";
 export default function ProfilePicture({
   displayName,
   Camera,
+  profilePictureUrl,
 }: {
   displayName: ProfileData["displayName"];
   Camera: React.ComponentType<{ size?: number; className?: string }>;
+  profilePictureUrl: ProfileData["profilePictureUrl"];
 }) {
   const CLOUDINARY_UPLOAD_ENDPOINT =
     process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_ENDPOINT || "";
@@ -18,6 +20,10 @@ export default function ProfilePicture({
 
   const [croppedImageUrl, setCroppedImageUrl] = useState("");
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    setCroppedImageUrl(profilePictureUrl);
+  }, [profilePictureUrl]);
 
   async function handleSaveImage(imageUrl: string, imageFile: File) {
     setCroppedImageUrl(imageUrl);
@@ -48,13 +54,6 @@ export default function ProfilePicture({
         CLOUDINARY_UPLOAD_ENDPOINT,
         formData
       );
-      // Set image then post to backend to update
-      // if (response && response.secure_url) {
-      //   setImageUrl(response.secure_url);
-      //   toast.success("Profile picture uploaded successfully");
-      // } else {
-      //   throw new Error("Invalid response from Cloudinary");
-      // }
       if (response && response.secure_url) {
         try {
           await patchJSON("profile/picture", {

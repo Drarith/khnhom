@@ -33,6 +33,7 @@ export default function ProfileTab({
         <ProfilePicture
           displayName={initialData?.displayName}
           Camera={Camera}
+          profilePictureUrl={initialData?.profilePictureUrl}
         />
       )}
 
