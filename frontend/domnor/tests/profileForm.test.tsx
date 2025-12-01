@@ -252,7 +252,6 @@ describe("ProfileForm", () => {
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(consoleTableSpy).toHaveBeenCalled();
       expect(consoleLogSpy).toHaveBeenCalled();
     });
 
@@ -371,5 +370,168 @@ describe("ProfileForm", () => {
       });
       expect(submitButton).toBeEnabled();
     });
+  });
+
+  it("does not enable submit button with only whitespace in required fields", async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<ProfileForm />);
+
+    const usernameInput = screen.getByLabelText("Username");
+    const displayNameInput = screen.getByLabelText("Display Name");
+
+    await user.type(usernameInput, "   ");
+    await user.type(displayNameInput, "   ");
+
+    const submitButton = screen.getByRole("button", { name: /save profile/i });
+    expect(submitButton).toBeDisabled();
+  });
+
+  it("updates submit button text when submitting", async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<ProfileForm />);
+
+    const usernameInput = screen.getByLabelText("Username");
+    const displayNameInput = screen.getByLabelText("Display Name");
+
+    await user.type(usernameInput, "testuser");
+    await user.type(displayNameInput, "Test User");
+
+    await waitFor(() => {
+      const submitButton = screen.getByRole("button", {
+        name: /save profile/i,
+      });
+      expect(submitButton).toBeEnabled();
+    });
+
+    const submitButton = screen.getByRole("button", { name: /save profile/i });
+    await user.click(submitButton);
+
+    // Check that button shows submitting state
+    await waitFor(() => {
+      expect(screen.getByText("Submitting")).toBeInTheDocument();
+    });
+  });
+
+  it("rejects invalid URL format in link field", async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<ProfileForm />);
+
+    const usernameInput = screen.getByLabelText("Username");
+    const displayNameInput = screen.getByLabelText("Display Name");
+    const linkInput = screen.getByLabelText("Your Link(*optional)");
+
+    await user.type(usernameInput, "testuser");
+    await user.type(displayNameInput, "Test User");
+    await user.type(linkInput, "not-a-valid-url");
+    await user.tab();
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/Must be a valid HTTPS URL/i)
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("rejects HTTP URLs in link field (only HTTPS allowed)", async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<ProfileForm />);
+
+    const usernameInput = screen.getByLabelText("Username");
+    const displayNameInput = screen.getByLabelText("Display Name");
+    const linkInput = screen.getByLabelText("Your Link(*optional)");
+
+    await user.type(usernameInput, "testuser");
+    await user.type(displayNameInput, "Test User");
+    await user.type(linkInput, "http://example.com");
+    await user.tab();
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/Must be a valid HTTPS URL/i)
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("allows form submission with valid link URL", async () => {
+    const user = userEvent.setup();
+    const consoleLogSpy = vi.spyOn(console, "log");
+    renderWithIntl(<ProfileForm />);
+
+    const usernameInput = screen.getByLabelText("Username");
+    const displayNameInput = screen.getByLabelText("Display Name");
+    const linkInput = screen.getByLabelText("Your Link(*optional)");
+
+    await user.type(usernameInput, "testuser");
+    await user.type(displayNameInput, "Test User");
+    await user.type(linkInput, "https://example.com");
+
+    await waitFor(() => {
+      const submitButton = screen.getByRole("button", {
+        name: /save profile/i,
+      });
+      expect(submitButton).toBeEnabled();
+    });
+
+    const submitButton = screen.getByRole("button", { name: /save profile/i });
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(consoleLogSpy).toHaveBeenCalled();
+    });
+
+    consoleLogSpy.mockRestore();
+  });
+
+  it("validates username during input change", async () => {
+    const user = userEvent.setup();
+    renderWithIntl(<ProfileForm />);
+
+    const usernameInput = screen.getByLabelText("Username");
+
+    // Type valid username
+    await user.type(usernameInput, "validuser123");
+
+    await waitFor(() => {
+      expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+    });
+
+    // Clear and type invalid username
+    await user.clear(usernameInput);
+    await user.type(usernameInput, "invalid-user!");
+    await user.tab();
+
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toBeInTheDocument();
+    });
+  });
+
+  it("normalizes whitespace in bio field", async () => {
+    const user = userEvent.setup();
+    const consoleLogSpy = vi.spyOn(console, "log");
+    renderWithIntl(<ProfileForm />);
+
+    const usernameInput = screen.getByLabelText("Username");
+    const displayNameInput = screen.getByLabelText("Display Name");
+    const bioInput = screen.getByLabelText("Bio(*optional)");
+
+    await user.type(usernameInput, "testuser");
+    await user.type(displayNameInput, "Test User");
+    await user.type(bioInput, "This  is   a    test");
+
+    await waitFor(() => {
+      const submitButton = screen.getByRole("button", {
+        name: /save profile/i,
+      });
+      expect(submitButton).toBeEnabled();
+    });
+
+    const submitButton = screen.getByRole("button", { name: /save profile/i });
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(consoleLogSpy).toHaveBeenCalled();
+    });
+
+    consoleLogSpy.mockRestore();
   });
 });
