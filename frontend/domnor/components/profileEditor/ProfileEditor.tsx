@@ -20,11 +20,7 @@ import { putJSON, postJSON, deleteLink } from "@/https/https";
 import { toast } from "react-toastify";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 import { AxiosError } from "axios";
-import axios from "axios";
-import type {
-  GenerateKHQRRequest,
-  GenerateKHQRResponse,
-} from "@/types/bakong/bakong";
+
 import Button from "../ui/Button";
 import ProfileTab from "./components/ProfileTab";
 import SocialsTab from "./components/SocialsTab";
@@ -119,7 +115,7 @@ export default function ProfileEditor({
     },
   });
 
-  console.log("Initial Data:", initialData);
+  // console.log("Initial Data:", initialData);
   const displayName = normalizeValue(
     useWatch({
       control: profileControl,
@@ -296,60 +292,81 @@ export default function ProfileEditor({
   };
 
   const onGenerateQR = async (values: khqrFormEditorInputValues) => {
-    console.log("Generating QR:", values);
     setIsGeneratingQR(true);
     setQrError("");
 
     try {
+      // filter out unnecessary optional data with empty string
+      const filteredData = Object.entries(values).filter(
+        ([_, val]) => val !== ""
+      );
+      const requestData = Object.fromEntries(filteredData);
+      console.log("filterd QR value:", requestData);
       // Prepare the request payload
-      const requestData: GenerateKHQRRequest = {
-        accountType: values.accountType,
-        data: {
-          accountType: values.accountType,
-          bakongAccountID: values.bakongAccountID,
-          merchantName: values.merchantName,
-          currency: values.currency as "KHR" | "USD",
-          amount: values.amount ? parseFloat(values.amount) : undefined,
-          merchantCity: values.merchantCity,
-          billNumber: values.billNumber,
-          mobileNumber: values.mobileNumber,
-          storeLabel: values.storeLabel,
-          terminalLabel: values.terminalLabel,
-          purposeOfTransaction: values.purposeOfTransaction,
-          upiAccountInformation: values.upiAccountInformation,
-          merchantAlternateLanguagePreference:
-            values.merchantAlternateLanguagePreference,
-          merchantNameAlternateLanguage: values.merchantNameAlternateLanguage,
-          merchantCityAlternateLanguage: values.merchantCityAlternateLanguage,
-          ...(values.accountType === "individual"
-            ? {
-                accountInformation: values.accountInformation,
-                acquiringBank: values.acquiringBank,
-              }
-            : {
-                merchantID: values.merchantID,
-                acquiringBank: values.acquiringBank,
-              }),
-        } as any,
-      };
+      // const requestData: GenerateKHQRRequest = {
+      //   accountType: values.accountType,
+      //   data:
+      //     values.accountType === "individual"
+      //       ? {
+      //           accountType: "individual",
+      //           bakongAccountID: values.bakongAccountID,
+      //           merchantName: values.merchantName,
+      //           currency: values.currency as "KHR" | "USD",
+      //           amount: values.amount ? parseFloat(values.amount) : undefined,
+      //           merchantCity: values.merchantCity,
+      //           billNumber: values.billNumber,
+      //           mobileNumber: values.mobileNumber,
+      //           storeLabel: values.storeLabel,
+      //           terminalLabel: values.terminalLabel,
+      //           purposeOfTransaction: values.purposeOfTransaction,
+      //           upiAccountInformation: values.upiAccountInformation,
+      //           merchantAlternateLanguagePreference:
+      //             values.merchantAlternateLanguagePreference,
+      //           merchantNameAlternateLanguage:
+      //             values.merchantNameAlternateLanguage,
+      //           merchantCityAlternateLanguage:
+      //             values.merchantCityAlternateLanguage,
+      //           accountInformation: values.accountInformation,
+      //           acquiringBank: values.acquiringBank,
+      //         }
+      //       : {
+      //           accountType: "merchant",
+      //           bakongAccountID: values.bakongAccountID,
+      //           merchantName: values.merchantName,
+      //           currency: values.currency as "KHR" | "USD",
+      //           amount: values.amount ? parseFloat(values.amount) : undefined,
+      //           merchantCity: values.merchantCity,
+      //           billNumber: values.billNumber,
+      //           mobileNumber: values.mobileNumber,
+      //           storeLabel: values.storeLabel,
+      //           terminalLabel: values.terminalLabel,
+      //           purposeOfTransaction: values.purposeOfTransaction,
+      //           upiAccountInformation: values.upiAccountInformation,
+      //           merchantAlternateLanguagePreference:
+      //             values.merchantAlternateLanguagePreference,
+      //           merchantNameAlternateLanguage:
+      //             values.merchantNameAlternateLanguage,
+      //           merchantCityAlternateLanguage:
+      //             values.merchantCityAlternateLanguage,
+      //           merchantID: values.merchantID,
+      //           acquiringBank: values.acquiringBank,
+      //         },
+      // };
 
       // Call backend API (placeholder route)
-      const response = await axios.post<GenerateKHQRResponse>(
-        "/api/khqr/generate",
-        requestData
-      );
+      // const response = await postJSON(
+      //   "/api/khqr/generate",
+      //   requestData
+      // );
 
-      if (response.data.success && response.data.qrCode) {
-        setGeneratedQR(response.data.qrCode);
-        toast.success("QR code generated successfully!");
-      } else {
-        setQrError(response.data.error || "Failed to generate QR code");
-        toast.error(response.data.error || "Failed to generate QR code");
-      }
-    } catch (err: any) {
-      const errorMsg =
-        err.response?.data?.error ||
-        "An error occurred while generating QR code";
+      //     setGeneratedQR(response?.data?.qrCode);
+      //     toast.success("QR code generated successfully!");
+      //   } else {
+      //     setQrError(response.data.error || "Failed to generate QR code");
+      //     toast.error(response.data.error || "Failed to generate QR code");
+      //   }
+    } catch (err) {
+      const errorMsg = getAxiosErrorMessage(err);
       setQrError(errorMsg);
       toast.error(errorMsg);
       console.error("Error generating KHQR:", err);

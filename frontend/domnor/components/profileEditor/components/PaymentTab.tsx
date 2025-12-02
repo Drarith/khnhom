@@ -2,39 +2,7 @@ import { useState } from "react";
 import { QrCode, ChevronDown, ChevronUp } from "lucide-react";
 import Button from "../../ui/Button";
 import ProfileFormInput from "../../profileInput/profileInput";
-import type {
-  UseFormRegister,
-  FieldErrors,
-  UseFormHandleSubmit,
-} from "react-hook-form";
-import type { khqrFormEditorInputValues } from "@/types/profileForm/profileFormInput";
-import type { ProfileData } from "@/types/profileData/profileData";
-
-interface PaymentTabProps {
-  register: UseFormRegister<khqrFormEditorInputValues>;
-  errors: FieldErrors<khqrFormEditorInputValues>;
-  handleSubmit: UseFormHandleSubmit<khqrFormEditorInputValues>;
-  onGenerateQR: (values: khqrFormEditorInputValues) => void;
-  accountType: "individual" | "merchant";
-  bakongAccountID: string;
-  merchantName: string;
-  merchantID: string;
-  acquiringBank: string;
-  accountInformation: string;
-  currency: string;
-  amount: string;
-  merchantCity: string;
-  billNumber: string;
-  mobileNumber: string;
-  storeLabel: string;
-  terminalLabel: string;
-  purposeOfTransaction: string;
-  isValid: boolean;
-  isGenerating: boolean;
-  generatedQR: string;
-  error: string;
-  initialData?: ProfileData;
-}
+import type { PaymentTabProps } from "@/types/profileForm/paymentTabProp";
 
 export default function PaymentTab({
   register,
@@ -59,7 +27,6 @@ export default function PaymentTab({
   isGenerating,
   generatedQR,
   error,
-  initialData,
 }: PaymentTabProps) {
   const [showOptionalFields, setShowOptionalFields] = useState(false);
 
@@ -138,6 +105,7 @@ export default function PaymentTab({
               register={register}
               fieldId="merchantID"
               fieldInput="merchantID"
+              // @ts-expect-error because of zod discrimination typescript is not cooperating
               fieldStateError={errors.merchantID}
               fieldWatchValue={merchantID}
               label="Merchant ID *"
@@ -150,7 +118,7 @@ export default function PaymentTab({
               fieldId="acquiringBank"
               fieldInput="acquiringBank"
               fieldStateError={errors.acquiringBank}
-              fieldWatchValue={acquiringBank}
+              fieldWatchValue={acquiringBank || ""}
               label="Acquiring Bank *"
               maxLength={32}
               hasInput={!!acquiringBank}
@@ -165,8 +133,9 @@ export default function PaymentTab({
               register={register}
               fieldId="accountInformation"
               fieldInput="accountInformation"
+              // @ts-expect-error because of zod discrimination typescript is not cooperating
               fieldStateError={errors.accountInformation}
-              fieldWatchValue={accountInformation}
+              fieldWatchValue={accountInformation || ""}
               label="Account Information (Optional)"
               maxLength={32}
               hasInput={!!accountInformation}
@@ -177,7 +146,7 @@ export default function PaymentTab({
               fieldId="acquiringBank"
               fieldInput="acquiringBank"
               fieldStateError={errors.acquiringBank}
-              fieldWatchValue={acquiringBank}
+              fieldWatchValue={acquiringBank || ""}
               label="Acquiring Bank (Optional)"
               maxLength={32}
               hasInput={!!acquiringBank}
@@ -203,7 +172,7 @@ export default function PaymentTab({
             fieldId="amount"
             fieldInput="amount"
             fieldStateError={errors.amount}
-            fieldWatchValue={amount}
+            fieldWatchValue={amount || ""}
             label="Amount (Optional)"
             maxLength={13}
             hasInput={!!amount}
@@ -231,7 +200,7 @@ export default function PaymentTab({
 
         {/* Collapsible Optional Fields */}
         {showOptionalFields && (
-          <div className="space-y-4 p-4 border-2 border-primary/10 rounded-lg bg-primary/5">
+          <div className="space-y-4 p-4 border-2 border-primary/10 rounded-lg bg-foreground">
             <h3 className="text-sm font-semibold text-primary mb-2">
               Additional Options
             </h3>
@@ -253,7 +222,7 @@ export default function PaymentTab({
                 fieldId="billNumber"
                 fieldInput="billNumber"
                 fieldStateError={errors.billNumber}
-                fieldWatchValue={billNumber}
+                fieldWatchValue={billNumber || ""}
                 label="Bill Number"
                 maxLength={25}
                 hasInput={!!billNumber}
@@ -266,7 +235,7 @@ export default function PaymentTab({
                 fieldId="mobileNumber"
                 fieldInput="mobileNumber"
                 fieldStateError={errors.mobileNumber}
-                fieldWatchValue={mobileNumber}
+                fieldWatchValue={mobileNumber || ""}
                 label="Mobile Number"
                 maxLength={25}
                 hasInput={!!mobileNumber}
@@ -277,7 +246,7 @@ export default function PaymentTab({
                 fieldId="storeLabel"
                 fieldInput="storeLabel"
                 fieldStateError={errors.storeLabel}
-                fieldWatchValue={storeLabel}
+                fieldWatchValue={storeLabel || ""}
                 label="Store Label"
                 maxLength={25}
                 hasInput={!!storeLabel}
@@ -290,7 +259,7 @@ export default function PaymentTab({
                 fieldId="terminalLabel"
                 fieldInput="terminalLabel"
                 fieldStateError={errors.terminalLabel}
-                fieldWatchValue={terminalLabel}
+                fieldWatchValue={terminalLabel || ""}
                 label="Terminal Label"
                 maxLength={25}
                 hasInput={!!terminalLabel}
@@ -301,7 +270,7 @@ export default function PaymentTab({
                 fieldId="purposeOfTransaction"
                 fieldInput="purposeOfTransaction"
                 fieldStateError={errors.purposeOfTransaction}
-                fieldWatchValue={purposeOfTransaction}
+                fieldWatchValue={purposeOfTransaction || ""}
                 label="Purpose of Transaction"
                 maxLength={25}
                 hasInput={!!purposeOfTransaction}

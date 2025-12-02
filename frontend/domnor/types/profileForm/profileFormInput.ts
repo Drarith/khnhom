@@ -33,3 +33,7 @@ export type linkFormEditorInputValues = z.infer<
 export type khqrFormEditorInputValues = z.infer<
   typeof khqrFormEditorInputSchema
 >;
+
+// export type khqrIndividualFormValues = z.infer<typeof khqrIndividualFormSchema>;
+// export type khqrMerchantFormValues = z.infer<typeof khqrMerchantFormSchema>;
+// export type khqrFormEditorInputValues = khqrIndividualFormValues | khqrMerchantFormValues;
