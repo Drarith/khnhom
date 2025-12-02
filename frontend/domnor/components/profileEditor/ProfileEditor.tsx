@@ -1,16 +1,18 @@
 "use client";
 import { useState } from "react";
 import { useForm, useWatch, type Resolver } from "react-hook-form";
-import { Link as LinkIcon, Palette, Eye, User } from "lucide-react";
+import { Link as LinkIcon, Palette, Eye, User, QrCode } from "lucide-react";
 import type { ProfileData } from "@/types/profileData/profileData";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ProfileFormEditorInputValues,
   linkFormEditorInputValues,
+  khqrFormEditorInputValues,
 } from "@/types/profileForm/profileFormInput";
 import {
   profileFormEditorInputSchema,
   linkFormEditorInputSchema,
+  khqrFormEditorInputSchema,
 } from "@/validationSchema/inputValidationSchema";
 import { normalizeValue } from "@/helpers/normalizeVal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -18,11 +20,17 @@ import { putJSON, postJSON, deleteLink } from "@/https/https";
 import { toast } from "react-toastify";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 import { AxiosError } from "axios";
+import axios from "axios";
+import type {
+  GenerateKHQRRequest,
+  GenerateKHQRResponse,
+} from "@/types/bakong/bakong";
 import Button from "../ui/Button";
 import ProfileTab from "./components/ProfileTab";
 import SocialsTab from "./components/SocialsTab";
 import LinksTab from "./components/LinksTab";
 import AppearanceTab from "./components/AppearanceTab";
+import PaymentTab from "./components/PaymentTab";
 
 export default function ProfileEditor({
   initialData,
@@ -30,11 +38,14 @@ export default function ProfileEditor({
   initialData?: ProfileData;
 }) {
   const [activeTab, setActiveTab] = useState<
-    "profile" | "socials" | "links" | "appearance"
+    "profile" | "socials" | "links" | "appearance" | "payment"
   >("profile");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAddingLink, setIsAddingLink] = useState(false);
+  const [isGeneratingQR, setIsGeneratingQR] = useState(false);
+  const [generatedQR, setGeneratedQR] = useState<string>("");
+  const [qrError, setQrError] = useState<string>("");
 
   const queryClient = useQueryClient();
 
@@ -74,6 +85,40 @@ export default function ProfileEditor({
     },
   });
 
+  const {
+    register: khqrRegister,
+    control: khqrControl,
+    reset: khqrReset,
+    handleSubmit: khqrHandleSubmit,
+    formState: { errors: khqrErrors, isValid: khqrIsValid },
+  } = useForm<khqrFormEditorInputValues>({
+    resolver: zodResolver(
+      khqrFormEditorInputSchema
+    ) as Resolver<khqrFormEditorInputValues>,
+    mode: "onChange",
+    reValidateMode: "onChange",
+    defaultValues: {
+      accountType: undefined,
+      bakongAccountID: "",
+      merchantName: "",
+      currency: "KHR",
+      amount: "",
+      merchantCity: "Phnom Penh",
+      billNumber: "",
+      mobileNumber: "",
+      storeLabel: "",
+      terminalLabel: "",
+      purposeOfTransaction: "",
+      upiAccountInformation: "",
+      merchantAlternateLanguagePreference: "",
+      merchantNameAlternateLanguage: "",
+      merchantCityAlternateLanguage: "",
+      accountInformation: "",
+      acquiringBank: "",
+      merchantID: "",
+    },
+  });
+
   console.log("Initial Data:", initialData);
   const displayName = normalizeValue(
     useWatch({
@@ -103,10 +148,83 @@ export default function ProfileEditor({
     defaultValue: {},
   });
 
+  // KHQR form watches
+  const accountType = useWatch({
+    control: khqrControl,
+    name: "accountType",
+    defaultValue: "individual",
+  });
+  const bakongAccountID = useWatch({
+    control: khqrControl,
+    name: "bakongAccountID",
+    defaultValue: "",
+  });
+  const merchantName = useWatch({
+    control: khqrControl,
+    name: "merchantName",
+    defaultValue: "",
+  });
+  const currency = useWatch({
+    control: khqrControl,
+    name: "currency",
+    defaultValue: "KHR",
+  });
+  const amount = useWatch({
+    control: khqrControl,
+    name: "amount",
+    defaultValue: "",
+  });
+  const merchantID = useWatch({
+    control: khqrControl,
+    name: "merchantID",
+    defaultValue: "",
+  });
+  const acquiringBank = useWatch({
+    control: khqrControl,
+    name: "acquiringBank",
+    defaultValue: "",
+  });
+  const accountInformation = useWatch({
+    control: khqrControl,
+    name: "accountInformation",
+    defaultValue: "",
+  });
+  const merchantCity = useWatch({
+    control: khqrControl,
+    name: "merchantCity",
+    defaultValue: "",
+  });
+  const billNumber = useWatch({
+    control: khqrControl,
+    name: "billNumber",
+    defaultValue: "",
+  });
+  const mobileNumber = useWatch({
+    control: khqrControl,
+    name: "mobileNumber",
+    defaultValue: "",
+  });
+  const storeLabel = useWatch({
+    control: khqrControl,
+    name: "storeLabel",
+    defaultValue: "",
+  });
+  const terminalLabel = useWatch({
+    control: khqrControl,
+    name: "terminalLabel",
+    defaultValue: "",
+  });
+  const purposeOfTransaction = useWatch({
+    control: khqrControl,
+    name: "purposeOfTransaction",
+    defaultValue: "",
+  });
+
   const tabs = [
     { id: "profile", label: "Profile", icon: User },
     { id: "socials", label: "Socials", icon: LinkIcon },
     { id: "links", label: "Links", icon: LinkIcon },
+    { id: "payment", label: "Payment", icon: QrCode },
     { id: "appearance", label: "Appearance", icon: Palette },
   ] as const;
 
@@ -175,6 +293,69 @@ export default function ProfileEditor({
         },
       });
     }, 2000);
+  };
+
+  const onGenerateQR = async (values: khqrFormEditorInputValues) => {
+    console.log("Generating QR:", values);
+    setIsGeneratingQR(true);
+    setQrError("");
+
+    try {
+      // Prepare the request payload
+      const requestData: GenerateKHQRRequest = {
+        accountType: values.accountType,
+        data: {
+          accountType: values.accountType,
+          bakongAccountID: values.bakongAccountID,
+          merchantName: values.merchantName,
+          currency: values.currency as "KHR" | "USD",
+          amount: values.amount ? parseFloat(values.amount) : undefined,
+          merchantCity: values.merchantCity,
+          billNumber: values.billNumber,
+          mobileNumber: values.mobileNumber,
+          storeLabel: values.storeLabel,
+          terminalLabel: values.terminalLabel,
+          purposeOfTransaction: values.purposeOfTransaction,
+          upiAccountInformation: values.upiAccountInformation,
+          merchantAlternateLanguagePreference:
+            values.merchantAlternateLanguagePreference,
+          merchantNameAlternateLanguage: values.merchantNameAlternateLanguage,
+          merchantCityAlternateLanguage: values.merchantCityAlternateLanguage,
+          ...(values.accountType === "individual"
+            ? {
+                accountInformation: values.accountInformation,
+                acquiringBank: values.acquiringBank,
+              }
+            : {
+                merchantID: values.merchantID,
+                acquiringBank: values.acquiringBank,
+              }),
+        } as any,
+      };
+
+      // Call backend API (placeholder route)
+      const response = await axios.post<GenerateKHQRResponse>(
+        "/api/khqr/generate",
+        requestData
+      );
+
+      if (response.data.success && response.data.qrCode) {
+        setGeneratedQR(response.data.qrCode);
+        toast.success("QR code generated successfully!");
+      } else {
+        setQrError(response.data.error || "Failed to generate QR code");
+        toast.error(response.data.error || "Failed to generate QR code");
+      }
+    } catch (err: any) {
+      const errorMsg =
+        err.response?.data?.error ||
+        "An error occurred while generating QR code";
+      setQrError(errorMsg);
+      toast.error(errorMsg);
+      console.error("Error generating KHQR:", err);
+    } finally {
+      setIsGeneratingQR(false);
+    }
   };
 
   return (
@@ -262,8 +443,36 @@ export default function ProfileEditor({
                   <AppearanceTab initialData={initialData} />
                 )}
 
+                {activeTab === "payment" && (
+                  <PaymentTab
+                    register={khqrRegister}
+                    errors={khqrErrors}
+                    handleSubmit={khqrHandleSubmit}
+                    onGenerateQR={onGenerateQR}
+                    accountType={accountType}
+                    bakongAccountID={bakongAccountID}
+                    merchantName={merchantName}
+                    merchantID={merchantID}
+                    acquiringBank={acquiringBank}
+                    accountInformation={accountInformation}
+                    currency={currency}
+                    amount={amount}
+                    merchantCity={merchantCity}
+                    billNumber={billNumber}
+                    mobileNumber={mobileNumber}
+                    storeLabel={storeLabel}
+                    terminalLabel={terminalLabel}
+                    purposeOfTransaction={purposeOfTransaction}
+                    isValid={khqrIsValid}
+                    isGenerating={isGeneratingQR}
+                    generatedQR={generatedQR}
+                    error={qrError}
+                    initialData={initialData}
+                  />
+                )}
+
                 {/* Save Button */}
-                {activeTab !== "links" && (
+                {activeTab !== "links" && activeTab !== "payment" && (
                   <div className="px-6 py-4 border-t border-primary/10 bg-primary/5">
                     <div className="flex justify-end gap-3">
                       <Button type="button" variant="secondary">

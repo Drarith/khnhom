@@ -3,6 +3,7 @@ import {
   createProfileFormInputSchema,
   profileFormEditorInputSchema,
   linkFormEditorInputSchema,
+  khqrFormEditorInputSchema,
 } from "@/validationSchema/inputValidationSchema";
 
 export interface ProfileFormInputs {
@@ -27,4 +28,8 @@ export type ProfileFormEditorInputValues = z.infer<
 
 export type linkFormEditorInputValues = z.infer<
   typeof linkFormEditorInputSchema
+>;
+
+export type khqrFormEditorInputValues = z.infer<
+  typeof khqrFormEditorInputSchema
 >;

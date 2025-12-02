@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {FieldValues, Path, PathValue } from "react-hook-form";
+import { FieldValues, Path, PathValue } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { X } from "lucide-react";
 
@@ -7,7 +7,6 @@ import { SOCIAL_PLATFORMS } from "@/config/socials";
 import Button from "../ui/Button";
 
 import type { SocialMediaFormProps } from "@/types/socialMedia/SocialMediaForm";
-
 
 export default function SocialMediaForm<T extends FieldValues>({
   socials,
@@ -125,8 +124,7 @@ export default function SocialMediaForm<T extends FieldValues>({
       {Object.keys(socials).length > 0 && (
         <div className="space-y-2">
           <p className="text-xs font-medium uppercase tracking-wide text-primary/70">
-            {t("socialMediaInput.addedSocialLink")} (
-            {Object.keys(socials).length})
+            {t("socialMediaInput.addedSocialLink")}
           </p>
           {Object.entries(socials).map(([key, url]) => {
             if (url.trim() === "") return null;

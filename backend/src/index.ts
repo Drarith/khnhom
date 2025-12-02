@@ -14,6 +14,7 @@ import { v2 as cloudinary } from "cloudinary";
 import userRouter from "./routes/userRoute.js";
 import profileRouter from "./routes/profileRoute.js";
 import cloudinaryRouter from "./routes/cloudinary.js";
+// import khqrRouter from "./routes/khqrRoute.js";
 import { env } from "../src/config/myEnv.js";
 
 dotenv.config();
@@ -63,8 +64,10 @@ app.use(userRouter);
 app.use(profileRouter);
 
 // Cloudinary routes
-
 app.use(cloudinaryRouter);
+
+// KHQR routes
+// app.use("/api/khqr", khqrRouter);
 
 app.get("/", async (req, res) => {
   res.send("Hello from Express + TypeScript!!!");

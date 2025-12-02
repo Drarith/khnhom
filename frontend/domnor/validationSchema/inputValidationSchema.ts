@@ -1,3 +1,4 @@
+import { error } from "console";
 import { z } from "zod";
 
 const ALLOWED_SOCIAL_KEYS = new Set([
@@ -188,7 +189,7 @@ export const linkFormEditorInputSchema = z.object({
       (data) => {
         const hasTitle = data.title.length > 3;
         const hasUrl = data.url.length > 8;
-        return (hasTitle && hasUrl);
+        return hasTitle && hasUrl;
       },
       {
         message: "Must have both title and valid URL.",
@@ -200,3 +201,51 @@ export const linkFormEditorInputSchema = z.object({
 export const socialHandleInputSchema = z.object({
   socialHandle: SanitizedString(30, 3),
 });
+
+// Base KHQR Schema
+const baseKhqrSchema = z.object({
+  accountType: z.enum(["individual", "merchant"]),
+  bakongAccountID: z.string().min(1, "Bakong Account ID is required").max(32),
+  merchantName: z
+    .string()
+    .min(3, "Merchant name must be at least 3 characters")
+    .max(25),
+  currency: z.enum(["KHR", "USD"]).optional(),
+  amount: z
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || /^\d+(\.\d{1,2})?$/.test(val),
+      "Invalid amount format"
+    ),
+  merchantCity: z.string().max(15).optional(),
+  billNumber: z.string().max(25).optional(),
+  mobileNumber: z.string().max(25).optional(),
+  storeLabel: z.string().max(25).optional(),
+  terminalLabel: z.string().max(25).optional(),
+  purposeOfTransaction: z.string().max(25).optional(),
+  upiAccountInformation: z.string().max(31).optional(),
+  merchantAlternateLanguagePreference: z.string().max(2).optional(),
+  merchantNameAlternateLanguage: z.string().max(25).optional(),
+  merchantCityAlternateLanguage: z.string().max(15).optional(),
+});
+
+// Individual specific fields
+const individualKhqrSchema = baseKhqrSchema.extend({
+  accountType: z.literal("individual"),
+  accountInformation: z.string().max(32).optional(),
+  acquiringBank: z.string().max(32).optional(),
+});
+
+// Merchant specific fields
+const merchantKhqrSchema = baseKhqrSchema.extend({
+  accountType: z.literal("merchant"),
+  merchantID: z.string().min(1, "Merchant ID is required").max(32),
+  acquiringBank: z.string().min(1, "Acquiring Bank is required").max(32),
+});
+
+// Combined schema
+export const khqrFormEditorInputSchema = z.discriminatedUnion("accountType", [
+  individualKhqrSchema,
+  merchantKhqrSchema,
+]);

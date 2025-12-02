@@ -127,3 +127,39 @@ export function sanitizeCreateProfile(
   }
   return result.data;
 }
+
+
+
+export const invidualKHQR = z.object({
+  bakongAccountId: SanitizedString(32),
+  name: SanitizedString(25),
+  amount: z
+    .string()
+    .regex(/^[0-9]+$/, "Account ID must contain only numbers")
+    .optional(),
+  currency: z.enum(["KHR", "USD"]),
+  mobileNumber: z
+    .string()
+    .max(25, "Phone number can only contain less than 25 numbers.")
+    .regex(/^[0-9]+$/, "Account ID must contain only numbers")
+    .optional(),
+  storeLabel: SanitizedString(25),
+  purposeOfTransaction: SanitizedString(25),
+});
+
+export const merchanKHQR = z.object({
+  bakongAccountId: SanitizedString(32),
+  name: SanitizedString(25),
+  amount: z
+    .string()
+    .regex(/^[0-9]+$/, "Account ID must contain only numbers")
+    .optional(),
+  currency: z.enum(["KHR", "USD"]),
+  mobileNumber: z
+    .string()
+    .max(25, "Phone number can only contain less than 25 numbers.")
+    .regex(/^[0-9]+$/, "Account ID must contain only numbers")
+    .optional(),
+  storeLabel: SanitizedString(25),
+  purposeOfTransaction: SanitizedString(25),
+});
