@@ -266,32 +266,60 @@ export default function ProfileEditor({
     linkDeleteMutation.mutate(id);
   };
 
+  const paymentMutation = useMutation({
+    mutationFn: (PaymentRequest: Partial<khqrFormEditorInputValues>) => {
+      return postJSON("placeHolder", PaymentRequest);
+    },
+    onSuccess: () => {
+      toast.success("Your Payment QR has been created successfully!");
+      // queryClient.invalidateQueries({ queryKey: ["profile"] });
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      const errorMessage = getAxiosErrorMessage(error);
+      toast.error("Error creating QR payment: " + errorMessage);
+    },
+  });
+
   const onSubmit = (values: ProfileFormEditorInputValues) => {
     setIsSubmitting(true);
     console.log("Submitting values:", values);
-    setTimeout(() => {
-      profileMutation.mutate(values, {
-        onSettled: () => {
-          setIsSubmitting(false);
-        },
-      });
-    }, 1000);
+    try {
+      setTimeout(() => {
+        profileMutation.mutate(values, {
+          onSettled: () => {
+            setIsSubmitting(false);
+          },
+        });
+      }, 1000);
+    } catch (err) {
+      const errorMsg = getAxiosErrorMessage(err);
+      toast.error(errorMsg);
+      console.error("Error submitting profile:", err);
+      setIsSubmitting(false);
+    }
   };
 
   const onAddLinkCLick = (values: linkFormEditorInputValues) => {
     setIsAddingLink(true);
-    setTimeout(() => {
-      console.log("Adding link:", values);
-      linkAddMutation.mutate(values, {
-        onSettled: () => {
-          setIsAddingLink(false);
-          linkReset();
-        },
-      });
-    }, 2000);
+    try {
+      setTimeout(() => {
+        console.log("Adding link:", values);
+        linkAddMutation.mutate(values, {
+          onSettled: () => {
+            setIsAddingLink(false);
+            linkReset();
+          },
+        });
+      }, 2000);
+    } catch (err) {
+      const errorMsg = getAxiosErrorMessage(err);
+      toast.error(errorMsg);
+      console.error("Error adding link:", err);
+      setIsAddingLink(false);
+    }
   };
 
-  const onGenerateQR = async (values: khqrFormEditorInputValues) => {
+  const onGenerateQR = (values: khqrFormEditorInputValues) => {
     setIsGeneratingQR(true);
     setQrError("");
 
@@ -301,76 +329,22 @@ export default function ProfileEditor({
         ([_, val]) => val !== ""
       );
       const requestData = Object.fromEntries(filteredData);
-      console.log("filterd QR value:", requestData);
-      // Prepare the request payload
-      // const requestData: GenerateKHQRRequest = {
-      //   accountType: values.accountType,
-      //   data:
-      //     values.accountType === "individual"
-      //       ? {
-      //           accountType: "individual",
-      //           bakongAccountID: values.bakongAccountID,
-      //           merchantName: values.merchantName,
-      //           currency: values.currency as "KHR" | "USD",
-      //           amount: values.amount ? parseFloat(values.amount) : undefined,
-      //           merchantCity: values.merchantCity,
-      //           billNumber: values.billNumber,
-      //           mobileNumber: values.mobileNumber,
-      //           storeLabel: values.storeLabel,
-      //           terminalLabel: values.terminalLabel,
-      //           purposeOfTransaction: values.purposeOfTransaction,
-      //           upiAccountInformation: values.upiAccountInformation,
-      //           merchantAlternateLanguagePreference:
-      //             values.merchantAlternateLanguagePreference,
-      //           merchantNameAlternateLanguage:
-      //             values.merchantNameAlternateLanguage,
-      //           merchantCityAlternateLanguage:
-      //             values.merchantCityAlternateLanguage,
-      //           accountInformation: values.accountInformation,
-      //           acquiringBank: values.acquiringBank,
-      //         }
-      //       : {
-      //           accountType: "merchant",
-      //           bakongAccountID: values.bakongAccountID,
-      //           merchantName: values.merchantName,
-      //           currency: values.currency as "KHR" | "USD",
-      //           amount: values.amount ? parseFloat(values.amount) : undefined,
-      //           merchantCity: values.merchantCity,
-      //           billNumber: values.billNumber,
-      //           mobileNumber: values.mobileNumber,
-      //           storeLabel: values.storeLabel,
-      //           terminalLabel: values.terminalLabel,
-      //           purposeOfTransaction: values.purposeOfTransaction,
-      //           upiAccountInformation: values.upiAccountInformation,
-      //           merchantAlternateLanguagePreference:
-      //             values.merchantAlternateLanguagePreference,
-      //           merchantNameAlternateLanguage:
-      //             values.merchantNameAlternateLanguage,
-      //           merchantCityAlternateLanguage:
-      //             values.merchantCityAlternateLanguage,
-      //           merchantID: values.merchantID,
-      //           acquiringBank: values.acquiringBank,
-      //         },
-      // };
 
-      // Call backend API (placeholder route)
-      // const response = await postJSON(
-      //   "/api/khqr/generate",
-      //   requestData
-      // );
-
-      //     setGeneratedQR(response?.data?.qrCode);
-      //     toast.success("QR code generated successfully!");
-      //   } else {
-      //     setQrError(response.data.error || "Failed to generate QR code");
-      //     toast.error(response.data.error || "Failed to generate QR code");
-      //   }
+      paymentMutation.mutate(requestData, {
+        onSettled: () => {
+          setIsGeneratingQR(false);
+        },
+        onSuccess: (data: any) => {
+          if (data?.qrCode) {
+            setGeneratedQR(data.qrCode);
+          }
+        },
+      });
     } catch (err) {
       const errorMsg = getAxiosErrorMessage(err);
       setQrError(errorMsg);
       toast.error(errorMsg);
       console.error("Error generating KHQR:", err);
-    } finally {
       setIsGeneratingQR(false);
     }
   };
