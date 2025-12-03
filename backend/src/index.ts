@@ -66,8 +66,7 @@ app.use(profileRouter);
 // Cloudinary routes
 app.use(cloudinaryRouter);
 
-// KHQR routes
-// app.use("/api/khqr", khqrRouter);
+
 
 app.get("/", async (req, res) => {
   res.send("Hello from Express + TypeScript!!!");

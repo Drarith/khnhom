@@ -268,7 +268,7 @@ export default function ProfileEditor({
 
   const paymentMutation = useMutation({
     mutationFn: (PaymentRequest: Partial<khqrFormEditorInputValues>) => {
-      return postJSON("placeHolder", PaymentRequest);
+      return postJSON("/khqr", PaymentRequest);
     },
     onSuccess: () => {
       toast.success("Your Payment QR has been created successfully!");

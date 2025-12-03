@@ -9,6 +9,7 @@ import {
   currentUserProfile,
   updateProfilePictureUrl,
 } from "../controllers/profileController.js";
+import {createKHQR} from "../controllers/khqrController.js"
 import { authenticateToken } from "../middleware/auth.js";
 import "../config/passport.js";
 import { trackProfileView } from "../middleware/viewProfile.js";
@@ -22,6 +23,8 @@ profileRouter.post(
   authenticateToken,
   createAndAddLinkToProfile
 );
+
+profileRouter.post("/api/khqr", authenticateToken, createKHQR)
 
 profileRouter.patch("/api/profile/picture", authenticateToken, updateProfilePictureUrl);
 
