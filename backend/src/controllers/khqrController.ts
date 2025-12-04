@@ -1,10 +1,10 @@
 import type { Request, Response } from "express";
 import QRCode from "qrcode";
+// @ts-expect-error For some reason when I install types the package breaks
 import { BakongKHQR, khqrData, IndividualInfo } from "bakong-khqr";
 import { uploadBase64ToCloudinary } from "../https/uploadToCloudinary.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 import Profile from "../model/profileModel.js";
-import { profile } from "console";
 
 export async function createKHQR(req: Request, res: Response) {
   if (!req.user) {
