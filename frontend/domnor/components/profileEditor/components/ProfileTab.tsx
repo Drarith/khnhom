@@ -1,17 +1,7 @@
 import { Camera } from "lucide-react";
 import ProfileFormInput from "../../profileInput/profileInput";
 import ProfilePicture from "../components/ProfilePicture";
-import type { ProfileData } from "@/types/profileData/profileData";
-import type { UseFormRegister, FieldErrors } from "react-hook-form";
-import type { ProfileFormEditorInputValues } from "@/types/profileForm/profileFormInput";
-
-interface ProfileTabProps {
-  register: UseFormRegister<ProfileFormEditorInputValues>;
-  errors: FieldErrors<ProfileFormEditorInputValues>;
-  displayName: string;
-  bio: string;
-  initialData?: ProfileData;
-}
+import type { ProfileTabProps } from "@/types/tabProps";
 
 export default function ProfileTab({
   register,

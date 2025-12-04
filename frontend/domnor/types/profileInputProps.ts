@@ -10,7 +10,7 @@ export interface ProfileFormInputProps<T extends FieldValues> {
   fieldInput: Path<T>; // Use Path<T> for type safety on field names
   fieldStateError: FieldError | undefined;
   fieldWatchValue: string;
-  register: UseFormRegister<T>; // Correctly type the register function
+  register: UseFormRegister<T>; 
   label: string;
   maxLength?: number;
   textArea?: boolean;

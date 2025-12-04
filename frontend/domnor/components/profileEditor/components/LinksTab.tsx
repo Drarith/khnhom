@@ -1,26 +1,7 @@
 import { Link as LinkIcon, X } from "lucide-react";
 import ProfileFormInput from "../../profileInput/profileInput";
 import Button from "../../ui/Button";
-import type {
-  UseFormRegister,
-  FieldErrors,
-  UseFormHandleSubmit,
-} from "react-hook-form";
-import type { linkFormEditorInputValues } from "@/types/profileForm/profileFormInput";
-import type { ProfileData } from "@/types/profileData/profileData";
-
-interface LinksTabProps {
-  register: UseFormRegister<linkFormEditorInputValues>;
-  errors: FieldErrors<linkFormEditorInputValues>;
-  handleSubmit: UseFormHandleSubmit<linkFormEditorInputValues>;
-  onAddLink: (values: linkFormEditorInputValues) => void;
-  onDelete: (id: string) => void;
-  linkTitle: string;
-  linkUrl: string;
-  isValid: boolean;
-  isAdding: boolean;
-  initialData?: ProfileData;
-}
+import type { LinksTabProps } from "@/types/tabProps";
 
 export default function LinksTab({
   register,
@@ -34,8 +15,6 @@ export default function LinksTab({
   isAdding,
   initialData,
 }: LinksTabProps) {
-
-
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">

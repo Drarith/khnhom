@@ -1,9 +1,9 @@
-import { ProfileData } from "@/types/profileData/profileData";
+import { ProfileData } from "@/types/profileData";
 import { useState, useEffect } from "react";
 import UploadImageModal from "./UploadImageModal";
 import { getJSON, patchJSON, uploadToCloudinary } from "@/https/https";
 import { toast } from "react-toastify";
-import { SignatureResponse } from "@/types/profileForm/PDResponse";
+import { SignatureResponse } from "@/types/PDResponse";
 import Image from "next/image";
 
 export default function ProfilePicture({

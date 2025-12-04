@@ -5,7 +5,7 @@ import { getJSON } from "@/https/https";
 
 import { toast } from "react-toastify";
 
-import type { ProfileData } from "@/types/profileData/profileData";
+import type { ProfileData } from "@/types/profileData";
 import ProfileEditor from "@/components/profileEditor/ProfileEditor";
 
 export default function Dashboard() {

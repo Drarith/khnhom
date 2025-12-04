@@ -1,11 +1,5 @@
 import SocialMediaForm from "../../createProfile/socialMediaForm";
-import type { UseFormSetValue } from "react-hook-form";
-import type { ProfileFormEditorInputValues } from "@/types/profileForm/profileFormInput";
-
-interface SocialsTabProps {
-  socials: Record<string, string>;
-  setValue: UseFormSetValue<ProfileFormEditorInputValues>;
-}
+import type { SocialsTabProps } from "@/types/tabProps";
 
 export default function SocialsTab({ socials, setValue }: SocialsTabProps) {
   return (

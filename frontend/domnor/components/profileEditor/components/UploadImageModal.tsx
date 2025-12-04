@@ -5,7 +5,6 @@ import "react-image-crop/dist/ReactCrop.css";
 import { X } from "lucide-react";
 import { toast } from "react-toastify";
 import Image from "next/image";
-import { full } from "@cloudinary/url-gen/qualifiers/fontHinting";
 
 interface UploadImageModalProps {
   isOpen: boolean;

@@ -4,7 +4,7 @@ import type {
   UseFormHandleSubmit,
 } from "react-hook-form";
 import type { khqrFormEditorInputValues } from "./profileFormInput";
-import type { ProfileData } from "@/types/profileData/profileData";
+import type { ProfileData } from "@/types/profileData";
 
 export interface PaymentTabProps {
   register: UseFormRegister<khqrFormEditorInputValues>;

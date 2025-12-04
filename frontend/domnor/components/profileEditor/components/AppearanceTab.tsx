@@ -1,4 +1,4 @@
-import type { ProfileData } from "@/types/profileData/profileData";
+import type { ProfileData } from "@/types/profileData";
 
 interface AppearanceTabProps {
   initialData?: ProfileData;

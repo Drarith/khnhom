@@ -12,7 +12,7 @@ import SocialMediaForm from "./socialMediaForm";
 import { useMutation } from "@tanstack/react-query";
 import { postJSON } from "@/https/https";
 
-import { ProfileFormInputValues } from "@/types/profileForm/profileFormInput";
+import { ProfileFormInputValues } from "@/types/profileFormInput";
 import { toast } from "react-toastify";
 
 import { useState } from "react";
@@ -51,7 +51,6 @@ export default function ProfileForm() {
       link: "",
     },
   });
-
 
   const username = normalizeValue(
     useWatch({ control, name: "username", defaultValue: "" })

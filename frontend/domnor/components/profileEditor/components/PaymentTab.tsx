@@ -2,7 +2,7 @@ import { useState } from "react";
 import { QrCode, ChevronDown, ChevronUp } from "lucide-react";
 import Button from "../../ui/Button";
 import ProfileFormInput from "../../profileInput/profileInput";
-import type { PaymentTabProps } from "@/types/profileForm/paymentTabProp";
+import type { PaymentTabProps } from "@/types/paymentTabProp";
 import Image from "next/image";
 
 export default function PaymentTab({
@@ -327,11 +327,13 @@ export default function PaymentTab({
             </div>
             <div className="mt-4 text-center">
               <p className="text-sm text-primary/70">
-                Account: {initialData?.paymentInfo.merchantName} ({initialData?.paymentInfo.bakongAccountID})
+                Account: {initialData?.paymentInfo.merchantName} (
+                {initialData?.paymentInfo.bakongAccountID})
               </p>
               <p className="text-sm text-primary/70">
                 Currency: {initialData?.paymentInfo.currency}
-                {initialData?.paymentInfo.amount && ` | Amount: ${initialData.paymentInfo.amount}`}
+                {initialData?.paymentInfo.amount &&
+                  ` | Amount: ${initialData.paymentInfo.amount}`}
               </p>
             </div>
           </div>

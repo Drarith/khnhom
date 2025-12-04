@@ -10,7 +10,7 @@ import { Bounce, ToastContainer } from "react-toastify";
 
 import ReactQueryProvider from "@/providers/reactQueryProvider";
 
-import type { Props } from "@/types/rootLayout/rootLayout";
+import type { Props } from "@/types/rootLayout";
 
 export const metadata: Metadata = {
   title: "Domnor",

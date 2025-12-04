@@ -2,13 +2,13 @@
 import { useState, useEffect } from "react";
 import { useForm, useWatch, type Resolver } from "react-hook-form";
 import { Link as LinkIcon, Palette, Eye, User, QrCode } from "lucide-react";
-import type { ProfileData } from "@/types/profileData/profileData";
+import type { ProfileData } from "@/types/profileData";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ProfileFormEditorInputValues,
   linkFormEditorInputValues,
   khqrFormEditorInputValues,
-} from "@/types/profileForm/profileFormInput";
+} from "@/types/profileFormInput";
 import {
   profileFormEditorInputSchema,
   linkFormEditorInputSchema,

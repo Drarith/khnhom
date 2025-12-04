@@ -1,4 +1,4 @@
-import type { ButtonProps } from "@/types/ui/Button";
+import type { ButtonProps } from "@/types/ui";
 
 export default function Button({
   variant = "primary",

@@ -1,4 +1,4 @@
-import type { ProfileFormInputProps } from "@/types/profileForm/profileInputProps";
+import type { ProfileFormInputProps } from "@/types/profileInputProps";
 import { FieldValues } from "react-hook-form";
 
 export default function ProfileFormInput<T extends FieldValues>({

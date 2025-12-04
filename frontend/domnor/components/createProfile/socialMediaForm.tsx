@@ -6,7 +6,7 @@ import { X } from "lucide-react";
 import { SOCIAL_PLATFORMS } from "@/config/socials";
 import Button from "../ui/Button";
 
-import type { SocialMediaFormProps } from "@/types/socialMedia/SocialMediaForm";
+import type { SocialMediaFormProps } from "@/types/socialMedia";
 
 export default function SocialMediaForm<T extends FieldValues>({
   socials,

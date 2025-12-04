@@ -1,8 +1,7 @@
 "use client";
-import { GoogleLoginButtonProps } from "@/types/google/button";
+import { GoogleLoginButtonProps } from "@/types/google";
 import { GoogleIcon } from "@/config/googleIcon";
 import Link from "next/link";
-
 
 export default function GoogleLoginButton({
   label = "Continue with Google",
