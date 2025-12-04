@@ -6,6 +6,14 @@ export interface ProfileData {
   bio: string;
   profilePictureUrl: string;
   paymentQrCodeUrl: string;
+  paymentInfo: {
+    bakongAccountID: string;
+    merchantName: string;
+    merchantCity?: string;
+    currency?: string;
+    amount?: number;
+    purpose?: string;
+  };
   links: { title: string; link: string, _id:string}[];
   theme: string;
   selectedTemplate: string;

@@ -27,6 +27,7 @@ export default function PaymentTab({
   isGenerating,
   generatedQR,
   error,
+  initialData,
 }: PaymentTabProps) {
   const [showOptionalFields, setShowOptionalFields] = useState(false);
 
@@ -308,7 +309,7 @@ export default function PaymentTab({
         </div>
       </div>
 
-      {generatedQR ? (
+      {initialData?.paymentQrCodeUrl ? (
         <div className="mt-6">
           <div className="border-2 border-primary/20 rounded-lg p-6 flex flex-col items-center">
             <h3 className="text-lg font-medium text-primary mb-4">
@@ -316,22 +317,18 @@ export default function PaymentTab({
             </h3>
             <div className="bg-white p-4 rounded-lg">
               <img
-                src={generatedQR}
+                src={initialData.paymentQrCodeUrl}
                 alt="KHQR Code"
                 className="w-64 h-64 object-contain"
               />
             </div>
             <div className="mt-4 text-center">
               <p className="text-sm text-primary/70">
-                Account: {merchantName} ({bakongAccountID})
+                Account: {initialData?.paymentInfo.merchantName} ({initialData?.paymentInfo.bakongAccountID})
               </p>
               <p className="text-sm text-primary/70">
-                Type:{" "}
-                {accountType.charAt(0).toUpperCase() + accountType.slice(1)}
-              </p>
-              <p className="text-sm text-primary/70">
-                Currency: {currency}
-                {amount && ` | Amount: ${amount}`}
+                Currency: {initialData?.paymentInfo.currency}
+                {initialData?.paymentInfo.amount && ` | Amount: ${initialData.paymentInfo.amount}`}
               </p>
             </div>
           </div>
