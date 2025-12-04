@@ -12,7 +12,6 @@ import type {
 
 import Link from "./linkModel.js";
 import type { SanitizedCreateProfile } from "../utils/sanitizeUtils.js";
-import { profile } from "console";
 
 const { Schema } = mongoose;
 

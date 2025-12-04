@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, useWatch, type Resolver } from "react-hook-form";
 import { Link as LinkIcon, Palette, Eye, User, QrCode } from "lucide-react";
 import type { ProfileData } from "@/types/profileData/profileData";

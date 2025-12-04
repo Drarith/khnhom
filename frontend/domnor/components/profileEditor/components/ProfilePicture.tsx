@@ -46,6 +46,7 @@ export default function ProfilePicture({
       formData.append("api_key", CLOUDINARY_API_KEY);
       formData.append("timestamp", timestamp.toString());
       formData.append("signature", signature);
+      // publicId will always be the same for each user, auto delete and replace
       formData.append("public_id", publicId);
       formData.append("folder", "profile_pictures");
 

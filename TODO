@@ -1,4 +1,1 @@
-need to refator how we handle links
-
-
-upload profile picture still needs work
+rework  frontend cloudinary upload logic to use unsigned uploads
