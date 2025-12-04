@@ -19,6 +19,15 @@ export interface ISocials {
   github: string;
 }
 
+export interface IPaymentInfo {
+  bakongAccountID: string;
+  merchantName: string;
+  merchantCity?: string;
+  currency?: string;
+  amount?: number;
+  purpose?: string;
+}
+
 // Interface for the Profile document
 export interface IProfile extends Document {
   _id: Types.ObjectId;

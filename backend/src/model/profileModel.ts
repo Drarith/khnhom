@@ -50,6 +50,14 @@ const profileSchema = new Schema(
       type: String,
       default: "",
     },
+    paymentInfo: {
+      bakongAccountID: { type: String, default: "" },
+      merchantName: { type: String, default: "" },
+      merchantCity: { type: String, default: "" },
+      currency: { type: String, default: "KHR" },
+      amount: { type: Number, default: 0 },
+      purpose: { type: String, default: "" },
+    },
 
     socials: {
       facebook: { type: String, default: "" },

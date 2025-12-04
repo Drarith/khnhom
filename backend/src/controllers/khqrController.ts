@@ -5,6 +5,7 @@ import { BakongKHQR, khqrData, IndividualInfo } from "bakong-khqr";
 import { uploadBase64ToCloudinary } from "../https/uploadToCloudinary.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 import Profile from "../model/profileModel.js";
+import { de } from "zod/locales";
 
 export async function createKHQR(req: Request, res: Response) {
   if (!req.user) {
@@ -70,7 +71,6 @@ export async function createKHQR(req: Request, res: Response) {
     try {
       const KHQR = new BakongKHQR();
       const individual = await KHQR.generateIndividual(individualInfo);
-      console.log("QR String:", individual.data.qr);
 
       // Generate QR code as Data URL (base64 image)
       const qrCodeDataURL = await QRCode.toDataURL(individual.data.qr, {
@@ -94,9 +94,29 @@ export async function createKHQR(req: Request, res: Response) {
         });
       }
 
-      await Profile.findOneAndUpdate(
+      const { data } = BakongKHQR.decode(individual.data.qr);
+      const decodedQR = data;
+
+
+      const updatedProfile = await Profile.findOneAndUpdate(
         { user: (req.user as IUser).id },
-        { $set: { paymentQrCodeUrl: secure_url } },
+        {
+          $set: {
+            paymentQrCodeUrl: secure_url,
+            paymentInfo: {
+              bakongAccountID: bakongAccountID,
+              merchantName: decodedQR.merchantName,
+              merchantCity: decodedQR.merchantCity
+                ? decodedQR.merchantCity
+                : "",
+              currency: decodedQR.transactionCurrency === "116" ? "KHR" : "USD",
+              amount: decodedQR.transactionAmount
+                ? parseFloat(decodedQR.transactionAmount)
+                : 0,
+              purpose: decodedQR.purpose ? decodedQR.purpose : "",
+            },
+          },
+        },
         { new: true }
       );
 
