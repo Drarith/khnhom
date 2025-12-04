@@ -3,6 +3,7 @@ import { QrCode, ChevronDown, ChevronUp } from "lucide-react";
 import Button from "../../ui/Button";
 import ProfileFormInput from "../../profileInput/profileInput";
 import type { PaymentTabProps } from "@/types/profileForm/paymentTabProp";
+import Image from "next/image";
 
 export default function PaymentTab({
   register,
@@ -316,8 +317,10 @@ export default function PaymentTab({
               Your KHQR Code
             </h3>
             <div className="bg-white p-4 rounded-lg">
-              <img
+              <Image
                 src={initialData.paymentQrCodeUrl}
+                width={500}
+                height={500}
                 alt="KHQR Code"
                 className="w-64 h-64 object-contain"
               />

@@ -4,6 +4,8 @@ import { useState, useRef } from "react";
 import "react-image-crop/dist/ReactCrop.css";
 import { X } from "lucide-react";
 import { toast } from "react-toastify";
+import Image from "next/image";
+import { full } from "@cloudinary/url-gen/qualifiers/fontHinting";
 
 interface UploadImageModalProps {
   isOpen: boolean;
@@ -230,7 +232,7 @@ export default function UploadImageModal({
               />
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4 max-w-full">
               <ReactCrop
                 crop={crop}
                 onChange={(_, percentCrop) => setCrop(percentCrop)}
@@ -239,14 +241,16 @@ export default function UploadImageModal({
                 circularCrop
                 locked={true}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+              
+                <Image
                   ref={imgRef}
                   alt="Crop me"
                   src={imgSrc}
-                  style={{ transform: `scale(${scale})`, maxHeight: "400px" }}
+                  width={400}
+                  height={ 400}
+                  // style={{ transform: `scale(${scale})`, maxHeight: "400px" }}
                   onLoad={onImageLoad}
-                  className="max-w-full"
+                  
                 />
               </ReactCrop>
 
