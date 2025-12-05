@@ -16,7 +16,6 @@ export default function PaymentTab({
   merchantID,
   acquiringBank,
   accountInformation,
-  currency,
   amount,
   merchantCity,
   billNumber,
@@ -26,22 +25,10 @@ export default function PaymentTab({
   purposeOfTransaction,
   isValid,
   isGenerating,
-  generatedQR,
   error,
   initialData,
 }: PaymentTabProps) {
   const [showOptionalFields, setShowOptionalFields] = useState(false);
-
-  const downloadQR = () => {
-    if (!generatedQR) return;
-
-    const link = document.createElement("a");
-    link.href = generatedQR;
-    link.download = `khqr-${accountType}-${Date.now()}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   return (
     <div className="p-6 space-y-6">
@@ -296,17 +283,6 @@ export default function PaymentTab({
           >
             Generate QR Code
           </Button>
-
-          {generatedQR && (
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={downloadQR}
-              className="flex items-center gap-2"
-            >
-              Download QR
-            </Button>
-          )}
         </div>
       </div>
 

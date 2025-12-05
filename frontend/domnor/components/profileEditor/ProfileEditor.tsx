@@ -15,11 +15,15 @@ import {
   khqrFormEditorInputSchema,
 } from "@/validationSchema/inputValidationSchema";
 import { normalizeValue } from "@/helpers/normalizeVal";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  UseMutationResult,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { putJSON, postJSON, deleteLink } from "@/https/https";
 import { toast } from "react-toastify";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
-import { AxiosError } from "axios";
+import { Axios, AxiosError } from "axios";
 
 import Button from "../ui/Button";
 import ProfileTab from "./components/ProfileTab";
@@ -27,6 +31,7 @@ import SocialsTab from "./components/SocialsTab";
 import LinksTab from "./components/LinksTab";
 import AppearanceTab from "./components/AppearanceTab";
 import PaymentTab from "./components/PaymentTab";
+import { set } from "zod";
 
 export default function ProfileEditor({
   initialData,
@@ -37,10 +42,6 @@ export default function ProfileEditor({
     "profile" | "socials" | "links" | "appearance" | "payment"
   >("profile");
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isAddingLink, setIsAddingLink] = useState(false);
-  const [isGeneratingQR, setIsGeneratingQR] = useState(false);
-  const [generatedQR, setGeneratedQR] = useState<string>("");
   const [qrError, setQrError] = useState<string>("");
 
   const queryClient = useQueryClient();
@@ -224,7 +225,7 @@ export default function ProfileEditor({
     { id: "appearance", label: "Appearance", icon: Palette },
   ] as const;
 
-  const profileMutation = useMutation({
+  const { mutate: profileMutation, isPending: isProfilePending } = useMutation({
     mutationFn: (values: ProfileFormEditorInputValues) =>
       putJSON("/update-profile", values),
     onSuccess: () => {
@@ -236,7 +237,7 @@ export default function ProfileEditor({
     },
   });
 
-  const linkAddMutation = useMutation({
+  const { mutate: linkAddMutation, isPending: isAddingLink } = useMutation({
     mutationFn: (values: linkFormEditorInputValues) =>
       postJSON("/create-link", values),
     onSuccess: () => {
@@ -246,107 +247,61 @@ export default function ProfileEditor({
       const errorMessage = getAxiosErrorMessage(error);
       toast.error("Error adding link: " + errorMessage);
     },
-  });
-
-  const linkDeleteMutation = useMutation({
-    mutationFn: (id: string) => {
-      return deleteLink(`/profile/links/${id}`);
-    },
-    onSuccess: () => {
-      toast.success("Link deleted successfully!");
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
-    },
-    onError: (error: AxiosError<{ message?: string }>) => {
-      const errorMessage = getAxiosErrorMessage(error);
-      toast.error("Error deleting link: " + errorMessage);
+      linkReset();
     },
   });
 
-  const onDelete = (id: string) => {
-    linkDeleteMutation.mutate(id);
-  };
+  const { mutate: linkDeleteMutation, isPending: isDeletingLink } = useMutation(
+    {
+      mutationFn: (id: string) => {
+        return deleteLink(`/profile/links/${id}`);
+      },
+      onSuccess: () => {
+        toast.success("Link deleted successfully!");
+        queryClient.invalidateQueries({ queryKey: ["profile"] });
+      },
+      onError: (error: AxiosError<{ message?: string }>) => {
+        const errorMessage = getAxiosErrorMessage(error);
+        toast.error("Error deleting link: " + errorMessage);
+      },
+    }
+  );
 
-  const paymentMutation = useMutation({
+  const { mutate: paymentMutation, isPending: isGeneratingQR } = useMutation({
     mutationFn: (PaymentRequest: Partial<khqrFormEditorInputValues>) => {
       return postJSON("/khqr", PaymentRequest);
     },
     onSuccess: () => {
       toast.success("Your Payment QR has been created successfully!");
-      // queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       const errorMessage = getAxiosErrorMessage(error);
-      toast.error("Error creating QR payment: " + errorMessage);
+      toast.error("Error creating QR payment");
+      setQrError(errorMessage);
     },
   });
 
+  const onDelete = (id: string) => {
+    linkDeleteMutation(id);
+  };
+
   const onSubmit = (values: ProfileFormEditorInputValues) => {
-    setIsSubmitting(true);
-    console.log("Submitting values:", values);
-    try {
-      setTimeout(() => {
-        profileMutation.mutate(values, {
-          onSettled: () => {
-            setIsSubmitting(false);
-          },
-        });
-      }, 1000);
-    } catch (err) {
-      const errorMsg = getAxiosErrorMessage(err);
-      toast.error(errorMsg);
-      console.error("Error submitting profile:", err);
-      setIsSubmitting(false);
-    }
+    profileMutation(values);
   };
 
   const onAddLinkCLick = (values: linkFormEditorInputValues) => {
-    setIsAddingLink(true);
-    try {
-      setTimeout(() => {
-        console.log("Adding link:", values);
-        linkAddMutation.mutate(values, {
-          onSettled: () => {
-            setIsAddingLink(false);
-            linkReset();
-          },
-        });
-      }, 2000);
-    } catch (err) {
-      const errorMsg = getAxiosErrorMessage(err);
-      toast.error(errorMsg);
-      console.error("Error adding link:", err);
-      setIsAddingLink(false);
-    }
+    linkAddMutation(values);
   };
 
   const onGenerateQR = (values: khqrFormEditorInputValues) => {
-    setIsGeneratingQR(true);
-    setQrError("");
-
-    try {
-      // filter out unnecessary optional data with empty string
-      const filteredData = Object.entries(values).filter(
-        ([_, val]) => val !== ""
-      );
-      const requestData = Object.fromEntries(filteredData);
-
-      paymentMutation.mutate(requestData, {
-        onSettled: () => {
-          setIsGeneratingQR(false);
-        },
-        onSuccess: (data: any) => {
-          if (data?.qrCode) {
-            setGeneratedQR(data.qrCode);
-          }
-        },
-      });
-    } catch (err) {
-      const errorMsg = getAxiosErrorMessage(err);
-      setQrError(errorMsg);
-      toast.error(errorMsg);
-      console.error("Error generating KHQR:", err);
-      setIsGeneratingQR(false);
-    }
+    const filteredData = Object.entries(values).filter(
+      ([_, val]) => val !== ""
+    );
+    const requestData = Object.fromEntries(filteredData);
+    paymentMutation(requestData);
   };
 
   return (
@@ -456,7 +411,6 @@ export default function ProfileEditor({
                     purposeOfTransaction={purposeOfTransaction}
                     isValid={khqrIsValid}
                     isGenerating={isGeneratingQR}
-                    generatedQR={generatedQR}
                     error={qrError}
                     initialData={initialData}
                   />
@@ -472,7 +426,7 @@ export default function ProfileEditor({
                       <Button
                         disabled={!profileIsValid}
                         type="submit"
-                        isLoading={isSubmitting}
+                        isLoading={isProfilePending}
                       >
                         Save Changes
                       </Button>
