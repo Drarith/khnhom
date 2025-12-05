@@ -12,6 +12,7 @@ export default function ProfileFormInput<T extends FieldValues>({
   initialValue = "",
   textArea = false,
   hasInput = false,
+  extraClassName = "",
 }: ProfileFormInputProps<T>) {
   const labelFloatClass = hasInput
     ? "text-secondary text-sm -translate-y-4"
@@ -33,7 +34,7 @@ export default function ProfileFormInput<T extends FieldValues>({
         ) : (
           <input
             defaultValue={initialValue}
-            className={`px-4 py-2 border-primary/70 border-2 rounded-sm text-primary outline-none duration-200 peer focus:border-primary w-full`}
+            className={`px-4 py-2 border-primary/70 border-2 rounded-sm text-primary outline-none duration-200 peer focus:border-primary w-full ${extraClassName}`}
             id={fieldId}
             {...register(fieldInput)}
             maxLength={maxLength}

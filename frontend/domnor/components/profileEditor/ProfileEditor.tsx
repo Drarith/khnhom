@@ -323,8 +323,8 @@ export default function ProfileEditor({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Sidebar Navigation */}
           <div className="lg:col-span-3">
-            <div className="bg-foreground rounded-lg shadow-sm p-2 border border-primary/10">
-              <nav className="space-y-1">
+            <div className="bg-foreground rounded-lg shadow-sm p-2 border border-primary/10 relative">
+              <nav className="space-y-1 md:grid md:grid-cols-1 lg:grid-cols-1 md:gap-2 flex overflow-x-auto no-scrollbar">
                 {tabs.map((tab) => {
                   const Icon = tab.icon;
                   return (
@@ -344,6 +344,8 @@ export default function ProfileEditor({
                   );
                 })}
               </nav>
+              {/* Fade indicator - only on mobile */}
+              <div className="absolute right-0 top-0 bottom-0 w-8 bg-linear-to-l from-foreground to-transparent pointer-events-none lg:hidden" />
             </div>
           </div>
 

@@ -16,4 +16,5 @@ export interface ProfileFormInputProps<T extends FieldValues> {
   textArea?: boolean;
   hasInput?: boolean;
   initialValue?: string;
+  extraClassName?: string;
 }
