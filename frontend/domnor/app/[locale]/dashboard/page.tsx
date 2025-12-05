@@ -9,7 +9,7 @@ import type { ProfileData } from "@/types/profileData";
 import ProfileEditor from "@/components/profileEditor/ProfileEditor";
 
 export default function Dashboard() {
-  const { isPending, error, data } = useQuery<ProfileData>({
+  const { isPending, error, data } = useQuery<{ data: ProfileData }>({
     queryKey: ["profile"],
     queryFn: () => getJSON("/me"),
   });

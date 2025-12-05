@@ -1,8 +1,7 @@
-// import { UseFormSetValue , FieldValues} from "react-hook-form";
-// import { ProfileFormEditorInputValues } from "./profileFormInput";
+import { UseFormSetValue , FieldValues} from "react-hook-form";
 
-// export interface SocialMediaFormProps<T extends FieldValues> {
-//   socials: Record<string, string>;
-//   setValue: UseFormSetValue<T>;
-// }
+export interface SocialMediaFormProps<T extends FieldValues> {
+  socials: Record<string, string>;
+  setValue: UseFormSetValue<T>;
+}
 

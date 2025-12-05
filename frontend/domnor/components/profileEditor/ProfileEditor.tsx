@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm, useWatch, type Resolver } from "react-hook-form";
 import { Link as LinkIcon, Palette, Eye, User, QrCode } from "lucide-react";
 import type { ProfileData } from "@/types/profileData";
@@ -15,15 +15,11 @@ import {
   khqrFormEditorInputSchema,
 } from "@/validationSchema/inputValidationSchema";
 import { normalizeValue } from "@/helpers/normalizeVal";
-import {
-  useMutation,
-  UseMutationResult,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { putJSON, postJSON, deleteLink } from "@/https/https";
 import { toast } from "react-toastify";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
-import { Axios, AxiosError } from "axios";
+import { AxiosError } from "axios";
 
 import Button from "../ui/Button";
 import ProfileTab from "./components/ProfileTab";
@@ -31,7 +27,6 @@ import SocialsTab from "./components/SocialsTab";
 import LinksTab from "./components/LinksTab";
 import AppearanceTab from "./components/AppearanceTab";
 import PaymentTab from "./components/PaymentTab";
-import { set } from "zod";
 
 export default function ProfileEditor({
   initialData,
