@@ -1,5 +1,6 @@
 import type { ProfileData } from "@/types/profileData";
 import ThemeCard from "@/components/themeCard/ThemeCard";
+import { themes } from "@/config/theme";
 
 interface AppearanceTabProps {
   initialData?: ProfileData;
@@ -44,10 +45,9 @@ export default function AppearanceTab({ initialData }: AppearanceTabProps) {
 
       {/* Theme Color */}
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 justify-items-center">
-        <ThemeCard />
-        <ThemeCard />
-        <ThemeCard />
-        <ThemeCard />
+        {themes.map((theme) => {
+          return <ThemeCard key={theme.name} theme={theme} />;
+        })}
       </div>
 
       {/* Profile Status */}

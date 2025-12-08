@@ -1,11 +1,6 @@
-export default function ThemeCard() {
-  const theme = {
-    bg: "#090014",
-    button: "#00ff9d",
-    buttonText: "#090014",
-    text: "#00ff9d",
-    border: "#00ff9d",
-  };
+import type { Theme } from "@/types/theme";
+
+export default function ThemeCard({ theme }: { theme: Theme }) {
   return (
     <div>
       {/* Visual Preview */}

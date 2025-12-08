@@ -1,0 +1,163 @@
+export const themes = [
+  {
+    name: "Classic Dark",
+    bg: "#111111",
+    button: "#333333",
+    text: "#ffffff",
+    buttonText: "#ffffff",
+    tags: ["Minimal", "Professional"]
+  },
+  {
+    name: "Clean White",
+    bg: "#ffffff",
+    button: "#f3f4f6",
+    text: "#1f2937",
+    buttonText: "#000000",
+    border: "#e5e7eb", // Special case for white themes
+    tags: ["Minimal", "Clean"]
+  },
+  {
+    name: "Neon Cyber",
+    bg: "#090014",
+    button: "#00ff9d",
+    text: "#00ff9d",
+    buttonText: "#090014",
+    tags: ["Tech", "Bold"]
+  },
+  {
+    name: "Soft Lavender",
+    bg: "#e9d5ff",
+    button: "#9333ea",
+    text: "#581c87",
+    buttonText: "#ffffff",
+    tags: ["Pastel", "Soft"]
+  },
+  {
+    name: "Midnight Gold",
+    bg: "#0f172a",
+    button: "#fbbf24",
+    text: "#f8fafc",
+    buttonText: "#451a03",
+    tags: ["Luxury", "Dark"]
+  },
+  {
+    name: "Matcha Latte",
+    bg: "#dcfce7",
+    button: "#15803d",
+    text: "#14532d",
+    buttonText: "#ffffff",
+    tags: ["Nature", "Fresh"]
+  },
+  {
+    name: "Deep Ocean",
+    bg: "#1e3a8a",
+    button: "#60a5fa",
+    text: "#eff6ff",
+    buttonText: "#1e3a8a",
+    tags: ["Blue", "Calm"]
+  },
+  {
+    name: "Hot Pink",
+    bg: "#be185d",
+    button: "#fbcfe8",
+    text: "#fff1f2",
+    buttonText: "#831843",
+    tags: ["Vibrant", "Fun"]
+  },
+  {
+    name: "Slate Minimal",
+    bg: "#334155",
+    button: "#94a3b8",
+    text: "#f8fafc",
+    buttonText: "#0f172a",
+    tags: ["Neutral", "Modern"]
+  },
+  {
+    name: "Coffee Shop",
+    bg: "#431407",
+    button: "#d6d3d1",
+    text: "#e7e5e4",
+    buttonText: "#292524",
+    tags: ["Warm", "Cozy"]
+  },
+  {
+    name: "Vampire",
+    bg: "#000000",
+    button: "#ef4444",
+    text: "#fca5a5",
+    buttonText: "#000000",
+    tags: ["Edgy", "Red"]
+  },
+  {
+    name: "Solar Flare",
+    bg: "#fef3c7",
+    button: "#f59e0b",
+    text: "#78350f",
+    buttonText: "#ffffff",
+    tags: ["Bright", "Yellow"]
+  },
+  {
+    name: "Forest Rain",
+    bg: "#064e3b",
+    button: "#a7f3d0",
+    text: "#ecfdf5",
+    buttonText: "#064e3b",
+    tags: ["Nature", "Dark"]
+  },
+  {
+    name: "Retro Wave",
+    bg: "#2e022d",
+    button: "#22d3ee",
+    text: "#f0abfc",
+    buttonText: "#164e63",
+    tags: ["Retro", "Synth"]
+  },
+  {
+    name: "Cream & Charcoal",
+    bg: "#f5f5f4",
+    button: "#292524",
+    text: "#1c1917",
+    buttonText: "#f5f5f4",
+    tags: ["Elegant", "Neutral"]
+  },
+  {
+    name: "High Contrast",
+    bg: "#000000",
+    button: "#eaff00",
+    text: "#ffffff",
+    buttonText: "#000000",
+    tags: ["Bold", "Accessible"]
+  },
+  {
+    name: "Royal Purple",
+    bg: "#4c1d95",
+    button: "#c4b5fd",
+    text: "#f5f3ff",
+    buttonText: "#4c1d95",
+    tags: ["Regal", "Purple"]
+  },
+  {
+    name: "Steel Blue",
+    bg: "#0f172a",
+    button: "#38bdf8",
+    text: "#e0f2fe",
+    buttonText: "#0c4a6e",
+    tags: ["Cool", "Tech"]
+  },
+  {
+    name: "Sunset Orange",
+    bg: "#fff7ed",
+    button: "#f97316",
+    text: "#9a3412",
+    buttonText: "#ffffff",
+    tags: ["Warm", "Energy"]
+  },
+  {
+    name: "Berry Smoothie",
+    bg: "#831843",
+    button: "#f472b6",
+    text: "#fdf2f8",
+    buttonText: "#831843",
+    tags: ["Fruity", "Pink"]
+  }
+];
