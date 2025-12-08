@@ -1,4 +1,5 @@
 import type { ProfileData } from "@/types/profileData";
+import ThemeCard from "@/components/themeCard/ThemeCard";
 
 interface AppearanceTabProps {
   initialData?: ProfileData;
@@ -16,7 +17,7 @@ export default function AppearanceTab({ initialData }: AppearanceTabProps) {
 
       {/* Template Selection */}
       <div>
-        <label className="block text-sm font-medium text-primary/70 mb-3">
+        {/* <label className="block text-sm font-medium text-primary/70 mb-3">
           Profile Template
         </label>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -38,35 +39,15 @@ export default function AppearanceTab({ initialData }: AppearanceTabProps) {
               </button>
             )
           )}
-        </div>
+        </div> */}
       </div>
 
       {/* Theme Color */}
-      <div>
-        <label className="block text-sm font-medium text-primary/70 mb-3">
-          Theme Color
-        </label>
-        <div className="flex gap-3">
-          {[
-            "#3B82F6",
-            "#8B5CF6",
-            "#EC4899",
-            "#10B981",
-            "#F59E0B",
-            "#EF4444",
-          ].map((color) => (
-            <button
-              type="button"
-              key={color}
-              className="w-12 h-12 rounded-full border-2 border-primary/20 hover:scale-110 transition-transform"
-              style={{ backgroundColor: color }}
-            />
-          ))}
-          <button
-            type="button"
-            className="w-12 h-12 rounded-full border-2 border-primary/20 hover:scale-110 transition-transform bg-linear-to-br from-purple-400 to-pink-600"
-          />
-        </div>
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 justify-items-center">
+        <ThemeCard />
+        <ThemeCard />
+        <ThemeCard />
+        <ThemeCard />
       </div>
 
       {/* Profile Status */}
