@@ -2,6 +2,7 @@ import { ProfileData } from "@/types/profileData";
 import Image from "next/image";
 
 export default function UserProfile({ data }: { data: ProfileData }) {
+  const backgorund = "primary"
   return (
     <div className="min-h-screen bg-accent">
       <div className="relative w-full">
