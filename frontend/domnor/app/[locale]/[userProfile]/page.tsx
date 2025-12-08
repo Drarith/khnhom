@@ -8,12 +8,12 @@ import UserProfile from "@/components/userProfile/UserProfile";
 
 export default function UserProfilePage() {
   const { locale, userProfile } = useParams();
-  const { data, error, isLoading } = useQuery<{ data: ProfileData }>({
+  const { data, error, isLoading } = useQuery<ProfileData>({
     queryKey: ["userProfile", userProfile],
     queryFn: () => getJSON(`/${userProfile}`),
   });
 
-  console.log("data for profile",data)
+  console.log("data for profile", data);
 
   if (isLoading) {
     return (
