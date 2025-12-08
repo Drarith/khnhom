@@ -9,7 +9,7 @@ import {
   currentUserProfile,
   updateProfilePictureUrl,
 } from "../controllers/profileController.js";
-import {createKHQR} from "../controllers/khqrController.js"
+import { createKHQR } from "../controllers/khqrController.js";
 import { authenticateToken } from "../middleware/auth.js";
 import "../config/passport.js";
 import { trackProfileView } from "../middleware/viewProfile.js";
@@ -24,9 +24,13 @@ profileRouter.post(
   createAndAddLinkToProfile
 );
 
-profileRouter.post("/api/khqr", authenticateToken, createKHQR)
+profileRouter.post("/api/khqr", authenticateToken, createKHQR);
 
-profileRouter.patch("/api/profile/picture", authenticateToken, updateProfilePictureUrl);
+profileRouter.patch(
+  "/api/profile/picture",
+  authenticateToken,
+  updateProfilePictureUrl
+);
 
 // use this path to update profile or delete profile data
 profileRouter.put("/api/update-profile", authenticateToken, updateProfile);
@@ -40,12 +44,8 @@ profileRouter.delete(
 // move the more specific route before the generic :username route
 profileRouter.get("/api/profile/:username/links", getProfileLinks);
 
-profileRouter.get(
-  "/api/profile/:username",
-  trackProfileView,
-  getProfileByUsername
-);
-
 profileRouter.get("/api/me", authenticateToken, currentUserProfile);
+
+profileRouter.get("/api/:username", trackProfileView, getProfileByUsername);
 
 export default profileRouter;
