@@ -28,6 +28,8 @@ import LinksTab from "./components/LinksTab";
 import AppearanceTab from "./components/AppearanceTab";
 import PaymentTab from "./components/PaymentTab";
 
+import UserProfile from "../userProfile/UserProfile";
+
 export default function ProfileEditor({
   initialData,
 }: {
@@ -38,6 +40,7 @@ export default function ProfileEditor({
   >("profile");
 
   const [qrError, setQrError] = useState<string>("");
+  const [notPreviewing, setNotPreviewing] = useState<boolean>(true);
 
   const queryClient = useQueryClient();
 
@@ -305,147 +308,151 @@ export default function ProfileEditor({
     const requestData = Object.fromEntries(filteredData);
     paymentMutation(requestData);
   };
-  console.log(initialData)
+  console.log(initialData);
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-5xl mx-auto p-4 md:p-6">
-        {/* Header */}
-        <div className="bg-foreground rounded-lg shadow-sm p-6 mb-6 border border-primary/10">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-primary">
-                Welcome back, {initialData?.username}
-              </h1>
-              <p className="text-sm text-primary/60 mt-1">
-                Customize your profile and manage your links
-              </p>
-            </div>
-            <Button type="button" className="flex items-center gap-2">
-              <Eye size={18} />
-              Preview
-            </Button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Sidebar Navigation */}
-          <div className="lg:col-span-3">
-            <div className="bg-foreground rounded-lg shadow-sm p-2 border border-primary/10 relative">
-              <nav className="space-y-1 md:grid md:grid-cols-1 lg:grid-cols-1 md:gap-2 flex overflow-x-auto no-scrollbar">
-                {tabs.map((tab) => {
-                  const Icon = tab.icon;
-                  return (
-                    <button
-                      type="button"
-                      key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                        activeTab === tab.id
-                          ? "bg-primary/10 text-primary"
-                          : "text-primary/70 hover:bg-primary/5"
-                      }`}
-                    >
-                      <Icon size={20} />
-                      <span className="font-medium">{tab.label}</span>
-                    </button>
-                  );
-                })}
-              </nav>
-              {/* Fade indicator - only on mobile */}
-              <div className="absolute right-0 top-0 bottom-0 w-8 bg-linear-to-l from-foreground to-transparent pointer-events-none lg:hidden" />
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="lg:col-span-9">
-            <form onSubmit={profileHandleSubmit(onSubmit)} noValidate>
-              <div className="bg-foreground rounded-lg shadow-sm border border-primary/10">
-                {activeTab === "profile" && (
-                  <ProfileTab
-                    register={profileRegister}
-                    errors={profileErrors}
-                    displayName={displayName}
-                    bio={bio}
-                    initialData={initialData}
-                  />
-                )}
-
-                {activeTab === "socials" && (
-                  <SocialsTab socials={socials} setValue={profileSetValue} />
-                )}
-
-                {activeTab === "links" && (
-                  <LinksTab
-                    register={linkRegister}
-                    errors={linkErrors}
-                    handleSubmit={linkHandleSubmit}
-                    onAddLink={onAddLinkCLick}
-                    onDelete={onDelete}
-                    linkTitle={link?.title || ""}
-                    linkUrl={link?.url || ""}
-                    isValid={LinkIsValid}
-                    isAdding={isAddingLink}
-                    initialData={initialData}
-                  />
-                )}
-
-                {activeTab === "appearance" && (
-                  <AppearanceTab
-                    initialData={initialData}
-                    theme={theme}
-                    setValue={profileSetValue}
-                  />
-                )}
-
-                {activeTab === "payment" && (
-                  <PaymentTab
-                    register={khqrRegister}
-                    errors={khqrErrors}
-                    handleSubmit={khqrHandleSubmit}
-                    onGenerateQR={onGenerateQR}
-                    accountType={accountType}
-                    bakongAccountID={bakongAccountID}
-                    merchantName={merchantName}
-                    merchantID={merchantID}
-                    acquiringBank={acquiringBank}
-                    accountInformation={accountInformation}
-                    currency={currency}
-                    amount={amount}
-                    merchantCity={merchantCity}
-                    billNumber={billNumber}
-                    mobileNumber={mobileNumber}
-                    storeLabel={storeLabel}
-                    terminalLabel={terminalLabel}
-                    purposeOfTransaction={purposeOfTransaction}
-                    isValid={khqrIsValid}
-                    isGenerating={isGeneratingQR}
-                    error={qrError}
-                    initialData={initialData}
-                  />
-                )}
-
-                {/* Save Button */}
-                {activeTab !== "links" && activeTab !== "payment" && (
-                  <div className="px-6 py-4 border-t border-primary/10 bg-primary/5">
-                    <div className="flex justify-end gap-3">
-                      <Button type="button" variant="secondary">
-                        Cancel
-                      </Button>
-                      <Button
-                        disabled={!profileIsValid}
-                        type="submit"
-                        isLoading={isProfilePending}
-                      >
-                        Save Changes
-                      </Button>
-                    </div>
-                  </div>
-                )}
+      <Button type="button" className="flex items-center gap-2 fixed bottom-0 right-4" onClick={() => setNotPreviewing(!notPreviewing)}>
+        <Eye size={18} />
+        Preview
+      </Button>
+      {notPreviewing ? (
+        <div className="max-w-5xl mx-auto p-4 md:p-6">
+          {/* Header */}
+          <div className="bg-foreground rounded-lg shadow-sm p-6 mb-6 border border-primary/10">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold text-primary">
+                  Welcome back, {initialData?.username}
+                </h1>
+                <p className="text-sm text-primary/60 mt-1">
+                  Customize your profile and manage your links
+                </p>
               </div>
-            </form>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Sidebar Navigation */}
+            <div className="lg:col-span-3">
+              <div className="bg-foreground rounded-lg shadow-sm p-2 border border-primary/10 relative">
+                <nav className="space-y-1 md:grid md:grid-cols-1 lg:grid-cols-1 md:gap-2 flex overflow-x-auto no-scrollbar">
+                  {tabs.map((tab) => {
+                    const Icon = tab.icon;
+                    return (
+                      <button
+                        type="button"
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                          activeTab === tab.id
+                            ? "bg-primary/10 text-primary"
+                            : "text-primary/70 hover:bg-primary/5"
+                        }`}
+                      >
+                        <Icon size={20} />
+                        <span className="font-medium">{tab.label}</span>
+                      </button>
+                    );
+                  })}
+                </nav>
+                {/* Fade indicator - only on mobile */}
+                <div className="absolute right-0 top-0 bottom-0 w-8 bg-linear-to-l from-foreground to-transparent pointer-events-none lg:hidden" />
+              </div>
+            </div>
+
+            {/* Main Content */}
+            <div className="lg:col-span-9">
+              <form onSubmit={profileHandleSubmit(onSubmit)} noValidate>
+                <div className="bg-foreground rounded-lg shadow-sm border border-primary/10">
+                  {activeTab === "profile" && (
+                    <ProfileTab
+                      register={profileRegister}
+                      errors={profileErrors}
+                      displayName={displayName}
+                      bio={bio}
+                      initialData={initialData}
+                    />
+                  )}
+
+                  {activeTab === "socials" && (
+                    <SocialsTab socials={socials} setValue={profileSetValue} />
+                  )}
+
+                  {activeTab === "links" && (
+                    <LinksTab
+                      register={linkRegister}
+                      errors={linkErrors}
+                      handleSubmit={linkHandleSubmit}
+                      onAddLink={onAddLinkCLick}
+                      onDelete={onDelete}
+                      linkTitle={link?.title || ""}
+                      linkUrl={link?.url || ""}
+                      isValid={LinkIsValid}
+                      isAdding={isAddingLink}
+                      initialData={initialData}
+                    />
+                  )}
+
+                  {activeTab === "appearance" && (
+                    <AppearanceTab
+                      initialData={initialData}
+                      theme={theme}
+                      setValue={profileSetValue}
+                    />
+                  )}
+
+                  {activeTab === "payment" && (
+                    <PaymentTab
+                      register={khqrRegister}
+                      errors={khqrErrors}
+                      handleSubmit={khqrHandleSubmit}
+                      onGenerateQR={onGenerateQR}
+                      accountType={accountType}
+                      bakongAccountID={bakongAccountID}
+                      merchantName={merchantName}
+                      merchantID={merchantID}
+                      acquiringBank={acquiringBank}
+                      accountInformation={accountInformation}
+                      currency={currency}
+                      amount={amount}
+                      merchantCity={merchantCity}
+                      billNumber={billNumber}
+                      mobileNumber={mobileNumber}
+                      storeLabel={storeLabel}
+                      terminalLabel={terminalLabel}
+                      purposeOfTransaction={purposeOfTransaction}
+                      isValid={khqrIsValid}
+                      isGenerating={isGeneratingQR}
+                      error={qrError}
+                      initialData={initialData}
+                    />
+                  )}
+
+                  {/* Save Button */}
+                  {activeTab !== "links" && activeTab !== "payment" && (
+                    <div className="px-6 py-4 border-t border-primary/10 bg-primary/5">
+                      <div className="flex justify-end gap-3">
+                        <Button type="button" variant="secondary">
+                          Cancel
+                        </Button>
+                        <Button
+                          disabled={!profileIsValid}
+                          type="submit"
+                          isLoading={isProfilePending}
+                        >
+                          Save Changes
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <UserProfile data={initialData!} />
+      )}
     </div>
   );
 }

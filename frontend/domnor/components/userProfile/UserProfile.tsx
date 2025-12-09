@@ -64,7 +64,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
         />
       </div>
 
-      <div className="relative -mt-20 px-4 pb-12 flex-grow flex flex-col items-center max-w-2xl mx-auto w-full space-y-8 z-10">
+      <div className="relative -mt-20 px-4 pb-12 grow flex flex-col items-center max-w-2xl mx-auto w-full space-y-8 z-10">
         <div className="text-center space-y-3">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight drop-shadow-sm">
             {data.displayName}
