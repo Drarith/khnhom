@@ -1,1 +1,1 @@
-rework  frontend cloudinary upload logic to use unsigned uploads
+deny bad words instead of clean

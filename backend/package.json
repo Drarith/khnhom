@@ -23,6 +23,7 @@
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
     "axios": "^1.13.2",
+    "bad-words": "^4.0.0",
     "bakong-khqr": "^1.0.7",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.8.0",
@@ -46,6 +47,7 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@types/bad-words": "^3.0.3",
     "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",

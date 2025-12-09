@@ -1,9 +1,18 @@
 import { z } from "zod";
-import type {
-  ProfileCreationInput,
-} from "../types/user-input.types.js";
+import {Filter} from "bad-words";
+import type { ProfileCreationInput } from "../types/user-input.types.js";
 
 import { checkUrlSafe } from "./googleSafeBrowsing.js";
+
+const filter = new Filter();
+
+export function cleanBadWords(str: string): string {
+  try {
+    return filter.clean(str);
+  } catch (e) {
+    return str;
+  }
+}
 
 // Escape HTML special characters to prevent XSS
 export function escapeHtml(str: string): string {
@@ -31,16 +40,16 @@ export function isValidHttpUrl(value: unknown): value is string {
   }
 }
 
-// Sanitized string — trims, normalizes, escapes, and caps length
+// Sanitized string — trims, normalizes, escapes, filters bad words, and caps length
 export const SanitizedString = (maxLength: number) =>
   z
     .string()
     .default("")
     .transform((s) => normalizeWhitespace(s))
-    .transform((s) => s.trim()) 
+    .transform((s) => s.trim())
+    .transform((s) => cleanBadWords(s))
     .transform((s) => escapeHtml(s))
     .transform((s) => s.slice(0, maxLength));
-
 
 // Strictly valid HTTP/S URL (fails if invalid)
 export const ValidHttpUrl = () =>
@@ -58,7 +67,6 @@ export const SanitizedUrl = () =>
     .trim()
     .transform((val) => (isValidHttpUrl(val) ? val : ""))
     .default("");
-
 
 // not utilized currently but may be useful in future
 export const SanitizedListOfUrls = () =>
@@ -95,14 +103,16 @@ export const SocialsSchema = z
         if (SanitizedUrl().parse(trimmed)) {
           out[key] = trimmed;
         } else {
-          out[key] = escapeHtml(normalizeWhitespace(trimmed).slice(0, 100));
+          out[key] = escapeHtml(
+            cleanBadWords(normalizeWhitespace(trimmed)).slice(0, 100)
+          );
         }
       }
     }
     return out;
   });
 
-  // Sanitize link separately because link is an object 
+// Sanitize link separately because link is an object
 export const CreateProfileSchema = z.object({
   user: z.string(),
   username: SanitizedString(30),
@@ -127,8 +137,6 @@ export function sanitizeCreateProfile(
   }
   return result.data;
 }
-
-
 
 export const invidualKHQR = z.object({
   bakongAccountId: SanitizedString(32),
