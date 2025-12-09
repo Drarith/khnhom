@@ -13,11 +13,35 @@
 
 /* Dark theme tokens (class-based) */
 .dark {
-  --color-primary: #ededed; /* adjust as needed */
+  --color-primary: #ededed;
   --color-secondary: #aab0b6;
   --color-accent: #00e5ff;
   --color-background: #0b0b0c;
   --color-foreground: #e6e6e6;
+}
+
+.btn-brutal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+
+  /* Core Brutalist Aesthetics */
+  border: 4px solid #000;
+  color: #000;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+
+  /* The Hard Shadow */
+  box-shadow: 8px 8px 0px 0px #000;
+  transition: all 0.15s ease-out;
+  cursor: pointer;
+  position: relative;
 }
 
 /* Base utilities */
