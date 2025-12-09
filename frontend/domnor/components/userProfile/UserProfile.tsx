@@ -35,7 +35,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: activeTheme?.bg }}>
+    <div className="min-h-screen" style={{ backgroundColor: activeTheme?.bg , color: activeTheme?.text}}>
       <div className="relative w-full">
         <div className="relative w-full h-96 md:h-[500px]">
           <Image
@@ -62,11 +62,11 @@ export default function UserProfile({ data }: { data: ProfileData }) {
       </div>
 
       <div className="relative -mt-20 px-4">
-        <h1 className="text-2xl font-bold text-center">{data.displayName}</h1>
+        <h1 className="text-2xl font-bold text-center" >{data.displayName}</h1>
         <div className="flex flex-row gap-2 justify-center">
           {/* filter and map */}
           {Object.entries(data.socials)
-            .filter(([_k, v]) => v !== "")
+            .filter(([_, v]) => v !== "")
             .map(([key, url]) => (
               <a key={key} href={url} target="_blank" rel="noopener noreferrer">
                 {icons[key as SocialPlatform]}
