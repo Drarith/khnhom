@@ -75,11 +75,7 @@ const profileSchema = new Schema(
     },
     theme: {
       type: String,
-      name: "",
-      bg: "",
-      button: "",
-      text: "",
-      buttonText: "",
+      default: "classic dark",
     },
     selectedTemplate: {
       type: String,

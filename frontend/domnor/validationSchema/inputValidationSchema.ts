@@ -1,3 +1,4 @@
+import { theme } from "@cloudinary/url-gen/actions/effect";
 import { z } from "zod";
 
 const ALLOWED_SOCIAL_KEYS = new Set([
@@ -176,6 +177,7 @@ export const profileFormEditorInputSchema = z.object({
   displayName: SanitizedString(30, 3),
   bio: SanitizedString(1000),
   socials: SocialsSchema,
+  theme: SanitizedString(50),
 });
 
 export const linkFormEditorInputSchema = z.object({

@@ -1,12 +1,27 @@
 import type { ProfileData } from "@/types/profileData";
 import ThemeCard from "@/components/themeCard/ThemeCard";
 import { themes } from "@/config/theme";
+import { UseFormSetValue } from "react-hook-form";
+import { profileFormEditorInputSchema } from "@/validationSchema/inputValidationSchema";
+import { z } from "zod";
+
+type ProfileFormEditorInputValues = z.infer<typeof profileFormEditorInputSchema>;
 
 interface AppearanceTabProps {
   initialData?: ProfileData;
+  theme: string;
+  setValue: UseFormSetValue<ProfileFormEditorInputValues>;
 }
 
-export default function AppearanceTab({ initialData }: AppearanceTabProps) {
+export default function AppearanceTab({
+  initialData,
+  theme,
+  setValue,
+}: AppearanceTabProps) {
+  function onSelect(themeName: string) {
+    setValue("theme", themeName, { shouldValidate: true });
+  }
+
   return (
     <div className="p-6 space-y-6">
       <div>
@@ -16,37 +31,17 @@ export default function AppearanceTab({ initialData }: AppearanceTabProps) {
         </p>
       </div>
 
-      {/* Template Selection */}
-      <div>
-        {/* <label className="block text-sm font-medium text-primary/70 mb-3">
-          Profile Template
-        </label>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {["default", "minimal", "gradient", "dark", "modern", "classic"].map(
-            (template) => (
-              <button
-                type="button"
-                key={template}
-                className={`p-4 border-2 rounded-lg text-center transition-all ${
-                  initialData?.selectedTemplate === template
-                    ? "border-primary bg-primary/5"
-                    : "border-primary/20 hover:border-primary/30"
-                }`}
-              >
-                <div className="w-full h-24 bg-linear-to-br from-primary/10 to-primary/20 rounded mb-2"></div>
-                <span className="text-sm font-medium capitalize text-primary">
-                  {template}
-                </span>
-              </button>
-            )
-          )}
-        </div> */}
-      </div>
-
       {/* Theme Color */}
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 justify-items-center">
-        {themes.map((theme) => {
-          return <ThemeCard key={theme.name} theme={theme} />;
+        {themes.map((t) => {
+          return (
+            <ThemeCard
+              key={t.name}
+              theme={t}
+              onThemeSelect={onSelect}
+              isSelected={theme === t.name}
+            />
+          );
         })}
       </div>
 

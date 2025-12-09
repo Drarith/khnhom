@@ -43,8 +43,8 @@ export default function UserProfile({ data }: { data: ProfileData }) {
           />
         </div>
 
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-primary" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-primary to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-primary" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-primary to-transparent" />
       </div>
 
       <div className="relative -mt-20 px-4">

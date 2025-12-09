@@ -57,6 +57,7 @@ export default function ProfileEditor({
       displayName: initialData?.displayName,
       bio: initialData?.bio,
       socials: initialData?.socials || {},
+      theme: initialData?.theme || "",
     },
   });
 
@@ -138,6 +139,12 @@ export default function ProfileEditor({
     control: profileControl,
     name: "socials",
     defaultValue: {},
+  });
+
+  const theme = useWatch({
+    control: profileControl,
+    name: "theme",
+    defaultValue: "classic dark",
   });
 
   // KHQR form watches
@@ -298,7 +305,7 @@ export default function ProfileEditor({
     const requestData = Object.fromEntries(filteredData);
     paymentMutation(requestData);
   };
-
+  console.log(initialData)
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto p-4 md:p-6">
@@ -383,7 +390,11 @@ export default function ProfileEditor({
                 )}
 
                 {activeTab === "appearance" && (
-                  <AppearanceTab initialData={initialData} />
+                  <AppearanceTab
+                    initialData={initialData}
+                    theme={theme}
+                    setValue={profileSetValue}
+                  />
                 )}
 
                 {activeTab === "payment" && (
