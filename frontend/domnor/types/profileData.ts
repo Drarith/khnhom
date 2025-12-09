@@ -14,7 +14,7 @@ export interface ProfileData {
     amount?: number;
     purpose?: string;
   };
-  links: { title: string; link: string, _id:string}[];
+  links: { title: string; url: string, _id:string}[];
   theme: string;
   selectedTemplate: string;
   views: number;
