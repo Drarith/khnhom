@@ -1,4 +1,5 @@
 import { ProfileData } from "@/types/profileData";
+import { themes } from "@/config/theme";
 import Image from "next/image";
 import {
   SiTiktok,
@@ -19,19 +20,22 @@ type SocialPlatform =
   | "youtube"
   | "github";
 
-const icons: Record<SocialPlatform, React.ReactElement> = {
-  facebook: <SiFacebook color="black" />,
-  x: <SiX color="black" />,
-  instagram: <SiInstagram color="black" />,
-  tiktok: <SiTiktok color="black" />,
-  telegram: <SiTelegram color="black" />,
-  youtube: <SiYoutube color="black" />,
-  github: <SiGithub color="black" />,
-};
-
 export default function UserProfile({ data }: { data: ProfileData }) {
+  const activeTheme = themes.find((theme) => {
+    return theme.name === data.theme;
+  });
+  const icons: Record<SocialPlatform, React.ReactElement> = {
+    facebook: <SiFacebook color={activeTheme?.text} />,
+    x: <SiX color={activeTheme?.text} />,
+    instagram: <SiInstagram color={activeTheme?.text} />,
+    tiktok: <SiTiktok color={activeTheme?.text} />,
+    telegram: <SiTelegram color={activeTheme?.text} />,
+    youtube: <SiYoutube color={activeTheme?.text} />,
+    github: <SiGithub color={activeTheme?.text} />,
+  };
+
   return (
-    <div className="min-h-screen bg-primary">
+    <div className="min-h-screen" style={{ backgroundColor: activeTheme?.bg }}>
       <div className="relative w-full">
         <div className="relative w-full h-96 md:h-[500px]">
           <Image
@@ -43,8 +47,18 @@ export default function UserProfile({ data }: { data: ProfileData }) {
           />
         </div>
 
-        <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-primary" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-primary to-transparent" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(to bottom, transparent, transparent, ${activeTheme?.bg})`,
+          }}
+        />
+        <div
+          className="absolute bottom-0 left-0 right-0 h-32"
+          style={{
+            background: `linear-gradient(to top, ${activeTheme?.bg}, transparent)`,
+          }}
+        />
       </div>
 
       <div className="relative -mt-20 px-4">
