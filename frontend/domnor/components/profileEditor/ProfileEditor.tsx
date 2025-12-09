@@ -311,10 +311,6 @@ export default function ProfileEditor({
   console.log(initialData);
   return (
     <div className="min-h-screen bg-background">
-      <Button type="button" className="flex items-center gap-2 fixed bottom-0 right-4" onClick={() => setNotPreviewing(!notPreviewing)}>
-        <Eye size={18} />
-        Preview
-      </Button>
       {notPreviewing ? (
         <div className="max-w-5xl mx-auto p-4 md:p-6">
           {/* Header */}
@@ -453,6 +449,25 @@ export default function ProfileEditor({
       ) : (
         <UserProfile data={initialData!} />
       )}
+      <div className="fixed bottom-8 right-8 z-50">
+        <Button
+          type="button"
+          className="flex items-center gap-2 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 px-6 py-3 rounded-full"
+          onClick={() => setNotPreviewing(!notPreviewing)}
+        >
+          {notPreviewing ? (
+            <>
+              <Eye size={20} />
+              <span className="font-semibold">Preview Profile</span>
+            </>
+          ) : (
+            <>
+              <Palette size={20} />
+              <span className="font-semibold">Back to Editor</span>
+            </>
+          )}
+        </Button>
+      </div>
     </div>
   );
 }
