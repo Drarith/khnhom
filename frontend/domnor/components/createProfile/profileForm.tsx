@@ -134,16 +134,22 @@ export default function ProfileForm() {
             </div>
             {/* username */}
             <div className="grid gap-6 md:grid-cols-2">
-              <ProfileFormInput
-                register={register}
-                fieldId="username"
-                fieldInput="username"
-                fieldStateError={errors.username}
-                fieldWatchValue={username}
-                label={t("profileInputLabel.username")}
-                maxLength={30}
-                hasInput={hasValue(username)}
-              />
+              <div className="flex flex-col gap-1">
+                <ProfileFormInput
+                  register={register}
+                  fieldId="username"
+                  fieldInput="username"
+                  fieldStateError={errors.username}
+                  fieldWatchValue={username}
+                  label={t("profileInputLabel.username")}
+                  maxLength={30}
+                  hasInput={hasValue(username)}
+                />
+                <span className="text-primary/70 m-0 text-xs">
+                  Note: Username is public and cannot be changed.
+                </span>
+              </div>
+
               {/* display name */}
               <ProfileFormInput
                 register={register}
