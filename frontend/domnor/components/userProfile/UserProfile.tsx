@@ -65,7 +65,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
         <h1 className="text-2xl font-bold text-center" >{data.displayName}</h1>
         <div className="flex flex-row gap-2 justify-center">
           {/* filter and map */}
-          {Object.entries(data.socials)
+          {Object.entries(data?.socials)
             .filter(([_, v]) => v !== "")
             .map(([key, url]) => (
               <a key={key} href={url} target="_blank" rel="noopener noreferrer">

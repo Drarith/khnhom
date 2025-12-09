@@ -160,10 +160,7 @@ export const getProfileByUsername = async (req: Request, res: Response) => {
   const username = req.params.username;
   if (!username) return res.status(400).json({ error: "Username is required" });
   try {
-    const profile = (await Profile.findOne({ username }).populate(
-      "user",
-      "isSupporter"
-    )) as IProfile | null;
+    const profile = (await Profile.findOne({ username }).populate("links")) as IProfile | null;
     if (!profile) return res.status(404).json({ error: "Profile not found" });
     return res.status(200).json(profile);
   } catch (err) {
