@@ -235,6 +235,7 @@ export default function ProfileEditor({
       putJSON("/update-profile", values),
     onSuccess: () => {
       toast.success("Profile updated successfully!");
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       const errorMessage = getAxiosErrorMessage(error);
@@ -295,6 +296,7 @@ export default function ProfileEditor({
 
   const onSubmit = (values: ProfileFormEditorInputValues) => {
     profileMutation(values);
+    
   };
 
   const onAddLinkCLick = (values: linkFormEditorInputValues) => {
