@@ -25,6 +25,7 @@ import type { IUser } from "../model/types-for-models/userModel.types.js";
 
 import { areLinkSafe, isLinkSafe } from "../helpers/checkLinkSafety.js";
 import path from "path";
+import { reservedUsernamesSet } from "../config/reservedNames.js";
 
 export const createProfile = async (req: Request, res: Response) => {
   if (!req.user) {
@@ -73,6 +74,20 @@ export const createProfile = async (req: Request, res: Response) => {
           const msg = getErrorMessage(err);
           return res.status(400).json({ msg });
         }
+      }
+    }
+
+    if (cleanedProfileData.username) {
+      const existingProfile = await Profile.findOne({
+        username: cleanedProfileData.username,
+      });
+
+      if (reservedUsernamesSet.has(cleanedProfileData.username.toLowerCase())) {
+        return res.status(400).json({ message: "Invalid username, please choose another one." });
+      }
+
+      if (existingProfile) {
+        return res.status(400).json({ message: "Username already taken." });
       }
     }
 
@@ -161,7 +176,10 @@ export const getProfileByUsername = async (req: Request, res: Response) => {
   const username = req.params.username;
   if (!username) return res.status(400).json({ error: "Username is required" });
   try {
-    const profile = (await Profile.findOne({ username }).populate({path:"links", select:"title url"})) as IProfile | null;
+    const profile = (await Profile.findOne({ username }).populate({
+      path: "links",
+      select: "title url",
+    })) as IProfile | null;
     if (!profile) return res.status(404).json({ error: "Profile not found" });
     return res.status(200).json(profile);
   } catch (err) {
