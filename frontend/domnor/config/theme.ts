@@ -5,7 +5,7 @@ export const themes = [
     button: "#333333",
     text: "#ffffff",
     buttonText: "#ffffff",
-    tags: ["Minimal", "Professional"]
+    tags: ["Minimal", "Professional"],
   },
   {
     name: "Clean White",
@@ -14,7 +14,7 @@ export const themes = [
     text: "#1f2937",
     buttonText: "#000000",
     border: "#e5e7eb", // Special case for white themes
-    tags: ["Minimal", "Clean"]
+    tags: ["Minimal", "Clean"],
   },
   {
     name: "Neon Cyber",
@@ -22,7 +22,7 @@ export const themes = [
     button: "#00ff9d",
     text: "#00ff9d",
     buttonText: "#090014",
-    tags: ["Tech", "Bold"]
+    tags: ["Tech", "Bold"],
   },
   {
     name: "Soft Lavender",
@@ -30,7 +30,7 @@ export const themes = [
     button: "#9333ea",
     text: "#581c87",
     buttonText: "#ffffff",
-    tags: ["Pastel", "Soft"]
+    tags: ["Pastel", "Soft"],
   },
   {
     name: "Midnight Gold",
@@ -38,7 +38,7 @@ export const themes = [
     button: "#fbbf24",
     text: "#f8fafc",
     buttonText: "#451a03",
-    tags: ["Luxury", "Dark"]
+    tags: ["Luxury", "Dark"],
   },
   {
     name: "Matcha Latte",
@@ -46,7 +46,7 @@ export const themes = [
     button: "#15803d",
     text: "#14532d",
     buttonText: "#ffffff",
-    tags: ["Nature", "Fresh"]
+    tags: ["Nature", "Fresh"],
   },
   {
     name: "Deep Ocean",
@@ -54,7 +54,7 @@ export const themes = [
     button: "#60a5fa",
     text: "#eff6ff",
     buttonText: "#1e3a8a",
-    tags: ["Blue", "Calm"]
+    tags: ["Blue", "Calm"],
   },
   {
     name: "Hot Pink",
@@ -62,7 +62,7 @@ export const themes = [
     button: "#fbcfe8",
     text: "#fff1f2",
     buttonText: "#831843",
-    tags: ["Vibrant", "Fun"]
+    tags: ["Vibrant", "Fun"],
   },
   {
     name: "Slate Minimal",
@@ -70,7 +70,7 @@ export const themes = [
     button: "#94a3b8",
     text: "#f8fafc",
     buttonText: "#0f172a",
-    tags: ["Neutral", "Modern"]
+    tags: ["Neutral", "Modern"],
   },
   {
     name: "Coffee Shop",
@@ -78,7 +78,7 @@ export const themes = [
     button: "#d6d3d1",
     text: "#e7e5e4",
     buttonText: "#292524",
-    tags: ["Warm", "Cozy"]
+    tags: ["Warm", "Cozy"],
   },
   {
     name: "Vampire",
@@ -86,7 +86,7 @@ export const themes = [
     button: "#ef4444",
     text: "#fca5a5",
     buttonText: "#000000",
-    tags: ["Edgy", "Red"]
+    tags: ["Edgy", "Red"],
   },
   {
     name: "Solar Flare",
@@ -94,7 +94,7 @@ export const themes = [
     button: "#f59e0b",
     text: "#78350f",
     buttonText: "#ffffff",
-    tags: ["Bright", "Yellow"]
+    tags: ["Bright", "Yellow"],
   },
   {
     name: "Forest Rain",
@@ -102,7 +102,7 @@ export const themes = [
     button: "#a7f3d0",
     text: "#ecfdf5",
     buttonText: "#064e3b",
-    tags: ["Nature", "Dark"]
+    tags: ["Nature", "Dark"],
   },
   {
     name: "Retro Wave",
@@ -110,7 +110,7 @@ export const themes = [
     button: "#22d3ee",
     text: "#f0abfc",
     buttonText: "#164e63",
-    tags: ["Retro", "Synth"]
+    tags: ["Retro", "Synth"],
   },
   {
     name: "Cream & Charcoal",
@@ -118,7 +118,7 @@ export const themes = [
     button: "#292524",
     text: "#1c1917",
     buttonText: "#f5f5f4",
-    tags: ["Elegant", "Neutral"]
+    tags: ["Elegant", "Neutral"],
   },
   {
     name: "High Contrast",
@@ -126,7 +126,7 @@ export const themes = [
     button: "#eaff00",
     text: "#ffffff",
     buttonText: "#000000",
-    tags: ["Bold", "Accessible"]
+    tags: ["Bold", "Accessible"],
   },
   {
     name: "Royal Purple",
@@ -134,7 +134,7 @@ export const themes = [
     button: "#c4b5fd",
     text: "#f5f3ff",
     buttonText: "#4c1d95",
-    tags: ["Regal", "Purple"]
+    tags: ["Regal", "Purple"],
   },
   {
     name: "Steel Blue",
@@ -142,7 +142,7 @@ export const themes = [
     button: "#38bdf8",
     text: "#e0f2fe",
     buttonText: "#0c4a6e",
-    tags: ["Cool", "Tech"]
+    tags: ["Cool", "Tech"],
   },
   {
     name: "Sunset Orange",
@@ -150,7 +150,7 @@ export const themes = [
     button: "#f97316",
     text: "#9a3412",
     buttonText: "#ffffff",
-    tags: ["Warm", "Energy"]
+    tags: ["Warm", "Energy"],
   },
   {
     name: "Berry Smoothie",
@@ -158,6 +158,6 @@ export const themes = [
     button: "#f472b6",
     text: "#fdf2f8",
     buttonText: "#831843",
-    tags: ["Fruity", "Pink"]
-  }
+    tags: ["Fruity", "Pink"],
+  },
 ];

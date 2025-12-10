@@ -76,7 +76,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
         className="w-full min-h-screen border-4 p-6 relative bg-white/5 backdrop-blur-sm"
         style={{
           borderColor: textColor,
-          boxShadow: `8px 8px 0px 0px ${textColor}`,
+          boxShadow: `12px 12px 0px 0px ${textColor}`,
         }}
       >
         {/* Header Section */}
@@ -87,7 +87,10 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
               alt="profile picture"
               fill
               className="object-cover border-4"
-              style={{ borderColor: textColor }}
+              style={{
+                borderColor: textColor,
+                boxShadow: `8px 8px 0px 0px ${textColor}`,
+              }}
               priority
             />
           </div>
@@ -131,10 +134,10 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 border-2 transition-all hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:shadow-none"
+                className="p-2 border-2 transition-all hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:shadow-none"
                 style={{
                   borderColor: textColor,
-                  boxShadow: `4px 4px 0px 0px ${textColor}`,
+                  boxShadow: `6px 6px 0px 0px ${textColor}`,
                 }}
                 aria-label={key}
               >
@@ -157,7 +160,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
                     backgroundColor: buttonColor,
                     color: buttonTextColor,
                     borderColor: textColor,
-                    boxShadow: `6px 6px 0px 0px ${textColor}`,
+                    boxShadow: `8px 8px 0px 0px ${textColor}`,
                   }}
                 >
                   {link.title}
@@ -190,7 +193,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
             style={{
               backgroundColor: bgColor,
               borderColor: textColor,
-              boxShadow: `12px 12px 0px 0px ${textColor}`,
+              boxShadow: `16px 16px 0px 0px ${textColor}`,
             }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -241,7 +244,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
                   backgroundColor: textColor,
                   color: bgColor,
                   borderColor: textColor,
-                  boxShadow: `4px 4px 0px 0px ${textColor}`,
+                  boxShadow: `8px 8px 0px 0px ${textColor}`,
                 }}
               >
                 <span>Open</span>
