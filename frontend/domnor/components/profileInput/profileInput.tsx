@@ -29,7 +29,6 @@ export default function ProfileFormInput<T extends FieldValues>({
             {...register(fieldInput)}
             rows={4}
             maxLength={maxLength}
-            autoFocus
           />
         ) : (
           <input
@@ -38,7 +37,6 @@ export default function ProfileFormInput<T extends FieldValues>({
             id={fieldId}
             {...register(fieldInput)}
             maxLength={maxLength}
-            autoFocus
           />
         )}
         <span
