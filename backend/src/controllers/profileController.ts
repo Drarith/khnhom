@@ -24,7 +24,7 @@ import type { IProfile } from "../model/types-for-models/profileModel.types.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 
 import { areLinkSafe, isLinkSafe } from "../helpers/checkLinkSafety.js";
-import path from "path";
+import { containsBadWords } from "../utils/sanitizeUtils.js";
 import { reservedUsernamesSet } from "../config/reservedNames.js";
 
 export const createProfile = async (req: Request, res: Response) => {
@@ -168,7 +168,7 @@ export const createProfile = async (req: Request, res: Response) => {
     if ((err as Error)?.name === "ValidationError") {
       return res.status(400).json({ error: (err as Error).message });
     }
-    return res.status(500).json({ error: "Unable to create profile." + msg });
+    return res.status(500).json({ error: "Unable to create profile. Please make sure you are not using inappropriate language." });
   }
 };
 
@@ -282,8 +282,11 @@ export const updateProfile = async (req: Request, res: Response) => {
 
     const updates: Partial<profileUpdateInput> = {};
 
+    // reject displayname if contains bad words
     if (profileData.displayName !== undefined) {
+
       const safeDisplay = SanitizedString(50).parse(profileData.displayName);
+
       updates.displayName = safeDisplay;
     }
 
@@ -348,8 +351,7 @@ export const updateProfile = async (req: Request, res: Response) => {
     if ((err as Error)?.name === "ValidationError") {
       return res.status(400).json({ error: (err as Error).message });
     }
-    const msg = getErrorMessage(err);
-    return res.status(500).json({ error: "Unable to update profile. " + msg });
+    return res.status(500).json({ message: "Unable to update profile. Please make sure you are not using inappropriate language." });
   }
 };
 

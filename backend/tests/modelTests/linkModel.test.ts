@@ -56,7 +56,7 @@ describe("LinkModel", () => {
         instagram: "",
         telegram: "",
         youtube: "",
-        linkedIn: "",
+        linkedin: "",
         x: "",
         tiktok: "",
         github: "",

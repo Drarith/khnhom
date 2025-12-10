@@ -110,4 +110,49 @@ describe("sanitizeCreateProfile", () => {
  
     expect(safe).toBe("");
   });
+
+  it("should reject input with bad words in username", () => {
+    const input: any = {
+      user: "123e4567-e89b-12d3-a456-426614174000",
+      username: "badword_ass",
+      displayName: "Test User",
+    };
+
+    expect(() => sanitizeCreateProfile(input)).toThrow();
+  });
+
+  it("should reject input with bad words in displayName", () => {
+    const input: any = {
+      user: "123e4567-e89b-12d3-a456-426614174000",
+      username: "testuser",
+      displayName: "Stupid User",
+    };
+
+    expect(() => sanitizeCreateProfile(input)).toThrow();
+  });
+
+  it("should reject input with bad words in bio", () => {
+    const input: any = {
+      user: "123e4567-e89b-12d3-a456-426614174000",
+      username: "testuser",
+      displayName: "Test User",
+      bio: "This is a damn test",
+    };
+
+    expect(() => sanitizeCreateProfile(input)).toThrow();
+  });
+
+  it("should allow clean input without bad words", () => {
+    const input: any = {
+      user: "123e4567-e89b-12d3-a456-426614174000",
+      username: "testuser",
+      displayName: "Test User",
+      bio: "This is a clean test",
+    };
+
+    const result = sanitizeCreateProfile(input);
+    expect(result.username).toBe("testuser");
+    expect(result.displayName).toBe("Test User");
+    expect(result.bio).toBe("This is a clean test");
+  });
 });

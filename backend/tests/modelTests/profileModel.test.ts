@@ -57,7 +57,7 @@ describe("ProfileModel", () => {
         instagram: "",
         telegram: "",
         youtube: "",
-        linkedIn: "",
+        linkedin: "",
         x: "",
         tiktok: "",
         github: "",
@@ -109,7 +109,7 @@ describe("ProfileModel", () => {
       expect(savedProfile.bio).toBe("");
       expect(savedProfile.profilePictureUrl).toBe("");
       expect(savedProfile.paymentQrCodeUrl).toBe("");
-      expect(savedProfile.theme).toBe("default");
+      expect(savedProfile.theme).toBe("classic dark");
       expect(savedProfile.views).toBe(0);
       expect(savedProfile.socials.facebook).toBe("");
       expect(savedProfile.socials.instagram).toBe("");

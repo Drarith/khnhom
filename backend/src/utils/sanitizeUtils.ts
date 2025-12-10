@@ -6,6 +6,14 @@ import { checkUrlSafe } from "./googleSafeBrowsing.js";
 
 const filter = new Filter();
 
+export function containsBadWords(str: string): boolean {
+  try {
+    return filter.isProfane(str);
+  } catch (e) {
+    return false;
+  }
+}
+
 export function cleanBadWords(str: string): string {
   try {
     return filter.clean(str);
@@ -40,14 +48,16 @@ export function isValidHttpUrl(value: unknown): value is string {
   }
 }
 
-// Sanitized string — trims, normalizes, escapes, filters bad words, and caps length
+// Sanitized string — trims, normalizes, escapes, validates no bad words, and caps length
 export const SanitizedString = (maxLength: number) =>
   z
     .string()
     .default("")
     .transform((s) => normalizeWhitespace(s))
     .transform((s) => s.trim())
-    .transform((s) => cleanBadWords(s))
+    .refine((s) => !containsBadWords(s), {
+      message: "Input contains inappropriate language",
+    })
     .transform((s) => escapeHtml(s))
     .transform((s) => s.slice(0, maxLength));
 
@@ -100,12 +110,16 @@ export const SocialsSchema = z
       if (!ALLOWED_SOCIAL_KEYS.has(key)) continue;
       if (typeof value === "string" && value.trim() !== "") {
         const trimmed = value.trim();
-        if (SanitizedUrl().parse(trimmed)) {
-          out[key] = trimmed;
+        const sanitizedUrl = SanitizedUrl().parse(trimmed);
+        if (sanitizedUrl && sanitizedUrl.trim() !== "") {
+          out[key] = sanitizedUrl;
         } else {
-          out[key] = escapeHtml(
-            cleanBadWords(normalizeWhitespace(trimmed)).slice(0, 100)
-          );
+          // For non-URL socials, validate no bad words then escape and cap length
+          const normalized = normalizeWhitespace(trimmed);
+          if (containsBadWords(normalized)) {
+            throw new Error(`Social link for ${key} contains inappropriate language`);
+          }
+          out[key] = escapeHtml(normalized.slice(0, 100));
         }
       }
     }

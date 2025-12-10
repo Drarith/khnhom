@@ -151,6 +151,30 @@ describe("Profile Routes", () => {
         "One or more provided links URL are unsafe"
       );
     });
+
+    it("should return 400 if username is reserved", async () => {
+      const profileData = {
+        user: testUser._id.toString(),
+        username: "admin",
+        displayName: "Test User",
+      };
+
+      const token = jwt.sign(
+        {
+          id: testUser._id.toString(),
+          email: (testUser.email as string) || "test@example.com",
+        },
+        process.env.JWT_SECRET as string
+      );
+
+      const res = await supertest(app)
+        .post("/api/create-profile")
+        .set("Authorization", `Bearer ${token}`)
+        .send(profileData);
+
+      expect(res.status).toBe(400);
+      expect(res.body.message).toContain("Invalid username");
+    });
   });
 
   describe("GET /api/profile/:username", () => {
@@ -221,7 +245,7 @@ describe("Profile Routes", () => {
       const res = await supertest(app)
         .post("/api/create-link")
         .set("Authorization", `Bearer ${token}`)
-        .send(linkData);
+        .send({ link: linkData });
 
       expect(res.status).toBe(201);
       expect(res.body.message).toBe("Added successfully.");
@@ -247,7 +271,7 @@ describe("Profile Routes", () => {
       const firstRes = await supertest(app)
         .post("/api/create-link")
         .set("Authorization", `Bearer ${token}`)
-        .send({ title: "New Link", url: "https://newlink.com" });
+        .send({ link: { title: "New Link", url: "https://newlink.com" } });
 
       expect(firstRes.status).toBe(201);
       expect(firstRes.body.message).toBe("Added successfully.");
@@ -255,10 +279,45 @@ describe("Profile Routes", () => {
       const secondRes = await supertest(app)
         .post("/api/create-link")
         .set("Authorization", `Bearer ${token}`)
-        .send({ title: "New Link", url: "https://another.com" });
+        .send({ link: { title: "New Link", url: "https://another.com" } });
 
       expect(secondRes.status).toBe(500);
       expect(secondRes.body.message).toBeDefined();
+    });
+
+    it("should return 403 when links limit is reached", async () => {
+      const profileData: ProfileCreationInput = {
+        user: testUser._id.toString(),
+        username: "testuser",
+        displayName: "Test User",
+      };
+
+      const newProfile = await Profile.createProfile(profileData);
+
+      const token = jwt.sign(
+        {
+          id: testUser._id.toString(),
+          email: (testUser.email as string) || "test@example.com",
+        },
+        process.env.JWT_SECRET as string
+      );
+
+      // Create 10 links (the limit)
+      for (let i = 0; i < 10; i++) {
+        await supertest(app)
+          .post("/api/create-link")
+          .set("Authorization", `Bearer ${token}`)
+          .send({ link: { title: `Link ${i}`, url: `https://link${i}.com` } });
+      }
+
+      // Try to add 11th link
+      const res = await supertest(app)
+        .post("/api/create-link")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ link: { title: "Extra Link", url: "https://extra.com" } });
+
+      expect(res.status).toBe(403);
+      expect(res.body.message).toContain("limit");
     });
   });
 
@@ -336,7 +395,7 @@ describe("Profile Routes", () => {
       expect(res.status).toBe(400);
     });
 
-    it("should return 400 for invalid socials", async () => {
+    it("should accept valid socials with non-URL formats", async () => {
       const profileData: ProfileCreationInput = {
         user: testUser._id.toString(),
         username: "testuser",
@@ -352,15 +411,16 @@ describe("Profile Routes", () => {
         process.env.JWT_SECRET as string
       );
 
-      // const res = await supertest(app)
-      //   .put("/api/update-profile")
-      //   .set("Authorization", `Bearer ${token}`)
-      //   .send({ socials: { tiktok: "wwww.google.com" } });
+      const res = await supertest(app)
+        .put("/api/update-profile")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ socials: { telegram: "@testuser", github: "https://github.com/test" } });
 
-      // const updated = await Profile.findOne({ user: testUser._id });
-      // console.log(updated);
-
-      // expect(res.status).toBe(400);
+      expect(res.status).toBe(200);
+      
+      const updated = await Profile.findOne({ user: testUser._id });
+      expect(updated?.socials?.telegram).toBe("@testuser");
+      expect(updated?.socials?.github).toBe("https://github.com/test");
     });
 
     it("should return 401 if user is not authenticated", async () => {
