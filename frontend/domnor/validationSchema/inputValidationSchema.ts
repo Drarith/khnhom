@@ -1,4 +1,3 @@
-import { theme } from "@cloudinary/url-gen/actions/effect";
 import { z } from "zod";
 
 const ALLOWED_SOCIAL_KEYS = new Set([
@@ -67,8 +66,9 @@ export const SocialsSchema = z
       if (!ALLOWED_SOCIAL_KEYS.has(key)) continue;
       if (typeof value === "string" && value.trim() !== "") {
         const trimmed = value.trim();
-        if (SanitizedUrl().parse(trimmed)) {
-          out[key] = trimmed;
+        const sanitizedUrl = SanitizedUrl().parse(trimmed);
+        if (sanitizedUrl && sanitizedUrl.trim() !== "") {
+          out[key] = sanitizedUrl;
         } else {
           out[key] = escapeHtml(normalizeWhitespace(trimmed).slice(0, 100));
         }

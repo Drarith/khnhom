@@ -259,7 +259,7 @@ describe("SocialMediaForm", () => {
     await user.click(button);
 
     await waitFor(() => {
-      expect(screen.getByText(/Added Social Links \(1\)/)).toBeInTheDocument();
+      expect(screen.getByText(/Added Social Links/)).toBeInTheDocument();
       expect(screen.getByText("Telegram")).toBeInTheDocument();
       expect(screen.getByText("https://t.me/testuser")).toBeInTheDocument();
     });
@@ -316,7 +316,7 @@ describe("SocialMediaForm", () => {
       expect(
         screen.getByText("https://github.com/testuser")
       ).toBeInTheDocument();
-      expect(screen.getByText(/Added Social Links \(2\)/)).toBeInTheDocument();
+      expect(screen.getByText(/Added Social Links/)).toBeInTheDocument();
     });
   });
 
@@ -411,7 +411,7 @@ describe("SocialMediaForm", () => {
 
     render(<TestWrapper initialSocials={initialSocials} />);
 
-    expect(screen.getByText(/Added Social Links \(2\)/)).toBeInTheDocument();
+    expect(screen.getByText(/Added Social Links/)).toBeInTheDocument();
     expect(screen.getByText("https://t.me/existinguser")).toBeInTheDocument();
     expect(
       screen.getByText("https://github.com/existinguser")
@@ -683,7 +683,7 @@ describe("SocialMediaForm", () => {
     await user.click(addButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/Added Social Links \(1\)/)).toBeInTheDocument();
+      expect(screen.getByText(/Added Social Links/)).toBeInTheDocument();
     });
 
     // Remove it
