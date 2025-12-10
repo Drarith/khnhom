@@ -61,6 +61,7 @@ export default function ProfileEditor({
       bio: initialData?.bio,
       socials: initialData?.socials || {},
       theme: initialData?.theme || "",
+      selectedTemplate: initialData?.selectedTemplate || "default",
     },
   });
 
@@ -148,6 +149,12 @@ export default function ProfileEditor({
     control: profileControl,
     name: "theme",
     defaultValue: "classic dark",
+  });
+
+  const selectedTemplate = useWatch({
+    control: profileControl,
+    name: "selectedTemplate",
+    defaultValue: "default",
   });
 
   // KHQR form watches
@@ -395,6 +402,7 @@ export default function ProfileEditor({
                     <AppearanceTab
                       initialData={initialData}
                       theme={theme}
+                      selectedTemplate={selectedTemplate}
                       setValue={profileSetValue}
                     />
                   )}

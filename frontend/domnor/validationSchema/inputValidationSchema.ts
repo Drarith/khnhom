@@ -178,6 +178,7 @@ export const profileFormEditorInputSchema = z.object({
   bio: SanitizedString(1000),
   socials: SocialsSchema,
   theme: SanitizedString(50),
+  selectedTemplate: z.enum(["default", "brutalist"]),
 });
 
 export const linkFormEditorInputSchema = z.object({

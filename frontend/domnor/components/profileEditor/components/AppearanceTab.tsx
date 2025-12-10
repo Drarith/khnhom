@@ -1,25 +1,34 @@
 import type { ProfileData } from "@/types/profileData";
 import ThemeCard from "@/components/themeCard/ThemeCard";
 import { themes } from "@/config/theme";
+import { templates } from "@/registry/templateRegistry";
 import { UseFormSetValue } from "react-hook-form";
 import { profileFormEditorInputSchema } from "@/validationSchema/inputValidationSchema";
 import { z } from "zod";
 
-type ProfileFormEditorInputValues = z.infer<typeof profileFormEditorInputSchema>;
+type ProfileFormEditorInputValues = z.infer<
+  typeof profileFormEditorInputSchema
+>;
 
 interface AppearanceTabProps {
   initialData?: ProfileData;
   theme: string;
+  selectedTemplate: string;
   setValue: UseFormSetValue<ProfileFormEditorInputValues>;
 }
 
 export default function AppearanceTab({
   initialData,
   theme,
+  selectedTemplate,
   setValue,
 }: AppearanceTabProps) {
-  function onSelect(themeName: string) {
+  function onThemeSelect(themeName: string) {
     setValue("theme", themeName, { shouldValidate: true });
+  }
+
+  function onTemplateSelect(templateKey: string) {
+    setValue("selectedTemplate", templateKey, { shouldValidate: true });
   }
 
   return (
@@ -31,18 +40,38 @@ export default function AppearanceTab({
         </p>
       </div>
 
+      <div>
+        <h3 className="font-medium text-primary mb-4">Template</h3>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 justify-items-center text-foreground">
+          <select
+            value={selectedTemplate}
+            onChange={(e) => onTemplateSelect(e.target.value)}
+            className="w-full p-2 border border-primary/20 rounded-lg bg-background text-foreground"
+          >
+            {Object.entries(templates).map(([key, template]) => (
+              <option key={key} value={key}>
+                {template.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       {/* Theme Color */}
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 justify-items-center">
-        {themes.map((t) => {
-          return (
-            <ThemeCard
-              key={t.name}
-              theme={t}
-              onThemeSelect={onSelect}
-              isSelected={theme === t.name}
-            />
-          );
-        })}
+      <div>
+        <h3 className="font-medium text-primary mb-4">Theme Color</h3>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 justify-items-center">
+          {themes.map((t) => {
+            return (
+              <ThemeCard
+                key={t.name}
+                theme={t}
+                onThemeSelect={onThemeSelect}
+                isSelected={theme === t.name}
+              />
+            );
+          })}
+        </div>
       </div>
 
       {/* Profile Status */}

@@ -341,6 +341,13 @@ export const updateProfile = async (req: Request, res: Response) => {
       updates.theme = safeTheme;
     }
 
+    if (profileData.selectedTemplate !== undefined) {
+      const safeTemplate = SanitizedString(50).parse(
+        profileData.selectedTemplate
+      );
+      updates.selectedTemplate = safeTemplate;
+    }
+
     Object.assign(profile, updates);
     await profile.save();
 

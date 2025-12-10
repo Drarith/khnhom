@@ -67,6 +67,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
       className="min-h-screen flex justify-center"
       style={{ backgroundColor: activeTheme?.bg, color: activeTheme?.text }}
     >
+      <h1>THIS IS BRUTALIST TEMPLATE</h1>
       <div className="w-full max-w-md min-h-screen flex flex-col relative shadow-2xl md:rounded-2xl md:overflow-hidden md:mt-5">
         <div className="relative w-full h-96 shrink-0">
           <Image
