@@ -63,11 +63,8 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
   };
 
   return (
-    <div
-      className="min-h-screen flex justify-center"
-      style={{ backgroundColor: activeTheme?.bg, color: activeTheme?.text }}
-    >
-      <div className="w-full max-w-md min-h-screen flex flex-col relative shadow-2xl md:rounded-2xl md:overflow-hidden md:mt-5">
+    <>
+      <div className="w-full min-h-full flex flex-col relative shadow-2xl md:rounded-2xl md:overflow-hidden">
         <div className="relative w-full h-96 shrink-0">
           <Image
             src={data.profilePictureUrl}
@@ -210,6 +207,6 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

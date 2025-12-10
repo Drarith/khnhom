@@ -50,6 +50,7 @@ export interface profileUpdateInput {
     github?: string;
   };
   theme?: string;
+  selectedTemplate?: string;
 }
 
 // Changed: include imageUrl as optional on LinkCreationInput
