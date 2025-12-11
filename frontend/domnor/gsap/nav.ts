@@ -1,17 +1,29 @@
-import { gsap, useGSAP } from "@/utils/gsap";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const useNavAnimation = () => {
   useGSAP(() => {
-    gsap.to("#nav", {
-      scrollTrigger: {
-        trigger: document.body,
-        start: "100 top",
-        end: "150 top",
-        scrub: true,
-        markers: true,
-      },
+    const hideNavTween = gsap.to(".nav", {
+      y: -100,
       opacity: 0,
-      ease: "none",
+      duration: 0.5,
+      paused: true,
     });
-  });
+
+    ScrollTrigger.create({
+      start: "top top",
+      end: 99999,
+      onUpdate: (self) => {
+        if (self.direction === 1 && self.scroll() > 100) {
+          hideNavTween.play();
+        } else {
+          hideNavTween.reverse();
+        }
+      },
+    });
+  }, []);
 };

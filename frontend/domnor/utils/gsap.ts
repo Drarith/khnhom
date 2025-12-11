@@ -5,4 +5,4 @@ import { ScrollSmoother } from "gsap/ScrollSmoother";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
-export { gsap, useGSAP, ScrollSmoother };
+export { gsap, useGSAP, ScrollSmoother, ScrollTrigger };
