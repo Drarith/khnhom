@@ -1,29 +1,41 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+export const useNavAnimation = (isMenuOpen: boolean) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const tl = useRef<gsap.core.Timeline>(null);
 
-export const useNavAnimation = () => {
-  useGSAP(() => {
-    const hideNavTween = gsap.to(".nav", {
-      y: -100,
-      opacity: 0,
-      duration: 0.5,
-      paused: true,
-    });
+  useGSAP(
+    () => {
+      gsap.set(".nav-link", { y: 75 });
+      tl.current = gsap.timeline({ paused: true });
+      tl.current
+        .to(containerRef.current, {
+          duration: 1.25,
+          ease: "power4.inOut",
+          y: "0%",
+        })
+        .to(".nav-link", {
+          duration: 1,
+          ease: "power4.inOut",
+          clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+          stagger: 0.1,
+          delay: -0.75,
+        });
+    },
+    { scope: containerRef }
+  );
 
-    ScrollTrigger.create({
-      start: "top top",
-      end: 99999,
-      onUpdate: (self) => {
-        if (self.direction === 1 && self.scroll() > 100) {
-          hideNavTween.play();
-        } else {
-          hideNavTween.reverse();
-        }
-      },
-    });
-  }, []);
+  useEffect(() => {
+    if (tl.current) {
+      if (isMenuOpen) {
+        tl.current.play();
+      } else {
+        tl.current.reverse();
+      }
+    }
+  }, [isMenuOpen]);
+
+  return containerRef;
 };
