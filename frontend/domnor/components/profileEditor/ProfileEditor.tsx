@@ -16,7 +16,7 @@ import {
 } from "@/validationSchema/inputValidationSchema";
 import { normalizeValue } from "@/helpers/normalizeVal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { putJSON, postJSON, deleteLink } from "@/https/https";
+import { putJSON, postJSON, deleteLink, logout } from "@/https/https";
 import { toast } from "react-toastify";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 import { AxiosError } from "axios";
@@ -29,6 +29,7 @@ import AppearanceTab from "./components/AppearanceTab";
 import PaymentTab from "./components/PaymentTab";
 
 import UserProfile from "../userProfile/UserProfile";
+import { log } from "console";
 
 export default function ProfileEditor({
   initialData,
@@ -297,13 +298,21 @@ export default function ProfileEditor({
     },
   });
 
+  const { mutate: logoutMutation } = useMutation({
+    mutationFn: () => {
+      return logout();
+    },
+    onSuccess: () => {
+      window.location.href = "/";
+    },
+  });
+
   const onDelete = (id: string) => {
     linkDeleteMutation(id);
   };
 
   const onSubmit = (values: ProfileFormEditorInputValues) => {
     profileMutation(values);
-    
   };
 
   const onAddLinkCLick = (values: linkFormEditorInputValues) => {
@@ -317,22 +326,34 @@ export default function ProfileEditor({
     const requestData = Object.fromEntries(filteredData);
     paymentMutation(requestData);
   };
+
+  const onLogout = () => {
+    logoutMutation();
+  };
   console.log(initialData);
+  
   return (
     <div className="min-h-screen bg-background">
       {notPreviewing ? (
-        <div className="max-w-5xl mx-auto p-4 md:p-6">
+        <div className="max-w-5xl mx-auto p-4 md:p-6 text-primary">
           {/* Header */}
           <div className="bg-foreground rounded-lg shadow-sm p-6 mb-6 border border-primary/10">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold text-primary">
+                <h1 className="text-2xl font-bold">
                   Welcome back, {initialData?.username}
                 </h1>
                 <p className="text-sm text-primary/60 mt-1">
                   Customize your profile and manage your links
                 </p>
               </div>
+              <button
+                type="button"
+                onClick={onLogout}
+                className="bg-primary text-foreground p-3 rounded"
+              >
+                Logout
+              </button>
             </div>
           </div>
 

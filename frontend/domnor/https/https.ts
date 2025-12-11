@@ -107,3 +107,17 @@ export const uploadToCloudinary = async (url: string, formData: FormData) => {
     throw err;
   }
 };
+
+export const logout = async () => {
+  try {
+    await apiClient.post("/logout");
+  } catch (err) {
+    const axiosError = err as AxiosError;
+    console.error(`[API Error] POST /logout`, {
+      status: axiosError.response?.status,
+      message: axiosError.message,
+      errorData: axiosError.response?.data,
+    });
+    throw err;
+  }
+};

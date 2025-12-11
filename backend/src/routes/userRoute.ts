@@ -22,6 +22,6 @@ userRouter.get(
 
 userRouter.get("/api/auth/google/callback", googleCallback);
 
-userRouter.get("/api/logout", logoutUser);
+userRouter.post("/api/logout", logoutUser);
 
 export default userRouter;
