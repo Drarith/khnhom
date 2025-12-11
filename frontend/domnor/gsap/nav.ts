@@ -1,29 +1,46 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+export const useNavAnimation = (isOpen: boolean) => {
+  const navRef = useRef<HTMLDivElement>(null);
 
-export const useNavAnimation = () => {
   useGSAP(() => {
-    const hideNavTween = gsap.to(".nav", {
-      y: -100,
-      opacity: 0,
-      duration: 0.5,
-      paused: true,
+    if (!navRef.current) return;
+
+    const links = navRef.current.querySelectorAll(".nav-link");
+    const tl = gsap.timeline();
+
+    gsap.set(".nav-link", {
+      y: 75,
     });
 
-    ScrollTrigger.create({
-      start: "top top",
-      end: 99999,
-      onUpdate: (self) => {
-        if (self.direction === 1 && self.scroll() > 100) {
-          hideNavTween.play();
-        } else {
-          hideNavTween.reverse();
-        }
-      },
-    });
-  }, []);
+    if (isOpen) {
+      tl.to(navRef.current, {
+        y: 0,
+        duration: 0.8,
+        ease: "power4.inOut",
+      }).to(links, {
+        clipPath: "polygon(0 0, 100% 0, 100% 100%, 0% 100%)",
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power4.inOut",
+        delay: 0.2,
+      });
+    } else {
+      tl.to(links, {
+        clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)",
+        duration: 0.4,
+        stagger: 0.08,
+        ease: "power4.inOut",
+      }).to(navRef.current, {
+        y: "-100%",
+        duration: 0.8,
+        ease: "power4.inOut",
+        delay: 0.2,
+      });
+    }
+  }, [isOpen]);
+
+  return navRef;
 };
