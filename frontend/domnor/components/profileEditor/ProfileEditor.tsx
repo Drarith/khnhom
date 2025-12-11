@@ -29,7 +29,6 @@ import AppearanceTab from "./components/AppearanceTab";
 import PaymentTab from "./components/PaymentTab";
 
 import UserProfile from "../userProfile/UserProfile";
-import { log } from "console";
 
 export default function ProfileEditor({
   initialData,

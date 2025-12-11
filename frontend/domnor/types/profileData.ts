@@ -16,7 +16,7 @@ export interface ProfileData {
   };
   links: { title: string; url: string, _id:string}[];
   theme: string;
-  selectedTemplate: string;
+  selectedTemplate: TemplateType;
   views: number;
   isActive: boolean;
   createdAt: string;
@@ -32,3 +32,5 @@ export interface ProfileData {
     github: string;
   };
 }
+
+export type TemplateType = "default" | "brutalist";
