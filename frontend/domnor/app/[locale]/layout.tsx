@@ -8,7 +8,10 @@ import { routing } from "@/i18n/routing";
 
 import { Bounce, ToastContainer } from "react-toastify";
 
+import SmoothScrollProvider from "@/providers/SmoothScrollProivder";
+
 import ReactQueryProvider from "@/providers/reactQueryProvider";
+import Nav from "@/components/nav/Nav";
 
 import type { Props } from "@/types/rootLayout";
 
@@ -36,7 +39,8 @@ export default async function RootLayout({ children, params }: Props) {
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ReactQueryProvider>
-            {children}{" "}
+            <Nav />
+            <SmoothScrollProvider>{children}</SmoothScrollProvider>
             <ToastContainer
               position="top-right"
               autoClose={10000}
