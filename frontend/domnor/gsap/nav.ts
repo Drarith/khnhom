@@ -8,18 +8,18 @@ export const useNavAnimation = (isMenuOpen: boolean) => {
 
   useGSAP(
     () => {
-      gsap.set(".nav-link", { y: 75 });
+      gsap.set(".nav-link", { y: "100%" });
       tl.current = gsap.timeline({ paused: true });
       tl.current
         .to(containerRef.current, {
           duration: 1.25,
           ease: "power4.inOut",
-          y: "0%",
+          translateY: "0%",
         })
         .to(".nav-link", {
           duration: 1,
           ease: "power4.inOut",
-          clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+          y: "0%",
           stagger: 0.1,
           delay: -0.75,
         });
