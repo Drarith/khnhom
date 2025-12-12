@@ -331,7 +331,7 @@ export default function ProfileEditor({
     logoutMutation();
   };
 
-  const containerRef = useTabAnimation(activeTab);
+  const { containerRef, highlighterRef, tabsRef } = useTabAnimation(activeTab);
 
   return (
     <div className="min-h-screen bg-background">
@@ -367,16 +367,20 @@ export default function ProfileEditor({
                     ref={containerRef}
                     className="tabs-container relative space-y-1 md:grid md:grid-cols-1 lg:grid-cols-1 md:gap-2 flex overflow-x-auto no-scrollbar"
                   >
-                    <div className="tab-highlighter absolute top-0 left-0 z-0 bg-primary/30 rounded-4xl pointer-events-none" />
+                    <div
+                      ref={highlighterRef}
+                      className="tab-highlighter absolute top-0 left-0 z-0 bg-accent rounded-4xl pointer-events-none"
+                    />
                     {tabs.map((tab) => {
                       const Icon = tab.icon;
                       return (
                         <button
                           type="button"
                           key={tab.id}
-                          data-tab-id={tab.id}
+                          data-id={tab.id}
+                          ref={tabsRef}
                           onClick={() => setActiveTab(tab.id)}
-                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors  z-10`}
+                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors relative z-10`}
                         >
                           <Icon size={20} />
                           <span className="font-medium">{tab.label}</span>
@@ -463,7 +467,11 @@ export default function ProfileEditor({
                   {activeTab !== "links" && activeTab !== "payment" && (
                     <div className="px-6 py-4 border-t border-primary/10 bg-primary/5">
                       <div className="flex justify-end gap-3">
-                        <Button data-button="cool" type="button" variant="secondary">
+                        <Button
+                          data-button="cool"
+                          type="button"
+                          variant="secondary"
+                        >
                           Cancel
                         </Button>
                         <Button
