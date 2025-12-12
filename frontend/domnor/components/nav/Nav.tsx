@@ -19,7 +19,7 @@ export default function Nav() {
   const container = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const tl = useRef();
+  const tl = useRef<gsap.core.Timeline | null>(null);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -49,6 +49,7 @@ export default function Nav() {
   );
 
   useEffect(() => {
+    if (!tl.current) return;
     if (isMenuOpen) {
       tl.current.play();
     } else {
@@ -95,7 +96,7 @@ export default function Nav() {
             <div className="menu-info">
               <div className="menu-info-col">
                 <a href="#">X &#8599;</a>
-                <a href="#">Instagram &#8599;</a>
+                <a href="https://github.com/Drarith">Github &#8599;</a>
                 <a href="#">LinkedIn &#8599;</a>
                 <a href="#">Behance &#8599;</a>
                 <a href="#">Dribble &#8599;</a>
