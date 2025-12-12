@@ -331,7 +331,7 @@ export default function ProfileEditor({
     logoutMutation();
   };
 
-  const { containerRef, highlighterRef, tabsRef } = useTabAnimation(activeTab);
+  const { containerRef, highlighterRef } = useTabAnimation(activeTab);
 
   return (
     <div className="min-h-screen bg-background">
@@ -378,7 +378,6 @@ export default function ProfileEditor({
                           type="button"
                           key={tab.id}
                           data-id={tab.id}
-                          ref={tabsRef}
                           onClick={() => setActiveTab(tab.id)}
                           className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors relative z-10`}
                         >

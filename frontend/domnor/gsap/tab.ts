@@ -5,7 +5,6 @@ import gsap from "gsap";
 export const useTabAnimation = (activeTab: string) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const highlighterRef = useRef<HTMLDivElement>(null);
-  const tabsRef = useRef();
 
   useGSAP(
     () => {
@@ -29,5 +28,5 @@ export const useTabAnimation = (activeTab: string) => {
     { dependencies: [activeTab], scope: containerRef }
   );
 
-  return { containerRef, highlighterRef, tabsRef };
+  return { containerRef, highlighterRef };
 };
