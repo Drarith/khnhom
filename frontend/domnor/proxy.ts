@@ -4,7 +4,7 @@ import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 
 // Define routes that do NOT need protection (public routes)
-const publicRoutes = ["/"];
+const publicRoutes = ["/", "/about", "/contact", "/lab"];
 
 // Create the next-intl middleware
 const intlMiddleware = createMiddleware(routing);
