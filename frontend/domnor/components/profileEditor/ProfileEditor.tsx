@@ -29,6 +29,7 @@ import AppearanceTab from "./components/AppearanceTab";
 import PaymentTab from "./components/PaymentTab";
 
 import UserProfile from "../userProfile/UserProfile";
+import { useTabAnimation } from "@/gsap/tab";
 
 export default function ProfileEditor({
   initialData,
@@ -329,8 +330,9 @@ export default function ProfileEditor({
   const onLogout = () => {
     logoutMutation();
   };
-  console.log(initialData);
-  
+
+  const containerRef = useTabAnimation(activeTab);
+
   return (
     <div className="min-h-screen bg-background">
       {notPreviewing ? (
@@ -360,25 +362,28 @@ export default function ProfileEditor({
             {/* Sidebar Navigation */}
             <div className="lg:col-span-3">
               <div className="bg-foreground rounded-lg shadow-sm p-2 border border-primary/10 relative">
-                <nav className="space-y-1 md:grid md:grid-cols-1 lg:grid-cols-1 md:gap-2 flex overflow-x-auto no-scrollbar">
-                  {tabs.map((tab) => {
-                    const Icon = tab.icon;
-                    return (
-                      <button
-                        type="button"
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                          activeTab === tab.id
-                            ? "bg-primary/10 text-primary"
-                            : "text-primary/70 hover:bg-primary/5"
-                        }`}
-                      >
-                        <Icon size={20} />
-                        <span className="font-medium">{tab.label}</span>
-                      </button>
-                    );
-                  })}
+                <nav id="nav-tab">
+                  <div
+                    ref={containerRef}
+                    className="tabs-container relative space-y-1 md:grid md:grid-cols-1 lg:grid-cols-1 md:gap-2 flex overflow-x-auto no-scrollbar"
+                  >
+                    <div className="tab-highlighter absolute top-0 left-0 z-0 bg-primary/30 rounded-4xl pointer-events-none" />
+                    {tabs.map((tab) => {
+                      const Icon = tab.icon;
+                      return (
+                        <button
+                          type="button"
+                          key={tab.id}
+                          data-tab-id={tab.id}
+                          onClick={() => setActiveTab(tab.id)}
+                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors  z-10`}
+                        >
+                          <Icon size={20} />
+                          <span className="font-medium">{tab.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </nav>
                 {/* Fade indicator - only on mobile */}
                 <div className="absolute right-0 top-0 bottom-0 w-8 bg-linear-to-l from-foreground to-transparent pointer-events-none lg:hidden" />
@@ -458,7 +463,7 @@ export default function ProfileEditor({
                   {activeTab !== "links" && activeTab !== "payment" && (
                     <div className="px-6 py-4 border-t border-primary/10 bg-primary/5">
                       <div className="flex justify-end gap-3">
-                        <Button type="button" variant="secondary">
+                        <Button data-button="cool" type="button" variant="secondary">
                           Cancel
                         </Button>
                         <Button
