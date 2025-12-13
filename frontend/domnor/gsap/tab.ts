@@ -6,6 +6,7 @@ export const useTabAnimation = (activeTab: string) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const highlighterRef = useRef<HTMLDivElement>(null);
 
+
   useGSAP(
     () => {
       const highlighter = highlighterRef.current;
@@ -14,7 +15,7 @@ export const useTabAnimation = (activeTab: string) => {
       if (highlighter && activeElement) {
         const { offsetLeft, offsetTop, offsetWidth, offsetHeight } =
           activeElement;
-
+        
         gsap.to(highlighter, {
           x: offsetLeft,
           y: offsetTop,
@@ -23,7 +24,7 @@ export const useTabAnimation = (activeTab: string) => {
           duration: 0.5,
           ease: "elastic.out(1, 0.6)",
         });
-      }
+      } 
     },
     { dependencies: [activeTab], scope: containerRef }
   );

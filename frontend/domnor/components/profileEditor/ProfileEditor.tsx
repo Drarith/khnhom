@@ -369,7 +369,7 @@ export default function ProfileEditor({
                   >
                     <div
                       ref={highlighterRef}
-                      className="tab-highlighter absolute top-0 left-0 z-0 bg-accent rounded-4xl pointer-events-none"
+                      className="tab-highlighter absolute top-0 left-0 z-0 bg-primary rounded-4xl pointer-events-none"
                     />
                     {tabs.map((tab) => {
                       const Icon = tab.icon;
@@ -379,7 +379,9 @@ export default function ProfileEditor({
                           key={tab.id}
                           data-id={tab.id}
                           onClick={() => setActiveTab(tab.id)}
-                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors relative z-10`}
+                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors relative z-10 ${
+                            activeTab === tab.id ? "text-foreground" : ""
+                          }`}
                         >
                           <Icon size={20} />
                           <span className="font-medium">{tab.label}</span>
