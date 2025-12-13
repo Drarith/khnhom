@@ -21,7 +21,7 @@ export const useTabAnimation = (activeTab: string) => {
           y: offsetTop,
           width: offsetWidth,
           height: offsetHeight,
-          duration: 0.5,
+          duration: 0.7,
           ease: "elastic.out(1, 0.6)",
         });
       } 

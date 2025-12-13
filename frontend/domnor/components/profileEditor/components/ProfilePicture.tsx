@@ -40,7 +40,6 @@ export default function ProfilePicture({
       }
 
       const { signature, timestamp, publicId } = signatureResponse;
-
       // Prepare form data for Cloudinary
       const formData = new FormData();
       formData.append("file", imageFile);

@@ -60,11 +60,13 @@ app.use(express.json({ limit: "100kb" }));
 // User routes
 app.use(userRouter);
 
+// Cloudinary routes
+app.use(cloudinaryRouter);
+
 // Profile routes
 app.use(profileRouter);
 
-// Cloudinary routes
-app.use(cloudinaryRouter);
+
 
 
 
