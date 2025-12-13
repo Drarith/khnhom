@@ -10,7 +10,7 @@ export const useTabAnimation = (activeTab: string) => {
   useGSAP(
     () => {
       const highlighter = highlighterRef.current;
-      const activeElement = containerRef.current?.querySelector(`[data-id="${activeTab}"]`);
+      const activeElement: HTMLElement | null | undefined = containerRef.current?.querySelector(`[data-id="${activeTab}"]`);
 
       if (highlighter && activeElement) {
         const { offsetLeft, offsetTop, offsetWidth, offsetHeight } =
