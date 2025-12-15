@@ -46,5 +46,15 @@ export default function UserProfilePage() {
     );
   }
 
+  if(!data.isActive){
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p>This profile is deactivated.</p>
+        </div>
+      </div>
+    );
+  }
+
   return <UserProfile data={data} />;
 }

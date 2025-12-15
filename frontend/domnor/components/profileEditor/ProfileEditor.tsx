@@ -1,7 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, useWatch, type Resolver } from "react-hook-form";
-import { Link as LinkIcon, Palette, Eye, User, QrCode } from "lucide-react";
+import {
+  Link as LinkIcon,
+  Palette,
+  Eye,
+  User,
+  QrCode,
+  Shield,
+} from "lucide-react";
 import type { ProfileData } from "@/types/profileData";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -16,7 +23,14 @@ import {
 } from "@/validationSchema/inputValidationSchema";
 import { normalizeValue } from "@/helpers/normalizeVal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { putJSON, postJSON, deleteLink, logout } from "@/https/https";
+import {
+  putJSON,
+  postJSON,
+  deleteLink,
+  logout,
+  getJSON,
+  patchJSON,
+} from "@/https/https";
 import { toast } from "react-toastify";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 import { AxiosError } from "axios";
@@ -27,6 +41,7 @@ import SocialsTab from "./components/SocialsTab";
 import LinksTab from "./components/LinksTab";
 import AppearanceTab from "./components/AppearanceTab";
 import PaymentTab from "./components/PaymentTab";
+import AdminTab from "./components/AdminTab";
 
 import UserProfile from "../userProfile/UserProfile";
 import { useTabAnimation } from "@/gsap/tab";
@@ -37,13 +52,28 @@ export default function ProfileEditor({
   initialData?: ProfileData;
 }) {
   const [activeTab, setActiveTab] = useState<
-    "profile" | "socials" | "links" | "appearance" | "payment"
+    "profile" | "socials" | "links" | "appearance" | "payment" | "admin"
   >("profile");
 
   const [qrError, setQrError] = useState<string>("");
   const [notPreviewing, setNotPreviewing] = useState<boolean>(true);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  // const [isCheckingRole, setIsCheckingRole] = useState<boolean>(true);
+  const [isAdminProcessing, setIsAdminProcessing] = useState<boolean>(false);
 
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      try {
+        const response = await getJSON<{ role: string }>("user/role");
+        setIsAdmin(response.role === "admin");
+      } catch (error) {
+        setIsAdmin(false);
+      } 
+    };
+    checkAdminStatus();
+  }, []);
 
   const {
     register: profileRegister,
@@ -236,7 +266,10 @@ export default function ProfileEditor({
     { id: "links", label: "Links", icon: LinkIcon },
     { id: "payment", label: "Payment", icon: QrCode },
     { id: "appearance", label: "Appearance", icon: Palette },
-  ] as const;
+    ...(isAdmin
+      ? [{ id: "admin" as const, label: "Admin", icon: Shield }]
+      : []),
+  ];
 
   const { mutate: profileMutation, isPending: isProfilePending } = useMutation({
     mutationFn: (values: ProfileFormEditorInputValues) =>
@@ -329,6 +362,40 @@ export default function ProfileEditor({
 
   const onLogout = () => {
     logoutMutation();
+  };
+
+  const handleDeactivateAccount = async (username: string) => {
+    setIsAdminProcessing(true);
+    try {
+      const response = await patchJSON<
+        unknown,
+        { success: boolean; message: string }
+      >(`admin/deactivate/${username}`);
+      toast.success(response.message);
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to deactivate account";
+      toast.error(errorMessage);
+    } finally {
+      setIsAdminProcessing(false);
+    }
+  };
+
+  const handleReactivateAccount = async (username: string) => {
+    setIsAdminProcessing(true);
+    try {
+      const response = await patchJSON<
+        unknown,
+        { success: boolean; message: string }
+      >(`admin/reactivate/${username}`);
+      toast.success(response.message);
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message || "Failed to reactivate account";
+      toast.error(errorMessage);
+    } finally {
+      setIsAdminProcessing(false);
+    }
   };
 
   const { containerRef, highlighterRef } = useTabAnimation(activeTab);
@@ -464,27 +531,37 @@ export default function ProfileEditor({
                     />
                   )}
 
-                  {/* Save Button */}
-                  {activeTab !== "links" && activeTab !== "payment" && (
-                    <div className="px-6 py-4 border-t border-primary/10 bg-primary/5">
-                      <div className="flex justify-end gap-3">
-                        <Button
-                          data-button="cool"
-                          type="button"
-                          variant="secondary"
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          disabled={!profileIsValid}
-                          type="submit"
-                          isLoading={isProfilePending}
-                        >
-                          Save Changes
-                        </Button>
-                      </div>
-                    </div>
+                  {activeTab === "admin" && isAdmin && (
+                    <AdminTab
+                      onDeactivate={handleDeactivateAccount}
+                      onReactivate={handleReactivateAccount}
+                      isProcessing={isAdminProcessing}
+                    />
                   )}
+
+                  {/* Save Button */}
+                  {activeTab !== "links" &&
+                    activeTab !== "payment" &&
+                    activeTab !== "admin" && (
+                      <div className="px-6 py-4 border-t border-primary/10 bg-primary/5">
+                        <div className="flex justify-end gap-3">
+                          <Button
+                            data-button="cool"
+                            type="button"
+                            variant="secondary"
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            disabled={!profileIsValid}
+                            type="submit"
+                            isLoading={isProfilePending}
+                          >
+                            Save Changes
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                 </div>
               </form>
             </div>

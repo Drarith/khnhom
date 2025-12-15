@@ -257,12 +257,10 @@ export const createAndAddLinkToProfile = async (
         .json({ message: "Can't add link. Profile not found" });
 
     if (!profile.isActive) {
-      return res
-        .status(403)
-        .json({
-          message:
-            "This profile has been terminated. You can no longer make changes to it.",
-        });
+      return res.status(403).json({
+        message:
+          "This profile has been terminated. You can no longer make changes to it.",
+      });
     }
 
     try {
@@ -317,12 +315,10 @@ export const updateProfile = async (req: Request, res: Response) => {
         .json({ message: "Can't update profile. Profile not found" });
 
     if (!profile.isActive) {
-      return res
-        .status(403)
-        .json({
-          message:
-            "This profile has been terminated. You can no longer make changes to it.",
-        });
+      return res.status(403).json({
+        message:
+          "This profile has been terminated. You can no longer make changes to it.",
+      });
     }
 
     const updates: Partial<profileUpdateInput> = {};
@@ -429,12 +425,10 @@ export const deleteLinkFromProfile = async (req: Request, res: Response) => {
   }
 
   if (!userProfile.isActive) {
-    return res
-      .status(403)
-      .json({
-        message:
-          "This profile has been terminated. You can no longer make changes to it.",
-      });
+    return res.status(403).json({
+      message:
+        "This profile has been terminated. You can no longer make changes to it.",
+    });
   }
 
   console.log(linkId);
@@ -464,15 +458,6 @@ export const currentUserProfile = async (req: Request, res: Response) => {
       .status(400)
       .json({ message: "Something went wrong, profile not found." });
 
-  if (!req.profile.isActive) {
-    return res
-      .status(403)
-      .json({
-        message:
-          "This profile has been terminated. You can no longer make changes to it.",
-      });
-  }
-
   try {
     await req.profile.populate({
       path: "links",
@@ -480,7 +465,6 @@ export const currentUserProfile = async (req: Request, res: Response) => {
     });
 
     const currentUserProfile = req.profile;
-    console.log(currentUserProfile);
 
     return res.status(200).json({ data: currentUserProfile });
   } catch (error) {
@@ -494,12 +478,10 @@ export const updateProfilePictureUrl = async (req: Request, res: Response) => {
   }
 
   if (!req.profile.isActive) {
-    return res
-      .status(403)
-      .json({
-        message:
-          "This profile has been terminated. You can no longer make changes to it.",
-      });
+    return res.status(403).json({
+      message:
+        "This profile has been terminated. You can no longer make changes to it.",
+    });
   }
 
   console.log(req.body);
