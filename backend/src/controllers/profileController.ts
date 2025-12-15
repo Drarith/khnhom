@@ -256,6 +256,15 @@ export const createAndAddLinkToProfile = async (
         .status(404)
         .json({ message: "Can't add link. Profile not found" });
 
+    if (!profile.isActive) {
+      return res
+        .status(403)
+        .json({
+          message:
+            "This profile has been terminated. You can no longer make changes to it.",
+        });
+    }
+
     try {
       safeLink = SanitizedUrl().parse(url);
       safeTitle = SanitizedString(30).parse(title);
@@ -306,6 +315,15 @@ export const updateProfile = async (req: Request, res: Response) => {
       return res
         .status(404)
         .json({ message: "Can't update profile. Profile not found" });
+
+    if (!profile.isActive) {
+      return res
+        .status(403)
+        .json({
+          message:
+            "This profile has been terminated. You can no longer make changes to it.",
+        });
+    }
 
     const updates: Partial<profileUpdateInput> = {};
 
@@ -409,6 +427,16 @@ export const deleteLinkFromProfile = async (req: Request, res: Response) => {
   if (!userProfile) {
     return res.status(400).json({ message: "User profile not found" });
   }
+
+  if (!userProfile.isActive) {
+    return res
+      .status(403)
+      .json({
+        message:
+          "This profile has been terminated. You can no longer make changes to it.",
+      });
+  }
+
   console.log(linkId);
   const linkExists = userProfile.links.map(String).includes(linkId);
   if (!linkExists) {
@@ -436,6 +464,15 @@ export const currentUserProfile = async (req: Request, res: Response) => {
       .status(400)
       .json({ message: "Something went wrong, profile not found." });
 
+  if (!req.profile.isActive) {
+    return res
+      .status(403)
+      .json({
+        message:
+          "This profile has been terminated. You can no longer make changes to it.",
+      });
+  }
+
   try {
     await req.profile.populate({
       path: "links",
@@ -455,6 +492,16 @@ export const updateProfilePictureUrl = async (req: Request, res: Response) => {
   if (!req.user && !req.profile) {
     return res.status(401).json({ error: "Unauthorized" });
   }
+
+  if (!req.profile.isActive) {
+    return res
+      .status(403)
+      .json({
+        message:
+          "This profile has been terminated. You can no longer make changes to it.",
+      });
+  }
+
   console.log(req.body);
   const { profilePictureUrl } = req.body;
   if (!profilePictureUrl) {
