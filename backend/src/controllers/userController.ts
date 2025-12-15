@@ -162,3 +162,101 @@ export const logoutUser = (_req: Request, res: Response) => {
       message: "Logged out. Cookie cleared.",
     });
 };
+
+export const deactivateAccountByUsername = async (
+  req: Request,
+  res: Response
+) => {
+  const { username } = req.params;
+
+  if (!username) {
+    return res.status(400).json({ message: "Username is required" });
+  }
+
+  try {
+    const profile = await Profile.findOne({ username });
+
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    if (!profile.isActive) {
+      return res
+        .status(400)
+        .json({ message: "This profile is already deactivated" });
+    }
+
+    profile.isActive = false;
+    await profile.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Profile ${username} has been deactivated successfully`,
+    });
+  } catch (error) {
+    console.error("Error deactivating account:", error);
+    return res.status(500).json({
+      message: "Unable to deactivate account",
+      error: error,
+    });
+  }
+};
+
+export const reactivateAccountByUsername = async (
+  req: Request,
+  res: Response
+) => {
+  const { username } = req.params;
+
+  if (!username) {
+    return res.status(400).json({ message: "Username is required" });
+  }
+
+  try {
+    const profile = await Profile.findOne({ username });
+
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    if (profile.isActive) {
+      return res
+        .status(400)
+        .json({ message: "This profile is already active" });
+    }
+
+    profile.isActive = true;
+    await profile.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Profile ${username} has been reactivated successfully`,
+    });
+  } catch (error) {
+    console.error("Error reactivating account:", error);
+    return res.status(500).json({
+      message: "Unable to reactivate account",
+      error: error,
+    });
+  }
+};
+
+export const getUserRole = async (req: Request, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const userId = (req.user as IUser).id;
+    const userRole = await UserRole.findOne({ user: userId });
+
+    if (!userRole) {
+      return res.status(404).json({ message: "Role not found" });
+    }
+
+    return res.status(200).json({ role: userRole.role });
+  } catch (error) {
+    console.error("Error fetching user role:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
