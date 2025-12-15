@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import type { IUser, IUserModel } from "./types-for-models/userModel.types.js";
+import UserRole from "./roleModel.js";
 
 const { Schema } = mongoose;
 
@@ -96,7 +97,8 @@ userSchema.statics.findOrCreate = async function (profile) {
     let user = await this.findOne({ googleId: profile.id });
     if (!user) {
       user = new this({ googleId: profile.id, email: profile.emails[0].value });
-      await user.save();
+      await user.save(); // Save user FIRST
+      await UserRole.createUserRole({ user: user._id }); // Then create role
     }
     return user;
   } catch (error) {

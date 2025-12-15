@@ -43,6 +43,7 @@ export interface IProfile extends Document {
   views: number;
   createdAt: Date;
   updatedAt: Date;
+  isActive: boolean;
 
   // Instance methods
   incrementViews(): Promise<void>;

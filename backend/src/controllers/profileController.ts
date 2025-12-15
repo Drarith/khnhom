@@ -26,6 +26,7 @@ import type { IUser } from "../model/types-for-models/userModel.types.js";
 import { areLinkSafe, isLinkSafe } from "../helpers/checkLinkSafety.js";
 import { containsBadWords } from "../utils/sanitizeUtils.js";
 import { reservedUsernamesSet } from "../config/reservedNames.js";
+import { profileEnd } from "console";
 
 export const createProfile = async (req: Request, res: Response) => {
   if (!req.user) {
@@ -170,24 +171,34 @@ export const createProfile = async (req: Request, res: Response) => {
     if ((err as Error)?.name === "ValidationError") {
       return res.status(400).json({ error: (err as Error).message });
     }
-    return res
-      .status(500)
-      .json({
-        error:
-          "Unable to create profile. Please make sure you are not using inappropriate language.",
-      });
+    return res.status(500).json({
+      error:
+        "Unable to create profile. Please make sure you are not using inappropriate language.",
+    });
   }
 };
 
 export const getProfileByUsername = async (req: Request, res: Response) => {
   const username = req.params.username;
   if (!username) return res.status(400).json({ error: "Username is required" });
+  const profile: IProfile | null = await Profile.findOne({
+    username: username,
+  });
+
+  if (!profile || !profile.isActive)
+    return res
+      .status(403)
+      .json({ message: "This profile has been terminated." });
+
   try {
     const profile = (await Profile.findOne({ username }).populate({
       path: "links",
       select: "title url",
     })) as IProfile | null;
-    if (!profile) return res.status(404).json({ error: "Can't get profile. Profile not found" });
+    if (!profile)
+      return res
+        .status(404)
+        .json({ error: "Can't get profile. Profile not found" });
     return res.status(200).json(profile);
   } catch (err) {
     return res.status(500).json({ message: "Server error", error: err });
@@ -199,7 +210,10 @@ export const getProfileLinks = async (req: Request, res: Response) => {
   if (!username) return res.status(400).json({ error: "Username is required" });
   try {
     const profile = (await Profile.findOne({ username })) as IProfile | null;
-    if (!profile) return res.status(404).json({ error: "Can't get links. Profile not found" });
+    if (!profile)
+      return res
+        .status(404)
+        .json({ error: "Can't get links. Profile not found" });
     const links = await Link.findByProfile(profile._id.toString());
     return res.status(200).json(links);
   } catch (err) {
@@ -237,7 +251,10 @@ export const createAndAddLinkToProfile = async (
     if (!userId) return res.status(400).json({ message: "User id not found!" });
 
     const profile = req.profile as IProfile | null;
-    if (!profile) return res.status(404).json({ message: "Can't add link. Profile not found" });
+    if (!profile)
+      return res
+        .status(404)
+        .json({ message: "Can't add link. Profile not found" });
 
     try {
       safeLink = SanitizedUrl().parse(url);
@@ -286,7 +303,9 @@ export const updateProfile = async (req: Request, res: Response) => {
   try {
     const profile = req.profile as IProfile | null;
     if (!profile)
-      return res.status(404).json({ message: "Can't update profile. Profile not found" });
+      return res
+        .status(404)
+        .json({ message: "Can't update profile. Profile not found" });
 
     const updates: Partial<profileUpdateInput> = {};
 
@@ -365,12 +384,10 @@ export const updateProfile = async (req: Request, res: Response) => {
     if ((err as Error)?.name === "ValidationError") {
       return res.status(400).json({ error: (err as Error).message });
     }
-    return res
-      .status(500)
-      .json({
-        message:
-          "Unable to update profile. Please make sure you are not using inappropriate language.",
-      });
+    return res.status(500).json({
+      message:
+        "Unable to update profile. Please make sure you are not using inappropriate language.",
+    });
   }
 };
 

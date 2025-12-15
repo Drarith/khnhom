@@ -2,7 +2,6 @@ import type { Request, Response, NextFunction } from "express";
 import passport from "passport";
 import jwt from "jsonwebtoken";
 import User from "../model/userModel.js";
-import UserRole from "../model/roleModel.js";
 
 import { sendAuthHttpOnlyCookie } from "../helpers/httpOnlyCookie.js";
 
@@ -10,6 +9,7 @@ import type { IUser } from "../model/types-for-models/userModel.types.js";
 
 import { env } from "../config/myEnv.js";
 import Profile from "../model/profileModel.js";
+import UserRole from "../model/roleModel.js";
 
 const JWT_SECRET = env.JWT_SECRET;
 const secureCookie = env.NODE_ENV === "production";
@@ -114,6 +114,14 @@ export const googleCallback = (
           expiresIn: "1d",
         });
 
+        // const doesRoleExist = await UserRole.findOne({ user: user._id });
+        // if (!doesRoleExist) {
+        //   try {
+        //     await UserRole.createUserRole({ user: user._id });
+        //   } catch (err) {
+        //     throw err;
+        //   }
+        // }
 
         const existingProfile = await Profile.findOne({ user: user._id });
 
@@ -131,7 +139,7 @@ export const googleCallback = (
         });
       } catch (dbErr) {
         console.error("Profile lookup failed:", dbErr);
-       
+
         return res.status(200).json({
           message:
             "Authenticated, but profile check failed. Please refresh or try again.",

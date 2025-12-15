@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 
 import type { ProfileData } from "@/types/profileData";
 import ProfileEditor from "@/components/profileEditor/ProfileEditor";
+import { redirect } from "next/navigation";
 
 export default function Dashboard() {
   const { isPending, error, data } = useQuery<{ data: ProfileData }>({
@@ -16,6 +17,7 @@ export default function Dashboard() {
 
   if (error) {
     toast.error(error.message);
+    redirect("/")
   }
 
   if (isPending) {
