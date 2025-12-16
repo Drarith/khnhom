@@ -181,24 +181,27 @@ export const createProfile = async (req: Request, res: Response) => {
 export const getProfileByUsername = async (req: Request, res: Response) => {
   const username = req.params.username;
   if (!username) return res.status(400).json({ error: "Username is required" });
-  const profile: IProfile | null = await Profile.findOne({
-    username: username,
-  });
-
-  if (!profile || !profile.isActive)
-    return res
-      .status(403)
-      .json({ message: "This profile has been terminated." });
 
   try {
-    const profile = (await Profile.findOne({ username }).populate({
+    const profile = (await Profile.findOne({
+      username: username.toLowerCase(),
+    }).populate({
       path: "links",
       select: "title url",
     })) as IProfile | null;
-    if (!profile)
+
+    if (!profile) {
       return res
         .status(404)
-        .json({ error: "Can't get profile. Profile not found" });
+        .json({ message: "Can't get profile. Profile not found" });
+    }
+
+    if (!profile.isActive) {
+      return res
+        .status(403)
+        .json({ message: "This profile has been terminated." });
+    }
+
     return res.status(200).json(profile);
   } catch (err) {
     return res.status(500).json({ message: "Server error", error: err });
