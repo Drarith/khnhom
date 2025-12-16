@@ -1,10 +1,12 @@
 import { ProfileData } from "@/types/profileData";
 import { templates } from "@/registry/templateRegistry";
 import { themes } from "@/config/theme";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { QrCode, Share2, X, Copy, Check } from "lucide-react";
 import { toast } from "react-toastify";
 import Image from "next/image";
+
+const DOMAIN = process.env.NEXT_PUBLIC_FRONTEND_URL;
 
 export default function UserProfile({ data }: { data: ProfileData }) {
   // Get the template based on selectedTemplate field
@@ -17,13 +19,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
   const [showQrModal, setShowQrModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [pageUrl, setPageUrl] = useState("");
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setPageUrl(window.location.href);
-    }
-  }, []);
+  const pageUrl = `${DOMAIN}/${data.username}`;
 
   const copyToClipboard = async () => {
     try {

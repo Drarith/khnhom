@@ -7,10 +7,10 @@ import { ProfileData } from "@/types/profileData";
 import UserProfile from "@/components/userProfile/UserProfile";
 
 export default function UserProfilePage() {
-  const { locale, userProfile } = useParams();
+  const { userProfile } = useParams();
   const { data, error, isLoading } = useQuery<ProfileData>({
     queryKey: ["userProfile", userProfile],
-    queryFn: () => getJSON(`/${userProfile}`),
+    queryFn: () => getJSON(`/${userProfile?.toString().toLocaleLowerCase()}`),
   });
 
   console.log("data for profile", data);
@@ -46,7 +46,7 @@ export default function UserProfilePage() {
     );
   }
 
-  if(!data.isActive){
+  if (!data.isActive) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">

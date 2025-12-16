@@ -52,7 +52,7 @@ export const createProfile = async (req: Request, res: Response) => {
 
   const profileData: ProfileCreationInput = {
     user: userId.toString(),
-    username: username || "",
+    username: username?.toLocaleLowerCase() || "",
     displayName: displayName || "",
     bio: bio || "",
     profilePictureUrl: profilePictureUrl || "",

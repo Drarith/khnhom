@@ -114,15 +114,6 @@ export const googleCallback = (
           expiresIn: "1d",
         });
 
-        // const doesRoleExist = await UserRole.findOne({ user: user._id });
-        // if (!doesRoleExist) {
-        //   try {
-        //     await UserRole.createUserRole({ user: user._id });
-        //   } catch (err) {
-        //     throw err;
-        //   }
-        // }
-
         const existingProfile = await Profile.findOne({ user: user._id });
 
         const base = process.env.FRONTEND_URL;
