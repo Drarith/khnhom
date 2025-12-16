@@ -46,20 +46,26 @@ import AdminTab from "./components/AdminTab";
 import UserProfile from "../userProfile/UserProfile";
 import { useTabAnimation } from "@/gsap/tab";
 
+enum Tab {
+  PROFILE = "profile",
+  SOCIALS = "socials",
+  LINKS = "links",
+  APPEARANCE = "appearance",
+  PAYMENT = "payment",
+  ADMIN = "admin",
+}
+
 export default function ProfileEditor({
   initialData,
 }: {
   initialData?: ProfileData;
 }) {
-  const [activeTab, setActiveTab] = useState<
-    "profile" | "socials" | "links" | "appearance" | "payment" | "admin"
-  >("profile");
+
+  const [activeTab, setActiveTab] = useState<Tab>(Tab.PROFILE);
 
   const [qrError, setQrError] = useState<string>("");
   const [notPreviewing, setNotPreviewing] = useState<boolean>(true);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  // const [isCheckingRole, setIsCheckingRole] = useState<boolean>(true);
-  const [isAdminProcessing, setIsAdminProcessing] = useState<boolean>(false);
 
   const queryClient = useQueryClient();
 
@@ -70,7 +76,7 @@ export default function ProfileEditor({
         setIsAdmin(response.role === "admin");
       } catch (error) {
         setIsAdmin(false);
-      } 
+      }
     };
     checkAdminStatus();
   }, []);
@@ -261,13 +267,13 @@ export default function ProfileEditor({
   });
 
   const tabs = [
-    { id: "profile", label: "Profile", icon: User },
-    { id: "socials", label: "Socials", icon: LinkIcon },
-    { id: "links", label: "Links", icon: LinkIcon },
-    { id: "payment", label: "Payment", icon: QrCode },
-    { id: "appearance", label: "Appearance", icon: Palette },
+    { id: Tab.PROFILE, label: "Profile", icon: User },
+    { id: Tab.SOCIALS, label: "Socials", icon: LinkIcon },
+    { id: Tab.LINKS, label: "Links", icon: LinkIcon },
+    { id: Tab.PAYMENT, label: "Payment", icon: QrCode },
+    { id: Tab.APPEARANCE, label: "Appearance", icon: Palette },
     ...(isAdmin
-      ? [{ id: "admin" as const, label: "Admin", icon: Shield }]
+      ? [{ id: Tab.ADMIN, label: "Admin", icon: Shield }]
       : []),
   ];
 
@@ -340,6 +346,36 @@ export default function ProfileEditor({
     },
   });
 
+  const { mutate: deactivateAccountMutation, isPending: isDeactivating } =
+    useMutation({
+      mutationFn: (username: string) =>
+        patchJSON<unknown, { success: boolean; message: string }>(
+          `admin/deactivate/${username}`
+        ),
+      onSuccess: (response) => {
+        toast.success(response.message);
+      },
+      onError: (error: AxiosError<{ message?: string }>) => {
+        const errorMessage = getAxiosErrorMessage(error);
+        toast.error(errorMessage || "Failed to deactivate account");
+      },
+    });
+
+  const { mutate: reactivateAccountMutation, isPending: isReactivating } =
+    useMutation({
+      mutationFn: (username: string) =>
+        patchJSON<unknown, { success: boolean; message: string }>(
+          `admin/reactivate/${username}`
+        ),
+      onSuccess: (response) => {
+        toast.success(response.message);
+      },
+      onError: (error: AxiosError<{ message?: string }>) => {
+        const errorMessage = getAxiosErrorMessage(error);
+        toast.error(errorMessage || "Failed to reactivate account");
+      },
+    });
+
   const onDelete = (id: string) => {
     linkDeleteMutation(id);
   };
@@ -364,38 +400,12 @@ export default function ProfileEditor({
     logoutMutation();
   };
 
-  const handleDeactivateAccount = async (username: string) => {
-    setIsAdminProcessing(true);
-    try {
-      const response = await patchJSON<
-        unknown,
-        { success: boolean; message: string }
-      >(`admin/deactivate/${username}`);
-      toast.success(response.message);
-    } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to deactivate account";
-      toast.error(errorMessage);
-    } finally {
-      setIsAdminProcessing(false);
-    }
+  const handleDeactivateAccount = (username: string) => {
+    deactivateAccountMutation(username);
   };
 
-  const handleReactivateAccount = async (username: string) => {
-    setIsAdminProcessing(true);
-    try {
-      const response = await patchJSON<
-        unknown,
-        { success: boolean; message: string }
-      >(`admin/reactivate/${username}`);
-      toast.success(response.message);
-    } catch (error: any) {
-      const errorMessage =
-        error?.response?.data?.message || "Failed to reactivate account";
-      toast.error(errorMessage);
-    } finally {
-      setIsAdminProcessing(false);
-    }
+  const handleReactivateAccount = (username: string) => {
+    reactivateAccountMutation(username);
   };
 
   const { containerRef, highlighterRef } = useTabAnimation(activeTab);
@@ -535,7 +545,7 @@ export default function ProfileEditor({
                     <AdminTab
                       onDeactivate={handleDeactivateAccount}
                       onReactivate={handleReactivateAccount}
-                      isProcessing={isAdminProcessing}
+                      isProcessing={isDeactivating || isReactivating}
                     />
                   )}
 
