@@ -15,7 +15,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
       className="min-h-screen flex justify-center overflow-x-hidden"
       style={{ backgroundColor: activeTheme?.bg, color: activeTheme?.text }}
     >
-      <div className="w-full max-w-md h-full min-h-screen md:py-10">
+      <div className="w-full max-w-lg h-full min-h-screen md:py-10">
         <TemplateComponent data={data} />
       </div>
     </div>

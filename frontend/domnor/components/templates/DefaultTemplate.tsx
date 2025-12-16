@@ -13,6 +13,7 @@ import {
   SiGithub,
   SiFacebook,
 } from "@icons-pack/react-simple-icons";
+import Footer from "../userProfile/Footer";
 
 type SocialPlatform =
   | "facebook"
@@ -64,7 +65,7 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
 
   return (
     <>
-      <div className="w-full min-h-full flex flex-col relative shadow-2xl md:rounded-2xl md:overflow-hidden">
+      <div className="w-full min-h-screen flex flex-col relative shadow-2xl md:rounded-2xl md:overflow-hidden">
         <div className="relative w-full h-96 shrink-0">
           <Image
             src={data.profilePictureUrl}
@@ -88,7 +89,7 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
           />
         </div>
 
-        <div className="relative -mt-20 px-4 pb-12 grow flex flex-col items-center w-full space-y-8 z-10">
+        <div className="relative -mt-20 px-4 pb-12 flex-1 flex flex-col items-center w-full space-y-8 z-10">
           <div className="text-center space-y-3">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight drop-shadow-sm">
               {data.displayName}
@@ -146,6 +147,9 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
               ))}
             </div>
           )}
+          <div className="mt-auto">
+            <Footer theme={activeTheme} username={data.username} />
+          </div>
         </div>
       </div>
       {shareModal.isOpen && (

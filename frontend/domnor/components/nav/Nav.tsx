@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect, use } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -12,14 +13,15 @@ export default function Nav() {
   const container = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { locale } = useParams();
+  const pathname = usePathname();
 
   const menuLinks = [
     { path: `/${locale}`, label: "Home" },
-    { path: `/${locale}/work`, label: "Work" },
     { path: `/${locale}/about`, label: "About" },
     { path: `/${locale}/contact`, label: "Contact" },
-    { path: `/${locale}/lab`, label: "Lab" },
   ];
+
+  const isControlledPath = menuLinks.some((link) => link.path === pathname);
 
   const tl = useRef<gsap.core.Timeline | null>(null);
 
@@ -59,7 +61,7 @@ export default function Nav() {
     }
   }, [isMenuOpen]);
 
-  return (
+  return isControlledPath ? (
     <div className="menu-container" ref={container}>
       <div className="menu-bar">
         <div className="menu-logo">
@@ -115,5 +117,7 @@ export default function Nav() {
         </div>
       </div>
     </div>
+  ) : (
+    <div></div>
   );
 }

@@ -13,6 +13,7 @@ import {
   SiGithub,
   SiFacebook,
 } from "@icons-pack/react-simple-icons";
+import Footer from "../userProfile/Footer";
 
 type SocialPlatform =
   | "facebook"
@@ -70,10 +71,10 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
   };
 
   return (
-    <div className="font-mono w-full h-full md:p-0">
+    <div className="font-mono w-full min-h-screen md:p-0 flex flex-col">
       {/* Main Card */}
       <div
-        className="w-full min-h-screen border-4 p-6 relative bg-white/5 backdrop-blur-sm"
+        className="w-full min-h-screen border-4 p-6 relative bg-white/5 backdrop-blur-sm flex flex-col"
         style={{
           borderColor: textColor,
           boxShadow: `12px 12px 0px 0px ${textColor}`,
@@ -148,7 +149,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
 
         {/* Links */}
         {data.links && data.links.length > 0 && (
-          <div className="w-full space-y-5">
+          <div className="w-full space-y-5 flex-1">
             {data.links.map((link) => (
               <div key={link._id} className="relative group">
                 <a
@@ -180,6 +181,12 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
             ))}
           </div>
         )}
+        <div className="mt-auto">
+          <Footer
+            theme={{ bg: bgColor, text: textColor }}
+            username={data.username}
+          />
+        </div>
       </div>
 
       {/* Share Modal - Brutalist Style */}
