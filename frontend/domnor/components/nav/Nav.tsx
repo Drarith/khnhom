@@ -1,23 +1,25 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, use } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import "./nav.css";
 
-const menuLinks = [
-  { path: "/", label: "Home" },
-  { path: "/work", label: "Work" },
-  { path: "/about", label: "About" },
-  { path: "/contact", label: "Contact" },
-  { path: "/lab", label: "Lab" },
-];
-
 export default function Nav() {
   const container = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { locale } = useParams();
+
+  const menuLinks = [
+    { path: `/${locale}`, label: "Home" },
+    { path: `/${locale}/work`, label: "Work" },
+    { path: `/${locale}/about`, label: "About" },
+    { path: `/${locale}/contact`, label: "Contact" },
+    { path: `/${locale}/lab`, label: "Lab" },
+  ];
 
   const tl = useRef<gsap.core.Timeline | null>(null);
 
