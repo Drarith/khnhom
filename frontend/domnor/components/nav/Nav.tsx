@@ -106,8 +106,8 @@ export default function Nav() {
                 <a href="#">Dribble &#8599;</a>
               </div>
               <div className="menu-info-col">
-                <p>info@innova code.com</p>
-                <p>2342 232 343</p>
+                <p>sarindararith@gmail.com</p>
+                <p>070 35 70 71</p>
               </div>
             </div>
           </div>

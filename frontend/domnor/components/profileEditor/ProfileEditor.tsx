@@ -45,8 +45,10 @@ import AdminTab from "./components/AdminTab";
 
 import UserProfile from "../userProfile/UserProfile";
 import { useTabAnimation } from "@/gsap/tab";
+import { setTimeout } from "timers";
+import { set } from "zod";
 
-enum Tab {
+export enum Tab {
   PROFILE = "profile",
   SOCIALS = "socials",
   LINKS = "links",
@@ -60,7 +62,6 @@ export default function ProfileEditor({
 }: {
   initialData?: ProfileData;
 }) {
-
   const [activeTab, setActiveTab] = useState<Tab>(Tab.PROFILE);
 
   const [qrError, setQrError] = useState<string>("");
@@ -272,9 +273,7 @@ export default function ProfileEditor({
     { id: Tab.LINKS, label: "Links", icon: LinkIcon },
     { id: Tab.PAYMENT, label: "Payment", icon: QrCode },
     { id: Tab.APPEARANCE, label: "Appearance", icon: Palette },
-    ...(isAdmin
-      ? [{ id: Tab.ADMIN, label: "Admin", icon: Shield }]
-      : []),
+    ...(isAdmin ? [{ id: Tab.ADMIN, label: "Admin", icon: Shield }] : []),
   ];
 
   const { mutate: profileMutation, isPending: isProfilePending } = useMutation({
@@ -408,7 +407,14 @@ export default function ProfileEditor({
     reactivateAccountMutation(username);
   };
 
-  const { containerRef, highlighterRef } = useTabAnimation(activeTab);
+  const handlePreviewToggle = () => {
+    setNotPreviewing(!notPreviewing);
+  };
+
+  const { containerRef, highlighterRef } = useTabAnimation(activeTab, [
+    notPreviewing,
+    isAdmin,
+  ]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -584,7 +590,7 @@ export default function ProfileEditor({
         <Button
           type="button"
           className="flex items-center gap-2 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 px-6 py-3 rounded-full"
-          onClick={() => setNotPreviewing(!notPreviewing)}
+          onClick={handlePreviewToggle}
         >
           {notPreviewing ? (
             <>
