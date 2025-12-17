@@ -131,6 +131,7 @@ export const createProfileFormInputSchema = (
     ),
     socials: SocialsSchema,
     link: SanitizedUrl(t("validation.invalidUrl")),
+    theme: SanitizedString(50),
   });
 };
 

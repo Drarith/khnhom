@@ -22,6 +22,8 @@ import { useRouter } from "next/navigation";
 
 import { normalizeValue } from "@/helpers/normalizeVal";
 
+const DEFAULTTHEME = "Classic Dark";
+
 export default function ProfileForm() {
   const router = useRouter();
 
@@ -49,6 +51,7 @@ export default function ProfileForm() {
       bio: "",
       socials: {},
       link: "",
+      theme: DEFAULTTHEME,
     },
   });
 
