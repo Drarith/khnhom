@@ -33,10 +33,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
   };
 
   return (
-    <div
-      className="min-h-screen flex justify-center overflow-x-hidden relative"
-      style={{ backgroundColor: activeTheme?.bg, color: activeTheme?.text }}
-    >
+    <div className="min-h-screen flex justify-center overflow-x-hidden relative">
       <div className="w-full max-w-lg h-full min-h-screen md:py-10 relative">
         {/* Universal Buttons */}
         <div className="absolute top-4 md:top-15 left-4 z-40">
@@ -74,8 +71,12 @@ export default function UserProfile({ data }: { data: ProfileData }) {
             <Share2 size={20} />
           </button>
         </div>
-
-        <TemplateComponent data={data} />
+        <div
+          className="rounded-2xl"
+          style={{ backgroundColor: activeTheme?.bg, color: activeTheme?.text }}
+        >
+          <TemplateComponent data={data} />
+        </div>
       </div>
 
       {/* QR Modal */}
