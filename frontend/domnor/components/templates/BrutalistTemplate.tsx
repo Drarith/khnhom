@@ -14,6 +14,7 @@ import {
   SiFacebook,
 } from "@icons-pack/react-simple-icons";
 import Footer from "../userProfile/Footer";
+import { backgroundImages } from "@/config/background";
 
 type SocialPlatform =
   | "facebook"
@@ -34,6 +35,11 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
   const textColor = activeTheme?.text || "#000000";
   const buttonColor = activeTheme?.button || "#000000";
   const buttonTextColor = activeTheme?.buttonText || "#ffffff";
+  const backgroundImage = backgroundImages.find(
+    (bg) => bg.name === data.backgroundImage
+  )?.url;
+
+  const haveBackgroundImage = Boolean(backgroundImage);
 
   const icons: Record<SocialPlatform, React.ReactElement> = {
     facebook: <SiFacebook className="w-6 h-6" color={textColor} />,
@@ -71,10 +77,10 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
   };
 
   return (
-    <div className="font-mono w-full min-h-screen md:p-0 flex flex-col">
+    <div className="font-mono w-full min-h-screen md:p-0 flex flex-col" style={backgroundImage ? { backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}>
       {/* Main Card */}
       <div
-        className="w-full min-h-screen border-4 p-6 relative bg-white/5 backdrop-blur-sm flex flex-col"
+        className="w-full min-h-screen border-4 p-6 relative bg-white/5 flex flex-col"
         style={{
           borderColor: textColor,
           boxShadow: `12px 12px 0px 0px ${textColor}`,
@@ -198,7 +204,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
           <div
             className="w-full max-w-sm p-6 border-4 relative"
             style={{
-              backgroundColor: bgColor,
+              background: haveBackgroundImage ? `url(${backgroundImage})` : bgColor,
               borderColor: textColor,
               boxShadow: `16px 16px 0px 0px ${textColor}`,
             }}
