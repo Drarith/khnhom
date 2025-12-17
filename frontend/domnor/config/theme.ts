@@ -25,28 +25,12 @@ export const themes = [
     tags: ["Tech", "Bold"],
   },
   {
-    name: "Soft Lavender",
-    bg: "#e9d5ff",
-    button: "#9333ea",
-    text: "#581c87",
-    buttonText: "#ffffff",
-    tags: ["Pastel", "Soft"],
-  },
-  {
     name: "Midnight Gold",
     bg: "#0f172a",
     button: "#fbbf24",
     text: "#f8fafc",
     buttonText: "#451a03",
     tags: ["Luxury", "Dark"],
-  },
-  {
-    name: "Matcha Latte",
-    bg: "#dcfce7",
-    button: "#15803d",
-    text: "#14532d",
-    buttonText: "#ffffff",
-    tags: ["Nature", "Fresh"],
   },
   {
     name: "Deep Ocean",
@@ -95,14 +79,6 @@ export const themes = [
     text: "#78350f",
     buttonText: "#ffffff",
     tags: ["Bright", "Yellow"],
-  },
-  {
-    name: "Forest Rain",
-    bg: "#064e3b",
-    button: "#a7f3d0",
-    text: "#ecfdf5",
-    buttonText: "#064e3b",
-    tags: ["Nature", "Dark"],
   },
   {
     name: "Retro Wave",
