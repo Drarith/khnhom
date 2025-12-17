@@ -51,6 +51,7 @@ export interface profileUpdateInput {
   };
   theme?: string;
   selectedTemplate?: string;
+  backgroundImage?: string;
 }
 
 // Changed: include imageUrl as optional on LinkCreationInput

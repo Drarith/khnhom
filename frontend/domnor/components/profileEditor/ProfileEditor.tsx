@@ -100,6 +100,7 @@ export default function ProfileEditor({
       socials: initialData?.socials || {},
       theme: initialData?.theme || "",
       selectedTemplate: initialData?.selectedTemplate || "default",
+      backgroundImage: initialData?.backgroundImage || "",
     },
   });
 
@@ -193,6 +194,12 @@ export default function ProfileEditor({
     control: profileControl,
     name: "selectedTemplate",
     defaultValue: "default",
+  });
+
+  const backgroundImage = useWatch({
+    control: profileControl,
+    name: "backgroundImage",
+    defaultValue: "",
   });
 
   // KHQR form watches
@@ -380,6 +387,7 @@ export default function ProfileEditor({
   };
 
   const onSubmit = (values: ProfileFormEditorInputValues) => {
+    // console.log("Submitting profile values:", values);
     profileMutation(values);
   };
 
@@ -516,6 +524,7 @@ export default function ProfileEditor({
                       initialData={initialData}
                       theme={theme}
                       selectedTemplate={selectedTemplate}
+                      backgroundImage={backgroundImage || ""}
                       setValue={profileSetValue}
                     />
                   )}

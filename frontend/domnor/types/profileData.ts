@@ -14,9 +14,10 @@ export interface ProfileData {
     amount?: number;
     purpose?: string;
   };
-  links: { title: string; url: string, _id:string}[];
+  links: { title: string; url: string; _id: string }[];
   theme: string;
   selectedTemplate: TemplateType;
+  backgroundImage: string;
   views: number;
   isActive: boolean;
   createdAt: string;

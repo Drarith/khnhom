@@ -323,7 +323,7 @@ export const updateProfile = async (req: Request, res: Response) => {
           "This profile has been terminated. You can no longer make changes to it.",
       });
     }
-
+    console.log("backend profile values:", profileData.backgroundImage);
     const updates: Partial<profileUpdateInput> = {};
 
     // reject displayname if contains bad words
@@ -389,6 +389,14 @@ export const updateProfile = async (req: Request, res: Response) => {
         profileData.selectedTemplate
       );
       updates.selectedTemplate = safeTemplate;
+    }
+
+    if (profileData.backgroundImage !== undefined) {
+      const safeBackgroundImage = SanitizedString(100).parse(
+        profileData.backgroundImage
+      );
+      console.log(safeBackgroundImage);
+      updates.backgroundImage = safeBackgroundImage;
     }
 
     Object.assign(profile, updates);

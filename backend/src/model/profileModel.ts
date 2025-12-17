@@ -81,6 +81,10 @@ const profileSchema = new Schema(
       type: String,
       default: "default",
     },
+    backgroundImage: {
+      type: String,
+      default: "",
+    },
     views: { type: Number, default: 0 },
     isActive: { type: Boolean, default: true },
   },
