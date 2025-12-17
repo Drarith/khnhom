@@ -178,7 +178,7 @@ export default function UploadImageModal({
         onClose();
       },
       "image/jpeg",
-      0.85 
+      0.85
     );
   }
 
@@ -210,7 +210,7 @@ export default function UploadImageModal({
 
         {/* Content */}
         <div className="p-6">
-          <canvas ref={previewCanvasRef} />
+          <canvas ref={previewCanvasRef} className="hidden" />
 
           {!imgSrc ? (
             <div className="space-y-4">
@@ -240,16 +240,14 @@ export default function UploadImageModal({
                 circularCrop
                 locked={true}
               >
-              
                 <Image
                   ref={imgRef}
                   alt="Crop me"
                   src={imgSrc}
-                  width={400}
-                  height={ 400}
-                  // style={{ transform: `scale(${scale})`, maxHeight: "400px" }}
+                  width={500}
+                  height={500}
+                  style={{ transform: `scale(${scale})` }}
                   onLoad={onImageLoad}
-                  
                 />
               </ReactCrop>
 
