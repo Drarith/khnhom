@@ -30,6 +30,10 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    isGoldSupporter: {
+      type: Boolean,
+      default: false,
+    },
     isActive: {
       type: Boolean,
       default: true,
