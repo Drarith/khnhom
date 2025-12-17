@@ -5,6 +5,9 @@ import { getJSON, patchJSON, uploadToCloudinary } from "@/https/https";
 import { toast } from "react-toastify";
 import { SignatureResponse } from "@/types/PDResponse";
 import Image from "next/image";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 
 export default function ProfilePicture({
   displayName,
@@ -22,31 +25,30 @@ export default function ProfilePicture({
   const [croppedImageUrl, setCroppedImageUrl] = useState("");
   const [showModal, setShowModal] = useState(false);
 
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     setCroppedImageUrl(profilePictureUrl);
   }, [profilePictureUrl]);
 
-  async function handleSaveImage(imageUrl: string, imageFile: File) {
-    setCroppedImageUrl(imageUrl);
-    try {
+  const { mutate: uploadProfilePicture, isPending: isUploading } = useMutation({
+    mutationFn: async ({ imageFile }: { imageFile: File }) => {
       // Get signature from backend
       const signatureResponse = await getJSON<SignatureResponse>(
         "/sign-upload"
       );
       if (!signatureResponse) {
-        toast.error("Failed to get upload signature");
-        setCroppedImageUrl("");
-        return;
+        throw new Error("Failed to get upload signature");
       }
 
       const { signature, timestamp, publicId } = signatureResponse;
+
       // Prepare form data for Cloudinary
       const formData = new FormData();
       formData.append("file", imageFile);
       formData.append("api_key", CLOUDINARY_API_KEY);
       formData.append("timestamp", timestamp.toString());
       formData.append("signature", signature);
-      // publicId will always be the same for each user, auto delete and replace
       formData.append("public_id", publicId);
       formData.append("folder", "profile_pictures");
 
@@ -55,27 +57,34 @@ export default function ProfilePicture({
         CLOUDINARY_UPLOAD_ENDPOINT,
         formData
       );
-      if (response && response.secure_url) {
-        try {
-          await patchJSON("profile/picture", {
-            profilePictureUrl: response.secure_url,
-          });
-          toast.success("Profile picture uploaded successfully");
-        } catch (err) {
-          throw err;
-        }
-      } else {
+
+      if (!response || !response.secure_url) {
         throw new Error("Invalid response from Cloudinary");
       }
-    } catch (err) {
-      toast.error(
-        `Unable to upload your image: ${
-          err instanceof Error ? err.message : "Unknown error"
-        }`
-      );
-      console.error(err);
-      setCroppedImageUrl("");
-    }
+
+      // Update profile picture URL in backend
+      await patchJSON("profile/picture", {
+        profilePictureUrl: response.secure_url,
+      });
+
+      return response.secure_url;
+    },
+    onSuccess: (secureUrl) => {
+      setCroppedImageUrl(secureUrl);
+      toast.success("Profile picture uploaded successfully");
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      const errorMessage = getAxiosErrorMessage(error);
+      toast.error(`Unable to upload your image: ${errorMessage}`);
+      console.error(error);
+      setCroppedImageUrl(profilePictureUrl);
+    },
+  });
+
+  function handleSaveImage(imageUrl: string, imageFile: File) {
+    setCroppedImageUrl(imageUrl);
+    uploadProfilePicture({ imageFile });
   }
 
   return (
@@ -102,10 +111,16 @@ export default function ProfilePicture({
               displayName?.[0]?.toUpperCase() || "U"
             )}
           </div>
+          {isUploading && (
+            <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
+            </div>
+          )}
           <button
             type="button"
             onClick={() => setShowModal(true)}
-            className="absolute bottom-0 right-0 p-2 bg-foreground rounded-full shadow-lg border-2 border-primary/10 hover:bg-primary/5 transition-colors"
+            disabled={isUploading}
+            className="absolute bottom-0 right-0 p-2 bg-foreground rounded-full shadow-lg border-2 border-primary/10 hover:bg-primary/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Camera size={16} className="text-primary" />
           </button>
@@ -118,9 +133,13 @@ export default function ProfilePicture({
           <button
             type="button"
             onClick={() => setShowModal(true)}
-            className="px-4 py-2 border border-primary/20 rounded-lg text-sm font-medium text-primary hover:bg-primary/5 transition-colors"
+            disabled={isUploading}
+            className="px-4 py-2 border border-primary/20 rounded-lg text-sm font-medium text-primary hover:bg-primary/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
-            Upload Photo
+            {isUploading && (
+              <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            )}
+            {isUploading ? "Uploading..." : "Upload Photo"}
           </button>
         </div>
       </div>

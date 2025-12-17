@@ -14,6 +14,7 @@ import {
   SiFacebook,
 } from "@icons-pack/react-simple-icons";
 import Footer from "../userProfile/Footer";
+import { backgroundImages } from "@/config/background";
 
 type SocialPlatform =
   | "facebook"
@@ -29,13 +30,13 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
     return theme.name === data.theme;
   });
   const icons: Record<SocialPlatform, React.ReactElement> = {
-    facebook: <SiFacebook className="w-6 h-6" color={activeTheme?.text} />,
-    x: <SiX className="w-6 h-6" color={activeTheme?.text} />,
-    instagram: <SiInstagram className="w-6 h-6" color={activeTheme?.text} />,
-    tiktok: <SiTiktok className="w-6 h-6" color={activeTheme?.text} />,
-    telegram: <SiTelegram className="w-6 h-6" color={activeTheme?.text} />,
-    youtube: <SiYoutube className="w-6 h-6" color={activeTheme?.text} />,
-    github: <SiGithub className="w-6 h-6" color={activeTheme?.text} />,
+    facebook: <SiFacebook className="w-7 h-7" color={activeTheme?.text} />,
+    x: <SiX className="w-7 h-7" color={activeTheme?.text} />,
+    instagram: <SiInstagram className="w-7 h-7" color={activeTheme?.text} />,
+    tiktok: <SiTiktok className="w-7 h-7" color={activeTheme?.text} />,
+    telegram: <SiTelegram className="w-7 h-7" color={activeTheme?.text} />,
+    youtube: <SiYoutube className="w-7 h-7" color={activeTheme?.text} />,
+    github: <SiGithub className="w-7 h-7" color={activeTheme?.text} />,
   };
 
   const [shareModal, setShareModal] = useState<{
@@ -63,33 +64,70 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
     }
   };
 
+  const backgroundImage = backgroundImages.find(
+    (bg) => bg.name === data.backgroundImage
+  )?.url;
+
   return (
     <>
       <div className="w-full min-h-screen flex flex-col relative shadow-2xl md:rounded-2xl md:overflow-hidden">
-        <div className="relative w-full h-96 shrink-0">
+        {/* Background Image Layer */}
+        {data.backgroundImage && (
+          <div className="absolute inset-0 z-0">
+            <Image
+              src={backgroundImage!}
+              alt="background"
+              fill
+              className="object-cover"
+              priority
+            />
+            {/* Overlay to ensure text readability */}
+            {/* <div
+              className="absolute inset-0"
+              style={{
+                background: `linear-gradient(to bottom, transparent 0%, ${activeTheme?.bg} 100%)`,
+                opacity: 0.9,
+              }}
+            /> */}
+          </div>
+        )}
+
+        <div className="relative w-full h-96 shrink-0 z-10">
           <Image
             src={data.profilePictureUrl}
             alt="profile picture"
             fill
             className="object-cover"
             priority
+            style={{
+              maskImage: backgroundImage
+                ? "linear-gradient(to bottom, black 0%, black 40%, transparent 100%)"
+                : "none",
+              WebkitMaskImage: backgroundImage
+                ? "linear-gradient(to bottom, black 0%, black 40%, transparent 100%)"
+                : "none",
+            }}
           />
 
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(to bottom, transparent, transparent, ${activeTheme?.bg})`,
-            }}
-          />
-          <div
-            className="absolute bottom-0 left-0 right-0 h-32"
-            style={{
-              background: `linear-gradient(to top, ${activeTheme?.bg}, transparent)`,
-            }}
-          />
+          {!backgroundImage && (
+            <>
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: `linear-gradient(to bottom, transparent, transparent, ${activeTheme?.bg})`,
+                }}
+              />
+              <div
+                className="absolute bottom-0 left-0 right-0 h-32"
+                style={{
+                  background: `linear-gradient(to top, ${activeTheme?.bg}, transparent)`,
+                }}
+              />
+            </>
+          )}
         </div>
 
-        <div className="relative -mt-20 px-4 pb-12 flex-1 flex flex-col items-center w-full space-y-8 z-10">
+        <div className="relative -mt-20 px-4 pb-12 flex-1 flex flex-col items-center w-full space-y-6 z-10">
           <div className="text-center space-y-3">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight drop-shadow-sm">
               {data.displayName}
@@ -102,7 +140,7 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
             )}
           </div>
 
-          <div className="flex flex-wrap gap-4 justify-center">
+          <div className="flex flex-wrap gap-3 justify-center">
             {Object.entries(data?.socials)
               .filter(([_, v]) => v !== "")
               .map(([key, url]) => (
@@ -111,7 +149,7 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 rounded-full transition-transform hover:scale-110 hover:bg-white/10"
+                  className="p-4 rounded-full transition-transform hover:scale-110 hover:bg-white/10"
                   aria-label={key}
                 >
                   {icons[key as SocialPlatform]}
