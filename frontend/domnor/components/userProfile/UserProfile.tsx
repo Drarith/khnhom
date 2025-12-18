@@ -1,7 +1,7 @@
 import { ProfileData } from "@/types/profileData";
 import { templates } from "@/registry/templateRegistry";
 import { themes } from "@/config/theme";
-import { useState, useEffect, use } from "react";
+import { useState} from "react";
 import { QrCode, Share2, X, Copy, Check } from "lucide-react";
 import { toast } from "react-toastify";
 import Image from "next/image";
@@ -28,6 +28,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
       setTimeout(() => setCopied(false), 2000);
       toast.success("Link copied!");
     } catch (err) {
+      console.error(err);
       toast.error("Failed to copy");
     }
   };

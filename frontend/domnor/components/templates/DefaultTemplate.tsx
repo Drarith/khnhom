@@ -60,6 +60,7 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
       setTimeout(() => setCopied(false), 2000);
       toast.success("Link copied!");
     } catch (err) {
+      console.error(err);
       toast.error("Failed to copy");
     }
   };

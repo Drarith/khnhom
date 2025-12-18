@@ -10,7 +10,6 @@ import { logout } from "@/https/https";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import "./nav.css";
-import { Divide } from "lucide-react";
 
 export default function Nav() {
   const container = useRef(null);
