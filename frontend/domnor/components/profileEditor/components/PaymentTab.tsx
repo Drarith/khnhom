@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { QrCode, ChevronDown, ChevronUp } from "lucide-react";
 import Button from "../../ui/Button";
+import Select from "../../ui/Select";
 import ProfileFormInput from "../../profileInput/profileInput";
 import type { PaymentTabProps } from "@/types/paymentTabProp";
 import Image from "next/image";
@@ -8,6 +9,7 @@ import { useTranslations } from "next-intl";
 
 export default function PaymentTab({
   register,
+  setValue,
   errors,
   handleSubmit,
   onGenerateQR,
@@ -28,6 +30,7 @@ export default function PaymentTab({
   isGenerating,
   error,
   initialData,
+  currency,
 }: PaymentTabProps) {
   const [showOptionalFields, setShowOptionalFields] = useState(false);
   const t = useTranslations("profileEditor.paymentTab");
@@ -39,9 +42,7 @@ export default function PaymentTab({
           <h2 className="text-xl font-semibold mb-2 text-primary">
             {t("title")}
           </h2>
-          <p className="text-sm text-primary/60">
-            {t("description")}
-          </p>
+          <p className="text-sm text-primary/60">{t("description")}</p>
         </div>
       </div>
 
@@ -54,14 +55,19 @@ export default function PaymentTab({
           >
             {t("accountType")}
           </label>
-          <select
-            id="accountType"
-            {...register("accountType")}
-            className="w-full px-4 py-2 border-2 border-primary/70 rounded-sm text-primary bg-foreground focus:border-primary outline-none"
-          >
-            <option value="individual">{t("individual")}</option>
-            <option value="merchant">{t("merchant")}</option>
-          </select>
+          <Select
+            value={accountType}
+            onChange={(val) =>
+              setValue("accountType", val as "individual" | "merchant", {
+                shouldValidate: true,
+              })
+            }
+            options={[
+              { value: "individual", label: t("individual") },
+              { value: "merchant", label: t("merchant") },
+            ]}
+            className="w-full"
+          />
         </div>
 
         {/* Common Mandatory Fields */}
@@ -148,14 +154,17 @@ export default function PaymentTab({
         {/* Currency and Amount */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex">
-            <select
-              id="currency"
-              {...register("currency")}
-              className="w-full px-4 md:mb-4 py-2.5 border-2 border-primary/70 rounded-sm text-primary bg-foreground focus:border-primary outline-none"
-            >
-              <option value="KHR">KHR (Riel)</option>
-              <option value="USD">USD (Dollar)</option>
-            </select>
+            <Select
+              value={currency || "KHR"}
+              onChange={(val) =>
+                setValue("currency", val as "KHR" | "USD", { shouldValidate: true })
+              }
+              options={[
+                { value: "KHR", label: "KHR (Riel)" },
+                { value: "USD", label: "USD (Dollar)" },
+              ]}
+              className="w-full md:mb-4"
+            />
           </div>
 
           <ProfileFormInput
@@ -319,12 +328,8 @@ export default function PaymentTab({
       ) : (
         <div className="border-2 border-dashed border-primary/20 rounded-lg p-12 text-center">
           <QrCode size={48} className="mx-auto text-primary/40 mb-4" />
-          <h3 className="text-lg font-medium text-primary mb-2">
-            {t("noQr")}
-          </h3>
-          <p className="text-sm text-primary/60">
-            {t("fillDetails")}
-          </p>
+          <h3 className="text-lg font-medium text-primary mb-2">{t("noQr")}</h3>
+          <p className="text-sm text-primary/60">{t("fillDetails")}</p>
         </div>
       )}
     </div>

@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 
 import { SOCIAL_PLATFORMS } from "@/config/socials";
 import Button from "../ui/Button";
+import Select from "../ui/Select";
 
 import type { SocialMediaFormProps } from "@/types/socialMedia";
 
@@ -56,17 +57,20 @@ export default function SocialMediaForm<T extends FieldValues>({
             </div>
           )}
 
-          <select
+          <Select
             value={selected}
-            onChange={(e) => setSelected(e.target.value)}
-            className="flex-1 rounded-lg border border-primary/20 bg-foreground px-3 py-2 text-sm text-primary transition focus:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/20"
-          >
-            {SOCIAL_PLATFORMS.map((platform) => (
-              <option key={platform.key} value={platform.key}>
-                {platform.label} {socials[platform.key] ? "✓" : ""}
-              </option>
-            ))}
-          </select>
+            onChange={(val) => setSelected(val)}
+            options={SOCIAL_PLATFORMS.map((platform) => ({
+              value: platform.key,
+              label: (
+                <span className="flex items-center justify-between w-full">
+                  {platform.label}
+                  {socials[platform.key] && <span className="ml-2">✓</span>}
+                </span>
+              ),
+            }))}
+            className="flex-1"
+          />
         </div>
 
         <div className="relative">

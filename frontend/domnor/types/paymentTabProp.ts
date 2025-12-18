@@ -2,12 +2,14 @@ import type {
   UseFormRegister,
   FieldErrors,
   UseFormHandleSubmit,
+  UseFormSetValue,
 } from "react-hook-form";
 import type { khqrFormEditorInputValues } from "./profileFormInput";
 import type { ProfileData } from "@/types/profileData";
 
 export interface PaymentTabProps {
   register: UseFormRegister<khqrFormEditorInputValues>;
+  setValue: UseFormSetValue<khqrFormEditorInputValues>;
   errors: FieldErrors<khqrFormEditorInputValues>;
   handleSubmit: UseFormHandleSubmit<khqrFormEditorInputValues>;
   onGenerateQR: (values: khqrFormEditorInputValues) => void;

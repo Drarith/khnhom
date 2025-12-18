@@ -1,5 +1,6 @@
 import type { ProfileData } from "@/types/profileData";
 import ThemeCard from "@/components/themeCard/ThemeCard";
+import Select from "../../ui/Select";
 import { themes } from "@/config/theme";
 import { templates } from "@/registry/templateRegistry";
 import { backgroundImages } from "@/config/background";
@@ -54,17 +55,15 @@ export default function AppearanceTab({
       <div>
         <h3 className="font-medium text-primary mb-4">{t("template")}</h3>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 justify-items-center text-foreground">
-          <select
+          <Select
             value={selectedTemplate}
-            onChange={(e) => onTemplateSelect(e.target.value)}
-            className="w-full p-2 border border-primary/20 rounded-lg bg-background text-foreground"
-          >
-            {Object.entries(templates).map(([key, template]) => (
-              <option key={key} value={key}>
-                {template.name}
-              </option>
-            ))}
-          </select>
+            onChange={(val) => onTemplateSelect(val)}
+            options={Object.entries(templates).map(([key, template]) => ({
+              value: key,
+              label: template.name,
+            }))}
+            className="w-full"
+          />
         </div>
       </div>
 

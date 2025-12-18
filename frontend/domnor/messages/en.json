@@ -31,7 +31,8 @@
     },
     "socialMediaInput": {
       "added": "Added",
-      "addedSocialLink": "Added social link successfully"
+      "addedSocialLink": "Added social link successfully",
+      "addSocialLink": "Add social link"
     }
   },
 

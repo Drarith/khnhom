@@ -128,6 +128,7 @@ export default function ProfileEditor({
   const {
     register: khqrRegister,
     control: khqrControl,
+    setValue: khqrSetValue,
     reset: khqrReset,
     handleSubmit: khqrHandleSubmit,
     formState: { errors: khqrErrors, isValid: khqrIsValid },
@@ -138,7 +139,7 @@ export default function ProfileEditor({
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: {
-      accountType: undefined,
+      accountType: "individual",
       bakongAccountID: "",
       merchantName: "",
       currency: "KHR",
@@ -155,6 +156,7 @@ export default function ProfileEditor({
       merchantCityAlternateLanguage: "",
       accountInformation: "",
       acquiringBank: "",
+      // @ts-expect-error - This works as intended, ts being weird
       merchantID: "",
     },
   });
@@ -442,7 +444,7 @@ export default function ProfileEditor({
                 <nav id="nav-tab">
                   <div
                     ref={containerRef}
-                    className="tabs-container relative space-y-1 md:grid md:grid-cols-1 lg:grid-cols-1 md:gap-2 flex overflow-x-auto no-scrollbar"
+                    className="tabs-container overflow-hidden relative space-y-1  md:grid md:grid-cols-1 lg:grid-cols-1 md:gap-2 flex overflow-x-auto no-scrollbar"
                   >
                     <div
                       ref={highlighterRef}
@@ -518,6 +520,7 @@ export default function ProfileEditor({
                   {activeTab === "payment" && (
                     <PaymentTab
                       register={khqrRegister}
+                      setValue={khqrSetValue}
                       errors={khqrErrors}
                       handleSubmit={khqrHandleSubmit}
                       onGenerateQR={onGenerateQR}
