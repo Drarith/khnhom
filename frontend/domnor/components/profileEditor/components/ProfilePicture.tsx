@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
+import { useTranslations } from "next-intl";
 
 export default function ProfilePicture({
   displayName,
@@ -18,6 +19,7 @@ export default function ProfilePicture({
   Camera: React.ComponentType<{ size?: number; className?: string }>;
   profilePictureUrl: ProfileData["profilePictureUrl"];
 }) {
+  const t = useTranslations("profileEditor.profileTab");
   const CLOUDINARY_UPLOAD_ENDPOINT =
     process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_ENDPOINT || "";
   const CLOUDINARY_API_KEY = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || "";
@@ -71,12 +73,12 @@ export default function ProfilePicture({
     },
     onSuccess: (secureUrl) => {
       setCroppedImageUrl(secureUrl);
-      toast.success("Profile picture uploaded successfully");
+      toast.success(t("uploadSuccess"));
       queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       const errorMessage = getAxiosErrorMessage(error);
-      toast.error(`Unable to upload your image: ${errorMessage}`);
+      toast.error(t("uploadError", { error: errorMessage }));
       console.error(error);
       setCroppedImageUrl(profilePictureUrl);
     },
@@ -126,10 +128,8 @@ export default function ProfilePicture({
           </button>
         </div>
         <div className="flex-1">
-          <h3 className="font-medium text-primary mb-2">Profile Picture</h3>
-          <p className="text-sm text-primary/60 mb-3">
-            Upload a profile picture that represents you
-          </p>
+          <h3 className="font-medium text-primary mb-2">{t("profilePic")}</h3>
+          <p className="text-sm text-primary/60 mb-3">{t("profilePicP")}</p>
           <button
             type="button"
             onClick={() => setShowModal(true)}
@@ -139,7 +139,7 @@ export default function ProfilePicture({
             {isUploading && (
               <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
             )}
-            {isUploading ? "Uploading..." : "Upload Photo"}
+            {isUploading ? t("uploading") : t("buttons.uploadPhoto")}
           </button>
         </div>
       </div>

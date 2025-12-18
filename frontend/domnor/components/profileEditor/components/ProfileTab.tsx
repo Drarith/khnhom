@@ -2,6 +2,7 @@ import { Camera } from "lucide-react";
 import ProfileFormInput from "../../profileInput/profileInput";
 import ProfilePicture from "../components/ProfilePicture";
 import type { ProfileTabProps } from "@/types/tabProps";
+import { useTranslations } from "next-intl";
 
 export default function ProfileTab({
   register,
@@ -10,11 +11,13 @@ export default function ProfileTab({
   bio,
   initialData,
 }: ProfileTabProps) {
+  const t = useTranslations("profileEditor.profileTab");
+
   return (
     <div className="p-6 space-y-6">
       <div>
         <h2 className="text-xl font-semibold mb-4 text-primary">
-          Profile Information
+          {t("title")}
         </h2>
       </div>
 
@@ -36,7 +39,7 @@ export default function ProfileTab({
           initialValue={initialData?.displayName}
           fieldStateError={errors.displayName}
           fieldWatchValue={displayName}
-          label="Display Name"
+          label={t("displayName")}
           maxLength={30}
           hasInput={!!displayName}
         />
@@ -49,7 +52,7 @@ export default function ProfileTab({
           initialValue={initialData?.bio}
           fieldStateError={errors.bio}
           fieldWatchValue={bio}
-          label="Bio"
+          label={t("bio")}
           maxLength={1000}
           textArea={true}
           hasInput={!!bio}

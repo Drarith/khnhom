@@ -7,6 +7,7 @@ import { UseFormSetValue } from "react-hook-form";
 import { profileFormEditorInputSchema } from "@/validationSchema/inputValidationSchema";
 import { z } from "zod";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 type ProfileFormEditorInputValues = z.infer<
   typeof profileFormEditorInputSchema
@@ -27,6 +28,8 @@ export default function AppearanceTab({
   backgroundImage,
   setValue,
 }: AppearanceTabProps) {
+  const t = useTranslations("profileEditor.appearanceTab");
+
   function onThemeSelect(themeName: string) {
     setValue("theme", themeName, { shouldValidate: true });
   }
@@ -42,14 +45,14 @@ export default function AppearanceTab({
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h2 className="text-xl font-semibold mb-2 text-primary">Appearance</h2>
+        <h2 className="text-xl font-semibold mb-2 text-primary">{t("title")}</h2>
         <p className="text-sm text-primary/60">
-          Customize how your profile looks
+          {t("description")}
         </p>
       </div>
 
       <div>
-        <h3 className="font-medium text-primary mb-4">Template</h3>
+        <h3 className="font-medium text-primary mb-4">{t("template")}</h3>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 justify-items-center text-foreground">
           <select
             value={selectedTemplate}
@@ -67,7 +70,7 @@ export default function AppearanceTab({
 
       {/* Theme Color */}
       <div>
-        <h3 className="font-medium text-primary mb-4">Theme Color</h3>
+        <h3 className="font-medium text-primary mb-4">{t("themeColor")}</h3>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
           {themes.map((t) => {
             return (
@@ -84,7 +87,7 @@ export default function AppearanceTab({
 
       {/* Background Image */}
       <div>
-        <h3 className="font-medium text-primary mb-4">Background Image</h3>
+        <h3 className="font-medium text-primary mb-4">{t("backgroundImage")}</h3>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
           <button
             type="button"
@@ -96,7 +99,7 @@ export default function AppearanceTab({
             }`}
           >
             <div className="absolute inset-0 flex items-center justify-center bg-primary/5">
-              <span className="text-sm font-medium text-primary">None</span>
+              <span className="text-sm font-medium text-primary">{t("none")}</span>
             </div>
           </button>
           {backgroundImages.map((bg) => (
@@ -125,11 +128,11 @@ export default function AppearanceTab({
       <div className="border-t border-primary/10 pt-6">
         <div className="flex items-center justify-between p-4 bg-primary/5 rounded-lg">
           <div>
-            <h3 className="font-medium text-primary">Profile Status</h3>
+            <h3 className="font-medium text-primary">{t("profileStatus")}</h3>
             <p className="text-sm text-primary/60">
               {initialData?.isActive
-                ? "Your profile is live"
-                : "Your profile is hidden"}
+                ? t("profileLive")
+                : t("profileHidden")}
             </p>
           </div>
           <button

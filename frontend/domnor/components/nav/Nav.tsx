@@ -10,17 +10,19 @@ import { logout } from "@/https/https";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import "./nav.css";
+import { useTranslations } from "next-intl";
 
 export default function Nav() {
   const container = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { locale } = useParams();
   const pathname = usePathname();
+  const t = useTranslations("nav");
 
   const menuLinks = [
-    { path: `/${locale}`, label: "Home" },
-    { path: `/${locale}/about`, label: "About" },
-    { path: `/${locale}/contact`, label: "Contact" },
+    { path: `/${locale}`, label: t("home") },
+    { path: `/${locale}/about`, label: t("about") },
+    { path: `/${locale}/contact`, label: t("contact") },
   ];
 
   const isControlledPath = menuLinks.some((link) => link.path === pathname);
@@ -87,7 +89,7 @@ export default function Nav() {
           <Link href={"/"}>DOMNOR</Link>
         </div>
         <div className="menu-open" onClick={toggleMenu}>
-          <p>Menu</p>
+          <p>{t("menu")}</p>
         </div>
       </div>
 
@@ -98,7 +100,7 @@ export default function Nav() {
             <Link href={"/"}>DOMNOR</Link>
           </div>
           <div className="menu-close" onClick={toggleMenu}>
-            <p>Close</p>
+            <p>{t("close")}</p>
           </div>
         </div>
         <div className="menu-overlay-content">
@@ -121,7 +123,7 @@ export default function Nav() {
                 <>
                   <div className="menu-link-item mt-25">
                     <div className="menu-link-item-holder" onClick={onLogout}>
-                      <a className="menu-link hover:cursor-pointer">LOGOUT</a>
+                      <a className="menu-link hover:cursor-pointer">{t("logout")}</a>
                     </div>
                   </div>
                 </>
@@ -129,7 +131,7 @@ export default function Nav() {
             </div>
             <div className="menu-info">
               <div className="menu-info-col">
-                <a href="https://github.com/Drarith">Github &#8599;</a>
+                <a href="https://github.com/Drarith">{t("github")} &#8599;</a>
               </div>
               <div className="menu-info-col">
                 <p>sarindararith@gmail.com</p>
@@ -138,7 +140,7 @@ export default function Nav() {
             </div>
           </div>
           <div className="menu-preview">
-            <p>View Showreel</p>
+            <p>{t("viewShowreel")}</p>
           </div>
         </div>
       </div>

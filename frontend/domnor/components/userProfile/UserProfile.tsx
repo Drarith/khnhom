@@ -5,10 +5,12 @@ import { useState} from "react";
 import { QrCode, Share2, X, Copy, Check } from "lucide-react";
 import { toast } from "react-toastify";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const DOMAIN = process.env.NEXT_PUBLIC_FRONTEND_URL;
 
 export default function UserProfile({ data }: { data: ProfileData }) {
+  const t = useTranslations("userProfile");
   // Get the template based on selectedTemplate field
   const templateKey = data.selectedTemplate || "default";
   const TemplateComponent =
@@ -26,10 +28,10 @@ export default function UserProfile({ data }: { data: ProfileData }) {
       await navigator.clipboard.writeText(pageUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-      toast.success("Link copied!");
+      toast.success(t("linkCopied"));
     } catch (err) {
       console.error(err);
-      toast.error("Failed to copy");
+      toast.error(t("copyFailed"));
     }
   };
 
@@ -99,11 +101,10 @@ export default function UserProfile({ data }: { data: ProfileData }) {
 
             <div className="flex flex-col items-center space-y-6 pt-2">
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                Scan to Pay
+                {t("scanToPay")}
               </h3>
               <p className="text-sm">
-                Note: This QR code was generated safely and securely using
-                official KHQR services. <br /> Open your banking app to scan and pay.
+                {t("qrNote")} <br /> {t("openApp")}
               </p>
 
               <div className="flex flex-col items-center">
@@ -146,7 +147,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
                     {data.paymentInfo.amount && (
                       <div className="flex justify-between items-center px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
                         <span className="text-gray-600 dark:text-gray-400">
-                          Amount
+                          {t("amount")}
                         </span>
                         <span className="font-semibold text-gray-900 dark:text-white">
                           {data.paymentInfo.currency || "KHR"}{" "}
@@ -158,7 +159,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
                     {data.paymentInfo.merchantCity && (
                       <div className="flex justify-between items-center px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
                         <span className="text-gray-600 dark:text-gray-400">
-                          City
+                          {t("city")}
                         </span>
                         <span className="font-medium text-gray-900 dark:text-white">
                           {data.paymentInfo.merchantCity}
@@ -169,7 +170,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
                     {data.paymentInfo.purpose && (
                       <div className="flex justify-between items-center px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
                         <span className="text-gray-600 dark:text-gray-400">
-                          Purpose
+                          {t("purpose")}
                         </span>
                         <span className="font-medium text-gray-900 dark:text-white">
                           {data.paymentInfo.purpose}
@@ -196,7 +197,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
           >
             <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-800 pb-4">
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                Share Profile
+                {t("shareProfile")}
               </h3>
               <button
                 onClick={() => setShowShareModal(false)}
@@ -209,7 +210,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
             <div className="space-y-6">
               <div className="space-y-2">
                 <p className="text-sm font-medium text-gray-500 ml-1">
-                  Profile Link
+                  {t("profileLink")}
                 </p>
                 <div className="flex items-center gap-2 p-2 pr-2 pl-4 rounded-xl bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                   <div className="flex-1 min-w-0">
@@ -226,7 +227,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
                     }`}
                   >
                     {copied ? <Check size={16} /> : <Copy size={16} />}
-                    {copied ? "Copied" : "Copy"}
+                    {copied ? t("copied") : t("copy")}
                   </button>
                 </div>
               </div>

@@ -83,18 +83,21 @@
 .menu-link-item {
   width: max-content;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+ 
 }
 
 .menu-link-item-holder {
   position: relative;
+
 }
 
 .menu-link-item-holder a {
   color: #000;
-  font-size: 80px;
+  font-size: 60px;
   font-weight: 400;
   letter-spacing: -0.02em;
-  line-height: 85%;
+  line-height: 1.2;
+ 
 }
 
 .menu-info {

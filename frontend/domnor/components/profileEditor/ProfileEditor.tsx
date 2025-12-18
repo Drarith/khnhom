@@ -46,6 +46,7 @@ import UserProfile from "../userProfile/UserProfile";
 import { useTabAnimation } from "@/gsap/tab";
 import Draggable from "react-draggable";
 import { DraggableCore } from "react-draggable";
+import { useTranslations } from "next-intl";
 
 export enum Tab {
   PROFILE = "profile",
@@ -68,6 +69,8 @@ export default function ProfileEditor({
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const draggableRef = useRef<HTMLDivElement>(null);
+
+  const t = useTranslations("profileEditor");
 
   const queryClient = useQueryClient();
 
@@ -276,24 +279,24 @@ export default function ProfileEditor({
   });
 
   const tabs = [
-    { id: Tab.PROFILE, label: "Profile", icon: User },
-    { id: Tab.SOCIALS, label: "Socials", icon: LinkIcon },
-    { id: Tab.LINKS, label: "Links", icon: LinkIcon },
-    { id: Tab.PAYMENT, label: "Payment", icon: QrCode },
-    { id: Tab.APPEARANCE, label: "Appearance", icon: Palette },
-    ...(isAdmin ? [{ id: Tab.ADMIN, label: "Admin", icon: Shield }] : []),
+    { id: Tab.PROFILE, label: t("tabs.profile"), icon: User },
+    { id: Tab.SOCIALS, label: t("tabs.socials"), icon: LinkIcon },
+    { id: Tab.LINKS, label: t("tabs.links"), icon: LinkIcon },
+    { id: Tab.PAYMENT, label: t("tabs.payment"), icon: QrCode },
+    { id: Tab.APPEARANCE, label: t("tabs.appearance"), icon: Palette },
+    ...(isAdmin ? [{ id: Tab.ADMIN, label: t("tabs.admin"), icon: Shield }] : []),
   ];
 
   const { mutate: profileMutation, isPending: isProfilePending } = useMutation({
     mutationFn: (values: ProfileFormEditorInputValues) =>
       putJSON("/update-profile", values),
     onSuccess: () => {
-      toast.success("Profile updated successfully!");
+      toast.success(t("toasts.profileUpdated"));
       queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       const errorMessage = getAxiosErrorMessage(error);
-      toast.error("Error updating profile" + errorMessage);
+      toast.error(t("toasts.profileUpdateError") + errorMessage);
     },
   });
 
@@ -301,11 +304,11 @@ export default function ProfileEditor({
     mutationFn: (values: linkFormEditorInputValues) =>
       postJSON("/create-link", values),
     onSuccess: () => {
-      toast.success("Link added successfully!");
+      toast.success(t("toasts.linkAdded"));
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       const errorMessage = getAxiosErrorMessage(error);
-      toast.error("Error adding link: " + errorMessage);
+      toast.error(t("toasts.linkAddError") + errorMessage);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
@@ -319,12 +322,12 @@ export default function ProfileEditor({
         return deleteLink(`/profile/links/${id}`);
       },
       onSuccess: () => {
-        toast.success("Link deleted successfully!");
+        toast.success(t("toasts.linkDeleted"));
         queryClient.invalidateQueries({ queryKey: ["profile"] });
       },
       onError: (error: AxiosError<{ message?: string }>) => {
         const errorMessage = getAxiosErrorMessage(error);
-        toast.error("Error deleting link: " + errorMessage);
+        toast.error(t("toasts.linkDeleteError") + errorMessage);
       },
     }
   );
@@ -334,12 +337,12 @@ export default function ProfileEditor({
       return postJSON("/khqr", PaymentRequest);
     },
     onSuccess: () => {
-      toast.success("Your Payment QR has been created successfully!");
+      toast.success(t("toasts.qrCreated"));
       queryClient.invalidateQueries({ queryKey: ["profile"] });
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       const errorMessage = getAxiosErrorMessage(error);
-      toast.error("Error creating QR payment");
+      toast.error(t("toasts.qrCreateError"));
       setQrError(errorMessage);
     },
   });
@@ -355,7 +358,7 @@ export default function ProfileEditor({
       },
       onError: (error: AxiosError<{ message?: string }>) => {
         const errorMessage = getAxiosErrorMessage(error);
-        toast.error(errorMessage || "Failed to deactivate account");
+        toast.error(errorMessage || t("toasts.deactivateError"));
       },
     });
 
@@ -370,7 +373,7 @@ export default function ProfileEditor({
       },
       onError: (error: AxiosError<{ message?: string }>) => {
         const errorMessage = getAxiosErrorMessage(error);
-        toast.error(errorMessage || "Failed to reactivate account");
+        toast.error(errorMessage || t("toasts.reactivateError"));
       },
     });
 
@@ -423,10 +426,10 @@ export default function ProfileEditor({
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold">
-                  Welcome back, {initialData?.username}
+                  {t("welcomeBack", { username: initialData?.username || "" })}
                 </h1>
                 <p className="text-sm text-primary/60 mt-1">
-                  Customize your profile and manage your links
+                  {t("customizeProfile")}
                 </p>
               </div>
             </div>
@@ -558,14 +561,14 @@ export default function ProfileEditor({
                             type="button"
                             variant="secondary"
                           >
-                            Cancel
+                            {t("buttons.cancel")}
                           </Button>
                           <Button
                             disabled={!profileIsValid}
                             type="submit"
                             isLoading={isProfilePending}
                           >
-                            Save Changes
+                            {t("buttons.saveChanges")}
                           </Button>
                         </div>
                       </div>
@@ -591,7 +594,7 @@ export default function ProfileEditor({
       >
         <div
           ref={draggableRef}
-          className="fixed bottom-8 right-8 z-50 cursor-move"
+          className="fixed bottom-8 right-8 z-10 cursor-move"
         >
           <Button
             type="button"
@@ -601,12 +604,12 @@ export default function ProfileEditor({
             {notPreviewing ? (
               <>
                 <Eye size={20} />
-                <span className="font-semibold">Preview(Drag me)</span>
+                <span className="font-semibold">{t("buttons.previewDrag")}</span>
               </>
             ) : (
               <>
                 <Palette size={20} />
-                <span className="font-semibold">Back to Editor</span>
+                <span className="font-semibold">{t("buttons.backToEditor")}</span>
               </>
             )}
           </Button>

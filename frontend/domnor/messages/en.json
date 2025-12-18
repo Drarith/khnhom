@@ -23,12 +23,6 @@
       "socials": "Social Media Links",
       "link": "Your Link(*optional)"
     },
-
-    "socialMediaInput": {
-      "addedSocialLink": "Added Social Links",
-      "addSocialLink": "Add Social Link",
-      "added": "Added"
-    },
     "validation": {
       "minLength": "Must be at least {min} characters",
       "maxLength": "Must be at most {max} characters",
@@ -46,5 +40,172 @@
     "profilePicP": "Upload a profile picture that represent you",
     "uploadPhoto": "Upload Photo",
     "username": "username"
+  },
+  "profileEditor": {
+    "welcomeBack": "Welcome back, {username}",
+    "customizeProfile": "Customize your profile and manage your links",
+    "tabs": {
+      "profile": "Profile",
+      "socials": "Socials",
+      "links": "Links",
+      "payment": "Payment",
+      "appearance": "Appearance",
+      "admin": "Admin"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "previewDrag": "Preview(Drag me)",
+      "backToEditor": "Back to Editor",
+      "addLink": "Add Link",
+      "addingLink": "Adding Link...",
+      "generateQR": "Generate QR Code",
+      "processing": "Processing...",
+      "deactivateAccount": "Deactivate Account",
+      "reactivateAccount": "Reactivate Account"
+    },
+    "toasts": {
+      "profileUpdated": "Profile updated successfully!",
+      "profileUpdateError": "Error updating profile",
+      "linkAdded": "Link added successfully!",
+      "linkAddError": "Error adding link: ",
+      "linkDeleted": "Link deleted successfully!",
+      "linkDeleteError": "Error deleting link: ",
+      "qrCreated": "Your Payment QR has been created successfully!",
+      "qrCreateError": "Error creating QR payment",
+      "deactivateError": "Failed to deactivate account",
+      "reactivateError": "Failed to reactivate account"
+    },
+    "profileTab": {
+      "title": "Profile Information",
+      "displayName": "Display Name",
+      "bio": "Bio",
+      "profilePic": "Profile Picture",
+      "profilePicP": "Upload a profile picture that represents you",
+      "uploading": "Uploading...",
+      "uploadSuccess": "Profile picture uploaded successfully",
+      "uploadError": "Unable to upload your image: {error}",
+      "buttons": {
+        "uploadPhoto": "Upload Photo"
+      }
+    },
+    "socialsTab": {
+      "title": "Social Links",
+      "description": "Connect your social media accounts"
+    },
+    "linksTab": {
+      "title": "Custom Links",
+      "description": "Add custom links to your profile",
+      "linkTitle": "Link Title",
+      "linkUrl": "Link URL",
+      "noLinks": "No links yet",
+      "startAdding": "Start adding custom links to share with your audience"
+    },
+    "appearanceTab": {
+      "title": "Appearance",
+      "description": "Customize how your profile looks",
+      "template": "Template",
+      "themeColor": "Theme Color",
+      "backgroundImage": "Background Image",
+      "none": "None",
+      "profileStatus": "Profile Status",
+      "profileLive": "Your profile is live",
+      "profileHidden": "Your profile is hidden"
+    },
+    "paymentTab": {
+      "title": "Bakong KHQR Payment",
+      "description": "Generate a Bakong KHQR code for receiving payments",
+      "accountType": "Account Type *",
+      "individual": "Individual",
+      "merchant": "Merchant",
+      "bakongAccountID": "Bakong Account ID *",
+      "merchantName": "Merchant Name *",
+      "merchantID": "Merchant ID *",
+      "acquiringBank": "Acquiring Bank *",
+      "acquiringBankOptional": "Acquiring Bank (Optional)",
+      "accountInformation": "Account Information (Optional)",
+      "amount": "Amount (Optional)",
+      "hideOptions": "Hide additional options",
+      "addOptions": "Add additional options",
+      "additionalOptions": "Additional Options",
+      "merchantCity": "Merchant City",
+      "billNumber": "Bill Number",
+      "mobileNumber": "Mobile Number",
+      "storeLabel": "Store Label",
+      "terminalLabel": "Terminal Label",
+      "purposeOfTransaction": "Purpose of Transaction",
+      "yourKhqr": "Your KHQR Code",
+      "account": "Account",
+      "currency": "Currency",
+      "noQr": "No QR code generated",
+      "fillDetails": "Fill in the details above and click \"Generate QR Code\"",
+      "buttons": {
+        "generateQR": "Generate QR Code"
+      }
+    },
+    "adminTab": {
+      "title": "Admin Controls",
+      "description": "Manage user accounts. Use these controls carefully.",
+      "deactivateTitle": "Deactivate Account",
+      "deactivateDesc": "Enter the username of the account you want to deactivate. The user will no longer be able to access or modify their profile.",
+      "deactivateLabel": "Username to Deactivate",
+      "deactivatePlaceholder": "Enter username",
+      "reactivateTitle": "Reactivate Account",
+      "reactivateDesc": "Enter the username of the account you want to reactivate. The user will regain access to their profile.",
+      "reactivateLabel": "Username to Reactivate",
+      "reactivatePlaceholder": "Enter username",
+      "warning": "Warning:",
+      "warningText": "Make sure you have the correct username before proceeding."
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "menu": "Menu",
+    "close": "Close",
+    "logout": "LOGOUT",
+    "github": "Github",
+    "viewShowreel": "View Showreel"
+  },
+  "dashboard": {
+    "loading": "Loading profile..."
+  },
+  "userProfile": {
+    "linkCopied": "Link copied!",
+    "copyFailed": "Failed to copy",
+    "scanToPay": "Scan to Pay",
+    "qrNote": "Note: This QR code was generated safely and securely using official KHQR services.",
+    "openApp": "Open your banking app to scan and pay.",
+    "amount": "Amount",
+    "city": "City",
+    "purpose": "Purpose",
+    "shareProfile": "Share Profile",
+    "profileLink": "Profile Link",
+    "copied": "Copied",
+    "copy": "Copy",
+    "shareLink": "Share this link",
+    "pageLink": "Page Link",
+    "continueToSite": "Continue to site"
+  },
+  "footer": {
+    "join": "Join",
+    "on": "on"
+  },
+  "socialMediaForm": {
+    "minChars": "Minimum 3 characters",
+    "preview": "Preview:",
+    "addedSocialLink": "Added Social Links",
+    "addSocialLink": "Add Social Link",
+    "added": "Added"
+  },
+  "profileForm": {
+    "usernameNote": "Note: Username is public and cannot be changed.",
+    "submitting": "Submitting",
+    "redirecting": " redirecting...",
+    "tryAgain": " Please try again later."
+  },
+  "about": {
+    "title": "About Page"
   }
 }

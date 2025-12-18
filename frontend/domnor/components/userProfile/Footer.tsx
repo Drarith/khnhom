@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 interface FooterProps {
   theme?: {
@@ -9,6 +10,7 @@ interface FooterProps {
 }
 
 export default function Footer({ theme, username }: FooterProps) {
+  const t = useTranslations("footer");
   return (
     <footer
       className="w-full py-4 md:py-6 mt-6 md:mt-8 text-center border-t"
@@ -19,11 +21,11 @@ export default function Footer({ theme, username }: FooterProps) {
     >
       <div className="flex flex-col items-center gap-1.5 md:gap-2 px-4">
         <p className="text-xs md:text-sm opacity-70">
-          Join{" "}
+          {t("join")}{" "}
           <span className="font-semibold" style={{ color: theme?.text }}>
             {username}
           </span>{" "}
-          on
+          {t("on")}
         </p>
         <Link
           href="/"

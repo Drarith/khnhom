@@ -2,6 +2,7 @@ import { Link as LinkIcon, X } from "lucide-react";
 import ProfileFormInput from "../../profileInput/profileInput";
 import Button from "../../ui/Button";
 import type { LinksTabProps } from "@/types/tabProps";
+import { useTranslations } from "next-intl";
 
 export default function LinksTab({
   register,
@@ -15,15 +16,17 @@ export default function LinksTab({
   isAdding,
   initialData,
 }: LinksTabProps) {
+  const t = useTranslations("profileEditor");
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-semibold mb-2 text-primary">
-            Custom Links
+            {t("linksTab.title")}
           </h2>
           <p className="text-sm text-primary/60">
-            Add custom links to your profile
+            {t("linksTab.description")}
           </p>
         </div>
       </div>
@@ -35,7 +38,7 @@ export default function LinksTab({
           fieldInput="link.title"
           fieldStateError={errors.link?.title}
           fieldWatchValue={linkTitle}
-          label="Link Title"
+          label={t("linksTab.linkTitle")}
           maxLength={50}
           hasInput={!!linkTitle}
         />
@@ -45,7 +48,7 @@ export default function LinksTab({
           fieldInput="link.url"
           fieldStateError={errors.link?.url}
           fieldWatchValue={linkUrl}
-          label="Link URL"
+          label={t("linksTab.linkUrl")}
           maxLength={200}
           hasInput={!!linkUrl}
         />
@@ -54,7 +57,7 @@ export default function LinksTab({
           disabled={!isValid || isAdding}
           type="button"
         >
-          {isAdding ? "Adding Link..." : "Add Link"}
+          {isAdding ? t("buttons.addingLink") : t("buttons.addLink")}
         </Button>
       </div>
 
@@ -62,10 +65,10 @@ export default function LinksTab({
         <div className="border-2 border-dashed border-primary/20 rounded-lg p-12 text-center">
           <LinkIcon size={48} className="mx-auto text-primary/40 mb-4" />
           <h3 className="text-lg font-medium text-primary mb-2">
-            No links yet
+            {t("linksTab.noLinks")}
           </h3>
           <p className="text-sm text-primary/60 mb-4">
-            Start adding custom links to share with your audience
+            {t("linksTab.startAdding")}
           </p>
         </div>
       ) : (

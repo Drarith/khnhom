@@ -4,6 +4,7 @@ import Button from "../../ui/Button";
 import ProfileFormInput from "../../profileInput/profileInput";
 import type { PaymentTabProps } from "@/types/paymentTabProp";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export default function PaymentTab({
   register,
@@ -29,16 +30,17 @@ export default function PaymentTab({
   initialData,
 }: PaymentTabProps) {
   const [showOptionalFields, setShowOptionalFields] = useState(false);
+  const t = useTranslations("profileEditor.paymentTab");
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-semibold mb-2 text-primary">
-            Bakong KHQR Payment
+            {t("title")}
           </h2>
           <p className="text-sm text-primary/60">
-            Generate a Bakong KHQR code for receiving payments
+            {t("description")}
           </p>
         </div>
       </div>
@@ -50,15 +52,15 @@ export default function PaymentTab({
             htmlFor="accountType"
             className="block text-sm font-medium text-primary mb-2"
           >
-            Account Type *
+            {t("accountType")}
           </label>
           <select
             id="accountType"
             {...register("accountType")}
             className="w-full px-4 py-2 border-2 border-primary/70 rounded-sm text-primary bg-foreground focus:border-primary outline-none"
           >
-            <option value="individual">Individual</option>
-            <option value="merchant">Merchant</option>
+            <option value="individual">{t("individual")}</option>
+            <option value="merchant">{t("merchant")}</option>
           </select>
         </div>
 
@@ -70,7 +72,7 @@ export default function PaymentTab({
             fieldInput="bakongAccountID"
             fieldStateError={errors.bakongAccountID}
             fieldWatchValue={bakongAccountID}
-            label="Bakong Account ID *"
+            label={t("bakongAccountID")}
             maxLength={32}
             hasInput={!!bakongAccountID}
           />
@@ -81,7 +83,7 @@ export default function PaymentTab({
             fieldInput="merchantName"
             fieldStateError={errors.merchantName}
             fieldWatchValue={merchantName}
-            label="Merchant Name *"
+            label={t("merchantName")}
             maxLength={25}
             hasInput={!!merchantName}
           />
@@ -97,7 +99,7 @@ export default function PaymentTab({
               // @ts-expect-error because of zod discrimination typescript is not cooperating
               fieldStateError={errors.merchantID}
               fieldWatchValue={merchantID}
-              label="Merchant ID *"
+              label={t("merchantID")}
               maxLength={32}
               hasInput={!!merchantID}
             />
@@ -108,7 +110,7 @@ export default function PaymentTab({
               fieldInput="acquiringBank"
               fieldStateError={errors.acquiringBank}
               fieldWatchValue={acquiringBank || ""}
-              label="Acquiring Bank *"
+              label={t("acquiringBank")}
               maxLength={32}
               hasInput={!!acquiringBank}
             />
@@ -125,7 +127,7 @@ export default function PaymentTab({
               // @ts-expect-error because of zod discrimination typescript is not cooperating
               fieldStateError={errors.accountInformation}
               fieldWatchValue={accountInformation || ""}
-              label="Account Information (Optional)"
+              label={t("accountInformation")}
               maxLength={32}
               hasInput={!!accountInformation}
             />
@@ -136,7 +138,7 @@ export default function PaymentTab({
               fieldInput="acquiringBank"
               fieldStateError={errors.acquiringBank}
               fieldWatchValue={acquiringBank || ""}
-              label="Acquiring Bank (Optional)"
+              label={t("acquiringBankOptional")}
               maxLength={32}
               hasInput={!!acquiringBank}
             />
@@ -162,7 +164,7 @@ export default function PaymentTab({
             fieldInput="amount"
             fieldStateError={errors.amount}
             fieldWatchValue={amount || ""}
-            label="Amount (Optional)"
+            label={t("amount")}
             maxLength={13}
             hasInput={!!amount}
           />
@@ -177,12 +179,12 @@ export default function PaymentTab({
           {showOptionalFields ? (
             <>
               <ChevronUp size={20} />
-              Hide additional options
+              {t("hideOptions")}
             </>
           ) : (
             <>
               <ChevronDown size={20} />
-              Add additional options
+              {t("addOptions")}
             </>
           )}
         </button>
@@ -191,7 +193,7 @@ export default function PaymentTab({
         {showOptionalFields && (
           <div className="space-y-4 p-4 border-2 border-primary/10 rounded-lg bg-foreground">
             <h3 className="text-sm font-semibold text-primary mb-2">
-              Additional Options
+              {t("additionalOptions")}
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -201,7 +203,7 @@ export default function PaymentTab({
                 fieldInput="merchantCity"
                 fieldStateError={errors.merchantCity}
                 fieldWatchValue={merchantCity || ""}
-                label="Merchant City"
+                label={t("merchantCity")}
                 maxLength={15}
                 hasInput={!!merchantCity}
               />
@@ -212,7 +214,7 @@ export default function PaymentTab({
                 fieldInput="billNumber"
                 fieldStateError={errors.billNumber}
                 fieldWatchValue={billNumber || ""}
-                label="Bill Number"
+                label={t("billNumber")}
                 maxLength={25}
                 hasInput={!!billNumber}
               />
@@ -225,7 +227,7 @@ export default function PaymentTab({
                 fieldInput="mobileNumber"
                 fieldStateError={errors.mobileNumber}
                 fieldWatchValue={mobileNumber || ""}
-                label="Mobile Number"
+                label={t("mobileNumber")}
                 maxLength={25}
                 hasInput={!!mobileNumber}
               />
@@ -236,7 +238,7 @@ export default function PaymentTab({
                 fieldInput="storeLabel"
                 fieldStateError={errors.storeLabel}
                 fieldWatchValue={storeLabel || ""}
-                label="Store Label"
+                label={t("storeLabel")}
                 maxLength={25}
                 hasInput={!!storeLabel}
               />
@@ -249,7 +251,7 @@ export default function PaymentTab({
                 fieldInput="terminalLabel"
                 fieldStateError={errors.terminalLabel}
                 fieldWatchValue={terminalLabel || ""}
-                label="Terminal Label"
+                label={t("terminalLabel")}
                 maxLength={25}
                 hasInput={!!terminalLabel}
               />
@@ -260,7 +262,7 @@ export default function PaymentTab({
                 fieldInput="purposeOfTransaction"
                 fieldStateError={errors.purposeOfTransaction}
                 fieldWatchValue={purposeOfTransaction || ""}
-                label="Purpose of Transaction"
+                label={t("purposeOfTransaction")}
                 maxLength={25}
                 hasInput={!!purposeOfTransaction}
               />
@@ -281,7 +283,7 @@ export default function PaymentTab({
             disabled={!isValid}
             isLoading={isGenerating}
           >
-            Generate QR Code
+            {t("buttons.generateQR")}
           </Button>
         </div>
       </div>
@@ -290,7 +292,7 @@ export default function PaymentTab({
         <div className="mt-6">
           <div className="border-2 border-primary/20 rounded-lg p-6 flex flex-col items-center">
             <h3 className="text-lg font-medium text-primary mb-4">
-              Your KHQR Code
+              {t("yourKhqr")}
             </h3>
             <div className="bg-white p-4 rounded-lg">
               <Image
@@ -303,11 +305,11 @@ export default function PaymentTab({
             </div>
             <div className="mt-4 text-center">
               <p className="text-sm text-primary/70">
-                Account: {initialData?.paymentInfo.merchantName} (
+                {t("account")}: {initialData?.paymentInfo.merchantName} (
                 {initialData?.paymentInfo.bakongAccountID})
               </p>
               <p className="text-sm text-primary/70">
-                Currency: {initialData?.paymentInfo.currency}
+                {t("currency")}: {initialData?.paymentInfo.currency}
                 {initialData?.paymentInfo.amount &&
                   ` | Amount: ${initialData.paymentInfo.amount}`}
               </p>
@@ -318,10 +320,10 @@ export default function PaymentTab({
         <div className="border-2 border-dashed border-primary/20 rounded-lg p-12 text-center">
           <QrCode size={48} className="mx-auto text-primary/40 mb-4" />
           <h3 className="text-lg font-medium text-primary mb-2">
-            No QR code generated
+            {t("noQr")}
           </h3>
           <p className="text-sm text-primary/60">
-            Fill in the details above and click &quot;Generate QR Code&quot;
+            {t("fillDetails")}
           </p>
         </div>
       )}
