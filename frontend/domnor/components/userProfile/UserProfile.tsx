@@ -100,6 +100,10 @@ export default function UserProfile({ data }: { data: ProfileData }) {
               <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                 Scan to Pay
               </h3>
+              <p className="text-sm">
+                Note: This QR code was generated safely and securely using
+                official KHQR services. <br /> Open your banking app to scan and pay.
+              </p>
 
               <div className="flex flex-col items-center">
                 <div className="w-64 bg-red-600 py-1 rounded-t-xl border border-b-0 border-red-600 flex items-center justify-center">
