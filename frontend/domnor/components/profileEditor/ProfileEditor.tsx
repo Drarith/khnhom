@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm, useWatch, type Resolver } from "react-hook-form";
 import {
   Link as LinkIcon,
@@ -27,7 +27,6 @@ import {
   putJSON,
   postJSON,
   deleteLink,
-  logout,
   getJSON,
   patchJSON,
 } from "@/https/https";
@@ -45,8 +44,8 @@ import AdminTab from "./components/AdminTab";
 
 import UserProfile from "../userProfile/UserProfile";
 import { useTabAnimation } from "@/gsap/tab";
-import { setTimeout } from "timers";
-import { set } from "zod";
+import Draggable from "react-draggable";
+import { DraggableCore } from "react-draggable";
 
 export enum Tab {
   PROFILE = "profile",
@@ -67,6 +66,8 @@ export default function ProfileEditor({
   const [qrError, setQrError] = useState<string>("");
   const [notPreviewing, setNotPreviewing] = useState<boolean>(true);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const draggableRef = useRef<HTMLDivElement>(null);
 
   const queryClient = useQueryClient();
 
@@ -403,7 +404,9 @@ export default function ProfileEditor({
   };
 
   const handlePreviewToggle = () => {
-    setNotPreviewing(!notPreviewing);
+    if (!isDragging) {
+      setNotPreviewing(!notPreviewing);
+    }
   };
 
   const { containerRef, highlighterRef } = useTabAnimation(activeTab, [
@@ -415,7 +418,6 @@ export default function ProfileEditor({
     <div className="min-h-screen">
       {notPreviewing ? (
         <div className="max-w-5xl mx-auto p-4 md:p-6 text-primary">
-          
           {/* Header */}
           <div className="bg-foreground rounded-lg shadow-sm p-6 mb-6 border border-primary/10">
             <div className="flex items-center justify-between">
@@ -574,27 +576,42 @@ export default function ProfileEditor({
           </div>
         </div>
       ) : (
-        <UserProfile data={initialData!} />
+        <div className="absolute inset-0">
+          <UserProfile data={initialData!} />
+        </div>
       )}
-      <div className="fixed bottom-8 right-8 z-50">
-        <Button
-          type="button"
-          className="flex items-center gap-2 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 px-6 py-3 rounded-full"
-          onClick={handlePreviewToggle}
+      <Draggable
+        nodeRef={draggableRef}
+        defaultPosition={{ x: 0, y: 0 }}
+        onStart={() => setIsDragging(false)}
+        onDrag={() => setIsDragging(true)}
+        onStop={() => {
+          setTimeout(() => setIsDragging(false), 0);
+        }}
+      >
+        <div
+          ref={draggableRef}
+          className="fixed bottom-8 right-8 z-50 cursor-move"
         >
-          {notPreviewing ? (
-            <>
-              <Eye size={20} />
-              <span className="font-semibold">Preview Profile</span>
-            </>
-          ) : (
-            <>
-              <Palette size={20} />
-              <span className="font-semibold">Back to Editor</span>
-            </>
-          )}
-        </Button>
-      </div>
+          <Button
+            type="button"
+            className="flex items-center gap-2 shadow-xl hover:shadow-2xl transition-all duration-300 px-6 py-3 rounded-full"
+            onClick={handlePreviewToggle}
+          >
+            {notPreviewing ? (
+              <>
+                <Eye size={20} />
+                <span className="font-semibold">Preview(Drag me)</span>
+              </>
+            ) : (
+              <>
+                <Palette size={20} />
+                <span className="font-semibold">Back to Editor</span>
+              </>
+            )}
+          </Button>
+        </div>
+      </Draggable>
     </div>
   );
 }

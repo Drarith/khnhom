@@ -26,6 +26,7 @@
     "next-intl": "^4.5.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
+    "react-draggable": "^4.5.0",
     "react-hook-form": "^7.66.0",
     "react-image-crop": "^11.0.10",
     "react-toastify": "^11.0.5",
