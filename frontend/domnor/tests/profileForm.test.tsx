@@ -49,6 +49,13 @@ const messages = {
       invalidUrl: "Must be a valid HTTPS URL. Example: https://domnor.com",
     },
   },
+  socialMediaForm: {
+    minChars: "Minimum 3 characters",
+    preview: "Preview:",
+    addedSocialLink: "Added Social Links",
+    addSocialLink: "Add Social Link",
+    added: "Added",
+  },
 };
 
 const queryClient = new QueryClient();

@@ -11,12 +11,12 @@ import { z } from "zod";
 type FormInputValues = z.infer<typeof profileFormInputSchema>;
 
 const messages = {
-  profileSetupPage: {
-    socialMediaInput: {
-      addedSocialLink: "Added Social Links",
-      addSocialLink: "Add Social Link",
-      added: "Added",
-    },
+  socialMediaForm: {
+    minChars: "Minimum 3 characters",
+    preview: "Preview:",
+    addedSocialLink: "Added Social Links",
+    addSocialLink: "Add Social Link",
+    added: "Added",
   },
 };
 

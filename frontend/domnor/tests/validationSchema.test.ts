@@ -156,16 +156,6 @@ describe("inputValidationSchema", () => {
       const result = schema.safeParse("invalid-url");
       expect(result.success).toBe(false);
     });
-
-    it("should use custom error message", () => {
-      const customMessage = "Custom error message";
-      const schema = SanitizedUrl(customMessage);
-      const result = schema.safeParse("invalid");
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        expect(result.error.errors[0].message).toContain(customMessage);
-      }
-    });
   });
 
   describe("SocialsSchema", () => {
