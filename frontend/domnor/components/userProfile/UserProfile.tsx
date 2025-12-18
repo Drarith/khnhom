@@ -101,25 +101,77 @@ export default function UserProfile({ data }: { data: ProfileData }) {
                 Scan to Pay
               </h3>
 
-              <div className="relative w-64 h-64 bg-white rounded-xl overflow-hidden border border-gray-100 shadow-inner">
-                <Image
-                  src={data.paymentQrCodeUrl}
-                  alt="Payment QR Code"
-                  fill
-                  className="object-contain p-2"
-                />
+              <div className="flex flex-col items-center">
+                <div className="w-64 bg-red-600 py-1 rounded-t-xl border border-b-0 border-red-600 flex items-center justify-center">
+                  <Image
+                    src={
+                      "https://res.cloudinary.com/dosj9q3zb/image/upload/v1766044956/KHQR_Logo_fvvdmq.png"
+                    }
+                    alt="khqr logo"
+                    width={60}
+                    height={60}
+                    className="w-16 h-16 object-contain brightness-0 invert"
+                  />
+                </div>
+
+                <div className="relative w-64 h-64 bg-white rounded-b-xl overflow-hidden border border-gray-100 shadow-inner">
+                  <Image
+                    src={data.paymentQrCodeUrl}
+                    alt="Payment QR Code"
+                    fill
+                    className="object-contain p-2"
+                  />
+                </div>
               </div>
 
               {data.paymentInfo && (
-                <div className="text-center space-y-1">
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    {data.paymentInfo.merchantName}
-                  </p>
-                  {data.paymentInfo.bakongAccountID && (
-                    <p className="text-sm text-gray-500">
-                      {data.paymentInfo.bakongAccountID}
+                <div className="w-full space-y-3">
+                  <div className="text-center space-y-1 pb-3 border-b border-gray-100 dark:border-gray-800">
+                    <p className="font-semibold text-lg text-gray-900 dark:text-white">
+                      {data.paymentInfo.merchantName}
                     </p>
-                  )}
+                    {data.paymentInfo.bakongAccountID && (
+                      <p className="text-sm text-gray-500 font-mono">
+                        {data.paymentInfo.bakongAccountID}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2 text-sm">
+                    {data.paymentInfo.amount && (
+                      <div className="flex justify-between items-center px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <span className="text-gray-600 dark:text-gray-400">
+                          Amount
+                        </span>
+                        <span className="font-semibold text-gray-900 dark:text-white">
+                          {data.paymentInfo.currency || "KHR"}{" "}
+                          {data.paymentInfo.amount.toLocaleString()}
+                        </span>
+                      </div>
+                    )}
+
+                    {data.paymentInfo.merchantCity && (
+                      <div className="flex justify-between items-center px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <span className="text-gray-600 dark:text-gray-400">
+                          City
+                        </span>
+                        <span className="font-medium text-gray-900 dark:text-white">
+                          {data.paymentInfo.merchantCity}
+                        </span>
+                      </div>
+                    )}
+
+                    {data.paymentInfo.purpose && (
+                      <div className="flex justify-between items-center px-3 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <span className="text-gray-600 dark:text-gray-400">
+                          Purpose
+                        </span>
+                        <span className="font-medium text-gray-900 dark:text-white">
+                          {data.paymentInfo.purpose}
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
