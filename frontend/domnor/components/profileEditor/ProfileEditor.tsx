@@ -343,15 +343,6 @@ export default function ProfileEditor({
     },
   });
 
-  const { mutate: logoutMutation } = useMutation({
-    mutationFn: () => {
-      return logout();
-    },
-    onSuccess: () => {
-      window.location.href = "/";
-    },
-  });
-
   const { mutate: deactivateAccountMutation, isPending: isDeactivating } =
     useMutation({
       mutationFn: (username: string) =>
@@ -403,10 +394,6 @@ export default function ProfileEditor({
     paymentMutation(requestData);
   };
 
-  const onLogout = () => {
-    logoutMutation();
-  };
-
   const handleDeactivateAccount = (username: string) => {
     deactivateAccountMutation(username);
   };
@@ -428,6 +415,7 @@ export default function ProfileEditor({
     <div className="min-h-screen">
       {notPreviewing ? (
         <div className="max-w-5xl mx-auto p-4 md:p-6 text-primary">
+          
           {/* Header */}
           <div className="bg-foreground rounded-lg shadow-sm p-6 mb-6 border border-primary/10">
             <div className="flex items-center justify-between">
@@ -439,13 +427,6 @@ export default function ProfileEditor({
                   Customize your profile and manage your links
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={onLogout}
-                className="bg-primary text-foreground p-3 rounded"
-              >
-                Logout
-              </button>
             </div>
           </div>
 

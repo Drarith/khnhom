@@ -56,7 +56,7 @@ export default function ProfileTab({
         />
 
         {/* Payment QR Code */}
-        <div className="mb-6">
+        {/* <div className="mb-6">
           <label className="block text-sm font-medium text-primary/70 mb-2">
             Payment QR Code
           </label>
@@ -86,7 +86,7 @@ export default function ProfileTab({
               </div>
             )}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

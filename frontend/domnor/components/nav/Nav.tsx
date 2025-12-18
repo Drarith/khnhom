@@ -4,10 +4,13 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { usePathname } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { logout } from "@/https/https";
 
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import "./nav.css";
+import { Divide } from "lucide-react";
 
 export default function Nav() {
   const container = useRef(null);
@@ -22,6 +25,19 @@ export default function Nav() {
   ];
 
   const isControlledPath = menuLinks.some((link) => link.path === pathname);
+
+  const { mutate: logoutMutation } = useMutation({
+    mutationFn: () => {
+      return logout();
+    },
+    onSuccess: () => {
+      window.location.href = "/";
+    },
+  });
+
+  const onLogout = () => {
+    logoutMutation();
+  };
 
   const tl = useRef<gsap.core.Timeline | null>(null);
 
@@ -76,6 +92,7 @@ export default function Nav() {
         </div>
       </div>
 
+
       <div className="menu-overlay">
         <div className="menu-overlay-bar ">
           <div className="menu-logo">
@@ -100,14 +117,20 @@ export default function Nav() {
                   </div>
                 </div>
               ))}
+              {/* logout */}
+              {!isControlledPath && (
+                <>
+                  <div className="menu-link-item mt-25">
+                    <div className="menu-link-item-holder" onClick={onLogout}>
+                      <a className="menu-link hover:cursor-pointer">LOGOUT</a>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
             <div className="menu-info">
               <div className="menu-info-col">
-                <a href="#">X &#8599;</a>
                 <a href="https://github.com/Drarith">Github &#8599;</a>
-                <a href="#">LinkedIn &#8599;</a>
-                <a href="#">Behance &#8599;</a>
-                <a href="#">Dribble &#8599;</a>
               </div>
               <div className="menu-info-col">
                 <p>sarindararith@gmail.com</p>
