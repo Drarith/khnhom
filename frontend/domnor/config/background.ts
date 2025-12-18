@@ -10,5 +10,9 @@ export const backgroundImages = [
     {
         name: "Ethereal Liquid",
         url: "https://res.cloudinary.com/dosj9q3zb/image/upload/v1765966439/wavy_lz2neq.png"
+    },
+    {
+        name: "concrete",
+        url: "https://res.cloudinary.com/dosj9q3zb/image/upload/v1766044204/concrete_qot5vy.png"
     }
 ]
