@@ -61,9 +61,13 @@ export default function Nav() {
     }
   }, [isMenuOpen]);
 
-  return isControlledPath ? (
+  return (
     <div className="menu-container" ref={container}>
-      <div className="menu-bar">
+      <div
+        className={
+          isControlledPath ? "menu-bar" : "menu-bar-login max-w-5xl mx-auto"
+        }
+      >
         <div className="menu-logo">
           <Link href={"/"}>DOMNOR</Link>
         </div>
@@ -73,7 +77,7 @@ export default function Nav() {
       </div>
 
       <div className="menu-overlay">
-        <div className="menu-overlay-bar">
+        <div className="menu-overlay-bar ">
           <div className="menu-logo">
             <Link href={"/"}>DOMNOR</Link>
           </div>
@@ -117,7 +121,5 @@ export default function Nav() {
         </div>
       </div>
     </div>
-  ) : (
-    <div></div>
   );
 }

@@ -40,7 +40,8 @@ export default async function RootLayout({ children, params }: Props) {
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ReactQueryProvider>
             <Nav />
-            <SmoothScrollProvider>{children}</SmoothScrollProvider>
+            {/* <SmoothScrollProvider>{children}</SmoothScrollProvider> */}
+            {children}
             <ToastContainer
               position="top-right"
               autoClose={10000}
