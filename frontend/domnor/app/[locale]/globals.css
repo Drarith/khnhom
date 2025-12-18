@@ -9,6 +9,7 @@
   --color-accent: #00adb5;
   --color-background: #222831;
   --color-foreground: #eeeeee;
+  --color-background-secondary: linear-gradient(to right, #16222a, #3a6073);
 }
 
 /* Dark theme tokens (class-based) */
@@ -24,10 +25,7 @@
 html,
 body {
   height: 100%;
-  background-color: var(--color-background);
+  background: var(--color-background-secondary);
   color: var(--color-foreground);
   -moz-osx-font-smoothing: grayscale;
 }
-
-
-

@@ -425,7 +425,7 @@ export default function ProfileEditor({
   ]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       {notPreviewing ? (
         <div className="max-w-5xl mx-auto p-4 md:p-6 text-primary">
           {/* Header */}
