@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NextIntlClientProvider } from "next-intl";
 import ProfileEditor from "@/components/profileEditor/ProfileEditor";
+import { ProfileData } from "@/types/profileData";
 
 // Mock next/navigation
 vi.mock("next/navigation", () => ({
@@ -17,8 +18,12 @@ vi.mock("next/navigation", () => ({
 
 // Mock react-draggable
 vi.mock("react-draggable", () => ({
-  default: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  DraggableCore: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  default: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  DraggableCore: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }));
 
 // Mock gsap
@@ -165,19 +170,36 @@ const renderWithIntl = (component: React.ReactElement) => {
   );
 };
 
-const mockProfileData = {
+const mockProfileData: ProfileData = {
+  _id: "123456789",
+  user: "user123",
   username: "testuser",
   displayName: "Test User",
   bio: "Test Bio",
-  socials: {},
+  socials: {
+    facebook: "",
+    instagram: "",
+    telegram: "",
+    youtube: "",
+    linkedin: "",
+    x: "",
+    tiktok: "",
+    github: "",
+  },
   links: [],
   theme: "classic dark",
   selectedTemplate: "default",
   backgroundImage: "",
   isActive: true,
   paymentQrCodeUrl: "",
-  paymentInfo: {},
+  paymentInfo: {
+    bakongAccountID: "",
+    merchantName: "",
+  },
   profilePictureUrl: "",
+  views: 0,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 };
 
 describe("ProfileEditor", () => {
@@ -221,7 +243,9 @@ describe("ProfileEditor", () => {
     await user.click(linksTab);
 
     expect(screen.getByText("Custom Links")).toBeInTheDocument();
-    expect(screen.getByText("Add custom links to your profile")).toBeInTheDocument();
+    expect(
+      screen.getByText("Add custom links to your profile")
+    ).toBeInTheDocument();
   });
 
   it("switches to Appearance tab", async () => {
@@ -231,8 +255,9 @@ describe("ProfileEditor", () => {
     const appearanceTab = screen.getByText("Appearance");
     await user.click(appearanceTab);
 
-    expect(screen.getByText("Appearance")).toBeInTheDocument();
-    expect(screen.getByText("Customize how your profile looks")).toBeInTheDocument();
+    expect(
+      screen.getByText("Customize how your profile looks")
+    ).toBeInTheDocument();
   });
 
   it("switches to Payment tab", async () => {

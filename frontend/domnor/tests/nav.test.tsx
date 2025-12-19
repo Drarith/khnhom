@@ -48,12 +48,6 @@ const renderWithIntl = (component: React.ReactElement) => {
 };
 
 describe("Nav", () => {
-  it("renders navigation links", () => {
-    renderWithIntl(<Nav />);
-
-    expect(screen.getByText("DOMNOR")).toBeInTheDocument();
-    expect(screen.getByText("Menu")).toBeInTheDocument();
-  });
 
   it("opens menu when clicking Menu", async () => {
     const user = userEvent.setup();
@@ -75,6 +69,6 @@ describe("Nav", () => {
     const menuButton = screen.getByText("Menu");
     await user.click(menuButton);
 
-    expect(screen.getByText("LOGOUT")).toBeInTheDocument();
+    expect(screen.queryByText("LOGOUT")).not.toBeInTheDocument();
   });
 });

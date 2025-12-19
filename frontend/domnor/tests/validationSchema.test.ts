@@ -84,8 +84,10 @@ describe("inputValidationSchema", () => {
     it("should apply max length validation", () => {
       const schema = SanitizedString(10);
       const longString = "a".repeat(20);
-      const result = schema.parse(longString);
-      expect(result.length).toBeLessThanOrEqual(10);
+      expect(() => schema.parse(longString)).toThrow();
+      const validString = "a".repeat(10);
+      expect(schema.parse(validString)).toBe(validString);
+      
     });
 
     it("should normalize whitespace", () => {

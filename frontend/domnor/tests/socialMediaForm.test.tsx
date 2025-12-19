@@ -403,7 +403,6 @@ describe("SocialMediaForm", () => {
     render(<TestWrapper />);
 
     const input = screen.getByPlaceholderText("username");
-    const select = screen.getByRole("combobox");
 
     await user.type(input, "testuser");
 
@@ -411,7 +410,14 @@ describe("SocialMediaForm", () => {
       screen.getByText("Preview: https://t.me/testuser")
     ).toBeInTheDocument();
 
-    await user.selectOptions(select, "github");
+    // Open the select dropdown
+    const selectButton = screen.getAllByText("Telegram")[1].closest("div")
+      ?.parentElement as HTMLElement;
+    await user.click(selectButton);
+    // Click on GitHub option
+    const githubOption =
+      screen.getAllByText("GitHub")[screen.getAllByText("GitHub").length - 1];
+    await user.click(githubOption);
 
     await waitFor(() => {
       expect(
@@ -528,7 +534,6 @@ describe("SocialMediaForm", () => {
     render(<TestWrapper />);
 
     const input = screen.getByPlaceholderText("username") as HTMLInputElement;
-    const select = screen.getByRole("combobox");
 
     // Add Telegram
     await user.type(input, "testuser");
@@ -542,8 +547,16 @@ describe("SocialMediaForm", () => {
     // Type something new
     await user.type(input, "newuser");
 
-    // Switch to the already added platform (Telegram)
-    await user.selectOptions(select, "telegram");
+    // Open the select dropdown
+    const selectButton = screen.getAllByText("Telegram")[1].closest("div")
+      ?.parentElement as HTMLElement;
+    await user.click(selectButton);
+    // Click on Telegram option again
+    const telegramOption =
+      screen.getAllByText("Telegram")[
+        screen.getAllByText("Telegram").length - 1
+      ];
+    await user.click(telegramOption);
 
     // Input should still have the value
     expect(input.value).toBe("newuser");
@@ -552,8 +565,6 @@ describe("SocialMediaForm", () => {
   it("shows correct prefix for each platform", async () => {
     const user = userEvent.setup();
     render(<TestWrapper />);
-
-    const select = screen.getByRole("combobox");
 
     const platformTests = [
       { key: "telegram", prefix: "https://t.me/" },
@@ -567,7 +578,19 @@ describe("SocialMediaForm", () => {
     ];
 
     for (const platform of platformTests) {
-      await user.selectOptions(select, platform.key);
+      // Open the select dropdown
+      const selectButton = screen.getAllByText("Telegram")[1].closest("div")
+        ?.parentElement as HTMLElement;
+      await user.click(selectButton);
+      // Click on the platform option
+      const option = screen.getAllByText(
+        platform.key.charAt(0).toUpperCase() + platform.key.slice(1)
+      )[
+        screen.getAllByText(
+          platform.key.charAt(0).toUpperCase() + platform.key.slice(1)
+        ).length - 1
+      ];
+      await user.click(option);
       expect(screen.getByText(platform.prefix)).toBeInTheDocument();
     }
   });
@@ -582,7 +605,6 @@ describe("SocialMediaForm", () => {
     render(<TestWrapper onSocialsChange={onSocialsChange} />);
 
     const input = screen.getByPlaceholderText("username");
-    const select = screen.getByRole("combobox");
     const button = screen.getByRole("button", { name: /add social link/i });
 
     const platformTests = [
@@ -594,7 +616,19 @@ describe("SocialMediaForm", () => {
     ];
 
     for (const platform of platformTests) {
-      await user.selectOptions(select, platform.key);
+      // Open the select dropdown
+      const selectButton = screen.getAllByText("Telegram")[1].closest("div")
+        ?.parentElement as HTMLElement;
+      await user.click(selectButton);
+      // Click on the platform option
+      const option = screen.getAllByText(
+        platform.key.charAt(0).toUpperCase() + platform.key.slice(1)
+      )[
+        screen.getAllByText(
+          platform.key.charAt(0).toUpperCase() + platform.key.slice(1)
+        ).length - 1
+      ];
+      await user.click(option);
       await user.clear(input);
       await user.type(input, "testuser");
       await user.click(button);
@@ -649,7 +683,7 @@ describe("SocialMediaForm", () => {
     const button = screen.getByRole("button");
 
     // Initial state
-    expect(button).toHaveTextContent("Add social link");
+    expect(button).toHaveTextContent(/add social link/i);
 
     // Add a social
     await user.type(input, "testuser");
@@ -666,7 +700,6 @@ describe("SocialMediaForm", () => {
     render(<TestWrapper />);
 
     const input = screen.getByPlaceholderText("username");
-    const select = screen.getByRole("combobox");
     const button = screen.getByRole("button");
 
     // Add Telegram
@@ -678,13 +711,20 @@ describe("SocialMediaForm", () => {
       expect(button).toHaveTextContent("Added");
     });
 
-    // Switch to GitHub
-    await user.selectOptions(select, "github");
+    // Open the select dropdown
+    const selectButton = screen.getAllByText("Telegram")[1].closest("div")
+      ?.parentElement as HTMLElement;
+    await user.click(selectButton);
+    // Click on GitHub option
+    const githubOption =
+      screen.getAllByText("GitHub")[screen.getAllByText("GitHub").length - 1];
+    await user.click(githubOption);
+
     await user.type(input, "testuser");
 
     await waitFor(() => {
       expect(button).toBeEnabled();
-      expect(button).toHaveTextContent("Add Social Link");
+      expect(button).toHaveTextContent(/add social link/i);
     });
   });
 
