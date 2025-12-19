@@ -32,30 +32,41 @@ export const SanitizedString = (
   minMessage?: string,
   maxMessage?: string
 ) => {
-  let schema = z.string();
-
-  if (minLength > 0) {
-    schema = schema.min(minLength, {
-      message: minMessage || `Must be at least ${minLength} characters`,
-    });
-  }
-
-  schema = schema.max(maxLength, {
-    message: maxMessage || `Must be at most ${maxLength} characters`,
-  });
-
-  if (pattern) {
-    schema = schema.regex(pattern, {
-      message: patternMessage || "Invalid format",
-    });
-  }
-
-  return schema
+  // Start with string and trim first
+  let schema: z.ZodTypeAny = z
+    .string()
     .default("")
-    .transform((s) => normalizeWhitespace(s))
-    .transform((s) => s.trim())
-    .transform((s) => escapeHtml(s))
-    .transform((s) => s.slice(0, maxLength));
+    .transform((s) => s.trim());
+
+  // Then apply length validations
+  // we use pipe() to chain validations
+  if (minLength > 0) {
+    schema = schema.pipe(
+      z.string().min(minLength, {
+        message: minMessage || `Must be at least ${minLength} characters`,
+      })
+    );
+  }
+
+  schema = schema.pipe(
+    z.string().max(maxLength, {
+      message: maxMessage || `Must be at most ${maxLength} characters`,
+    })
+  );
+
+  // Then apply pattern validation
+  if (pattern) {
+    schema = schema.pipe(
+      z.string().regex(pattern, {
+        message: patternMessage || "Invalid format",
+      })
+    );
+  }
+
+  // Finally apply sanitization transformations
+  return schema
+    .transform((s) => normalizeWhitespace(s as string))
+    .transform((s) => escapeHtml(s));
 };
 export const SocialsSchema = z
   .record(z.string(), z.unknown())
@@ -63,14 +74,16 @@ export const SocialsSchema = z
   .transform((raw) => {
     const out: Record<string, string> = {};
     for (const [key, value] of Object.entries(raw)) {
+      // if key not in allowed keys, skip
       if (!ALLOWED_SOCIAL_KEYS.has(key)) continue;
       if (typeof value === "string" && value.trim() !== "") {
         const trimmed = value.trim();
-        const sanitizedUrl = SanitizedUrl().parse(trimmed);
-        if (sanitizedUrl && sanitizedUrl.trim() !== "") {
-          out[key] = sanitizedUrl;
+        // If it's a valid HTTPS URL, use it as-is
+        if (isValidHttpUrl(trimmed)) {
+          out[key] = trimmed;
         } else {
-          out[key] = escapeHtml(normalizeWhitespace(trimmed).slice(0, 100));
+          // Otherwise, it's a handle/username - sanitize and cap at 100 chars
+          out[key] = escapeHtml(normalizeWhitespace(trimmed)).slice(0, 100);
         }
       }
     }

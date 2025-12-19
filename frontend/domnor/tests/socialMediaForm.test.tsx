@@ -11,12 +11,14 @@ import { z } from "zod";
 type FormInputValues = z.infer<typeof profileFormInputSchema>;
 
 const messages = {
-  socialMediaForm: {
-    minChars: "Minimum 3 characters",
-    preview: "Preview:",
-    addedSocialLink: "Added Social Links",
-    addSocialLink: "Add Social Link",
-    added: "Added",
+  profileSetupPage: {
+    socialMediaInput: {
+      minChars: "Minimum 3 characters",
+      preview: "Preview:",
+      addedSocialLink: "Added Social Links",
+      addSocialLink: "Add Social Link",
+      added: "Added",
+    },
   },
 };
 
@@ -56,7 +58,6 @@ describe("SocialMediaForm", () => {
   it("renders the social media form with default platform selected", () => {
     render(<TestWrapper />);
 
-    expect(screen.getByRole("combobox")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("username")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /add social link/i })
@@ -66,27 +67,33 @@ describe("SocialMediaForm", () => {
   it("displays all available social platforms in dropdown", () => {
     render(<TestWrapper />);
 
-    const select = screen.getByRole("combobox") as HTMLSelectElement;
-    const options = Array.from(select.options).map((opt) => opt.value);
-
-    expect(options).toContain("telegram");
-    expect(options).toContain("x");
-    expect(options).toContain("instagram");
-    expect(options).toContain("github");
-    expect(options).toContain("tiktok");
-    expect(options).toContain("youtube");
-    expect(options).toContain("linkedin");
-    expect(options).toContain("facebook");
+    expect(screen.getByText("Telegram")).toBeInTheDocument();
+    expect(screen.getByText("X")).toBeInTheDocument();
+    expect(screen.getByText("Instagram")).toBeInTheDocument();
+    expect(screen.getByText("GitHub")).toBeInTheDocument();
+    expect(screen.getByText("TikTok")).toBeInTheDocument();
+    expect(screen.getByText("YouTube")).toBeInTheDocument();
+    expect(screen.getByText("LinkedIn")).toBeInTheDocument();
+    expect(screen.getByText("Facebook")).toBeInTheDocument();
   });
 
   it("changes platform when selecting from dropdown", async () => {
     const user = userEvent.setup();
     render(<TestWrapper />);
 
-    const select = screen.getByRole("combobox");
-    await user.selectOptions(select, "github");
+    // Click on the select to open it
+    const selectButton = screen.getByText("Telegram").closest("div")
+      ?.parentElement as HTMLElement;
+    await user.click(selectButton);
 
-    expect(screen.getByText("https://github.com/")).toBeInTheDocument();
+    // Click on GitHub option
+    const githubOption =
+      screen.getAllByText("GitHub")[screen.getAllByText("GitHub").length - 1];
+    await user.click(githubOption);
+
+    await waitFor(() => {
+      expect(screen.getByText("https://github.com/")).toBeInTheDocument();
+    });
   });
 
   it("shows minimum character error when input is less than 3 characters", async () => {
@@ -296,7 +303,6 @@ describe("SocialMediaForm", () => {
     render(<TestWrapper />);
 
     const input = screen.getByPlaceholderText("username");
-    const select = screen.getByRole("combobox");
     const addButton = screen.getByRole("button", { name: /add social link/i });
 
     // Add Telegram
@@ -307,8 +313,15 @@ describe("SocialMediaForm", () => {
       expect(screen.getByText("https://t.me/testuser")).toBeInTheDocument();
     });
 
+    // Click to change platform to GitHub
+    const selectButton = screen.getByText("Telegram").closest("div")
+      ?.parentElement as HTMLElement;
+    await user.click(selectButton);
+    const githubOption =
+      screen.getAllByText("GitHub")[screen.getAllByText("GitHub").length - 1];
+    await user.click(githubOption);
+
     // Add GitHub
-    await user.selectOptions(select, "github");
     await user.type(input, "testuser");
     await user.click(addButton);
 
@@ -345,17 +358,21 @@ describe("SocialMediaForm", () => {
     render(<TestWrapper />);
 
     const input = screen.getByPlaceholderText("username");
-    const select = screen.getByRole("combobox") as HTMLSelectElement;
     const button = screen.getByRole("button", { name: /add social link/i });
 
     await user.type(input, "testuser");
     await user.click(button);
 
     await waitFor(() => {
-      const option = Array.from(select.options).find(
-        (opt: HTMLOptionElement) => opt.value === "telegram"
-      );
-      expect(option?.text).toContain("✓");
+      // Check if the Telegram text appears with a checkmark
+      const telegramText = screen.getByText((content, element) => {
+        return (
+          (element?.textContent?.includes("Telegram") &&
+            element?.textContent?.includes("✓")) ||
+          false
+        );
+      });
+      expect(telegramText).toBeInTheDocument();
     });
   });
 
@@ -632,7 +649,7 @@ describe("SocialMediaForm", () => {
     const button = screen.getByRole("button");
 
     // Initial state
-    expect(button).toHaveTextContent("Add Social Link");
+    expect(button).toHaveTextContent("Add social link");
 
     // Add a social
     await user.type(input, "testuser");
