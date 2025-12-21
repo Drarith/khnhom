@@ -2,13 +2,22 @@ import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import Profile from "../model/profileModel.js";
 import { env } from "../config/myEnv.js";
+import { verifyAccessToken } from "../utils/tokenUtils.js";
+import type { IUser } from "../model/types-for-models/userModel.types.js";
 
 const JWT_SECRET = env.JWT_SECRET;
 
 function getTokenFromRequest(req: Request): string | null {
-  const cookieToken = (req as any).cookies?.auth_token; 
+  // Check for new access_token cookie first
+  const accessToken = (req as any).cookies?.access_token;
+  if (accessToken) return accessToken;
+
+  // Fallback to old auth_token for backward compatibility
+  const cookieToken = (req as any).cookies?.auth_token;
   if (cookieToken) return cookieToken;
 
+  // Check Authorization header
+  // For testing with postman 
   const authHeader = req.headers["authorization"];
   if (authHeader?.startsWith("Bearer ")) {
     return authHeader.slice("Bearer ".length);
@@ -28,20 +37,15 @@ export const authenticateToken = async (
     return res.status(401).json({ message: "No token provided" });
   }
 
-  jwt.verify(token, JWT_SECRET, async (err, userPayload) => {
-    if (err) {
-      if ((err as any).name === "TokenExpiredError") {
-        return res.status(401).json({ message: "Token expired" });
-      }
-      return res.status(403).json({ message: "Invalid token" });
-    }
+  try {
+    // decode token with jwt.verify from jwt.sign
+    const userPayload = verifyAccessToken(token);
+    req.user = userPayload as IUser;
 
-    req.user = userPayload as any;
-
-
-    if (userPayload && typeof userPayload === "object" && "id" in userPayload) {
+    // Fetch profile if user ID exists
+    if (userPayload && userPayload.id) {
       try {
-        const profile = await Profile.findOne({ user: (userPayload as any).id });
+        const profile = await Profile.findOne({ user: userPayload.id });
         if (profile) {
           req.profile = profile;
         }
@@ -51,5 +55,16 @@ export const authenticateToken = async (
     }
 
     next();
-  });
+  } catch (err) {
+    if ((err as any).name === "TokenExpiredError") {
+      return res.status(401).json({
+        message: "Token expired",
+        code: "TOKEN_EXPIRED",
+      });
+    }
+    if ((err as any).name === "JsonWebTokenError") {
+      return res.status(403).json({ message: "Invalid token" });
+    }
+    return res.status(403).json({ message: "Token verification failed" });
+  }
 };

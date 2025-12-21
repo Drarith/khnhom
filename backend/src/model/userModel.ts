@@ -26,6 +26,10 @@ const userSchema = new Schema(
       unique: true,
       sparse: true,
     },
+    refreshToken: {
+      type: String,
+      required: false,
+    },
     isSupporter: {
       type: Boolean,
       default: false,
@@ -118,6 +122,16 @@ userSchema.statics.emailExists = async function (email: string) {
 
 userSchema.methods.updatePassword = async function (newPassword: string) {
   this.password = newPassword;
+  await this.save();
+};
+
+userSchema.methods.updateRefreshToken = async function (refreshToken: string) {
+  this.refreshToken = refreshToken;
+  await this.save();
+};
+
+userSchema.methods.clearRefreshToken = async function () {
+  this.refreshToken = undefined;
   await this.save();
 };
 

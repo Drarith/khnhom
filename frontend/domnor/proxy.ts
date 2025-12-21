@@ -21,7 +21,8 @@ export default async function proxy(request: NextRequest) {
 
   // extract the path without locale
   const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, "") || "/";
-  const token = request.cookies.get("auth_token")?.value;
+  const token = request.cookies.get("access_token")?.value || 
+                request.cookies.get("auth_token")?.value; // fallback for backward compatibility
 
   const isProtectedRoute = protectedRoutes.includes(pathWithoutLocale);
 

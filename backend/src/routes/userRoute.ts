@@ -7,6 +7,7 @@ import {
   deactivateAccountByUsername,
   reactivateAccountByUsername,
   getUserRole,
+  refreshAccessToken,
 } from "../controllers/userController.js";
 import passport from "passport";
 import "../config/passport.js";
@@ -28,6 +29,9 @@ userRouter.get(
 userRouter.get("/api/auth/google/callback", googleCallback);
 
 userRouter.post("/api/logout", logoutUser);
+
+// Refresh access token
+userRouter.post("/api/refresh-token", refreshAccessToken);
 
 // Admin route to deactivate account by username
 userRouter.patch(

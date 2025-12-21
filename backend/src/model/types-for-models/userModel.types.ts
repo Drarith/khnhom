@@ -8,12 +8,15 @@ export interface IUser extends Document {
   password: string;
   googleId?: string;
   isSupporter: boolean;
+  refreshToken?: string;
   createdAt: Date;
   updatedAt: Date;
 
   // Instance methods
   comparePassword(candidatePassword: string): Promise<boolean>;
   updatePassword(newPassword: string): Promise<void>;
+  updateRefreshToken(refreshToken: string): Promise<void>;
+  clearRefreshToken(): Promise<void>;
 }
 
 // Interface for the User model (static methods)

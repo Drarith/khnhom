@@ -10,7 +10,7 @@ export const sendAuthHttpOnlyCookie = (
     statusCode = 200,
     maxAgeMs = 24 * 60 * 60 * 1000,
     secure = true,
-    redirectTo, 
+    redirectTo,
   }: CookieOptions = {}
 ) => {
   const cookieOptions = {
@@ -21,6 +21,43 @@ export const sendAuthHttpOnlyCookie = (
   };
 
   res.cookie(name, token, cookieOptions);
+
+  if (redirectTo) {
+    return res.status(statusCode).redirect(redirectTo);
+  }
+
+  return res.status(statusCode).json({ message });
+};
+
+/**
+ * Send both access token and refresh token as HTTP-only cookies
+ */
+export const sendAuthTokens = (
+  res: Response,
+  accessToken: string,
+  refreshToken: string,
+  {
+    message = "OK",
+    statusCode = 200,
+    secure = true,
+    redirectTo,
+  }: Omit<CookieOptions, "name" | "maxAgeMs"> = {}
+) => {
+  // Access token - 15 minutes
+  res.cookie("access_token", accessToken, {
+    httpOnly: true,
+    secure,
+    sameSite: "lax",
+    maxAge: 15 * 60 * 1000, // 15 minutes
+  });
+
+  // Refresh token - 7 days
+  res.cookie("refresh_token", refreshToken, {
+    httpOnly: true,
+    secure,
+    sameSite: "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
 
   if (redirectTo) {
     return res.status(statusCode).redirect(redirectTo);

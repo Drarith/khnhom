@@ -3,7 +3,11 @@ import passport from "passport";
 import jwt from "jsonwebtoken";
 import User from "../model/userModel.js";
 
-import { sendAuthHttpOnlyCookie } from "../helpers/httpOnlyCookie.js";
+import {
+  sendAuthHttpOnlyCookie,
+  sendAuthTokens,
+} from "../helpers/httpOnlyCookie.js";
+import { generateTokens, verifyRefreshToken } from "../utils/tokenUtils.js";
 
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 
@@ -33,14 +37,11 @@ export const createUser = async (req: Request, res: Response) => {
       user: user._id,
     };
     await UserRole.createUserRole(userData);
-    const payload = {
-      id: user._id,
-      email: user.email,
-    };
-    const token = jwt.sign(payload, JWT_SECRET as string, {
-      expiresIn: "1d",
-    });
-    sendAuthHttpOnlyCookie(res, token, {
+
+    const { accessToken, refreshToken } = generateTokens(user);
+    await user.updateRefreshToken(refreshToken);
+
+    sendAuthTokens(res, accessToken, refreshToken, {
       statusCode: 201,
       message: "User created successfully.",
       secure: secureCookie,
@@ -56,7 +57,7 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
     { session: false },
     // executing our strategy from passport config
     // this is the returned function
-    (err: Error, user: IUser | false, info?: { message: string }) => {
+    async (err: Error, user: IUser | false, info?: { message: string }) => {
       if (err) {
         return next(err);
       }
@@ -65,15 +66,11 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
           .status(401)
           .json({ message: info?.message || "Login failed" });
       }
-      const payload = {
-        id: user._id,
-        email: user.email,
-      };
-      const token = jwt.sign(payload, JWT_SECRET as string, {
-        expiresIn: "1d",
-      });
 
-      sendAuthHttpOnlyCookie(res, token, {
+      const { accessToken, refreshToken } = generateTokens(user);
+      await user.updateRefreshToken(refreshToken);
+
+      sendAuthTokens(res, accessToken, refreshToken, {
         message: "Logged in successfully.",
         secure: secureCookie,
       });
@@ -106,13 +103,8 @@ export const googleCallback = (
       }
 
       try {
-        const payload = {
-          id: user._id,
-          email: user.email,
-        };
-        const token = jwt.sign(payload, JWT_SECRET as string, {
-          expiresIn: "1d",
-        });
+        const { accessToken, refreshToken } = generateTokens(user);
+        await user.updateRefreshToken(refreshToken);
 
         const existingProfile = await Profile.findOne({ user: user._id });
 
@@ -121,7 +113,7 @@ export const googleCallback = (
           ? `${base}/dashboard`
           : `${base}/create-profile`;
 
-        sendAuthHttpOnlyCookie(res, token, {
+        sendAuthTokens(res, accessToken, refreshToken, {
           message: existingProfile
             ? "Google authentication successful."
             : "Google authentication successful. Please create your profile.",
@@ -140,8 +132,31 @@ export const googleCallback = (
   )(req, res, next);
 };
 
-export const logoutUser = (_req: Request, res: Response) => {
+export const logoutUser = async (req: Request, res: Response) => {
+  // Clear refresh token from database
+  if (req.user) {
+    try {
+      const userId = (req.user as IUser).id;
+      const user = await User.findById(userId);
+      if (user) {
+        await user.clearRefreshToken();
+      }
+    } catch (error) {
+      console.error("Error clearing refresh token:", error);
+    }
+  }
+
   res
+    .clearCookie("access_token", {
+      httpOnly: true,
+      secure: secureCookie,
+      sameSite: "lax",
+    })
+    .clearCookie("refresh_token", {
+      httpOnly: true,
+      secure: secureCookie,
+      sameSite: "lax",
+    })
     .clearCookie("auth_token", {
       httpOnly: true,
       secure: secureCookie,
@@ -150,7 +165,7 @@ export const logoutUser = (_req: Request, res: Response) => {
     .status(200)
     .json({
       success: true,
-      message: "Logged out. Cookie cleared.",
+      message: "Logged out. Cookies cleared.",
     });
 };
 
@@ -248,6 +263,49 @@ export const getUserRole = async (req: Request, res: Response) => {
     return res.status(200).json({ role: userRole.role });
   } catch (error) {
     console.error("Error fetching user role:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+/**
+ * Refresh access token using refresh token
+ */
+export const refreshAccessToken = async (req: Request, res: Response) => {
+  const refreshToken = req.cookies?.refresh_token;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: "Refresh token not provided" });
+  }
+
+  try {
+    // Verify the refresh token
+    const decoded = verifyRefreshToken(refreshToken);
+
+    // Find the user and verify the refresh token matches
+    const user = await User.findById(decoded.id);
+    if (!user || user.refreshToken !== refreshToken) {
+      return res.status(403).json({ message: "Invalid refresh token" });
+    }
+
+    // Generate new tokens
+    const { accessToken, refreshToken: newRefreshToken } = generateTokens(user);
+
+    // Update refresh token in database
+    await user.updateRefreshToken(newRefreshToken);
+
+    // Send new tokens
+    sendAuthTokens(res, accessToken, newRefreshToken, {
+      message: "Tokens refreshed successfully",
+      secure: secureCookie,
+    });
+  } catch (error) {
+    console.error("Error refreshing token:", error);
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(403).json({ message: "Invalid refresh token" });
+    }
+    if (error instanceof jwt.TokenExpiredError) {
+      return res.status(403).json({ message: "Refresh token expired" });
+    }
     return res.status(500).json({ message: "Internal server error" });
   }
 };
