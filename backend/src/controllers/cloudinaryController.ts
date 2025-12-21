@@ -20,7 +20,7 @@ export const cloudinaryUploadSignature = async (
   }
 
   const timestamp = Math.round(new Date().getTime() / 1000);
-  //With this approach, each new upload overwrites the previous one
+  //With this approach, each new upload overwrites the previous one, so we don't accumulate multiple profile pictures per user.
   const publicId = `user_${userId}_profile`;
 
   const params_to_sign = {
