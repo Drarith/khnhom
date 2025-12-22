@@ -116,8 +116,9 @@ export default function UploadImageModal({
       return;
     }
 
-    const cropWidth = completedCrop.width * scaleX;
-    const cropHeight = completedCrop.height * scaleY;
+    // divided by scale to account for zoom level
+    const cropWidth = (completedCrop.width * scaleX) / scale;
+    const cropHeight = (completedCrop.height * scaleY) / scale;
 
     let outputWidth = cropWidth;
     let outputHeight = cropHeight;
