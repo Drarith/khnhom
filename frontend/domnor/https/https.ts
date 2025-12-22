@@ -31,6 +31,13 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // Handle rate limit
+    if (error.response?.status === 429) {
+      alert("You are sending too many requests. Please wait and try again.");
+
+      return Promise.reject(error);
+    }
+
     if (
       error.response?.status === 401 &&
       error.response?.data?.code === "TOKEN_EXPIRED" &&
