@@ -13,9 +13,9 @@ export default function ThemeCard({
     <button
       type="button"
       onClick={() => onThemeSelect(theme.name)}
-      className={`theme-btn relative rounded-lg p-4 flex flex-col items-center justify-center gap-3 transition-all overflow-hidden border-2 h-52 w-full opacity-0 ${
+      className={`theme-btn relative rounded-lg p-4 flex flex-col items-center justify-center gap-3 transition-all overflow-hidden border-2 h-52 w-full${
         isSelected
-          ? "border-primary shadow-lg scale-105"
+          ? "border-blue shadow-lg scale-105 border-8"
           : "border-primary/20 hover:border-primary/40 hover:scale-[1.02]"
       }`}
       style={{ background: theme.bg }}

@@ -115,7 +115,7 @@ export default function AppearanceTab({
                 type="button"
                 key={bg.url}
                 onClick={() => onBackgroundSelect(bg.name)}
-                className={`theme-btn relative h-32 rounded-lg border-2 transition-all overflow-hidden opacity-0 ${
+                className={`theme-btn relative h-32 rounded-lg border-2 transition-all overflow-hidden ${
                   backgroundImage === bg.name
                     ? "border-primary shadow-lg scale-105"
                     : "border-primary/20 hover:border-primary/40"
