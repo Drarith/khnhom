@@ -192,7 +192,7 @@ export const profileFormEditorInputSchema = z.object({
   bio: SanitizedString(1000),
   socials: SocialsSchema,
   theme: SanitizedString(50),
-  selectedTemplate: z.enum(["default", "brutalist"]),
+  selectedTemplate: z.enum(["default", "brutalist", "khmer"]),
   backgroundImage: z.string().optional(),
 });
 

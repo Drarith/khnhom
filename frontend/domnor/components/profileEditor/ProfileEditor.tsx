@@ -318,7 +318,7 @@ export default function ProfileEditor({
     },
   });
 
-  const { mutate: linkDeleteMutation, isPending: isDeletingLink } = useMutation(
+  const { mutate: linkDeleteMutation} = useMutation(
     {
       mutationFn: (id: string) => {
         return deleteLink(`/profile/links/${id}`);
@@ -411,7 +411,9 @@ export default function ProfileEditor({
   const handlePreviewToggle = () => {
     if (!isDragging) {
       setNotPreviewing(!notPreviewing);
+      console.log("Toggled preview mode");
     }
+    console.log("isDragging:", isDragging);
   };
 
   const { containerRef, highlighterRef } = useTabAnimation(activeTab, [

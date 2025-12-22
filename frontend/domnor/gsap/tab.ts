@@ -19,7 +19,6 @@ export const useTabAnimation = (
       const isValidTab = Object.values(Tab).includes(activeTab as Tab);
 
       if (highlighter && activeElement && isValidTab) {
-        console.log(activeElement);
         const { offsetLeft, offsetTop, offsetWidth, offsetHeight } =
           activeElement;
 

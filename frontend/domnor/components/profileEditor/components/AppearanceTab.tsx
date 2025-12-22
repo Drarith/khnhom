@@ -9,6 +9,7 @@ import { profileFormEditorInputSchema } from "@/validationSchema/inputValidation
 import { z } from "zod";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { ThemeButton } from "@/gsap/themeButton";
 
 type ProfileFormEditorInputValues = z.infer<
   typeof profileFormEditorInputSchema
@@ -23,7 +24,6 @@ interface AppearanceTabProps {
 }
 
 export default function AppearanceTab({
-  initialData,
   theme,
   selectedTemplate,
   backgroundImage,
@@ -35,7 +35,7 @@ export default function AppearanceTab({
     setValue("theme", themeName, { shouldValidate: true });
   }
 
-  function onTemplateSelect(templateKey: string) {
+  function onTemplateSelect(templateKey: ProfileFormEditorInputValues["selectedTemplate"]) {
     setValue("selectedTemplate", templateKey, { shouldValidate: true });
   }
 
@@ -43,13 +43,15 @@ export default function AppearanceTab({
     setValue("backgroundImage", backgroundName, { shouldValidate: true });
   }
 
+  const buttonContainerRef = ThemeButton();
+
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h2 className="text-xl font-semibold mb-2 text-primary">{t("title")}</h2>
-        <p className="text-sm text-primary/60">
-          {t("description")}
-        </p>
+        <h2 className="text-xl font-semibold mb-2 text-primary">
+          {t("title")}
+        </h2>
+        <p className="text-sm text-primary/60">{t("description")}</p>
       </div>
 
       <div>
@@ -68,63 +70,76 @@ export default function AppearanceTab({
       </div>
 
       {/* Theme Color */}
-      <div>
-        <h3 className="font-medium text-primary mb-4">{t("themeColor")}</h3>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
-          {themes.map((t) => {
-            return (
-              <ThemeCard
-                key={t.name}
-                theme={t}
-                onThemeSelect={onThemeSelect}
-                isSelected={theme === t.name}
-              />
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Background Image */}
-      <div>
-        <h3 className="font-medium text-primary mb-4">{t("backgroundImage")}</h3>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
-          <button
-            type="button"
-            onClick={() => onBackgroundSelect("")}
-            className={`relative h-32 rounded-lg border-2 transition-all overflow-hidden ${
-              backgroundImage === ""
-                ? "border-primary shadow-lg scale-105"
-                : "border-primary/20 hover:border-primary/40"
-            }`}
+      <div ref={buttonContainerRef}>
+        <div>
+          <h3 className="font-medium text-primary mb-4">{t("themeColor")}</h3>
+          <div
+            
+            className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3"
           >
-            <div className="absolute inset-0 flex items-center justify-center bg-primary/5">
-              <span className="text-sm font-medium text-primary">{t("none")}</span>
-            </div>
-          </button>
-          {backgroundImages.map((bg) => (
+            {themes.map((t) => {
+              return (
+                <ThemeCard
+                  key={t.name}
+                  theme={t}
+                  onThemeSelect={onThemeSelect}
+                  isSelected={theme === t.name}
+                />
+              );
+            })}
+          </div>
+        </div>
+        {/* Background Image */}
+        <div className="mt-8 ">
+          <h3 className="font-medium text-primary mb-4">
+            {t("backgroundImage")}
+          </h3>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
             <button
               type="button"
-              key={bg.url}
-              onClick={() => onBackgroundSelect(bg.name)}
+              onClick={() => onBackgroundSelect("")}
               className={`relative h-32 rounded-lg border-2 transition-all overflow-hidden ${
-                backgroundImage === bg.name
+                backgroundImage === ""
                   ? "border-primary shadow-lg scale-105"
                   : "border-primary/20 hover:border-primary/40"
               }`}
             >
-              <Image src={bg.url} alt={bg.name} fill className="object-cover" />
-              <div className="absolute inset-0 bg-black/20 flex items-end p-2">
-                <span className="text-xs font-medium text-white drop-shadow">
-                  {bg.name}
+              <div className="absolute inset-0 flex items-center justify-center bg-primary/5">
+                <span className="text-sm font-medium text-primary">
+                  {t("none")}
                 </span>
               </div>
             </button>
-          ))}
+            {backgroundImages.map((bg) => (
+              <button
+                type="button"
+                key={bg.url}
+                onClick={() => onBackgroundSelect(bg.name)}
+                className={`theme-btn relative h-32 rounded-lg border-2 transition-all overflow-hidden opacity-0 ${
+                  backgroundImage === bg.name
+                    ? "border-primary shadow-lg scale-105"
+                    : "border-primary/20 hover:border-primary/40"
+                }`}
+              >
+                <Image
+                  src={bg.url}
+                  alt={bg.name}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-black/20 flex items-end p-2">
+                  <span className="text-xs font-medium text-white drop-shadow">
+                    {bg.name}
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Profile Status */}
-      <div className="border-t border-primary/10 pt-6">
+      {/* <div className="border-t border-primary/10 pt-6">
         <div className="flex items-center justify-between p-4 bg-primary/5 rounded-lg">
           <div>
             <h3 className="font-medium text-primary">{t("profileStatus")}</h3>
@@ -147,7 +162,7 @@ export default function AppearanceTab({
             />
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
