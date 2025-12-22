@@ -1,0 +1,42 @@
+.selected-spin {
+  transform-style: preserve-3d;
+}
+
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+.selected-spin::after,
+.selected-spin::before {
+  content: "";
+  position: absolute;
+  background-image: conic-gradient(
+    from var(--angle),
+    #ff4545,
+    #00ff99,
+    #006aff,
+    #ff0095,
+    #ff4545
+  );
+  inset: -4px;
+  border-radius: inherit;
+
+  transform: translateZ(-1px);
+  padding: 10px;
+  animation: 3s spin infinite linear;
+}
+
+.selected-spin::before {
+  filter: blur(1.5rem);
+  opacity: 0.5;
+}
+
+@keyframes spin {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+}
