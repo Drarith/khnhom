@@ -93,7 +93,6 @@ export default function Nav() {
         </div>
       </div>
 
-
       <div className="menu-overlay">
         <div className="menu-overlay-bar ">
           <div className="menu-logo">
@@ -104,11 +103,9 @@ export default function Nav() {
           </div>
         </div>
         <div className="menu-overlay-content">
-          <div className="menu-close-icon" onClick={toggleMenu}>
-            <p>&#x2715;</p>
-          </div>
+
           <div className="menu-copy">
-            <div className="menu-links">
+            <div className="menu-links mx-auto">
               {menuLinks?.map((link, index) => (
                 <div className="menu-link-item" key={index}>
                   <div className="menu-link-item-holder" onClick={toggleMenu}>
@@ -123,7 +120,9 @@ export default function Nav() {
                 <>
                   <div className="menu-link-item mt-25">
                     <div className="menu-link-item-holder" onClick={onLogout}>
-                      <a className="menu-link hover:cursor-pointer">{t("logout")}</a>
+                      <a className="menu-link hover:cursor-pointer">
+                        {t("logout")}
+                      </a>
                     </div>
                   </div>
                 </>
@@ -138,9 +137,6 @@ export default function Nav() {
                 <p>070 35 70 71</p>
               </div>
             </div>
-          </div>
-          <div className="menu-preview">
-            <p>{t("viewShowreel")}</p>
           </div>
         </div>
       </div>
