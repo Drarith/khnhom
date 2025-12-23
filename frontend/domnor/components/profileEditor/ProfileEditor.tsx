@@ -17,7 +17,7 @@ import {
   khqrFormEditorInputValues,
 } from "@/types/profileFormInput";
 import {
-  profileFormEditorInputSchema,
+  editProfileFormInputSchema,
   linkFormEditorInputSchema,
   khqrFormEditorInputSchema,
 } from "@/validationSchema/inputValidationSchema";
@@ -67,8 +67,10 @@ export default function ProfileEditor({
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const t = useTranslations("profileEditor");
+  const p = useTranslations("profileSetupPage")
 
   const queryClient = useQueryClient();
+
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -90,7 +92,8 @@ export default function ProfileEditor({
     formState: { errors: profileErrors, isValid: profileIsValid },
   } = useForm<ProfileFormEditorInputValues>({
     resolver: zodResolver(
-      profileFormEditorInputSchema
+      // we defined a function so we need to actaully call it
+      editProfileFormInputSchema(p)
     ) as Resolver<ProfileFormEditorInputValues>,
     mode: "onChange",
     reValidateMode: "onChange",

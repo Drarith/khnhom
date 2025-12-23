@@ -14,10 +14,11 @@
       "preSave": "You're just a button away.",
       "socialAndLink": "Socials & Link",
       "socialAndLinkInfo": "Add your social media and website here.",
-      "saveProfile": "Save Profile"
+      "saveProfile": "Save Profile",
+      "usernameNote": "Note: Username is public and cannot be changed."
     },
     "profileInputLabel": {
-      "username": "Username",
+      "username": "Username (Latin Characters only)",
       "displayName": "Display Name",
       "bio": "Bio(*optional)",
       "socials": "Social Media Links",
@@ -115,7 +116,8 @@
       "none": "None",
       "profileStatus": "Profile Status",
       "profileLive": "Your profile is live",
-      "profileHidden": "Your profile is hidden"
+      "profileHidden": "Your profile is hidden",
+      "note": "Please note that some theme may not work well with certain background or templates. Choose wisely!"
     },
     "paymentTab": {
       "title": "Bakong KHQR Payment",

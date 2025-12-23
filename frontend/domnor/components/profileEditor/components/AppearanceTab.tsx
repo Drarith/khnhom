@@ -52,6 +52,7 @@ export default function AppearanceTab({
           {t("title")}
         </h2>
         <p className="text-sm text-primary/60">{t("description")}</p>
+        <p className="text-sm text-primary/60 mt-2 font-bold">*{t("note")}</p>
       </div>
 
       <div>

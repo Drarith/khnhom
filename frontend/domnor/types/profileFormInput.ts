@@ -1,7 +1,7 @@
 import { z } from "zod";
 import {
   createProfileFormInputSchema,
-  profileFormEditorInputSchema,
+  editProfileFormInputSchema,
   linkFormEditorInputSchema,
   khqrFormEditorInputSchema,
 } from "@/validationSchema/inputValidationSchema";
@@ -23,7 +23,7 @@ export type ProfileFormInputValues = z.infer<
 >;
 
 export type ProfileFormEditorInputValues = z.infer<
-  typeof profileFormEditorInputSchema
+  typeof editProfileFormInputSchema
 >;
 
 export type linkFormEditorInputValues = z.infer<

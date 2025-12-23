@@ -149,7 +149,7 @@ export default function ProfileForm() {
                   hasInput={hasValue(username)}
                 />
                 <span className="text-primary/70 m-0 text-xs">
-                  Note: Username is public and cannot be changed.
+                  {t("common.usernameNote")}
                 </span>
               </div>
 
