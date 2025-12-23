@@ -11,6 +11,7 @@ export default function UserProfilePage() {
   const { data, error, isLoading } = useQuery<ProfileData>({
     queryKey: ["userProfile", userProfile],
     queryFn: () => getJSON(`/${userProfile?.toString().toLocaleLowerCase()}`),
+    defaultOptions: { queries: { staleTime: 5 * 60 * 1000 } },
   });
 
   console.log("data for profile", data);

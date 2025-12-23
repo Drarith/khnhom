@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { logout } from "@/https/https";
+import { useRouter } from "next/navigation";
 
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
