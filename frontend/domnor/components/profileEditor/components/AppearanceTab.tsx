@@ -10,7 +10,6 @@ import { z } from "zod";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ThemeButton } from "@/gsap/themeButton";
-import "./../../themeCard/themeCard.css";
 
 type ProfileFormEditorInputValues = z.infer<
   typeof profileFormEditorInputSchema
@@ -118,7 +117,7 @@ export default function AppearanceTab({
                 onClick={() => onBackgroundSelect(bg.name)}
                 className={`theme-btn relative h-32 rounded-lg border-2 transition-all  ${
                   backgroundImage === bg.name
-                    ? "shadow-lg selected-spin"
+                    ? "shadow-lg selected-spin "
                     : "border-primary/20 hover:border-primary/40"
                 }`}
               >

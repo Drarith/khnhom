@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 import { useTranslations } from "next-intl";
+import "../../themeCard/themeCard.css";
 
 export default function ProfilePicture({
   displayName,
@@ -115,7 +116,7 @@ export default function ProfilePicture({
           </div>
           {isUploading && (
             <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
-              <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
+              <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"/>
             </div>
           )}
           <button

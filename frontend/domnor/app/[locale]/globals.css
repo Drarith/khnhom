@@ -21,6 +21,10 @@
   --color-foreground: #e6e6e6;
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Base utilities */
 html,
 body {

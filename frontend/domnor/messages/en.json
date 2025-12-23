@@ -60,7 +60,7 @@
     "buttons": {
       "cancel": "Cancel",
       "saveChanges": "Save Changes",
-      "previewDrag": "Preview(Drag me)",
+      "previewDrag": "Preview",
       "backToEditor": "Back to Editor",
       "addLink": "Add Link",
       "addingLink": "Adding Link...",

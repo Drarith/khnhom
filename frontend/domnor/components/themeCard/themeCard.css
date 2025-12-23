@@ -24,7 +24,7 @@
 
   transform: translateZ(-1px);
   padding: 10px;
-  animation: 3s spin infinite linear;
+  animation: 3s spin-angle infinite linear;
 }
 
 .selected-spin::before {
@@ -32,7 +32,7 @@
   opacity: 0.5;
 }
 
-@keyframes spin {
+@keyframes spin-angle {
   from {
     --angle: 0deg;
   }
