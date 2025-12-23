@@ -80,8 +80,8 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
 
   const bgColor = activeTheme?.bg || "#ffffff";
   const textColor = activeTheme?.text || "#000000";
-  const buttonColor = activeTheme?.button || "#000000";
-  const buttonText = activeTheme?.buttonText || "#ffffff";
+  //   const buttonColor = activeTheme?.button || "#000000";
+  //   const buttonText = activeTheme?.buttonText || "#ffffff";
 
   return (
     <>
@@ -136,7 +136,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
 
             <div className="flex flex-col justify-between h-full space-y-4">
               <div>
-                <h1 className="text-4xl md:text-5xl font-black leading-none tracking-tighter break-words">
+                <h1 className="text-4xl md:text-5xl font-black leading-none tracking-tighter wrap-break-words">
                   {data.displayName}
                 </h1>
                 <div className="inline-block bg-black text-white px-2 py-1 mt-2 font-bold text-lg">
@@ -160,13 +160,14 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
             </div>
 
             {data.links &&
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               data.links.map((link, index) => (
                 <div key={link._id} className="relative group">
                   <a
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full p-4 pr-14 lg:pr-4 border-4 border-black font-black text-lg md:text-xl transition-all duration-200 -translate-y-1 translate-x-1 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] lg:translate-y-0 lg:translate-x-0 lg:shadow-none lg:hover:-translate-y-1 lg:hover:translate-x-1 lg:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-none bg-white text-black flex justify-between items-center"
+                    className="w-full p-4 pr-14 lg:pr-4 border-4 border-black font-black text-lg md:text-xl transition-all duration-200 -translate-y-1 translate-x-1 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] lg:translate-y-0 lg:translate-x-0 lg:shadow-none lg:hover:-translate-y-1 lg:hover:translate-x-1 lg:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-none bg-white text-black flex justify-between items-center"
                   >
                     <span className="truncate mr-4">{link.title}</span>
                     <ExternalLink size={20} className="shrink-0" />
@@ -186,6 +187,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
           <div className="border-t-4 border-black">
             <div className="flex flex-wrap justify-center border-b-4 border-black gap-3 p-4">
               {Object.entries(data?.socials)
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 .filter(([_, v]) => v !== "")
                 .map(([key, url]) => (
                   <a
@@ -193,7 +195,8 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="aspect-square flex items-center justify-center hover:scale-110 hover:text-white transition-colors"
+                    className="aspect-square flex items-center justify-center border-4 border-black bg-white text-black font-black uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 hover:-translate-y-1 hover:translate-x-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white active:translate-y-0 active:translate-x-0 active:shadow-none"
+                    style={{ width: "48px", height: "48px" }}
                     aria-label={key}
                   >
                     {icons[key as SocialPlatform]}

@@ -89,7 +89,7 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
               priority
             />
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-black/10" />
+            <div className="absolute inset-0 bg-linear-to-br from-white/10 to-black/10" />
           )}
           {/* Floating Orbs */}
           <div 
@@ -113,7 +113,7 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
             
             {/* Profile Header */}
             <div className="flex flex-col items-center text-center space-y-6 mb-8">
-              <div className="relative w-32 h-32 rounded-full p-1 bg-gradient-to-tr from-white/50 to-transparent">
+              <div className="relative w-32 h-32 rounded-full p-1 bg-linear-to-tr from-white/50 to-transparent">
                 <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white/20">
                   <Image
                     src={data.profilePictureUrl}
@@ -243,7 +243,7 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
                 href={shareModal.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 transition-all shadow-lg"
+                className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-white bg-linear-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 transition-all shadow-lg"
               >
                 <span>Open Link</span>
                 <ExternalLink size={18} />

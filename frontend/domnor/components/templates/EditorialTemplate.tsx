@@ -1,7 +1,7 @@
 import { ProfileData } from "@/types/profileData";
 import { themes } from "@/config/theme";
 import Image from "next/image";
-import { Share2, X, Copy, Check, ExternalLink } from "lucide-react";
+import { Share2, X, ExternalLink } from "lucide-react";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import {
@@ -89,7 +89,7 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
               priority
             />
             <div
-              className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white/90"
+              className="absolute inset-0 bg-linear-to-b from-transparent via-white/50 to-white/90"
               style={{ mixBlendMode: "overlay" }}
             ></div>
           </div>
