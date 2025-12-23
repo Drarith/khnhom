@@ -11,6 +11,7 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import "./nav.css";
 import { useTranslations } from "next-intl";
+import { LanguageToggle } from "../ui/languageSwitchpill";
 
 export default function Nav() {
   const container = useRef(null);
@@ -86,7 +87,7 @@ export default function Nav() {
         }
       >
         <div className="menu-logo">
-          <Link href={"/"}>DOMNOR</Link>
+          <LanguageToggle />
         </div>
         <div className="menu-open" onClick={toggleMenu}>
           <p>{t("menu")}</p>
@@ -103,7 +104,6 @@ export default function Nav() {
           </div>
         </div>
         <div className="menu-overlay-content">
-
           <div className="menu-copy">
             <div className="menu-links mx-auto">
               {menuLinks?.map((link, index) => (
