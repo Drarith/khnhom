@@ -7,7 +7,7 @@ import type { PaymentTabProps } from "@/types/paymentTabProp";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-export default function PaymentTab({
+export default function GenerateQrTab({
   register,
   setValue,
   errors,

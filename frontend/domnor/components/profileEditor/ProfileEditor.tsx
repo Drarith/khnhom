@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useForm, useWatch, type Resolver } from "react-hook-form";
 import {
   Link as LinkIcon,
@@ -39,7 +39,7 @@ import ProfileTab from "./components/ProfileTab";
 import SocialsTab from "./components/SocialsTab";
 import LinksTab from "./components/LinksTab";
 import AppearanceTab from "./components/AppearanceTab";
-import PaymentTab from "./components/PaymentTab";
+import GenerateQrTab from "./components/GenerateQr";
 import AdminTab from "./components/AdminTab";
 
 import UserProfile from "../userProfile/UserProfile";
@@ -451,7 +451,7 @@ export default function ProfileEditor({
                           key={tab.id}
                           data-id={tab.id}
                           onClick={() => setActiveTab(tab.id)}
-                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors relative z-10 ${
+                          className={`w-full flex flex-1 items-center gap-3 px-4 py-3 rounded-lg transition-colors relative z-10 whitespace-nowrap ${
                             activeTab === tab.id ? "text-foreground" : ""
                           }`}
                         >
@@ -509,9 +509,9 @@ export default function ProfileEditor({
                       setValue={profileSetValue}
                     />
                   )}
-
+                  {/* Generate QR Code tab, will name later maybe ._. */}
                   {activeTab === "payment" && (
-                    <PaymentTab
+                    <GenerateQrTab
                       register={khqrRegister}
                       setValue={khqrSetValue}
                       errors={khqrErrors}
