@@ -65,25 +65,41 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
     }
   };
 
+  const backgroundImage = backgroundImages.find(
+    (bg) => bg.name === data.backgroundImage
+  )?.url;
+
   return (
     <>
-      <div 
-        className="w-full min-h-screen flex flex-col items-center font-sans selection:bg-zinc-100"
-        style={{ 
-          backgroundColor: activeTheme?.bg || '#ffffff',
-          color: activeTheme?.text || '#18181b'
+      <div
+        className="w-full min-h-screen flex flex-col items-center font-sans selection:bg-zinc-100 relative"
+        style={{
+          backgroundColor: activeTheme?.bg || "#ffffff",
+          color: activeTheme?.text || "#18181b",
         }}
       >
-        
-        <div className="w-full max-w-xl mx-auto px-6 py-20 flex flex-col items-center space-y-12">
-          
+        {/* Background Image Layer */}
+        {data.backgroundImage && (
+          <div className="absolute inset-0 z-0">
+            <Image
+              src={backgroundImage!}
+              alt="background"
+              fill
+              className="object-cover opacity-30"
+              priority
+            />
+          </div>
+        )}
+
+        <div className="relative z-10 w-full max-w-xl mx-auto px-6 py-20 flex flex-col items-center space-y-12">
           {/* Profile Header */}
           <div className="flex flex-col items-center text-center space-y-6">
-            <div 
+            <div
               className="relative w-24 h-24 rounded-full overflow-hidden ring-1"
-              style={{ 
-                backgroundColor: activeTheme?.button || '#f4f4f5',
-                ringColor: activeTheme?.border || activeTheme?.button || '#e4e4e7'
+              style={{
+                backgroundColor: activeTheme?.button || "#f4f4f5",
+                ringColor:
+                  activeTheme?.border || activeTheme?.button || "#e4e4e7",
               }}
             >
               <Image
@@ -95,13 +111,13 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
               />
             </div>
             <div className="space-y-2">
-              <h1 
+              <h1
                 className="text-2xl font-medium tracking-tight"
                 style={{ color: activeTheme?.text }}
               >
                 {data.displayName}
               </h1>
-              <h4 
+              <h4
                 className="text-sm font-normal"
                 style={{ color: activeTheme?.text, opacity: 0.6 }}
               >
@@ -109,7 +125,7 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
               </h4>
             </div>
             {data.bio && (
-              <p 
+              <p
                 className="text-sm max-w-sm leading-relaxed font-light"
                 style={{ color: activeTheme?.text, opacity: 0.7 }}
               >
@@ -130,8 +146,12 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
                   rel="noopener noreferrer"
                   className="transition-colors duration-300"
                   style={{ color: activeTheme?.text, opacity: 0.4 }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = '1'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = '0.4'; }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = "1";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = "0.4";
+                  }}
                   aria-label={key}
                 >
                   {icons[key as SocialPlatform]}
@@ -148,27 +168,33 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full py-4 px-6 text-center text-sm font-medium border rounded-lg transition-all duration-300 bg-transparent"
-                    style={{ 
-                      borderColor: activeTheme?.border || activeTheme?.button || '#e4e4e7',
-                      color: activeTheme?.text
+                    className="block w-full py-4 pl-6 pr-12 text-center text-sm font-medium border rounded-lg transition-all duration-300 bg-transparent"
+                    style={{
+                      borderColor:
+                        activeTheme?.border || activeTheme?.button || "#e4e4e7",
+                      color: activeTheme?.text,
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = activeTheme?.text || '#18181b';
-                      e.currentTarget.style.backgroundColor = activeTheme?.text || '#18181b';
-                      e.currentTarget.style.color = activeTheme?.bg || '#ffffff';
+                      e.currentTarget.style.borderColor =
+                        activeTheme?.text || "#18181b";
+                      e.currentTarget.style.backgroundColor =
+                        activeTheme?.text || "#18181b";
+                      e.currentTarget.style.color =
+                        activeTheme?.bg || "#ffffff";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = activeTheme?.border || activeTheme?.button || '#e4e4e7';
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = activeTheme?.text || '#18181b';
+                      e.currentTarget.style.borderColor =
+                        activeTheme?.border || activeTheme?.button || "#e4e4e7";
+                      e.currentTarget.style.backgroundColor = "transparent";
+                      e.currentTarget.style.color =
+                        activeTheme?.text || "#18181b";
                     }}
                   >
                     {link.title}
                   </a>
                   <button
                     onClick={(e) => handleShare(e, link.url, link.title)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors opacity-0 group-hover:opacity-100 duration-300"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors opacity-100 lg:opacity-0 lg:group-hover:opacity-100 duration-300"
                     style={{ color: activeTheme?.text }}
                     aria-label="Share link"
                   >
@@ -178,9 +204,9 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
               ))}
             </div>
           )}
-          
+
           <div className="mt-auto pt-12 opacity-50 hover:opacity-100 transition-opacity duration-500">
-             <Footer theme={activeTheme} username={data.username} />
+            <Footer theme={activeTheme} username={data.username} />
           </div>
         </div>
       </div>
@@ -196,9 +222,7 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-medium text-zinc-900">
-                Share
-              </h3>
+              <h3 className="text-lg font-medium text-zinc-900">Share</h3>
               <button
                 onClick={() => setShareModal({ ...shareModal, isOpen: false })}
                 className="text-zinc-400 hover:text-zinc-900 transition-colors"

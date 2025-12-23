@@ -1,7 +1,15 @@
 import { ProfileData } from "@/types/profileData";
 import { themes } from "@/config/theme";
 import Image from "next/image";
-import { Share2, X, Copy, Check, ExternalLink, Terminal, ArrowRight } from "lucide-react";
+import {
+  Share2,
+  X,
+  Copy,
+  Check,
+  ExternalLink,
+  Terminal,
+  ArrowRight,
+} from "lucide-react";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import {
@@ -29,7 +37,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
   const activeTheme = themes.find((theme) => {
     return theme.name === data.theme;
   });
-  
+
   const icons: Record<SocialPlatform, React.ReactElement> = {
     facebook: <SiFacebook className="w-6 h-6" />,
     x: <SiX className="w-6 h-6" />,
@@ -77,9 +85,9 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
 
   return (
     <>
-      <div 
+      <div
         className="w-full min-h-screen flex flex-col font-mono uppercase relative md:rounded-2xl md:overflow-hidden"
-        style={{ 
+        style={{
           backgroundColor: bgColor,
           color: textColor,
         }}
@@ -103,7 +111,9 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
           <div className="border-b-4 border-black p-3 md:p-4 flex justify-between items-center bg-black text-white">
             <div className="flex items-center gap-2">
               <Terminal size={20} />
-              <span className="font-bold tracking-widest">USER_PROFILE.EXE</span>
+              <span className="font-bold tracking-widest">
+                USER_PROFILE.EXE
+              </span>
             </div>
             <div className="flex gap-1">
               <div className="w-3 h-3 bg-white rounded-full"></div>
@@ -123,7 +133,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
                 priority
               />
             </div>
-            
+
             <div className="flex flex-col justify-between h-full space-y-4">
               <div>
                 <h1 className="text-4xl md:text-5xl font-black leading-none tracking-tighter break-words">
@@ -133,7 +143,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
                   @{data.username}
                 </div>
               </div>
-              
+
               {data.bio && (
                 <p className="text-sm md:text-base font-bold leading-tight border-l-4 border-black pl-4 py-1">
                   {data.bio}
@@ -149,26 +159,27 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
               <span className="font-bold">AVAILABLE_LINKS</span>
             </div>
 
-            {data.links && data.links.map((link, index) => (
-              <div key={link._id} className="relative group">
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block w-full p-4 border-4 border-black font-black text-lg md:text-xl transition-all duration-200 hover:-translate-y-1 hover:translate-x-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-none bg-white text-black flex justify-between items-center"
-                >
-                  <span className="truncate mr-4">{link.title}</span>
-                  <ExternalLink size={20} className="shrink-0" />
-                </a>
-                <button
-                  onClick={(e) => handleShare(e, link.url, link.title)}
-                  className="absolute -right-3 -top-3 bg-black text-white p-2 border-2 border-white shadow-lg opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110 z-20"
-                  aria-label="Share link"
-                >
-                  <Share2 size={16} />
-                </button>
-              </div>
-            ))}
+            {data.links &&
+              data.links.map((link, index) => (
+                <div key={link._id} className="relative group">
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full p-4 pr-14 lg:pr-4 border-4 border-black font-black text-lg md:text-xl transition-all duration-200 -translate-y-1 translate-x-1 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] lg:translate-y-0 lg:translate-x-0 lg:shadow-none lg:hover:-translate-y-1 lg:hover:translate-x-1 lg:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-none bg-white text-black flex justify-between items-center"
+                  >
+                    <span className="truncate mr-4">{link.title}</span>
+                    <ExternalLink size={20} className="shrink-0" />
+                  </a>
+                  <button
+                    onClick={(e) => handleShare(e, link.url, link.title)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 lg:-right-3 lg:-top-3 lg:translate-y-0 bg-black text-white p-2 border-2 border-white shadow-lg opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110 z-20"
+                    aria-label="Share link"
+                  >
+                    <Share2 size={16} />
+                  </button>
+                </div>
+              ))}
           </div>
 
           {/* Socials & Footer */}
@@ -232,7 +243,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
                   {copied ? <Check size={20} /> : <Copy size={20} />}
                   {copied ? "COPIED" : "COPY"}
                 </button>
-                
+
                 <a
                   href={shareModal.url}
                   target="_blank"

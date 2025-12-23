@@ -85,16 +85,20 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
 
   return (
     <>
-      <div 
+      <div
         className="w-full min-h-screen flex flex-col relative font-mono overflow-hidden"
         style={retroBg}
       >
         {/* CRT Effect Overlay */}
-        <div className="absolute inset-0 pointer-events-none z-50 opacity-20" style={{
-          background: "linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))",
-          backgroundSize: "100% 2px, 3px 100%"
-        }}></div>
-        
+        <div
+          className="absolute inset-0 pointer-events-none z-50 opacity-20"
+          style={{
+            background:
+              "linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))",
+            backgroundSize: "100% 2px, 3px 100%",
+          }}
+        ></div>
+
         {/* Background Image Layer */}
         {data.backgroundImage && (
           <div className="absolute inset-0 z-0 opacity-30 grayscale contrast-125">
@@ -109,17 +113,16 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
         )}
 
         <div className="relative z-10 flex flex-col items-center w-full max-w-2xl mx-auto p-6 space-y-8">
-          
           {/* Profile Header */}
-          <div 
+          <div
             className="w-full border-4 p-6 bg-black shadow-[8px_8px_0px_0px]"
-            style={{ 
+            style={{
               borderColor: secondaryColor,
-              boxShadow: `8px 8px 0px 0px ${secondaryColor}`
+              boxShadow: `8px 8px 0px 0px ${secondaryColor}`,
             }}
           >
             <div className="flex flex-col md:flex-row items-center gap-6">
-              <div 
+              <div
                 className="relative w-32 h-32 shrink-0 border-2"
                 style={{ borderColor: secondaryColor }}
               >
@@ -132,25 +135,22 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
                 />
               </div>
               <div className="text-center md:text-left space-y-2 w-full">
-                <h1 
+                <h1
                   className="text-3xl md:text-4xl font-bold uppercase tracking-widest glitch-text"
                   style={{ color: primaryColor }}
                 >
                   {data.displayName}
                 </h1>
-                <h4 
-                  className="font-bold"
-                  style={{ color: secondaryColor }}
-                >
+                <h4 className="font-bold" style={{ color: secondaryColor }}>
                   @{data.username}
                 </h4>
                 {data.bio && (
-                  <p 
+                  <p
                     className="text-sm leading-relaxed border-t pt-2 mt-2"
-                    style={{ 
-                      color: primaryColor, 
+                    style={{
+                      color: primaryColor,
                       opacity: 0.8,
-                      borderColor: `${secondaryColor}80`
+                      borderColor: `${secondaryColor}80`,
                     }}
                   >
                     {">"} {data.bio}
@@ -162,7 +162,7 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
           </div>
 
           {/* Social Icons */}
-          <div 
+          <div
             className="flex flex-wrap gap-4 justify-center bg-black border-2 p-4 w-full"
             style={{ borderColor: secondaryColor }}
           >
@@ -178,10 +178,10 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
                   style={{ color: secondaryColor }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = secondaryColor;
-                    e.currentTarget.style.color = 'black';
+                    e.currentTarget.style.color = "black";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.backgroundColor = "transparent";
                     e.currentTarget.style.color = secondaryColor;
                   }}
                   aria-label={key}
@@ -200,19 +200,19 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full block text-center border-2 bg-black py-4 px-12 font-bold text-lg uppercase tracking-wider transition-all hover:translate-x-[2px] hover:translate-y-[2px]"
-                    style={{ 
+                    className="w-full block text-center border-2 bg-black py-4 pl-4 pr-14 font-bold text-lg uppercase tracking-wider transition-all hover:translate-x-[2px] hover:translate-y-[2px]"
+                    style={{
                       borderColor: secondaryColor,
                       color: primaryColor,
-                      boxShadow: `4px 4px 0px 0px ${secondaryColor}80`
+                      boxShadow: `4px 4px 0px 0px ${secondaryColor}80`,
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = secondaryColor;
-                      e.currentTarget.style.color = 'black';
-                      e.currentTarget.style.boxShadow = 'none';
+                      e.currentTarget.style.color = "black";
+                      e.currentTarget.style.boxShadow = "none";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'black';
+                      e.currentTarget.style.backgroundColor = "black";
                       e.currentTarget.style.color = primaryColor;
                       e.currentTarget.style.boxShadow = `4px 4px 0px 0px ${secondaryColor}80`;
                     }}
@@ -221,8 +221,11 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
                   </a>
                   <button
                     onClick={(e) => handleShare(e, link.url, link.title)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 transition-colors"
-                    style={{ color: secondaryColor }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 transition-colors z-10 bg-black border-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
+                    style={{
+                      color: secondaryColor,
+                      borderColor: secondaryColor,
+                    }}
                     aria-label="Share link"
                   >
                     <Share2 size={18} />
@@ -231,12 +234,12 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
               ))}
             </div>
           )}
-          
-          <div 
+
+          <div
             className="mt-8 text-xs uppercase"
             style={{ color: secondaryColor }}
           >
-             SYSTEM READY...
+            SYSTEM READY...
           </div>
         </div>
       </div>

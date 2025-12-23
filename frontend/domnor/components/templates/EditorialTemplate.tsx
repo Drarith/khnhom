@@ -71,11 +71,11 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
 
   return (
     <>
-      <div 
+      <div
         className="w-full min-h-screen flex flex-col font-serif selection:bg-zinc-200"
-        style={{ 
-          backgroundColor: activeTheme?.bg || '#ffffff',
-          color: activeTheme?.text || '#000000'
+        style={{
+          backgroundColor: activeTheme?.bg || "#ffffff",
+          color: activeTheme?.text || "#000000",
         }}
       >
         {/* Background Image Layer */}
@@ -85,27 +85,30 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
               src={backgroundImage!}
               alt="background"
               fill
-              className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
+              className="object-cover grayscale-0 lg:grayscale lg:hover:grayscale-0 transition-all duration-700"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white/90" style={{ mixBlendMode: 'overlay' }}></div>
+            <div
+              className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-white/90"
+              style={{ mixBlendMode: "overlay" }}
+            ></div>
           </div>
         )}
 
         <div className="relative z-10 w-full max-w-3xl mx-auto px-8 py-20 flex flex-col min-h-screen">
-          
           {/* Header Section */}
-          <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-20 border-b-2 pb-8" style={{ borderColor: activeTheme?.text || '#000000' }}>
+          <header
+            className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-20 border-b-2 pb-8"
+            style={{ borderColor: activeTheme?.text || "#000000" }}
+          >
             <div className="space-y-4">
               <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-none">
                 {data.displayName}
               </h1>
-              <p className="text-xl italic opacity-70">
-                @{data.username}
-              </p>
+              <p className="text-xl italic opacity-70">@{data.username}</p>
             </div>
-            
-            <div className="relative w-32 h-32 md:w-40 md:h-40 shrink-0 grayscale hover:grayscale-0 transition-all duration-500">
+
+            <div className="relative w-32 h-32 md:w-40 md:h-40 shrink-0 grayscale-0 lg:grayscale lg:hover:grayscale-0 transition-all duration-500">
               <Image
                 src={data.profilePictureUrl}
                 alt="profile picture"
@@ -119,41 +122,48 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
           {/* Bio Section */}
           {data.bio && (
             <section className="mb-20 max-w-xl">
-              <p className="text-2xl leading-relaxed font-light">
-                {data.bio}
-              </p>
+              <p className="text-2xl leading-relaxed font-light">{data.bio}</p>
             </section>
           )}
 
           {/* Links Section */}
           {data.links && data.links.length > 0 && (
             <section className="w-full space-y-0 mb-20">
-              <h3 className="text-xs uppercase tracking-widest mb-6 opacity-50 font-sans">Selected Links</h3>
+              <h3 className="text-xs uppercase tracking-widest mb-6 opacity-50 font-sans">
+                Selected Links
+              </h3>
               {data.links.map((link, index) => (
-                <div 
-                  key={link._id} 
+                <div
+                  key={link._id}
                   className="group relative border-t transition-all duration-300 hover:pl-4"
-                  style={{ borderColor: `${activeTheme?.text}40` || '#00000040' }}
+                  style={{
+                    borderColor: `${activeTheme?.text}40` || "#00000040",
+                  }}
                 >
                   <a
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between w-full py-6 text-xl md:text-2xl hover:italic"
+                    className="flex items-center justify-between w-full py-6 text-xl md:text-2xl italic lg:not-italic lg:hover:italic"
                   >
                     <span>{link.title}</span>
-                    <span className="opacity-0 group-hover:opacity-100 transition-opacity text-sm font-sans">↗</span>
+                    <span className="opacity-100 lg:opacity-0 group-hover:opacity-100 transition-opacity text-sm font-sans">
+                      ↗
+                    </span>
                   </a>
                   <button
                     onClick={(e) => handleShare(e, link.url, link.title)}
-                    className="absolute right-12 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-50 hover:!opacity-100 transition-all"
+                    className="absolute right-4 lg:right-12 top-1/2 -translate-y-1/2 opacity-100 lg:opacity-0 lg:group-hover:opacity-50 hover:!opacity-100 transition-all"
                     aria-label="Share link"
                   >
                     <Share2 size={18} />
                   </button>
                 </div>
               ))}
-              <div className="border-t" style={{ borderColor: `${activeTheme?.text}40` || '#00000040' }}></div>
+              <div
+                className="border-t"
+                style={{ borderColor: `${activeTheme?.text}40` || "#00000040" }}
+              ></div>
             </section>
           )}
 
@@ -193,9 +203,7 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-bold italic">
-                Share
-              </h3>
+              <h3 className="text-2xl font-bold italic">Share</h3>
               <button
                 onClick={() => setShareModal({ ...shareModal, isOpen: false })}
                 className="hover:opacity-50 transition-opacity"
@@ -211,9 +219,7 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
                 </p>
                 <div className="flex items-center gap-4 border-b border-black pb-2">
                   <div className="flex-1 min-w-0">
-                    <p className="truncate text-lg">
-                      {shareModal.url}
-                    </p>
+                    <p className="truncate text-lg">{shareModal.url}</p>
                   </div>
                   <button
                     onClick={copyToClipboard}
