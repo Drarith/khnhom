@@ -98,7 +98,7 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
               className="relative w-24 h-24 rounded-full overflow-hidden ring-1"
               style={{
                 backgroundColor: activeTheme?.button || "#f4f4f5",
-                ringColor:
+                borderColor:
                   activeTheme?.border || activeTheme?.button || "#e4e4e7",
               }}
             >
