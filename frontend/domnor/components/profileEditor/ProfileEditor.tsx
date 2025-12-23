@@ -405,10 +405,15 @@ export default function ProfileEditor({
   };
 
   const handlePreviewToggle = () => {
+    const menu = document.querySelector(".menu-container");
     setNotPreviewing(!notPreviewing);
     if(notPreviewing) {
       window.scrollTo({ top: 0, behavior: "smooth" });
+      menu?.classList.add("hidden");
+    } else {
+      menu?.classList.remove("hidden");
     }
+  
   };
 
   const { containerRef, highlighterRef } = useTabAnimation(activeTab, [
