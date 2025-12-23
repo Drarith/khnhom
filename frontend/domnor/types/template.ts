@@ -1,4 +1,4 @@
-export type TemplateType = 'default' | 'brutalist';
+export type TemplateType = 'default' | 'brutalist' | 'retro' | 'minimalism' | 'glassmorphism' | 'editorial' | 'neobrutalism' | 'khmerroyal';
 
 export interface TemplateConfig {
   name: string;

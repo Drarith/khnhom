@@ -71,10 +71,16 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
 
   return (
     <>
-      <div className="w-full min-h-screen flex flex-col relative overflow-hidden text-white">
+      <div 
+        className="w-full min-h-screen flex flex-col relative overflow-hidden"
+        style={{ 
+          backgroundColor: activeTheme?.bg || '#4f46e5',
+          color: activeTheme?.text || '#ffffff'
+        }}
+      >
         {/* Background Layer */}
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
-          {data.backgroundImage && (
+        <div className="absolute inset-0 z-0">
+          {data.backgroundImage ? (
             <Image
               src={backgroundImage!}
               alt="background"
@@ -82,11 +88,22 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
               className="object-cover opacity-60 mix-blend-overlay"
               priority
             />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-black/10" />
           )}
           {/* Floating Orbs */}
-          <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob"></div>
-          <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
-          <div className="absolute bottom-[-20%] left-[20%] w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-4000"></div>
+          <div 
+            className="absolute top-[-10%] left-[-10%] w-96 h-96 rounded-full mix-blend-overlay filter blur-3xl opacity-50 animate-blob"
+            style={{ backgroundColor: activeTheme?.button || '#60a5fa' }}
+          ></div>
+          <div 
+            className="absolute top-[-10%] right-[-10%] w-96 h-96 rounded-full mix-blend-overlay filter blur-3xl opacity-50 animate-blob animation-delay-2000"
+            style={{ backgroundColor: activeTheme?.text || '#c084fc' }}
+          ></div>
+          <div 
+            className="absolute bottom-[-20%] left-[20%] w-96 h-96 rounded-full mix-blend-overlay filter blur-3xl opacity-50 animate-blob animation-delay-4000"
+            style={{ backgroundColor: activeTheme?.button || '#f472b6' }}
+          ></div>
         </div>
 
         <div className="relative z-10 flex flex-col items-center w-full max-w-2xl mx-auto p-6 min-h-screen">
@@ -108,13 +125,13 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
                 </div>
               </div>
               <div className="space-y-2">
-                <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-white drop-shadow-md">
+                <h1 className="text-3xl md:text-4xl font-bold tracking-tight drop-shadow-md">
                   {data.displayName}
                 </h1>
-                <h4 className="text-white/70 font-medium tracking-wide">@{data.username}</h4>
+                <h4 className="opacity-70 font-medium tracking-wide">@{data.username}</h4>
               </div>
               {data.bio && (
-                <p className="text-white/90 max-w-md leading-relaxed font-light text-lg">
+                <p className="opacity-90 max-w-md leading-relaxed font-light text-lg">
                   {data.bio}
                 </p>
               )}
@@ -132,8 +149,9 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
                     rel="noopener noreferrer"
                     className="p-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/30 transition-all duration-300 hover:scale-110 backdrop-blur-md"
                     aria-label={key}
+                    style={{ color: activeTheme?.text || '#ffffff' }}
                   >
-                    <div className="text-white">
+                    <div>
                       {icons[key as SocialPlatform]}
                     </div>
                   </a>
@@ -149,13 +167,15 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block w-full py-4 px-6 text-center text-lg font-semibold text-white bg-white/5 hover:bg-white/15 border border-white/10 hover:border-white/30 rounded-xl backdrop-blur-md transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
+                      className="block w-full py-4 px-6 text-center text-lg font-semibold bg-white/5 hover:bg-white/15 border border-white/10 hover:border-white/30 rounded-xl backdrop-blur-md transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
+                      style={{ color: activeTheme?.text || '#ffffff' }}
                     >
                       {link.title}
                     </a>
                     <button
                       onClick={(e) => handleShare(e, link.url, link.title)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-white/10 transition-colors"
+                      style={{ color: activeTheme?.text || '#ffffff', opacity: 0.7 }}
                       aria-label="Share link"
                     >
                       <Share2 size={18} />
