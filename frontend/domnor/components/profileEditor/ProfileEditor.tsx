@@ -44,8 +44,6 @@ import AdminTab from "./components/AdminTab";
 
 import UserProfile from "../userProfile/UserProfile";
 import { useTabAnimation } from "@/gsap/tab";
-import Draggable from "react-draggable";
-import { DraggableCore } from "react-draggable";
 import { useTranslations } from "next-intl";
 
 export enum Tab {
@@ -67,8 +65,6 @@ export default function ProfileEditor({
   const [qrError, setQrError] = useState<string>("");
   const [notPreviewing, setNotPreviewing] = useState<boolean>(true);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-  const draggableRef = useRef<HTMLDivElement>(null);
 
   const t = useTranslations("profileEditor");
 
@@ -286,7 +282,9 @@ export default function ProfileEditor({
     { id: Tab.LINKS, label: t("tabs.links"), icon: LinkIcon },
     { id: Tab.PAYMENT, label: t("tabs.payment"), icon: QrCode },
     { id: Tab.APPEARANCE, label: t("tabs.appearance"), icon: Palette },
-    ...(isAdmin ? [{ id: Tab.ADMIN, label: t("tabs.admin"), icon: Shield }] : []),
+    ...(isAdmin
+      ? [{ id: Tab.ADMIN, label: t("tabs.admin"), icon: Shield }]
+      : []),
   ];
 
   const { mutate: profileMutation, isPending: isProfilePending } = useMutation({
@@ -318,21 +316,19 @@ export default function ProfileEditor({
     },
   });
 
-  const { mutate: linkDeleteMutation} = useMutation(
-    {
-      mutationFn: (id: string) => {
-        return deleteLink(`/profile/links/${id}`);
-      },
-      onSuccess: () => {
-        toast.success(t("toasts.linkDeleted"));
-        queryClient.invalidateQueries({ queryKey: ["profile"] });
-      },
-      onError: (error: AxiosError<{ message?: string }>) => {
-        const errorMessage = getAxiosErrorMessage(error);
-        toast.error(t("toasts.linkDeleteError") + errorMessage);
-      },
-    }
-  );
+  const { mutate: linkDeleteMutation } = useMutation({
+    mutationFn: (id: string) => {
+      return deleteLink(`/profile/links/${id}`);
+    },
+    onSuccess: () => {
+      toast.success(t("toasts.linkDeleted"));
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+    },
+    onError: (error: AxiosError<{ message?: string }>) => {
+      const errorMessage = getAxiosErrorMessage(error);
+      toast.error(t("toasts.linkDeleteError") + errorMessage);
+    },
+  });
 
   const { mutate: paymentMutation, isPending: isGeneratingQR } = useMutation({
     mutationFn: (PaymentRequest: Partial<khqrFormEditorInputValues>) => {
@@ -409,11 +405,10 @@ export default function ProfileEditor({
   };
 
   const handlePreviewToggle = () => {
-    if (!isDragging) {
-      setNotPreviewing(!notPreviewing);
-      console.log("Toggled preview mode");
+    setNotPreviewing(!notPreviewing);
+    if(notPreviewing) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
-    console.log("isDragging:", isDragging);
   };
 
   const { containerRef, highlighterRef } = useTabAnimation(activeTab, [
@@ -582,44 +577,32 @@ export default function ProfileEditor({
               </form>
             </div>
           </div>
+          <div className="bg-foreground p-2 mt-6 rounded-lg flex items-center justify-center">
+            <Button
+              type="button"
+              className="flex items-center gap-2 shadow-xl hover:shadow-2xl transition-all duration-300 px-6 py-3 rounded-full"
+              onClick={handlePreviewToggle}
+            >
+              <Eye size={20} />
+              <span className="font-semibold">{t("buttons.previewDrag")}</span>
+            </Button>
+          </div>
         </div>
       ) : (
         <div className="absolute inset-0">
           <UserProfile data={initialData!} />
+          <div className="fixed bottom-8 right-8 z-50">
+            <Button
+              type="button"
+              className="flex items-center gap-2 shadow-xl hover:shadow-2xl transition-all duration-300 px-6 py-3 rounded-full"
+              onClick={handlePreviewToggle}
+            >
+              <Palette size={20} />
+              <span className="font-semibold">{t("buttons.backToEditor")}</span>
+            </Button>
+          </div>
         </div>
       )}
-      <Draggable
-        nodeRef={draggableRef}
-        defaultPosition={{ x: 0, y: 0 }}
-        onStart={() => setIsDragging(false)}
-        onDrag={() => setIsDragging(true)}
-        onStop={() => {
-          setTimeout(() => setIsDragging(false), 0);
-        }}
-      >
-        <div
-          ref={draggableRef}
-          className="fixed bottom-8 right-8 z-10 cursor-move"
-        >
-          <Button
-            type="button"
-            className="flex items-center gap-2 shadow-xl hover:shadow-2xl transition-all duration-300 px-6 py-3 rounded-full"
-            onClick={handlePreviewToggle}
-          >
-            {notPreviewing ? (
-              <>
-                <Eye size={20} />
-                <span className="font-semibold">{t("buttons.previewDrag")}</span>
-              </>
-            ) : (
-              <>
-                <Palette size={20} />
-                <span className="font-semibold">{t("buttons.backToEditor")}</span>
-              </>
-            )}
-          </Button>
-        </div>
-      </Draggable>
     </div>
   );
 }
