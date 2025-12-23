@@ -21,11 +21,6 @@ export default function PaymentTab({
   accountInformation,
   amount,
   merchantCity,
-  billNumber,
-  mobileNumber,
-  storeLabel,
-  terminalLabel,
-  purposeOfTransaction,
   isValid,
   isGenerating,
   error,
@@ -215,65 +210,6 @@ export default function PaymentTab({
                 label={t("merchantCity")}
                 maxLength={15}
                 hasInput={!!merchantCity}
-              />
-
-              <ProfileFormInput
-                register={register}
-                fieldId="billNumber"
-                fieldInput="billNumber"
-                fieldStateError={errors.billNumber}
-                fieldWatchValue={billNumber || ""}
-                label={t("billNumber")}
-                maxLength={25}
-                hasInput={!!billNumber}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ProfileFormInput
-                register={register}
-                fieldId="mobileNumber"
-                fieldInput="mobileNumber"
-                fieldStateError={errors.mobileNumber}
-                fieldWatchValue={mobileNumber || ""}
-                label={t("mobileNumber")}
-                maxLength={25}
-                hasInput={!!mobileNumber}
-              />
-
-              <ProfileFormInput
-                register={register}
-                fieldId="storeLabel"
-                fieldInput="storeLabel"
-                fieldStateError={errors.storeLabel}
-                fieldWatchValue={storeLabel || ""}
-                label={t("storeLabel")}
-                maxLength={25}
-                hasInput={!!storeLabel}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ProfileFormInput
-                register={register}
-                fieldId="terminalLabel"
-                fieldInput="terminalLabel"
-                fieldStateError={errors.terminalLabel}
-                fieldWatchValue={terminalLabel || ""}
-                label={t("terminalLabel")}
-                maxLength={25}
-                hasInput={!!terminalLabel}
-              />
-
-              <ProfileFormInput
-                register={register}
-                fieldId="purposeOfTransaction"
-                fieldInput="purposeOfTransaction"
-                fieldStateError={errors.purposeOfTransaction}
-                fieldWatchValue={purposeOfTransaction || ""}
-                label={t("purposeOfTransaction")}
-                maxLength={25}
-                hasInput={!!purposeOfTransaction}
               />
             </div>
           </div>

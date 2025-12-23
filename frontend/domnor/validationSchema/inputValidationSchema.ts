@@ -236,15 +236,15 @@ const baseKhqrSchema = z.object({
       "Invalid amount format"
     ),
   merchantCity: z.string().max(15).optional(),
-  billNumber: z.string().max(25).optional(),
-  mobileNumber: z.string().max(25).optional(),
-  storeLabel: z.string().max(25).optional(),
-  terminalLabel: z.string().max(25).optional(),
-  purposeOfTransaction: z.string().max(25).optional(),
-  upiAccountInformation: z.string().max(31).optional(),
-  merchantAlternateLanguagePreference: z.string().max(2).optional(),
-  merchantNameAlternateLanguage: z.string().max(25).optional(),
-  merchantCityAlternateLanguage: z.string().max(15).optional(),
+  // billNumber: z.string().max(25).optional(),
+  // mobileNumber: z.string().max(25).optional(),
+  // storeLabel: z.string().max(25).optional(),
+  // terminalLabel: z.string().max(25).optional(),
+  // purposeOfTransaction: z.string().max(25).optional(),
+  // upiAccountInformation: z.string().max(31).optional(),
+  // merchantAlternateLanguagePreference: z.string().max(2).optional(),
+  // merchantNameAlternateLanguage: z.string().max(25).optional(),
+  // merchantCityAlternateLanguage: z.string().max(15).optional(),
 });
 
 // Individual specific fields

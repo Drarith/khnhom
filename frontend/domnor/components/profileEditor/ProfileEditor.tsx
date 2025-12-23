@@ -141,15 +141,6 @@ export default function ProfileEditor({
       currency: "KHR",
       amount: "",
       merchantCity: "Phnom Penh",
-      billNumber: "",
-      mobileNumber: "",
-      storeLabel: "",
-      terminalLabel: "",
-      purposeOfTransaction: "",
-      upiAccountInformation: "",
-      merchantAlternateLanguagePreference: "",
-      merchantNameAlternateLanguage: "",
-      merchantCityAlternateLanguage: "",
       accountInformation: "",
       acquiringBank: "",
       // @ts-expect-error - This works as intended, ts being weird
@@ -250,31 +241,31 @@ export default function ProfileEditor({
     name: "merchantCity",
     defaultValue: "",
   });
-  const billNumber = useWatch({
-    control: khqrControl,
-    name: "billNumber",
-    defaultValue: "",
-  });
-  const mobileNumber = useWatch({
-    control: khqrControl,
-    name: "mobileNumber",
-    defaultValue: "",
-  });
-  const storeLabel = useWatch({
-    control: khqrControl,
-    name: "storeLabel",
-    defaultValue: "",
-  });
-  const terminalLabel = useWatch({
-    control: khqrControl,
-    name: "terminalLabel",
-    defaultValue: "",
-  });
-  const purposeOfTransaction = useWatch({
-    control: khqrControl,
-    name: "purposeOfTransaction",
-    defaultValue: "",
-  });
+  // const billNumber = useWatch({
+  //   control: khqrControl,
+  //   name: "billNumber",
+  //   defaultValue: "",
+  // });
+  // const mobileNumber = useWatch({
+  //   control: khqrControl,
+  //   name: "mobileNumber",
+  //   defaultValue: "",
+  // });
+  // const storeLabel = useWatch({
+  //   control: khqrControl,
+  //   name: "storeLabel",
+  //   defaultValue: "",
+  // });
+  // const terminalLabel = useWatch({
+  //   control: khqrControl,
+  //   name: "terminalLabel",
+  //   defaultValue: "",
+  // });
+  // const purposeOfTransaction = useWatch({
+  //   control: khqrControl,
+  //   name: "purposeOfTransaction",
+  //   defaultValue: "",
+  // });
 
   const tabs = [
     { id: Tab.PROFILE, label: t("tabs.profile"), icon: User },
@@ -513,7 +504,7 @@ export default function ProfileEditor({
                     <AppearanceTab
                       initialData={initialData}
                       theme={theme}
-                      selectedTemplate={selectedTemplate}
+                      selectedTemplate={selectedTemplate || "default"}
                       backgroundImage={backgroundImage || ""}
                       setValue={profileSetValue}
                     />
@@ -524,6 +515,7 @@ export default function ProfileEditor({
                       register={khqrRegister}
                       setValue={khqrSetValue}
                       errors={khqrErrors}
+                      // @ts-expect-error - This one i'm pretty sure related to the error from switching between individual and merchant
                       handleSubmit={khqrHandleSubmit}
                       onGenerateQR={onGenerateQR}
                       accountType={accountType}
@@ -535,11 +527,6 @@ export default function ProfileEditor({
                       currency={currency}
                       amount={amount}
                       merchantCity={merchantCity}
-                      billNumber={billNumber}
-                      mobileNumber={mobileNumber}
-                      storeLabel={storeLabel}
-                      terminalLabel={terminalLabel}
-                      purposeOfTransaction={purposeOfTransaction}
                       isValid={khqrIsValid}
                       isGenerating={isGeneratingQR}
                       error={qrError}
