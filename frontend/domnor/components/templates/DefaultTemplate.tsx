@@ -71,7 +71,7 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
 
   return (
     <>
-      <div className="w-full min-h-screen flex flex-col relative shadow-2xl md:rounded-2xl md:overflow-hidden">
+      <div className="w-full min-h-screen flex flex-col relative md:shadow-2xl md:rounded-2xl md:overflow-hidden">
         {/* Background Image Layer */}
         {data.backgroundImage && (
           <div className="absolute inset-0 z-0">

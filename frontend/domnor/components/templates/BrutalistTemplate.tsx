@@ -91,16 +91,16 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
               src={backgroundImage!}
               alt="background"
               fill
-              className="object-cover opacity-20 grayscale contrast-125"
+              className="object-cover opacity-20 contrast-125"
               priority
             />
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
           </div>
         )}
 
-        <div className="relative z-10 flex flex-col min-h-screen border-x-4 border-black max-w-2xl mx-auto bg-white/50 backdrop-blur-sm">
+        <div className="relative z-10 flex flex-col min-h-screen md:border-x-4 border-black max-w-2xl  bg-white/50 backdrop-blur-sm">
           {/* Header Bar */}
-          <div className="border-b-4 border-black p-4 flex justify-between items-center bg-black text-white">
+          <div className="border-b-4 border-black p-3 md:p-4 flex justify-between items-center bg-black text-white">
             <div className="flex items-center gap-2">
               <Terminal size={20} />
               <span className="font-bold tracking-widest">USER_PROFILE.EXE</span>
@@ -113,13 +113,13 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
           </div>
 
           {/* Profile Section */}
-          <div className="p-6 border-b-4 border-black grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 items-start">
+          <div className="p-4 md:p-6 border-b-4 border-black grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 items-start">
             <div className="relative w-32 h-32 md:w-40 md:h-40 shrink-0 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <Image
                 src={data.profilePictureUrl}
                 alt="profile picture"
                 fill
-                className="object-cover grayscale hover:grayscale-0 transition-all duration-300"
+                className="object-cover  transition-all duration-300"
                 priority
               />
             </div>
@@ -143,7 +143,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
           </div>
 
           {/* Links Section */}
-          <div className="flex-1 p-6 space-y-4">
+          <div className="flex-1 p-4 md:p-6 space-y-4">
             <div className="flex items-center gap-2 mb-6 opacity-50">
               <ArrowRight size={20} />
               <span className="font-bold">AVAILABLE_LINKS</span>
@@ -173,7 +173,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
 
           {/* Socials & Footer */}
           <div className="border-t-4 border-black">
-            <div className="grid grid-cols-4 md:grid-cols-7 divide-x-4 divide-black border-b-4 border-black">
+            <div className="flex flex-wrap justify-center border-b-4 border-black gap-3 p-4">
               {Object.entries(data?.socials)
                 .filter(([_, v]) => v !== "")
                 .map(([key, url]) => (
@@ -182,7 +182,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="aspect-square flex items-center justify-center hover:bg-black hover:text-white transition-colors"
+                    className="aspect-square flex items-center justify-center hover:scale-110 hover:text-white transition-colors"
                     aria-label={key}
                   >
                     {icons[key as SocialPlatform]}
