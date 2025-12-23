@@ -77,14 +77,14 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
   return (
     <>
       <div 
-        className="w-full min-h-screen flex flex-col font-sans"
+        className="w-full min-h-screen flex flex-col font-sans relative md:rounded-2xl md:overflow-hidden"
         style={{ 
           backgroundColor: secondaryColor,
           color: textColor
         }}
       >
         {/* Background Pattern */}
-        <div className="fixed inset-0 opacity-10 pointer-events-none z-0" 
+        <div className="absolute inset-0 opacity-10 pointer-events-none z-0" 
           style={{ 
             backgroundImage: `radial-gradient(${textColor} 1px, transparent 1px)`,
             backgroundSize: '20px 20px'
@@ -93,7 +93,7 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
 
         {/* Background Image Layer */}
         {data.backgroundImage && (
-          <div className="fixed inset-0 z-0 opacity-40 mix-blend-hard-light">
+          <div className="absolute inset-0 z-0 opacity-40 mix-blend-hard-light">
             <Image
               src={backgroundImage!}
               alt="background"

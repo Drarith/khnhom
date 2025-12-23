@@ -82,7 +82,7 @@ export default function KhmerRoyalTemplate({ data }: { data: ProfileData }) {
   return (
     <>
       <div 
-        className="w-full min-h-screen flex flex-col font-serif relative overflow-hidden"
+        className="w-full min-h-screen flex flex-col font-serif relative overflow-hidden md:rounded-2xl"
         style={{ 
           backgroundColor: bgColor,
           color: primaryColor
@@ -99,7 +99,7 @@ export default function KhmerRoyalTemplate({ data }: { data: ProfileData }) {
 
         {/* Background Image Layer */}
         {data.backgroundImage && (
-          <div className="fixed inset-0 z-0 opacity-30 mix-blend-overlay">
+          <div className="absolute inset-0 z-0 opacity-30 mix-blend-overlay">
             <Image
               src={backgroundImage!}
               alt="background"
