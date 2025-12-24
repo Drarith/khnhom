@@ -8,13 +8,23 @@ import {
   getProfileLinks,
   currentUserProfile,
   updateProfilePictureUrl,
+  toggleSupporterStatus,
 } from "../controllers/profileController.js";
 import { createKHQR } from "../controllers/khqrController.js";
 import { authenticateToken } from "../middleware/auth.js";
 import "../config/passport.js";
 import { trackProfileView } from "../middleware/viewProfile.js";
+import { requireAdmin } from "../middleware/adminAuth.js";
 
 const profileRouter = express.Router();
+
+// Toggle isSupporter status for current user
+profileRouter.patch(
+  "/api/user/toggle-supporter",
+  requireAdmin,
+  authenticateToken,
+  toggleSupporterStatus
+);
 
 profileRouter.post("/api/create-profile", authenticateToken, createProfile);
 

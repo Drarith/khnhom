@@ -4,7 +4,6 @@ import type {
   LinkCreationInput,
 } from "../../types/user-input.types.js";
 import type { ILink } from "./linkModel.types.js";
-import { updateProfilePictureUrl } from "../../controllers/profileController.js";
 
 // Interface for the Profile document and model in case your dumbass forgets
 // Interface for social media links
@@ -43,6 +42,8 @@ export interface IProfile extends Document {
   views: number;
   createdAt: Date;
   updatedAt: Date;
+  isSupporter: boolean;
+  isGoldSupporter: boolean;
   isActive: boolean;
 
   // Instance methods

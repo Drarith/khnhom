@@ -502,3 +502,24 @@ export const updateProfilePictureUrl = async (req: Request, res: Response) => {
   await userProfile.updateProfilePictureUrl(profilePictureUrl);
   return res.status(201).json({ message: "Profile picture updated." });
 };
+
+export const toggleSupporterStatus = async (req: Request, res: Response) => {
+  try {
+    const usernameToToggle = req.body.username;
+    if (!usernameToToggle) {
+      return res.status(400).json({ message: "Username is required" });
+    }
+    const user = await Profile.findOne({ username: usernameToToggle });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.isSupporter = !user.isSupporter;
+    await user.save();
+
+    return res.status(200).json({ isSupporter: user.isSupporter });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Failed to toggle supporter status", error });
+  }
+};

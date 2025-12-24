@@ -85,6 +85,14 @@ const profileSchema = new Schema(
       type: String,
       default: "",
     },
+    isSupporter: {
+      type: Boolean,
+      default: false,
+    },
+    isGoldSupporter: {
+      type: Boolean,
+      default: false,
+    },
     views: { type: Number, default: 0 },
     isActive: { type: Boolean, default: true },
   },
