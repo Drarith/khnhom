@@ -60,6 +60,11 @@ export default function ProfileEditor({
 }: {
   initialData?: ProfileData;
 }) {
+  if(!initialData) {
+    const error = new Error("Initial data is required for ProfileEditor");
+    toast.error("Failed to load profile data. Please try again.");
+    throw error;
+  }
   const [activeTab, setActiveTab] = useState<Tab>(Tab.PROFILE);
 
   const [qrError, setQrError] = useState<string>("");

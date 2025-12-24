@@ -3,22 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 
 import { getJSON } from "@/https/https";
 
-import { toast } from "react-toastify";
-
 import type { ProfileData } from "@/types/profileData";
 import ProfileEditor from "@/components/profileEditor/ProfileEditor";
-import { redirect } from "next/navigation";
+import ErrorBoundary from "@/errorBoundary";
 
 export default function Dashboard() {
-  const { isPending, error, data } = useQuery<{ data: ProfileData }>({
+  const { isPending, data } = useQuery<{ data: ProfileData }>({
     queryKey: ["profile"],
     queryFn: () => getJSON("/me"),
   });
-
-  if (error) {
-    toast.error(error.message);
-    redirect("/")
-  }
 
   if (isPending) {
     return (
@@ -31,5 +24,9 @@ export default function Dashboard() {
     );
   }
 
-  return <ProfileEditor initialData={data?.data} />;
+  return (
+    <ErrorBoundary>
+      <ProfileEditor initialData={data?.data} />
+    </ErrorBoundary>
+  );
 }

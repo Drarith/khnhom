@@ -169,7 +169,20 @@ export const editProfileFormInputSchema = (
       t("validation.maxLength", { max: 1000 })
     ),
     socials: SocialsSchema,
-    link: SocialsSchema,
+    theme: SanitizedString(50),
+    selectedTemplate: z
+      .enum([
+        "default",
+        "brutalist",
+        "retro",
+        "minimalism",
+        "glassmorphism",
+        "editorial",
+        "neobrutalism",
+        "khmerroyal",
+      ])
+      .optional(),
+    backgroundImage: z.string().optional(),
   });
 };
 
@@ -192,7 +205,18 @@ export const profileFormEditorInputSchema = z.object({
   bio: SanitizedString(1000),
   socials: SocialsSchema,
   theme: SanitizedString(50),
-  selectedTemplate: z.enum(["default", "brutalist", "retro", "minimalism", "glassmorphism", "editorial", "neobrutalism", "khmerroyal"]).optional(),
+  selectedTemplate: z
+    .enum([
+      "default",
+      "brutalist",
+      "retro",
+      "minimalism",
+      "glassmorphism",
+      "editorial",
+      "neobrutalism",
+      "khmerroyal",
+    ])
+    .optional(),
   backgroundImage: z.string().optional(),
 });
 

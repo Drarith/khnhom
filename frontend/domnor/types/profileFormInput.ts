@@ -23,7 +23,7 @@ export type ProfileFormInputValues = z.infer<
 >;
 
 export type ProfileFormEditorInputValues = z.infer<
-  typeof editProfileFormInputSchema
+  ReturnType<typeof editProfileFormInputSchema>
 >;
 
 export type linkFormEditorInputValues = z.infer<
