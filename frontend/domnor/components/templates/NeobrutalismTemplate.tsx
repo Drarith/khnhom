@@ -1,7 +1,7 @@
 import { ProfileData } from "@/types/profileData";
 import { themes } from "@/config/theme";
 import Image from "next/image";
-import { Share2, X, Copy, Check, ExternalLink } from "lucide-react";
+import { Share2, X, ExternalLink } from "lucide-react";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import {
@@ -17,6 +17,7 @@ import Footer from "../userProfile/Footer";
 import { backgroundImages } from "@/config/background";
 import { badges } from "@/config/supporterBadge";
 import "./templates.css";
+import Badge from "../badge/Badge";
 
 type SocialPlatform =
   | "facebook"
@@ -129,22 +130,11 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
                   {data.displayName}
                 </h1>
                 <div className="block pt-2">
-                  <h4 className="font-bold text-lg inline-block bg-black text-white px-2 py-0.5">
-                    @{data.username}
-                  </h4>
-                  {data.isSupporter && (
-                    <span
-                      onClick={() => setShowBadgeText((v) => !v)}
-                      className="cursor-pointer ml-2 inline-block align-middle relative sweep-container overflow-hidden "
-                    >
-                      <Image
-                        src={badges.firstTierSuppoerterBadge}
-                        alt="Supporter Badge"
-                        width={28}
-                        height={28}
-                      />
-                    </span>
-                  )}
+                  <Badge
+                    username={data.username}
+                    isSupporter={data.isSupporter}
+                    isGoldSupporter={data.isGoldSupporter}
+                  />
                 </div>
                 {showBadgeText && (
                   <span className="left-8 top-1 bg-white border border-black px-2 py-1 rounded shadow text-xs z-10">

@@ -97,6 +97,14 @@ const profileSchema = new Schema(
       type: Number,
       default: 0,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    isDev: {
+      type: Boolean,
+      default: false,
+    },
     views: { type: Number, default: 0 },
     isActive: { type: Boolean, default: true },
   },

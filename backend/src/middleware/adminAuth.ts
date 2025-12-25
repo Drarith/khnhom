@@ -8,6 +8,7 @@ export const requireAdmin = async (
   res: Response,
   next: NextFunction
 ) => {
+  console.log("Checking admin role for user:", req.profile);
   if (!req.user) {
     return res.status(401).json({ message: "Unauthorized" });
   }

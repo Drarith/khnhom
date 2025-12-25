@@ -503,9 +503,10 @@ export const updateProfilePictureUrl = async (req: Request, res: Response) => {
   return res.status(201).json({ message: "Profile picture updated." });
 };
 
-export const toggleSupporterStatus = async (req: Request, res: Response) => {
+export const toggleStatus = async (req: Request, res: Response) => {
   try {
     const usernameToToggle = req.body.username;
+    const statusType = req.body.statusType;
     if (!usernameToToggle) {
       return res.status(400).json({ message: "Username is required" });
     }
@@ -513,10 +514,26 @@ export const toggleSupporterStatus = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    user.isSupporter = !user.isSupporter;
-    await user.save();
-
-    return res.status(200).json({ isSupporter: user.isSupporter });
+    switch (statusType) {
+      case "supporter":
+        user.isSupporter = !user.isSupporter;
+        await user.save();
+        return res.status(200).json({ isSupporter: user.isSupporter });
+      case "gold":
+        user.isGoldSupporter = !user.isGoldSupporter;
+        await user.save();
+        return res.status(200).json({ isGoldSupporter: user.isGoldSupporter });
+      case "verified":
+        user.isVerified = !user.isVerified;
+        await user.save();
+        return res.status(200).json({ isVerified: user.isVerified });
+      case "dev":
+        user.isDev = !user.isDev;
+        await user.save();
+        return res.status(200).json({ isDev: user.isDev });
+      default:
+        return res.status(400).json({ message: "Invalid status type" });
+    }
   } catch (error) {
     return res
       .status(500)
