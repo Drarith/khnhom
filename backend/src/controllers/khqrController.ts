@@ -5,7 +5,6 @@ import { BakongKHQR, khqrData, IndividualInfo } from "bakong-khqr";
 import { uploadBase64ToCloudinary } from "../https/uploadToCloudinary.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 import Profile from "../model/profileModel.js";
-import { de } from "zod/locales";
 
 export async function createKHQR(req: Request, res: Response) {
   if (!req.user) {
@@ -97,7 +96,6 @@ export async function createKHQR(req: Request, res: Response) {
       const { data } = BakongKHQR.decode(individual.data.qr);
       const decodedQR = data;
 
-
       const updatedProfile = await Profile.findOneAndUpdate(
         { user: (req.user as IUser).id },
         {
@@ -133,3 +131,25 @@ export async function createKHQR(req: Request, res: Response) {
     }
   }
 }
+
+export const createKHQRForDoantion = async (req: Request, res: Response) => {
+  const amount = req.body.amount;
+  if (!amount) {
+    return res.status(400).json({ message: "Amount is required" });
+  }
+  const bakongAccountID = "dararith_sarin@aclb";
+  const merchantName = "DararithSarin";
+  const optionalData = {
+    amount: 1,
+    currency: khqrData.currency.usd,
+  };
+  const individualInfo = new IndividualInfo(
+    bakongAccountID,
+    merchantName,
+    "Phnom Penh",
+    optionalData
+  );
+  const KHQR = new BakongKHQR();
+  const individual = await KHQR.generateIndividual(individualInfo);
+  return res.status(200).json({ qrData: individual.data.qr });
+};

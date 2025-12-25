@@ -2,6 +2,7 @@ export const reservedUsernamesSet = new Set([
   // --- Roles & Security ---
   "admin",
   "administrator",
+  "khqr",
   "superuser",
   "root",
   "sudo",
