@@ -44,6 +44,7 @@ export interface IProfile extends Document {
   updatedAt: Date;
   isSupporter: boolean;
   isGoldSupporter: boolean;
+  donationAmount: number;
   isActive: boolean;
 
   // Instance methods

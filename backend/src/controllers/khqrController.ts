@@ -6,6 +6,11 @@ import { uploadBase64ToCloudinary } from "../https/uploadToCloudinary.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 import Profile from "../model/profileModel.js";
 import axios from "axios";
+import type { IProfile } from "../model/types-for-models/profileModel.types.js";
+
+const clients = new Map<string, Response>();
+let amountToSave: number;
+let profileToSave: IProfile;
 
 export async function createKHQR(req: Request, res: Response) {
   if (!req.user) {
@@ -133,41 +138,152 @@ export async function createKHQR(req: Request, res: Response) {
   }
 }
 
-export const createKHQRForDoantion = async (req: Request, res: Response) => {
-  try {
-    const amount = req.body.amount;
-    if (!amount) {
-      return res.status(400).json({ message: "Amount is required" });
+async function pollBakong(md5: string) {
+  const start = Date.now();
+  const timeout = 5 * 60 * 1000; // 5 mins
+
+  const check = async () => {
+    // 1. Check if we timed out
+    if (Date.now() - start > timeout) {
+      notifyClient(md5, { status: "EXPIRED" });
+      return;
     }
-    const bakongAccountID = "dararith_sarin@aclb";
-    const merchantName = "DararithSarin";
-    const optionalData = {
-      amount: parseFloat(amount),
-      currency: khqrData.currency.usd,
-    };
+
+    if (!clients.has(md5)) {
+      console.log(`[SSE] Stopping poll for ${md5} - User refreshed/left.`);
+      return;
+    }
+
+    try {
+      // 2. Ask Bakong
+      const { data } = await axios.post(
+        "https://api-bakong.nbc.gov.kh/v1/check_transaction_by_md5",
+        { md5 },
+        { headers: { Authorization: `Bearer ${process.env.BAKONG_TOKEN}` } }
+      );
+
+      // 3. If paid, notify and stop
+      if (data && data.responseCode === 0) {
+        notifyClient(md5, { status: "PAID", data: data.data });
+        return;
+      }
+
+      // 4. If not paid, keep checking only if the client is still listening
+      // Optimization: If the user closed the tab (client gone), stop polling Bakong to save resources.
+      if (clients.has(md5)) {
+        setTimeout(check, 5000); // Check every 3s
+      } else {
+        console.log(`[SSE] Client ${md5} disconnected. Stopping poll.`);
+      }
+    } catch (error) {
+      console.error(`[SSE] Error polling ${md5}`, error);
+      setTimeout(check, 5000); // Retry slower on error
+    }
+  };
+
+  check();
+}
+
+// Helper to send data to the specific user
+function notifyClient(md5: string, payload: any) {
+  const client = clients.get(md5);
+
+  if (client) {
+    // SSE formatting is strict: "data: <json>\n\n"
+    client.write(`data: ${JSON.stringify(payload)}\n\n`);
+
+    // If it's a final state (PAID or EXPIRED), close the connection
+    if (payload.status === "PAID" || payload.status === "EXPIRED") {
+      client.end();
+      clients.delete(md5);
+      updateAmount(payload.status);
+    }
+  }
+}
+
+async function updateAmount(status: string) {
+  if (!status || status !== "PAID") return;
+  const currentDonationAmount = (profileToSave as IProfile).donationAmount;
+  const newDonationAmount = currentDonationAmount
+    ? currentDonationAmount + amountToSave
+    : amountToSave;
+  profileToSave.donationAmount = newDonationAmount;
+
+  if (!profileToSave.isSupporter && newDonationAmount >= 5) {
+    profileToSave.isSupporter = true;
+  }
+
+  if (!profileToSave.isGoldSupporter && newDonationAmount >= 20) {
+    profileToSave.isGoldSupporter = true;
+  }
+
+  await profileToSave.save();
+  amountToSave = 0;
+}
+
+// --- C. EXPRESS CONTROLLERS ---
+
+// 1. The Setup Endpoint (Generates QR)
+export const createKHQRForDonation = async (req: Request, res: Response) => {
+  try {
+    const { amount } = req.body;
+    if (!amount) return res.status(400).json({ message: "Amount is required" });
+
+    // Generate QR Logic (Same as yours)
     const individualInfo = new IndividualInfo(
-      bakongAccountID,
-      merchantName,
+      "dararith_sarin@aclb",
+      "DararithSarin",
       "Phnom Penh",
-      optionalData
+      { amount: parseFloat(amount), currency: khqrData.currency.usd }
     );
     const KHQR = new BakongKHQR();
-    const individual = await KHQR.generateIndividual(individualInfo);
+    const result = KHQR.generateIndividual(individualInfo);
 
-    const qrCodeDataURL = await QRCode.toDataURL(individual.data.qr, {
-      errorCorrectionLevel: "M",
-      type: "image/png",
-      width: 512,
-      margin: 2,
+    // Safety check for library version differences
+    const md5 = result.data?.md5 || (result as any).md5;
+    const qrString = result.data?.qr || (result as any).qr;
+
+    if (!md5) throw new Error("MD5 generation failed");
+
+    const qrCodeDataURL = await QRCode.toDataURL(qrString);
+    amountToSave = parseFloat(amount);
+    profileToSave = req.profile;
+
+    return res.status(200).json({
+      qrData: qrCodeDataURL,
+      md5: md5,
+      // Give frontend the URL to listen to
+      subscribeUrl: `/api/payment/events/${md5}`,
     });
-
-    return res.status(200).json({ qrData: qrCodeDataURL });
   } catch (error) {
-    console.error("Error generating donation KHQR:", error);
-    return res.status(500).json({
-      message: "Error generating donation QR code",
-      error: error instanceof Error ? error.message : String(error),
-    });
+    return res.status(500).json({ error: String(error) });
   }
 };
 
+// 2. The SSE Endpoint (Frontend listens here)
+export const paymentEventsHandler = (req: Request, res: Response) => {
+  const { md5 } = req.params;
+  if (!md5) {
+    return res.status(400).json({ message: "MD5 is required" });
+  }
+
+  // Mandatory headers for SSE
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+    Connection: "keep-alive",
+  });
+
+  // Send initial heartbeat so frontend knows it's working
+  res.write(`data: ${JSON.stringify({ status: "CONNECTED" })}\n\n`);
+
+  // Register this client
+  clients.set(md5, res);
+  pollBakong(md5);
+
+  // Clean up if user closes tab
+  req.on("close", () => {
+    console.log(`[SSE] Connection closed for ${md5}`);
+    clients.delete(md5);
+  });
+};

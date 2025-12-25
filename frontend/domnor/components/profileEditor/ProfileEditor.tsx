@@ -544,7 +544,7 @@ export default function ProfileEditor({
                     />
                   )}
 
-                  {activeTab === "donation" && <DonationTab />}
+                  {activeTab === "donation" && <DonationTab currentDonationAmount={initialData?.donationAmount || 0} />}
 
                   {activeTab === "admin" && isAdmin && (
                     <AdminTab

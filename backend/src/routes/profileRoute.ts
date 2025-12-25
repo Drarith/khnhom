@@ -10,7 +10,7 @@ import {
   updateProfilePictureUrl,
   toggleSupporterStatus,
 } from "../controllers/profileController.js";
-import { createKHQR, createKHQRForDoantion } from "../controllers/khqrController.js";
+import { createKHQR, createKHQRForDonation, paymentEventsHandler } from "../controllers/khqrController.js";
 import { authenticateToken } from "../middleware/auth.js";
 import "../config/passport.js";
 import { trackProfileView } from "../middleware/viewProfile.js";
@@ -26,9 +26,11 @@ profileRouter.patch(
   toggleSupporterStatus
 );
 
-profileRouter.post("/api/user/generate-donation-khqr", authenticateToken, createKHQRForDoantion);
+profileRouter.post("/api/user/generate-donation-khqr", authenticateToken, createKHQRForDonation);
 
 profileRouter.post("/api/create-profile", authenticateToken, createProfile);
+
+profileRouter.get('/api/payment/events/:md5', paymentEventsHandler);
 
 profileRouter.post(
   "/api/create-link",

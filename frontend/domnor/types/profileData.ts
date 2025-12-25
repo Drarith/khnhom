@@ -32,6 +32,7 @@ export interface ProfileData {
     tiktok: string;
     github: string;
   };
+  donationAmount: number;
 }
 
 export type TemplateType = "default" | "brutalist";
