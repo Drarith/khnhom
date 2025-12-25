@@ -8,6 +8,7 @@ import {
   User,
   QrCode,
   Shield,
+  Heart,
 } from "lucide-react";
 import type { ProfileData } from "@/types/profileData";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -41,6 +42,7 @@ import LinksTab from "./components/LinksTab";
 import AppearanceTab from "./components/AppearanceTab";
 import GenerateQrTab from "./components/GenerateQr";
 import AdminTab from "./components/AdminTab";
+import DonationTab from "./components/DonationTab";
 
 import UserProfile from "../userProfile/UserProfile";
 import { useTabAnimation } from "@/gsap/tab";
@@ -52,6 +54,7 @@ export enum Tab {
   LINKS = "links",
   APPEARANCE = "appearance",
   PAYMENT = "payment",
+  DONATION = "donation",
   ADMIN = "admin",
 }
 
@@ -60,7 +63,7 @@ export default function ProfileEditor({
 }: {
   initialData?: ProfileData;
 }) {
-  if(!initialData) {
+  if (!initialData) {
     const error = new Error("Initial data is required for ProfileEditor");
     toast.error("Failed to load profile data. Please try again.");
     throw error;
@@ -72,10 +75,9 @@ export default function ProfileEditor({
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const t = useTranslations("profileEditor");
-  const p = useTranslations("profileSetupPage")
+  const p = useTranslations("profileSetupPage");
 
   const queryClient = useQueryClient();
-
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -280,6 +282,7 @@ export default function ProfileEditor({
     { id: Tab.SOCIALS, label: t("tabs.socials"), icon: LinkIcon },
     { id: Tab.LINKS, label: t("tabs.links"), icon: LinkIcon },
     { id: Tab.PAYMENT, label: t("tabs.payment"), icon: QrCode },
+    { id: Tab.DONATION, label: "Donation", icon: Heart },
     { id: Tab.APPEARANCE, label: t("tabs.appearance"), icon: Palette },
     ...(isAdmin
       ? [{ id: Tab.ADMIN, label: t("tabs.admin"), icon: Shield }]
@@ -406,13 +409,12 @@ export default function ProfileEditor({
   const handlePreviewToggle = () => {
     const menu = document.querySelector(".menu-container");
     setNotPreviewing(!notPreviewing);
-    if(notPreviewing) {
+    if (notPreviewing) {
       window.scrollTo({ top: 0, behavior: "smooth" });
       menu?.classList.add("hidden");
     } else {
       menu?.classList.remove("hidden");
     }
-  
   };
 
   const { containerRef, highlighterRef } = useTabAnimation(activeTab, [
@@ -541,6 +543,8 @@ export default function ProfileEditor({
                       initialData={initialData}
                     />
                   )}
+
+                  {activeTab === "donation" && <DonationTab />}
 
                   {activeTab === "admin" && isAdmin && (
                     <AdminTab

@@ -5,6 +5,7 @@ import { BakongKHQR, khqrData, IndividualInfo } from "bakong-khqr";
 import { uploadBase64ToCloudinary } from "../https/uploadToCloudinary.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 import Profile from "../model/profileModel.js";
+import axios from "axios";
 
 export async function createKHQR(req: Request, res: Response) {
   if (!req.user) {
@@ -133,23 +134,40 @@ export async function createKHQR(req: Request, res: Response) {
 }
 
 export const createKHQRForDoantion = async (req: Request, res: Response) => {
-  const amount = req.body.amount;
-  if (!amount) {
-    return res.status(400).json({ message: "Amount is required" });
+  try {
+    const amount = req.body.amount;
+    if (!amount) {
+      return res.status(400).json({ message: "Amount is required" });
+    }
+    const bakongAccountID = "dararith_sarin@aclb";
+    const merchantName = "DararithSarin";
+    const optionalData = {
+      amount: parseFloat(amount),
+      currency: khqrData.currency.usd,
+    };
+    const individualInfo = new IndividualInfo(
+      bakongAccountID,
+      merchantName,
+      "Phnom Penh",
+      optionalData
+    );
+    const KHQR = new BakongKHQR();
+    const individual = await KHQR.generateIndividual(individualInfo);
+
+    const qrCodeDataURL = await QRCode.toDataURL(individual.data.qr, {
+      errorCorrectionLevel: "M",
+      type: "image/png",
+      width: 512,
+      margin: 2,
+    });
+
+    return res.status(200).json({ qrData: qrCodeDataURL });
+  } catch (error) {
+    console.error("Error generating donation KHQR:", error);
+    return res.status(500).json({
+      message: "Error generating donation QR code",
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
-  const bakongAccountID = "dararith_sarin@aclb";
-  const merchantName = "DararithSarin";
-  const optionalData = {
-    amount: 1,
-    currency: khqrData.currency.usd,
-  };
-  const individualInfo = new IndividualInfo(
-    bakongAccountID,
-    merchantName,
-    "Phnom Penh",
-    optionalData
-  );
-  const KHQR = new BakongKHQR();
-  const individual = await KHQR.generateIndividual(individualInfo);
-  return res.status(200).json({ qrData: individual.data.qr });
 };
+
