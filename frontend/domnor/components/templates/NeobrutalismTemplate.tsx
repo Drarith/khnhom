@@ -15,6 +15,8 @@ import {
 } from "@icons-pack/react-simple-icons";
 import Footer from "../userProfile/Footer";
 import { backgroundImages } from "@/config/background";
+import { badges } from "@/config/supporterBadge";
+import "./templates.css";
 
 type SocialPlatform =
   | "facebook"
@@ -45,6 +47,7 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
     title: string;
   }>({ isOpen: false, url: "", title: "" });
   const [copied, setCopied] = useState(false);
+  const [showBadgeText, setShowBadgeText] = useState(false);
 
   const handleShare = (e: React.MouseEvent, url: string, title: string) => {
     e.preventDefault();
@@ -69,25 +72,26 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
     (bg) => bg.name === data.backgroundImage
   )?.url;
 
-  const primaryColor = activeTheme?.button || '#FFDE00';
-  const secondaryColor = activeTheme?.bg || '#FFFFFF';
-  const textColor = activeTheme?.text || '#000000';
-  const accentColor = activeTheme?.border || '#000000';
+  const primaryColor = activeTheme?.button || "#FFDE00";
+  const secondaryColor = activeTheme?.bg || "#FFFFFF";
+  const textColor = activeTheme?.text || "#000000";
+  const accentColor = activeTheme?.border || "#000000";
 
   return (
     <>
-      <div 
+      <div
         className="w-full min-h-screen flex flex-col font-sans relative md:rounded-2xl md:overflow-hidden"
-        style={{ 
+        style={{
           backgroundColor: secondaryColor,
-          color: textColor
+          color: textColor,
         }}
       >
         {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none z-0" 
-          style={{ 
+        <div
+          className="absolute inset-0 opacity-10 pointer-events-none z-0"
+          style={{
             backgroundImage: `radial-gradient(${textColor} 1px, transparent 1px)`,
-            backgroundSize: '20px 20px'
+            backgroundSize: "20px 20px",
           }}
         ></div>
 
@@ -105,9 +109,8 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
         )}
 
         <div className="relative z-10 w-full max-w-2xl mx-auto p-6 flex flex-col items-center min-h-screen space-y-8">
-          
           {/* Profile Card */}
-          <div 
+          <div
             className="w-full bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mt-10 transform hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
             style={{ backgroundColor: primaryColor }}
           >
@@ -122,14 +125,34 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
                 />
               </div>
               <div className="space-y-2">
-                <h1 className="text-4xl font-black uppercase tracking-tight bg-white border-2 border-black px-4 py-1 inline-block shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <h1 className="text-4xl text-black font-black uppercase tracking-tight bg-white border-2 border-black px-4 py-1 inline-block shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                   {data.displayName}
                 </h1>
                 <div className="block pt-2">
                   <h4 className="font-bold text-lg inline-block bg-black text-white px-2 py-0.5">
                     @{data.username}
                   </h4>
+                  {data.isSupporter && (
+                    <span
+                      onClick={() => setShowBadgeText((v) => !v)}
+                      className="cursor-pointer ml-2 inline-block align-middle relative sweep-container overflow-hidden "
+                    >
+                      <Image
+                        src={badges.firstTierSuppoerterBadge}
+                        alt="Supporter Badge"
+                        width={28}
+                        height={28}
+                      />
+                    </span>
+                  )}
                 </div>
+                {showBadgeText && (
+                  <span className="left-8 top-1 bg-white border border-black px-2 py-1 rounded shadow text-xs z-10">
+                    {data.username.charAt(0).toUpperCase() +
+                      data.username.slice(1)}{" "}
+                    is a Supporter of Domnor!
+                  </span>
+                )}
               </div>
               {data.bio && (
                 <p className="text-lg font-medium border-2 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full">
@@ -159,7 +182,7 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
 
           {/* Links */}
           {data.links && data.links.length > 0 && (
-            <div className="w-full space-y-5">
+            <div className="w-full space-y-5 text-black">
               {data.links.map((link) => (
                 <div key={link._id} className="relative group">
                   <a
@@ -181,9 +204,9 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
               ))}
             </div>
           )}
-          
+
           <div className="mt-auto pt-8 font-bold">
-             <Footer theme={activeTheme} username={data.username} />
+            <Footer theme={activeTheme} username={data.username} />
           </div>
         </div>
       </div>
@@ -195,13 +218,11 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
           onClick={() => setShareModal({ ...shareModal, isOpen: false })}
         >
           <div
-            className="bg-white border-4 border-black w-full max-w-sm p-8 space-y-6 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]"
+            className="bg-white border-4 border-black text-black w-full max-w-sm p-8 space-y-6 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center border-b-4 border-black pb-4">
-              <h3 className="text-2xl font-black uppercase">
-                Share It!
-              </h3>
+              <h3 className="text-2xl font-black uppercase">Share It!</h3>
               <button
                 onClick={() => setShareModal({ ...shareModal, isOpen: false })}
                 className="bg-red-500 border-2 border-black text-white p-1 hover:bg-red-600 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
@@ -212,9 +233,7 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
 
             <div className="space-y-6">
               <div className="space-y-2">
-                <p className="font-bold uppercase text-sm">
-                  The Link
-                </p>
+                <p className="font-bold uppercase text-sm">The Link</p>
                 <div className="flex items-center gap-2 p-2 border-4 border-black bg-gray-100">
                   <div className="flex-1 min-w-0">
                     <p className="truncate font-mono font-bold">
@@ -224,9 +243,7 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
                   <button
                     onClick={copyToClipboard}
                     className={`px-3 py-1 border-2 border-black font-bold text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-[2px] active:translate-y-[2px] transition-all ${
-                      copied
-                        ? "bg-green-400"
-                        : "bg-blue-400 hover:bg-blue-500"
+                      copied ? "bg-green-400" : "bg-blue-400 hover:bg-blue-500"
                     }`}
                   >
                     {copied ? "COPIED!" : "COPY"}

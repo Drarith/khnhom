@@ -33,6 +33,8 @@ export interface ProfileData {
     github: string;
   };
   donationAmount: number;
+  isSupporter: boolean;
+  isGoldSupporter: boolean;
 }
 
 export type TemplateType = "default" | "brutalist";
