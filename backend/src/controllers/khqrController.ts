@@ -284,8 +284,8 @@ export const paymentEventsHandler = (req: Request, res: Response) => {
   pollBakong(md5);
 
   // Clean up if user closes tab
-  req.on("close", () => {
-    console.log(`[SSE] Connection closed for ${md5}`);
-    activeJobs.delete(md5);
-  });
+  // req.on("close", () => {
+  //   console.log(`[SSE] Connection closed for ${md5}`);
+  //   activeJobs.delete(md5);
+  // });
 };
