@@ -6,11 +6,15 @@ import { uploadBase64ToCloudinary } from "../https/uploadToCloudinary.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 import Profile from "../model/profileModel.js";
 import axios from "axios";
-import type { IProfile } from "../model/types-for-models/profileModel.types.js";
 
-const clients = new Map<string, Response>();
-let amountToSave: number;
-let profileToSave: IProfile;
+interface PollingJob {
+  res: Response;
+  profileId: string;
+  amount: number;
+  attempts: number;
+}
+
+const activeJobs = new Map<string, PollingJob>();
 
 export async function createKHQR(req: Request, res: Response) {
   if (!req.user) {
@@ -138,92 +142,66 @@ export async function createKHQR(req: Request, res: Response) {
   }
 }
 
-async function pollBakong(md5: string) {
-  const start = Date.now();
-  const timeout = 5 * 60 * 1000; // 5 mins
+async function pollBakong(md5: string, startTime = Date.now()) {
+  const job = activeJobs.get(md5);
+  if (!job) return; 
 
-  const check = async () => {
-    // 1. Check if we timed out
-    if (Date.now() - start > timeout) {
-      notifyClient(md5, { status: "EXPIRED" });
+  // Timeout: Stop polling after 5 minutes
+  if (Date.now() - startTime > 5 * 60 * 1000) {
+    notifyAndCleanup(md5, { status: "EXPIRED" });
+    return;
+  }
+
+  try {
+    const { data } = await axios.post(
+      "https://api-bakong.nbc.gov.kh/v1/check_transaction_by_md5",
+      { md5 },
+      { headers: { Authorization: `Bearer ${process.env.BAKONG_TOKEN}` } }
+    );
+
+    if (data?.responseCode === 0) {
+      await finalizeTransaction(md5, job, data.data);
       return;
     }
 
-    if (!clients.has(md5)) {
-      console.log(`[SSE] Stopping poll for ${md5} - User refreshed/left.`);
-      return;
-    }
+    // Successive attempt tracking
+    job.attempts++;
+    
+    // Exponential Backoff: Starts at 3s, slows down as time passes
+    const nextDelay = Math.min(3000 + (Math.floor(job.attempts / 5) * 2000), 15000);
+    setTimeout(() => pollBakong(md5, startTime), nextDelay);
 
-    try {
-      // 2. Ask Bakong
-      const { data } = await axios.post(
-        "https://api-bakong.nbc.gov.kh/v1/check_transaction_by_md5",
-        { md5 },
-        { headers: { Authorization: `Bearer ${process.env.BAKONG_TOKEN}` } }
-      );
-
-      // 3. If paid, notify and stop
-      if (data && data.responseCode === 0) {
-        notifyClient(md5, { status: "PAID", data: data.data });
-        return;
-      }
-
-      // 4. If not paid, keep checking only if the client is still listening
-      // Optimization: If the user closed the tab (client gone), stop polling Bakong to save resources.
-      if (clients.has(md5)) {
-        setTimeout(check, 5000); // Check every 3s
-      } else {
-        console.log(`[SSE] Client ${md5} disconnected. Stopping poll.`);
-      }
-    } catch (error) {
-      console.error(`[SSE] Error polling ${md5}`, error);
-      setTimeout(check, 5000); // Retry slower on error
-    }
-  };
-
-  check();
-}
-
-// Helper to send data to the specific user
-function notifyClient(md5: string, payload: any) {
-  const client = clients.get(md5);
-
-  if (client) {
-    // SSE formatting is strict: "data: <json>\n\n"
-    client.write(`data: ${JSON.stringify(payload)}\n\n`);
-
-    // If it's a final state (PAID or EXPIRED), close the connection
-    if (payload.status === "PAID" || payload.status === "EXPIRED") {
-      client.end();
-      clients.delete(md5);
-      updateAmount(payload.status);
-    }
+  } catch (error) {
+    // Error backoff: Wait 10s if the Bakong API is down or errors out
+    setTimeout(() => pollBakong(md5, startTime), 10000);
   }
 }
 
-async function updateAmount(status: string) {
-  if (!status || status !== "PAID") return;
-  const currentDonationAmount = (profileToSave as IProfile).donationAmount;
-  const newDonationAmount = currentDonationAmount
-    ? currentDonationAmount + amountToSave
-    : amountToSave;
-  profileToSave.donationAmount = newDonationAmount;
-
-  if (!profileToSave.isSupporter && newDonationAmount >= 5) {
-    profileToSave.isSupporter = true;
+async function finalizeTransaction(md5: string, job: PollingJob, paymentData: any) {
+  try {
+    const profile = await Profile.findById(job.profileId);
+    if (profile) {
+      profile.donationAmount = Math.round(((profile.donationAmount || 0) + job.amount) * 100) / 100;
+      profile.isSupporter = profile.donationAmount >= 5;
+      profile.isGoldSupporter = profile.donationAmount >= 20;
+      await profile.save();
+    }
+    notifyAndCleanup(md5, { status: "PAID", data: paymentData });
+  } catch (err) {
+    console.error("Database update failed:", err);
+    // You might want to retry the DB update here
   }
-
-  if (!profileToSave.isGoldSupporter && newDonationAmount >= 20) {
-    profileToSave.isGoldSupporter = true;
-  }
-
-  await profileToSave.save();
-  amountToSave = 0;
 }
 
-// --- C. EXPRESS CONTROLLERS ---
+function notifyAndCleanup(md5: string, payload: any) {
+  const job = activeJobs.get(md5);
+  if (job) {
+    job.res.write(`data: ${JSON.stringify(payload)}\n\n`);
+    job.res.end();
+    activeJobs.delete(md5);
+  }
+}
 
-// 1. The Setup Endpoint (Generates QR)
 export const createKHQRForDonation = async (req: Request, res: Response) => {
   try {
     const { amount } = req.body;
@@ -245,10 +223,15 @@ export const createKHQRForDonation = async (req: Request, res: Response) => {
 
     if (!md5) throw new Error("MD5 generation failed");
 
-    const qrCodeDataURL = await QRCode.toDataURL(qrString);
-    amountToSave = parseFloat(amount);
-    profileToSave = req.profile;
+    // Register this client
+    activeJobs.set(md5, {
+      res: null as unknown as Response,
+      profileId: req.profile.id,
+      amount: parseFloat(amount),
+      attempts: 0,
+    });
 
+    const qrCodeDataURL = await QRCode.toDataURL(qrString);
     return res.status(200).json({
       qrData: qrCodeDataURL,
       md5: md5,
@@ -273,17 +256,18 @@ export const paymentEventsHandler = (req: Request, res: Response) => {
     "Cache-Control": "no-cache",
     Connection: "keep-alive",
   });
-
+  console.log(`[SSE] Connection established for ${md5}, length: ${activeJobs.size}`);
   // Send initial heartbeat so frontend knows it's working
   res.write(`data: ${JSON.stringify({ status: "CONNECTED" })}\n\n`);
-
-  // Register this client
-  clients.set(md5, res);
+  const activeJob = activeJobs.get(md5);
+  if (activeJob) {
+    activeJob.res = res;
+  }
   pollBakong(md5);
 
   // Clean up if user closes tab
   req.on("close", () => {
     console.log(`[SSE] Connection closed for ${md5}`);
-    clients.delete(md5);
+    activeJobs.delete(md5);
   });
 };
