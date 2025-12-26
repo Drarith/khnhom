@@ -157,6 +157,8 @@ async function pollBakong(md5: string, startTime = Date.now()) {
     return;
   }
 
+  
+
   try {
     const { data } = await axios.post(
       "https://api-bakong.nbc.gov.kh/v1/check_transaction_by_md5",
@@ -262,6 +264,7 @@ export const paymentEventsHandler = (req: Request, res: Response) => {
   if (!md5) {
     return res.status(400).json({ message: "MD5 is required" });
   }
+  
 
   // Mandatory headers for SSE
   res.writeHead(200, {
@@ -281,8 +284,8 @@ export const paymentEventsHandler = (req: Request, res: Response) => {
   pollBakong(md5);
 
   // Clean up if user closes tab
-  // req.on("close", () => {
-  //   console.log(`[SSE] Connection closed for ${md5}`);
-  //   activeJobs.delete(md5);
-  // });
+  req.on("close", () => {
+    console.log(`[SSE] Connection closed for ${md5}`);
+    activeJobs.delete(md5);
+  });
 };
