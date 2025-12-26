@@ -134,7 +134,7 @@ export function useDonation() {
         eventSource.close();
       }
     };
-  }, [subscribeUrl, paymentStatus]);
+  }, [subscribeUrl, paymentStatus, queryClient]);
 
   // Timer countdown effect
   useEffect(() => {
