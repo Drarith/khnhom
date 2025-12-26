@@ -144,10 +144,15 @@ export async function createKHQR(req: Request, res: Response) {
 
 async function pollBakong(md5: string, startTime = Date.now()) {
   const job = activeJobs.get(md5);
-  if (!job) return; 
+  if (!job) return;
 
   // Timeout: Stop polling after 5 minutes
-  if (Date.now() - startTime > 5 * 60 * 1000) {
+  // if (Date.now() - startTime > 5 * 60 * 1000) {
+  //   notifyAndCleanup(md5, { status: "EXPIRED" });
+  //   return;
+  // }
+
+  if (Date.now() - startTime > 30 * 1000) {
     notifyAndCleanup(md5, { status: "EXPIRED" });
     return;
   }
@@ -166,22 +171,29 @@ async function pollBakong(md5: string, startTime = Date.now()) {
 
     // Successive attempt tracking
     job.attempts++;
-    
-    // Exponential Backoff: Starts at 3s, slows down as time passes
-    const nextDelay = Math.min(3000 + (Math.floor(job.attempts / 5) * 2000), 15000);
-    setTimeout(() => pollBakong(md5, startTime), nextDelay);
 
+    // Exponential Backoff: Starts at 3s, slows down as time passes
+    const nextDelay = Math.min(
+      3000 + Math.floor(job.attempts / 5) * 2000,
+      15000
+    );
+    setTimeout(() => pollBakong(md5, startTime), nextDelay);
   } catch (error) {
     // Error backoff: Wait 10s if the Bakong API is down or errors out
     setTimeout(() => pollBakong(md5, startTime), 10000);
   }
 }
 
-async function finalizeTransaction(md5: string, job: PollingJob, paymentData: any) {
+async function finalizeTransaction(
+  md5: string,
+  job: PollingJob,
+  paymentData: any
+) {
   try {
     const profile = await Profile.findById(job.profileId);
     if (profile) {
-      profile.donationAmount = Math.round(((profile.donationAmount || 0) + job.amount) * 100) / 100;
+      profile.donationAmount =
+        Math.round(((profile.donationAmount || 0) + job.amount) * 100) / 100;
       profile.isSupporter = profile.donationAmount >= 5;
       profile.isGoldSupporter = profile.donationAmount >= 20;
       await profile.save();
@@ -199,6 +211,7 @@ function notifyAndCleanup(md5: string, payload: any) {
     job.res.write(`data: ${JSON.stringify(payload)}\n\n`);
     job.res.end();
     activeJobs.delete(md5);
+    console.log(`[SSE] Job ${md5} completed and cleaned up.`);
   }
 }
 
@@ -256,7 +269,9 @@ export const paymentEventsHandler = (req: Request, res: Response) => {
     "Cache-Control": "no-cache",
     Connection: "keep-alive",
   });
-  console.log(`[SSE] Connection established for ${md5}, length: ${activeJobs.size}`);
+  console.log(
+    `[SSE] Connection established for ${md5}, length: ${activeJobs.size}`
+  );
   // Send initial heartbeat so frontend knows it's working
   res.write(`data: ${JSON.stringify({ status: "CONNECTED" })}\n\n`);
   const activeJob = activeJobs.get(md5);
@@ -266,8 +281,8 @@ export const paymentEventsHandler = (req: Request, res: Response) => {
   pollBakong(md5);
 
   // Clean up if user closes tab
-  req.on("close", () => {
-    console.log(`[SSE] Connection closed for ${md5}`);
-    activeJobs.delete(md5);
-  });
+  // req.on("close", () => {
+  //   console.log(`[SSE] Connection closed for ${md5}`);
+  //   activeJobs.delete(md5);
+  // });
 };

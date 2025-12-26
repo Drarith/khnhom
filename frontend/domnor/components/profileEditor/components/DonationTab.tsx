@@ -38,7 +38,8 @@ export default function DonationTab({
       setQrData(data.qrData);
       setSubscribeUrl(data.subscribeUrl); 
       setPaymentStatus("pending");
-      setTimeLeft(300); // 5 minutes
+      // setTimeLeft(300); 
+      setTimeLeft(30); // 30 seconds
       toast.success("QR Code generated. Waiting for payment...");
     },
     onError: (error: AxiosError<{ message?: string }>) => {
