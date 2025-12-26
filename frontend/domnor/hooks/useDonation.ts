@@ -46,7 +46,7 @@ export function useDonation() {
   const [qrData, setQrData] = useState(saved?.qrData || "");
   const [timeLeft, setTimeLeft] = useState(saved?.remaining || 0);
 
-  const [subscribeUrl, setSubscribeUrl] = useState<string | null>(null);
+  const [subscribeUrl, setSubscribeUrl] = useState(saved?.subscribeUrl);
 
 
   const eventSourceRef = useRef<EventSource | null>(null);
