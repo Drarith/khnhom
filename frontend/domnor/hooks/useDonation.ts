@@ -13,12 +13,41 @@ interface GenerateQRResponse {
 
 type PaymentStatus = "idle" | "pending" | "paid" | "expired";
 
+const getSavedDonation = () => {
+  try {
+    const saved = localStorage.getItem("donationState");
+    if (!saved) return null;
+
+    const parsed = JSON.parse(saved);
+    const now = new Date().getTime();
+
+    if (now < parsed.timerEndTime) {
+      return {
+        ...parsed,
+        remaining: Math.round((parsed.timerEndTime - now) / 1000),
+      };
+    }
+    localStorage.removeItem("donationState");
+  } catch (e) {
+    localStorage.removeItem("donationState");
+  }
+  return null;
+};
+
+const DURATION = 180
+
 export function useDonation() {
-  const [amount, setAmount] = useState<string>("");
-  const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>("idle");
-  const [qrData, setQrData] = useState<string | null>(null);
+  const saved = getSavedDonation();
+  // Initialize states directly
+  const [amount, setAmount] = useState(saved?.amount?.toString() || "");
+  const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>(
+    saved?.paymentStatus || "idle"
+  );
+  const [qrData, setQrData] = useState(saved?.qrData || "");
+  const [timeLeft, setTimeLeft] = useState(saved?.remaining || 0);
+
   const [subscribeUrl, setSubscribeUrl] = useState<string | null>(null);
-  const [timeLeft, setTimeLeft] = useState<number>(0);
+
 
   const eventSourceRef = useRef<EventSource | null>(null);
 
@@ -31,9 +60,9 @@ export function useDonation() {
       setQrData(data.qrData);
       setSubscribeUrl(data.subscribeUrl);
       setPaymentStatus("pending");
-      const duration = 30; // 30 seconds for timer
+      const duration = DURATION 
       setTimeLeft(duration);
-      
+
       const timerEndTime = new Date().getTime() + duration * 1000;
 
       localStorage.setItem(
@@ -55,37 +84,6 @@ export function useDonation() {
     },
   });
 
-  // Effect to restore state from localStorage on mount
-  useEffect(() => {
-    try {
-      const savedState = localStorage.getItem("donationState");
-      if (savedState) {
-        const {
-          paymentStatus: savedStatus,
-          qrData: savedQr,
-          subscribeUrl: savedSubUrl,
-          timerEndTime,
-          amount: savedAmount,
-        } = JSON.parse(savedState);
-
-        const now = new Date().getTime();
-
-        if (now < timerEndTime) {
-          const remaining = Math.round((timerEndTime - now) / 1000);
-          setPaymentStatus(savedStatus);
-          setQrData(savedQr);
-          setSubscribeUrl(savedSubUrl);
-          setTimeLeft(remaining);
-          setAmount(savedAmount.toString());
-        } else {
-          localStorage.removeItem("donationState");
-        }
-      }
-    } catch (error) {
-      console.error("Failed to parse donation state from localStorage", error);
-      localStorage.removeItem("donationState");
-    }
-  }, []);
 
   // SSE for listening to payment status
   useEffect(() => {
@@ -175,7 +173,7 @@ export function useDonation() {
 
     mutate(numAmount);
   };
-  
+
   const handleIdle = () => {
     setPaymentStatus("idle");
     setQrData(null);

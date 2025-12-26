@@ -152,7 +152,7 @@ async function pollBakong(md5: string, startTime = Date.now()) {
   //   return;
   // }
 
-  if (Date.now() - startTime > 30 * 1000) {
+  if (Date.now() - startTime > 3 * 60 * 1000) {
     notifyAndCleanup(md5, { status: "EXPIRED" });
     return;
   }
