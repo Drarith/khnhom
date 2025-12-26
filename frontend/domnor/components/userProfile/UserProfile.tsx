@@ -1,11 +1,13 @@
 import { ProfileData } from "@/types/profileData";
 import { templates } from "@/registry/templateRegistry";
 import { themes } from "@/config/theme";
-import { useState} from "react";
+import { useState } from "react";
 import { QrCode, Share2, X, Copy, Check } from "lucide-react";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { SocialShare } from "../shareSocial/ShareSocial";
+import { fa } from "zod/v4/locales";
 
 const DOMAIN = process.env.NEXT_PUBLIC_FRONTEND_URL;
 
@@ -189,9 +191,10 @@ export default function UserProfile({ data }: { data: ProfileData }) {
       {showShareModal && (
         <div
           className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
-          onClick={() => setShowShareModal(false)}
+          // onClick={() => setShowShareModal(false)}
         >
-          <div
+          <SocialShare onClose={() => setShowShareModal(false)} />
+          {/* <div
             className="bg-white dark:bg-gray-900 rounded-t-3xl sm:rounded-2xl w-full max-w-sm p-6 space-y-6 shadow-2xl animate-in slide-in-from-bottom-10 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
@@ -232,7 +235,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
     </div>

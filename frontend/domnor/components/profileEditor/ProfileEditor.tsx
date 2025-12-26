@@ -557,7 +557,8 @@ export default function ProfileEditor({
                   {/* Save Button */}
                   {activeTab !== "links" &&
                     activeTab !== "payment" &&
-                    activeTab !== "admin" && (
+                    activeTab !== "admin" &&
+                    activeTab !== "donation" && (
                       <div className="px-6 py-4 border-t border-primary/10 bg-primary/5">
                         <div className="flex justify-end gap-3">
                           <Button

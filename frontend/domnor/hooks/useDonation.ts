@@ -4,6 +4,7 @@ import { postJSON } from "@/https/https";
 import { toast } from "react-toastify";
 import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 import { AxiosError } from "axios";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface GenerateQRResponse {
   qrData: string;
@@ -34,9 +35,10 @@ const getSavedDonation = () => {
   return null;
 };
 
-const DURATION = 180
+const DURATION = 180;
 
 export function useDonation() {
+  const queryClient = useQueryClient();
   const saved = getSavedDonation();
   // Initialize states directly
   const [amount, setAmount] = useState(saved?.amount?.toString() || "");
@@ -47,7 +49,6 @@ export function useDonation() {
   const [timeLeft, setTimeLeft] = useState(saved?.remaining || 0);
 
   const [subscribeUrl, setSubscribeUrl] = useState(saved?.subscribeUrl);
-
 
   const eventSourceRef = useRef<EventSource | null>(null);
 
@@ -60,7 +61,7 @@ export function useDonation() {
       setQrData(data.qrData);
       setSubscribeUrl(data.subscribeUrl);
       setPaymentStatus("pending");
-      const duration = DURATION 
+      const duration = DURATION;
       setTimeLeft(duration);
 
       const timerEndTime = new Date().getTime() + duration * 1000;
@@ -83,7 +84,6 @@ export function useDonation() {
       toast.error(errorMessage || "Failed to generate QR code");
     },
   });
-
 
   // SSE for listening to payment status
   useEffect(() => {
@@ -114,6 +114,7 @@ export function useDonation() {
         toast.success("Donation received! Thank you.");
         localStorage.removeItem("donationState");
         eventSource.close();
+        queryClient.invalidateQueries({ queryKey: ["profile"] });
       } else if (data.status === "EXPIRED") {
         setPaymentStatus("expired");
         toast.info("QR Code expired");
@@ -139,7 +140,7 @@ export function useDonation() {
   useEffect(() => {
     if (timeLeft > 0 && paymentStatus === "pending") {
       const timer = setInterval(() => {
-        setTimeLeft((prev) => {
+        setTimeLeft((prev: number) => {
           if (prev <= 1) {
             clearInterval(timer);
             setPaymentStatus("expired");

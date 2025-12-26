@@ -2,6 +2,9 @@ import Image from "next/image";
 import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { useDonation } from "@/hooks/useDonation";
 import Button from "../../ui/Button";
+import { badges } from "@/config/supporterBadge";
+import { ProfileData } from "@/types/profileData";
+import { CheckCheck } from "lucide-react";
 
 export default function DonationTab({
   currentDonationAmount,
@@ -16,7 +19,6 @@ export default function DonationTab({
     timeLeft,
     isPending,
     handleGenerate,
-    handleIdle,
   } = useDonation();
 
   const formatTime = (seconds: number) => {
@@ -30,11 +32,61 @@ export default function DonationTab({
       <div>
         <h2 className="text-xl font-semibold mb-2 text-primary">Donation</h2>
         <p className="text-sm text-primary/60">
-          Support us by scanning the KHQR below.
+          Domnor is a free platform and will forever remain so. Your support
+          will make it better over time.
         </p>
         <p className="text-sm text-primary/60">
           Total Donations Received: ${currentDonationAmount}
         </p>
+        <div className="flex flex-col gap-2 mt-2 text-primary/60">
+          {currentDonationAmount < 5 ? (
+            <div className="flex flex-row items-center gap-2">
+              <p>Unlock supporter badge at $5 </p>
+              <Image
+                src={badges.firstTierSupporterBadge}
+                alt="Supporter Badge"
+                width={24}
+                height={24}
+              />
+            </div>
+          ) : (
+            <div className="flex flex-row items-center gap-2">
+              <p className="inline-flex gap-2">
+                Unlocked{<CheckCheck color="green" />}
+              </p>
+              <Image
+                src={badges.firstTierSupporterBadge}
+                alt="Supporter Badge"
+                width={24}
+                height={24}
+              />
+            </div>
+          )}
+
+          {currentDonationAmount < 20 ? (
+            <div className="flex flex-row items-center gap-2">
+              <p>Unlock supporter badge at $20 </p>
+              <Image
+                src={badges.goldTierSupporterBadge}
+                alt="Supporter Badge"
+                width={24}
+                height={24}
+              />
+            </div>
+          ) : (
+            <div className="flex flex-row items-center gap-2">
+              <p className="inline-flex gap-2">
+                Unlocked{<CheckCheck color="green" />}
+              </p>
+              <Image
+                src={badges.goldTierSupporterBadge}
+                alt="Supporter Badge"
+                width={24}
+                height={24}
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Input Section - Hide if paid to prevent confusion */}
@@ -113,12 +165,12 @@ export default function DonationTab({
           </div>
 
           {/* Manual Cancel Button */}
-          <button
+          {/* <button
             onClick={handleIdle}
             className="text-xs text-red-400 hover:text-red-600 underline"
           >
             Cancel Transaction
-          </button>
+          </button> */}
         </div>
       )}
 
