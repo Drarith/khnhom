@@ -8,10 +8,6 @@ import {
   getProfileLinks,
   currentUserProfile,
   updateProfilePictureUrl,
-  toggleSupporterStatus,
-  toggleDevStatus,
-  toggleGoldSupporterStatus,
-  toggleVerifiedStatus,
   toggleStatus
 } from "../controllers/profileController.js";
 import {

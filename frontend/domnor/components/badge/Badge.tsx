@@ -6,10 +6,14 @@ export default function Badge({
   username,
   isSupporter,
   isGoldSupporter,
+  isVerified,
+  isDev,
 }: {
   username: string;
   isSupporter: boolean;
   isGoldSupporter: boolean;
+  isVerified: boolean;
+  isDev: boolean;
 }) {
   const [showBadgeText, setShowBadgeText] = useState(false);
   const [showGoldBadgeText, setShowGoldBadgeText] = useState(false);
@@ -17,9 +21,20 @@ export default function Badge({
     <>
       {" "}
       <div className="block pt-2">
-        <h4 className="font-bold text-lg inline-block bg-black text-white px-2 py-0.5">
+        <h4 className="font-bold text-lg inline-flex bg-black text-white px-2 py-0.5 gap-1">
           @{username}
+          {isVerified && (
+            <span className="bg-transparent">
+              <Image
+                src={badges.verified}
+                alt="Verified Badge"
+                width={28}
+                height={28}
+              />
+            </span>
+          )}
         </h4>
+
         {isSupporter && !isGoldSupporter && (
           <span
             onClick={() => setShowBadgeText((v) => !v)}

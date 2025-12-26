@@ -134,6 +134,8 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
                     username={data.username}
                     isSupporter={data.isSupporter}
                     isGoldSupporter={data.isGoldSupporter}
+                    isVerified={data.isVerified}
+                    isDev={data.isDev}
                   />
                 </div>
                 {showBadgeText && (

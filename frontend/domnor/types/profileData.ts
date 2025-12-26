@@ -35,6 +35,8 @@ export interface ProfileData {
   donationAmount: number;
   isSupporter: boolean;
   isGoldSupporter: boolean;
+  isVerified: boolean;
+  isDev: boolean;
 }
 
 export type TemplateType = "default" | "brutalist";
