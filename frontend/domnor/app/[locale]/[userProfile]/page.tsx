@@ -1,11 +1,12 @@
 import UserProfile from "@/components/userProfile/UserProfile";
 import { ProfileData } from "@/types/profileData";
 import { Metadata } from "next";
+import ProfileNotFound from "@/components/erro/ProfileNotFound";
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export async function generateMetadata({ params }: { params: { locale: string; userProfile: string } }): Promise<Metadata> {
-  const {locale, userProfile } = await params;
+  const { userProfile } = await params;
   const username = userProfile.toString().toLowerCase();
   const res = await fetch(`${API_URL}/${username}`, { next: { revalidate: 60 } });
   if (!res.ok) return { title: "Profile", description: "Profile not found" };
@@ -26,18 +27,11 @@ export async function generateMetadata({ params }: { params: { locale: string; u
 }
 
 export default async function UserProfilePage({ params }: { params: { locale: string; userProfile: string } }) {
-  const { locale, userProfile } = await params;
+  const { userProfile } = await params;
   const username = userProfile.toString().toLowerCase();
-  console.log("Fetching profile for username:", username);
   const res = await fetch(`${API_URL}/${username}`, { next: { revalidate: 60 } });
   if (!res.ok) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center text-red-600">
-          <p>Error loading profile</p>
-        </div>
-      </div>
-    );
+    return <ProfileNotFound username={username} />;
   }
 
   const data: ProfileData = await res.json();
