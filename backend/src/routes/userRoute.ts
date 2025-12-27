@@ -34,7 +34,7 @@ userRouter.get("/api/auth/google/callback", googleCallback);
 userRouter.post("/api/logout", logoutUser);
 
 // Refresh access token
-userRouter.post("/api/refresh-token", refreshAccessToken);
+userRouter.post("/api/auth/refresh-token", refreshAccessToken);
 
 // Admin route to deactivate account by username
 userRouter.patch(

@@ -12,16 +12,19 @@ function getTokenFromRequest(req: Request): string | null {
   const accessToken = (req as any).cookies?.access_token;
   if (accessToken) return accessToken;
 
+  // const refreshToken = (req as any).cookies?.refresh_token;
+  // if (refreshToken) return refreshToken;
+
   // Fallback to old auth_token for backward compatibility
-  const cookieToken = (req as any).cookies?.auth_token;
-  if (cookieToken) return cookieToken;
+  // const cookieToken = (req as any).cookies?.auth_token;
+  // if (cookieToken) return cookieToken;
 
   // Check Authorization header
-  // For testing with postman 
-  const authHeader = req.headers["authorization"];
-  if (authHeader?.startsWith("Bearer ")) {
-    return authHeader.slice("Bearer ".length);
-  }
+  // For testing with postman
+  // const authHeader = req.headers["authorization"];
+  // if (authHeader?.startsWith("Bearer ")) {
+  //   return authHeader.slice("Bearer ".length);
+  // }
   return null;
 }
 
@@ -34,7 +37,10 @@ export const authenticateToken = async (
   const token = getTokenFromRequest(req);
 
   if (!token) {
-    return res.status(401).json({ message: "No token provided" });
+    return res.status(401).json({
+      message: "No token provided",
+      code: "TOKEN_EXPIRED",
+    });
   }
 
   try {
@@ -63,7 +69,9 @@ export const authenticateToken = async (
       });
     }
     if ((err as any).name === "JsonWebTokenError") {
-      return res.status(403).json({ message: "Invalid token" });
+      return res
+        .status(403)
+        .json({ message: "Invalid token", code: "TOKEN_INVALID" });
     }
     return res.status(403).json({ message: "Token verification failed" });
   }
