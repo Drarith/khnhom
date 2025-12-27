@@ -1,57 +1,56 @@
-import UserProfile from "@/components/userProfile/UserProfile";
-import { ProfileData } from "@/types/profileData";
+import { cache } from "react";
 import { Metadata } from "next";
+import UserProfile from "@/components/userProfile/UserProfile";
 import ProfileNotFound from "@/components/erro/ProfileNotFound";
+import { ProfileData } from "@/types/profileData";
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export async function generateMetadata({ params }: { params: { locale: string; userProfile: string } }): Promise<Metadata> {
+// 1. Memoized fetch function
+const getProfile = cache(async (username: string) => {
+  const res = await fetch(`${API_URL}/${username.toLowerCase()}`, {
+    next: { revalidate: 60, tags: [`user-${username.toLowerCase()}`] },
+    // cache: "no-cache",
+  });
+  if (!res.ok) return null;
+  return res.json() as Promise<ProfileData>;
+});
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { userProfile: string };
+}): Promise<Metadata> {
   const { userProfile } = await params;
-  const username = userProfile.toString().toLowerCase();
-  const res = await fetch(`${API_URL}/${username}`, { next: { revalidate: 60 } });
-  if (!res.ok) return { title: "Profile", description: "Profile not found" };
-  const profile: ProfileData = await res.json();
-  const url = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/${username}`;
-  const image = profile.profilePictureUrl || `${process.env.NEXT_PUBLIC_FRONTEND_URL}/default-profile.png`;
+  const profile = await getProfile(userProfile);
+
+  if (!profile) return { title: "Profile Not Found" };
 
   return {
     title: profile.displayName || profile.username,
     description: profile.bio || "Profile",
     openGraph: {
-      url,
-      title: profile.displayName,
-      description: profile.bio,
-      images: [image],
+      images: [profile.profilePictureUrl || "/default-profile.png"],
     },
   };
 }
 
-export default async function UserProfilePage({ params }: { params: { locale: string; userProfile: string } }) {
+export default async function UserProfilePage({
+  params,
+}: {
+  params: { userProfile: string };
+}) {
   const { userProfile } = await params;
-  const username = userProfile.toString().toLowerCase();
-  const res = await fetch(`${API_URL}/${username}`, { next: { revalidate: 60 } });
-  if (!res.ok) {
-    return <ProfileNotFound username={username} />;
-  }
-
-  const data: ProfileData = await res.json();
+  const data = await getProfile(userProfile);
 
   if (!data) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <p>Profile not found</p>
-        </div>
-      </div>
-    );
+    return <ProfileNotFound username={userProfile} />;
   }
 
   if (!data.isActive) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <p>This profile is deactivated.</p>
-        </div>
+        <p>This profile is deactivated.</p>
       </div>
     );
   }

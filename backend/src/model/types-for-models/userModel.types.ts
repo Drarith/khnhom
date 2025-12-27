@@ -11,6 +11,7 @@ export interface IUser extends Document {
   refreshToken?: string;
   createdAt: Date;
   updatedAt: Date;
+  isActive:boolean;
 
   // Instance methods
   comparePassword(candidatePassword: string): Promise<boolean>;

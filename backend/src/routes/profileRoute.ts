@@ -67,6 +67,6 @@ profileRouter.get("/api/profile/:username/links", getProfileLinks);
 
 profileRouter.get("/api/me", authenticateToken, currentUserProfile);
 
-profileRouter.get("/api/:username", trackProfileView, getProfileByUsername);
+profileRouter.get("/api/:username", getProfileByUsername);
 
 export default profileRouter;

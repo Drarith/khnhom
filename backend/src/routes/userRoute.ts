@@ -23,7 +23,10 @@ userRouter.post("/api/login", loginUser);
 userRouter.get(
   "/api/auth/google",
   // scope specifies what data we want from the user
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    prompt: "select_account",
+  })
 );
 
 userRouter.get("/api/auth/google/callback", googleCallback);

@@ -17,6 +17,7 @@ import {
   type SanitizedCreateProfile,
 } from "../utils/sanitizeUtils.js";
 import { SanitizedUrl } from "../utils/sanitizeUtils.js";
+import User from "../model/userModel.js";
 
 import { getErrorMessage } from "../utils/getErrorMessage.js";
 
@@ -26,7 +27,7 @@ import type { IUser } from "../model/types-for-models/userModel.types.js";
 import { areLinkSafe, isLinkSafe } from "../helpers/checkLinkSafety.js";
 import { containsBadWords } from "../utils/sanitizeUtils.js";
 import { reservedUsernamesSet } from "../config/reservedNames.js";
-import { profileEnd } from "console";
+import { error, profileEnd } from "console";
 
 export const createProfile = async (req: Request, res: Response) => {
   if (!req.user) {
@@ -181,7 +182,6 @@ export const createProfile = async (req: Request, res: Response) => {
 export const getProfileByUsername = async (req: Request, res: Response) => {
   const username = req.params.username;
   if (!username) return res.status(400).json({ error: "Username is required" });
-
   try {
     const profile = (await Profile.findOne({
       username: username.toLowerCase(),
@@ -200,6 +200,19 @@ export const getProfileByUsername = async (req: Request, res: Response) => {
       return res
         .status(403)
         .json({ message: "This profile has been terminated." });
+    }
+    const userId = profile.user
+    const user = await User.findOne({_id: userId})
+    console.log(user)
+    if (!user) {
+      // If user not found (or was deleted), return 404 or a clear message
+      return res
+        .status(404)
+        .json({ message: "User account not found for this profile" });
+    }
+
+    if (!(user as IUser).isActive) {
+      return res.status(403).json({ message: "User has been terminated." });
     }
 
     return res.status(200).json(profile);
