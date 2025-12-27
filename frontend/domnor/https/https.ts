@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 const PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
 
@@ -80,87 +80,83 @@ export async function postJSON<TRequest = unknown, TResponse = unknown>(
   url: string,
   data?: TRequest
 ): Promise<TResponse> {
-  try {
-    const response = await apiClient.post<TResponse>(url, data);
-    return response.data;
-  } catch (err) {
-    const axiosError = err as AxiosError;
-    console.error(`[API Error] POST ${url}`, {
-      status: axiosError.response?.status,
-      message: axiosError.message,
-      errorData: axiosError.response?.data,
-    });
-
-    throw err;
+  const full = PUBLIC_API_BASE_URL + url;
+  const res = await fetch(full, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: data !== undefined ? JSON.stringify(data) : undefined,
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Fetch POST ${res.status}: ${text}`);
   }
+  return res.json() as Promise<TResponse>;
 }
 
 export async function putJSON<TRequest = unknown, TResponse = unknown>(
   url: string,
   data?: TRequest
 ): Promise<TResponse> {
-  try {
-    const response = await apiClient.put<TResponse>(url, data);
-    return response.data;
-  } catch (err) {
-    const axiosError = err as AxiosError;
-    console.error(`[API Error] PUT ${url}`, {
-      status: axiosError.response?.status,
-      message: axiosError.message,
-      errorData: axiosError.response?.data,
-    });
-    throw err;
+  const full = PUBLIC_API_BASE_URL + url;
+  const res = await fetch(full, {
+    method: "PUT",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: data !== undefined ? JSON.stringify(data) : undefined,
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Fetch PUT ${res.status}: ${text}`);
   }
+  return res.json() as Promise<TResponse>;
 }
 
 export async function getJSON<TResponse = unknown>(
   url: string
 ): Promise<TResponse> {
-  try {
-    const response = await apiClient.get<TResponse>(url);
-    return response.data;
-  } catch (err) {
-    const axiosError = err as AxiosError;
-    console.error(`[API Error] GET ${url}`, {
-      status: axiosError.response?.status,
-      message: axiosError.message,
-      errorData: axiosError.response?.data,
-    });
-    throw err;
+  const full = PUBLIC_API_BASE_URL + url;
+  const res = await fetch(full, {
+    method: "GET",
+    credentials: "include",
+    next: { revalidate: 60 },
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Fetch ${res.status}: ${text}`);
   }
+  return res.json() as Promise<TResponse>;
 }
 
 export async function patchJSON<TRequest = unknown, TResponse = unknown>(
   url: string,
   data?: TRequest
 ): Promise<TResponse> {
-  try {
-    const response = await apiClient.patch<TResponse>(url, data);
-    return response.data;
-  } catch (err) {
-    const axiosError = err as AxiosError;
-    console.error(`[API Error] PATCH ${url}`, {
-      status: axiosError.response?.status,
-      message: axiosError.message,
-      errorData: axiosError.response?.data,
-    });
-    throw err;
+  const full = PUBLIC_API_BASE_URL + url;
+  const res = await fetch(full, {
+    method: "PATCH",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: data !== undefined ? JSON.stringify(data) : undefined,
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Fetch PATCH ${res.status}: ${text}`);
   }
+  return res.json() as Promise<TResponse>;
 }
 
 export async function deleteLink(url: string) {
-  try {
-    const response = await apiClient.delete(url);
-    return response.data;
-  } catch (err) {
-    const axiosError = err as AxiosError;
-    console.error(`[API Error] PATCH ${url}`, {
-      status: axiosError.response?.status,
-      message: axiosError.message,
-      errorData: axiosError.response?.data,
-    });
-    throw err;
+  const full = PUBLIC_API_BASE_URL + url;
+  const res = await fetch(full, {
+    method: "DELETE",
+    credentials: "include",
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Fetch DELETE ${res.status}: ${text}`);
   }
+  return res.json();
 }
 
 export const uploadToCloudinary = async (url: string, formData: FormData) => {
@@ -176,16 +172,143 @@ export const uploadToCloudinary = async (url: string, formData: FormData) => {
   }
 };
 
+
 export const logout = async () => {
-  try {
-    await apiClient.post("/logout");
-  } catch (err) {
-    const axiosError = err as AxiosError;
-    console.error(`[API Error] POST /logout`, {
-      status: axiosError.response?.status,
-      message: axiosError.message,
-      errorData: axiosError.response?.data,
-    });
-    throw err;
+  const full = PUBLIC_API_BASE_URL + "/logout";
+  const res = await fetch(full, { method: "POST", credentials: "include" });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Logout failed ${res.status}: ${text}`);
   }
 };
+
+
+// export async function postJSON<TRequest = unknown, TResponse = unknown>(
+//   url: string,
+//   data?: TRequest
+// ): Promise<TResponse> {
+//   try {
+//     const response = await apiClient.post<TResponse>(url, data);
+//     return response.data;
+//   } catch (err) {
+//     const axiosError = err as AxiosError;
+//     console.error(`[API Error] POST ${url}`, {
+//       status: axiosError.response?.status,
+//       message: axiosError.message,
+//       errorData: axiosError.response?.data,
+//     });
+
+//     throw err;
+//   }
+// }
+
+// export async function putJSON<TRequest = unknown, TResponse = unknown>(
+//   url: string,
+//   data?: TRequest
+// ): Promise<TResponse> {
+//   try {
+//     const response = await apiClient.put<TResponse>(url, data);
+//     return response.data;
+//   } catch (err) {
+//     const axiosError = err as AxiosError;
+//     console.error(`[API Error] PUT ${url}`, {
+//       status: axiosError.response?.status,
+//       message: axiosError.message,
+//       errorData: axiosError.response?.data,
+//     });
+//     throw err;
+//   }
+// }
+
+// export async function gettJSON<TResponse = unknown>(
+//   url: string
+// ): Promise<TResponse> {
+//   try {
+//     const response = await apiClient.get<TResponse>(url);
+//     return response.data;
+//   } catch (err) {
+//     const axiosError = err as AxiosError;
+//     console.error(`[API Error] GET ${url}`, {
+//       status: axiosError.response?.status,
+//       message: axiosError.message,
+//       errorData: axiosError.response?.data,
+//     });
+//     throw err;
+//   }
+// }
+
+// export async function getJSON<TResponse = unknown>(
+//   url: string
+// ): Promise<TResponse> {
+//   const full = PUBLIC_API_BASE_URL + url;
+//   const res = await fetch(full, {
+//     method: "GET",
+//     credentials: "include",
+//     next: { revalidate: 60 },
+//   });
+//   if (!res.ok) {
+//     const text = await res.text();
+//     throw new Error(`Fetch ${res.status}: ${text}`);
+//   }
+//   return res.json() as Promise<TResponse>;
+// }
+
+// export async function patchJSON<TRequest = unknown, TResponse = unknown>(
+//   url: string,
+//   data?: TRequest
+// ): Promise<TResponse> {
+//   try {
+//     const response = await apiClient.patch<TResponse>(url, data);
+//     return response.data;
+//   } catch (err) {
+//     const axiosError = err as AxiosError;
+//     console.error(`[API Error] PATCH ${url}`, {
+//       status: axiosError.response?.status,
+//       message: axiosError.message,
+//       errorData: axiosError.response?.data,
+//     });
+//     throw err;
+//   }
+// }
+
+// export async function deleteLink(url: string) {
+//   try {
+//     const response = await apiClient.delete(url);
+//     return response.data;
+//   } catch (err) {
+//     const axiosError = err as AxiosError;
+//     console.error(`[API Error] PATCH ${url}`, {
+//       status: axiosError.response?.status,
+//       message: axiosError.message,
+//       errorData: axiosError.response?.data,
+//     });
+//     throw err;
+//   }
+// }
+
+// export const uploadToCloudinary = async (url: string, formData: FormData) => {
+//   try {
+//     const response = await axios.post(url, formData, {
+//       timeout: 30000,
+//       headers: {},
+//     });
+//     return response.data;
+//   } catch (err) {
+//     console.error("Cloudinary upload error:", err);
+//     throw err;
+//   }
+// };
+
+// export const logout = async () => {
+//   try {
+//     await apiClient.post("/logout");
+//   } catch (err) {
+//     const axiosError = err as AxiosError;
+//     console.error(`[API Error] POST /logout`, {
+//       status: axiosError.response?.status,
+//       message: axiosError.message,
+//       errorData: axiosError.response?.data,
+//     });
+//     throw err;
+//   }
+// };

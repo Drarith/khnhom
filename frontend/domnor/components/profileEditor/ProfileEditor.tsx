@@ -82,7 +82,7 @@ export default function ProfileEditor({
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
-        const response = await getJSON<{ role: string }>("user/role");
+        const response = await getJSON<{ role: string }>("/user/role");
         setIsAdmin(response.role === "admin");
       } catch (error) {
         setIsAdmin(false);

@@ -66,7 +66,7 @@ export default function ProfilePicture({
       }
 
       // Update profile picture URL in backend
-      await patchJSON("profile/picture", {
+      await patchJSON("/profile/picture", {
         profilePictureUrl: response.secure_url,
       });
 
