@@ -15,7 +15,7 @@ import {
 } from "@icons-pack/react-simple-icons";
 import Footer from "../userProfile/Footer";
 import { backgroundImages } from "@/config/background";
-import { badges } from "@/config/supporterBadge";
+import { SocialShare } from "../shareSocial/ShareSocial";
 import "./templates.css";
 import Badge from "../badge/Badge";
 
@@ -205,11 +205,13 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
 
       {/* Share Modal */}
       {shareModal.isOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
-          onClick={() => setShareModal({ ...shareModal, isOpen: false })}
-        >
-          <div
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <SocialShare
+            url={shareModal.url}
+            title={shareModal.title}
+            onClose={() => setShareModal({ ...shareModal, isOpen: false })}
+          />
+          {/* <div
             className="bg-white border-4 border-black text-black w-full max-w-sm p-8 space-y-6 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]"
             onClick={(e) => e.stopPropagation()}
           >
@@ -253,7 +255,7 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
                 <ExternalLink size={20} />
               </a>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
     </>

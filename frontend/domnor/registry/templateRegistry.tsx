@@ -1,4 +1,4 @@
-import { TemplateConfig } from "@/types/templates";
+import { TemplateConfig } from "@/types/template";
 import DefaultTemplate from "../components/templates/DefaultTemplate";
 import BrutalistTemplate from "../components/templates/BrutalistTemplate";
 import RetroTemplate from "../components/templates/RetroTemplate";

@@ -1,13 +1,13 @@
+'use client';
+
 import { ProfileData } from "@/types/profileData";
 import { templates } from "@/registry/templateRegistry";
 import { themes } from "@/config/theme";
 import { useState } from "react";
-import { QrCode, Share2, X, Copy, Check } from "lucide-react";
-import { toast } from "react-toastify";
+import { QrCode, Share2, X} from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { SocialShare } from "../shareSocial/ShareSocial";
-import { fa } from "zod/v4/locales";
 
 const DOMAIN = process.env.NEXT_PUBLIC_FRONTEND_URL;
 
@@ -22,20 +22,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
 
   const [showQrModal, setShowQrModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const pageUrl = `${DOMAIN}/${data.username}`;
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(pageUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-      toast.success(t("linkCopied"));
-    } catch (err) {
-      console.error(err);
-      toast.error(t("copyFailed"));
-    }
-  };
 
   return (
     <div className="min-h-screen flex justify-center overflow-x-hidden relative">
@@ -193,7 +180,7 @@ export default function UserProfile({ data }: { data: ProfileData }) {
           className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
           // onClick={() => setShowShareModal(false)}
         >
-          <SocialShare onClose={() => setShowShareModal(false)} />
+          <SocialShare url={`${DOMAIN}/${data.username}`} onClose={() => setShowShareModal(false)} />
           {/* <div
             className="bg-white dark:bg-gray-900 rounded-t-3xl sm:rounded-2xl w-full max-w-sm p-6 space-y-6 shadow-2xl animate-in slide-in-from-bottom-10 sm:slide-in-from-bottom-0 sm:zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}

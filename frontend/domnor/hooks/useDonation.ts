@@ -89,7 +89,6 @@ export function useDonation() {
   useEffect(() => {
     if (!subscribeUrl || paymentStatus !== "pending") {
       if (eventSourceRef.current) {
-        console.log("🔌 Disconnecting radio due to status change");
         eventSourceRef.current.close();
         eventSourceRef.current = null;
       }
@@ -106,7 +105,6 @@ export function useDonation() {
 
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log("📨 Signal received:", data);
 
       if (data.status === "PAID") {
         setPaymentStatus("paid");

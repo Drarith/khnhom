@@ -1,32 +1,36 @@
-"use client";
-
-import { useParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { getJSON } from "@/https/https";
-import { ProfileData } from "@/types/profileData";
 import UserProfile from "@/components/userProfile/UserProfile";
+import { ProfileData } from "@/types/profileData";
+import { Metadata } from "next";
 
-export default function UserProfilePage() {
-  const { userProfile } = useParams();
-  const { data, error, isLoading } = useQuery<ProfileData>({
-    queryKey: ["userProfile", userProfile],
-    queryFn: () => getJSON(`/${userProfile?.toString().toLocaleLowerCase()}`),
-  });
+const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-  console.log("data for profile", data);
+export async function generateMetadata({ params }: { params: { locale: string; userProfile: string } }): Promise<Metadata> {
+  const {locale, userProfile } = await params;
+  const username = userProfile.toString().toLowerCase();
+  const res = await fetch(`${API_URL}/${username}`, { next: { revalidate: 60 } });
+  if (!res.ok) return { title: "Profile", description: "Profile not found" };
+  const profile: ProfileData = await res.json();
+  const url = `${process.env.NEXT_PUBLIC_FRONTEND_URL}/${username}`;
+  const image = profile.profilePictureUrl || `${process.env.NEXT_PUBLIC_FRONTEND_URL}/default-profile.png`;
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading profile...</p>
-        </div>
-      </div>
-    );
-  }
+  return {
+    title: profile.displayName || profile.username,
+    description: profile.bio || "Profile",
+    openGraph: {
+      url,
+      title: profile.displayName,
+      description: profile.bio,
+      images: [image],
+    },
+  };
+}
 
-  if (error) {
+export default async function UserProfilePage({ params }: { params: { locale: string; userProfile: string } }) {
+  const { locale, userProfile } = await params;
+  const username = userProfile.toString().toLowerCase();
+  console.log("Fetching profile for username:", username);
+  const res = await fetch(`${API_URL}/${username}`, { next: { revalidate: 60 } });
+  if (!res.ok) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center text-red-600">
@@ -35,6 +39,8 @@ export default function UserProfilePage() {
       </div>
     );
   }
+
+  const data: ProfileData = await res.json();
 
   if (!data) {
     return (
