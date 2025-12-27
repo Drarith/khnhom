@@ -1,9 +1,10 @@
 import { ProfileData } from "@/types/profileData";
 import { themes } from "@/config/theme";
 import Image from "next/image";
-import { Share2, X, ExternalLink } from "lucide-react";
+import { Share2, ExternalLink } from "lucide-react";
+import TemplateShare from "./TemplateShare";
 import { toast } from "react-toastify";
-import { useState } from "react";
+
 import {
   SiTiktok,
   SiX,
@@ -40,33 +41,6 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
     telegram: <SiTelegram className="w-6 h-6" />,
     youtube: <SiYoutube className="w-6 h-6" />,
     github: <SiGithub className="w-6 h-6" />,
-  };
-
-  const [shareModal, setShareModal] = useState<{
-    isOpen: boolean;
-    url: string;
-    title: string;
-  }>({ isOpen: false, url: "", title: "" });
-  const [copied, setCopied] = useState(false);
-  const [showBadgeText, setShowBadgeText] = useState(false);
-
-  const handleShare = (e: React.MouseEvent, url: string, title: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setShareModal({ isOpen: true, url, title });
-    setCopied(false);
-  };
-
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(shareModal.url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-      toast.success("Copied!");
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed!");
-    }
   };
 
   const backgroundImage = backgroundImages.find(
@@ -138,13 +112,6 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
                     isDev={data.isDev}
                   />
                 </div>
-                {showBadgeText && (
-                  <span className="left-8 top-1 bg-white border border-black px-2 py-1 rounded shadow text-xs z-10">
-                    {data.username.charAt(0).toUpperCase() +
-                      data.username.slice(1)}{" "}
-                    is a Supporter of Domnor!
-                  </span>
-                )}
               </div>
               {data.bio && (
                 <p className="text-lg font-medium border-2 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full">
@@ -185,13 +152,14 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
                   >
                     {link.title}
                   </a>
-                  <button
-                    onClick={(e) => handleShare(e, link.url, link.title)}
+                  <TemplateShare
+                    url={link.url}
+                    title={link.title}
                     className="absolute right-4 top-1/2 -translate-y-1/2 p-2 border-2 border-black bg-yellow-300 hover:bg-yellow-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
-                    aria-label="Share link"
+                    ariaLabel="Share link"
                   >
                     <Share2 size={18} />
-                  </button>
+                  </TemplateShare>
                 </div>
               ))}
             </div>
@@ -203,61 +171,7 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
         </div>
       </div>
 
-      {/* Share Modal */}
-      {shareModal.isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <SocialShare
-            url={shareModal.url}
-            title={shareModal.title}
-            onClose={() => setShareModal({ ...shareModal, isOpen: false })}
-          />
-          {/* <div
-            className="bg-white border-4 border-black text-black w-full max-w-sm p-8 space-y-6 shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center border-b-4 border-black pb-4">
-              <h3 className="text-2xl font-black uppercase">Share It!</h3>
-              <button
-                onClick={() => setShareModal({ ...shareModal, isOpen: false })}
-                className="bg-red-500 border-2 border-black text-white p-1 hover:bg-red-600 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <p className="font-bold uppercase text-sm">The Link</p>
-                <div className="flex items-center gap-2 p-2 border-4 border-black bg-gray-100">
-                  <div className="flex-1 min-w-0">
-                    <p className="truncate font-mono font-bold">
-                      {shareModal.url}
-                    </p>
-                  </div>
-                  <button
-                    onClick={copyToClipboard}
-                    className={`px-3 py-1 border-2 border-black font-bold text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-[2px] active:translate-y-[2px] transition-all ${
-                      copied ? "bg-green-400" : "bg-blue-400 hover:bg-blue-500"
-                    }`}
-                  >
-                    {copied ? "COPIED!" : "COPY"}
-                  </button>
-                </div>
-              </div>
-
-              <a
-                href={shareModal.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-4 border-4 border-black bg-black text-white font-black uppercase text-lg hover:bg-gray-900 shadow-[6px_6px_0px_0px_rgba(100,100,100,1)] hover:shadow-[3px_3px_0px_0px_rgba(100,100,100,1)] hover:translate-x-[3px] hover:translate-y-[3px] transition-all"
-              >
-                <span>GO TO LINK</span>
-                <ExternalLink size={20} />
-              </a>
-            </div>
-          </div> */}
-        </div>
-      )}
+      {/* Share handled by TemplateShare */}
     </>
   );
 }

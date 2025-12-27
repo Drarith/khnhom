@@ -1,9 +1,9 @@
 import { ProfileData } from "@/types/profileData";
 import { themes } from "@/config/theme";
 import Image from "next/image";
-import { Share2, X, Copy, Check, ExternalLink } from "lucide-react";
+import { Share2, ExternalLink } from "lucide-react";
+import TemplateShare from "./TemplateShare";
 import { toast } from "react-toastify";
-import { useState } from "react";
 import {
   SiTiktok,
   SiX,
@@ -39,31 +39,6 @@ export default function KhmerRoyalTemplate({ data }: { data: ProfileData }) {
     github: <SiGithub className="w-6 h-6" />,
   };
 
-  const [shareModal, setShareModal] = useState<{
-    isOpen: boolean;
-    url: string;
-    title: string;
-  }>({ isOpen: false, url: "", title: "" });
-  const [copied, setCopied] = useState(false);
-
-  const handleShare = (e: React.MouseEvent, url: string, title: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setShareModal({ isOpen: true, url, title });
-    setCopied(false);
-  };
-
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(shareModal.url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-      toast.success("Copied");
-    } catch (err) {
-      console.error(err);
-      toast.error("Error");
-    }
-  };
 
   const backgroundImage = backgroundImages.find(
     (bg) => bg.name === data.backgroundImage
@@ -74,26 +49,27 @@ export default function KhmerRoyalTemplate({ data }: { data: ProfileData }) {
   const darkGold = "#B8860B";
   const royalBlue = "#002366";
   const deepRed = "#8B0000";
-  
+
   const primaryColor = activeTheme?.text || gold;
   const secondaryColor = activeTheme?.button || darkGold;
   const bgColor = activeTheme?.bg || royalBlue;
 
   return (
     <>
-      <div 
+      <div
         className="w-full min-h-screen flex flex-col font-serif relative overflow-hidden md:rounded-2xl"
-        style={{ 
+        style={{
           backgroundColor: bgColor,
-          color: primaryColor
+          color: primaryColor,
         }}
       >
         {/* Decorative Background Pattern */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none" 
+        <div
+          className="absolute inset-0 opacity-10 pointer-events-none"
           style={{
             backgroundImage: `radial-gradient(${gold} 1px, transparent 1px), radial-gradient(${gold} 1px, transparent 1px)`,
-            backgroundSize: '40px 40px',
-            backgroundPosition: '0 0, 20px 20px'
+            backgroundSize: "40px 40px",
+            backgroundPosition: "0 0, 20px 20px",
           }}
         />
 
@@ -112,11 +88,10 @@ export default function KhmerRoyalTemplate({ data }: { data: ProfileData }) {
 
         {/* Main Content Container */}
         <div className="relative z-10 w-full max-w-2xl mx-auto p-6 flex flex-col items-center min-h-screen">
-          
           {/* Top Ornament */}
           <div className="w-full h-16 mb-8 relative flex justify-center items-center">
-             <div className="w-32 h-1 bg-gradient-to-r from-transparent via-yellow-500 to-transparent"></div>
-             <div className="absolute w-4 h-4 rotate-45 bg-yellow-500 border-2 border-white"></div>
+            <div className="w-32 h-1 bg-gradient-to-r from-transparent via-yellow-500 to-transparent"></div>
+            <div className="absolute w-4 h-4 rotate-45 bg-yellow-500 border-2 border-white"></div>
           </div>
 
           {/* Profile Section */}
@@ -124,7 +99,7 @@ export default function KhmerRoyalTemplate({ data }: { data: ProfileData }) {
             {/* Frame */}
             <div className="absolute -inset-4 border-2 border-yellow-500/50 rotate-45 rounded-3xl"></div>
             <div className="absolute -inset-4 border-2 border-yellow-500/50 -rotate-12 rounded-3xl"></div>
-            
+
             <div className="relative w-40 h-40 mx-auto mb-6 rounded-full border-4 border-yellow-500 shadow-[0_0_20px_rgba(255,215,0,0.3)] overflow-hidden">
               <Image
                 src={data.profilePictureUrl}
@@ -187,87 +162,34 @@ export default function KhmerRoyalTemplate({ data }: { data: ProfileData }) {
                     className="relative block w-full py-4 px-8 text-center text-xl font-medium border border-yellow-500/30 bg-black/20 backdrop-blur-sm rounded-lg hover:bg-yellow-900/30 transition-all duration-500 group-hover:border-yellow-400"
                     style={{ color: gold }}
                   >
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">✦</span>
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      ✦
+                    </span>
                     {link.title}
-                    <span className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">✦</span>
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      ✦
+                    </span>
                   </a>
-                  <button
-                    onClick={(e) => handleShare(e, link.url, link.title)}
+                  <TemplateShare
+                    url={link.url}
+                    title={link.title}
                     className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-yellow-500/50 hover:text-yellow-200 transition-colors z-20"
-                    aria-label="Share link"
+                    ariaLabel="Share link"
                   >
                     <Share2 size={16} />
-                  </button>
+                  </TemplateShare>
                 </div>
               ))}
             </div>
           )}
 
           <div className="mt-auto pt-8 opacity-60">
-             <Footer theme={activeTheme} username={data.username} />
+            <Footer theme={activeTheme} username={data.username} />
           </div>
         </div>
       </div>
 
-      {/* Share Modal */}
-      {shareModal.isOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm font-serif"
-          onClick={() => setShareModal({ ...shareModal, isOpen: false })}
-        >
-          <div
-            className="w-full max-w-md p-8 relative bg-gradient-to-b from-gray-900 to-black border border-yellow-600 rounded-xl shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="absolute -inset-1 bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600 rounded-xl opacity-30 blur"></div>
-            
-            <div className="relative z-10">
-              <div className="flex justify-between items-center mb-8 border-b border-yellow-500/30 pb-4">
-                <h3 className="text-2xl font-bold text-yellow-500">
-                  Share
-                </h3>
-                <button
-                  onClick={() => setShareModal({ ...shareModal, isOpen: false })}
-                  className="text-yellow-500 hover:text-yellow-200 transition-colors"
-                >
-                  <X size={24} />
-                </button>
-              </div>
-
-              <div className="space-y-8">
-                <div className="space-y-2">
-                  <p className="text-xs uppercase tracking-widest text-yellow-500/70">
-                    Link
-                  </p>
-                  <div className="flex items-center gap-4 bg-white/5 p-2 rounded border border-yellow-500/30">
-                    <div className="flex-1 min-w-0">
-                      <p className="truncate text-yellow-100 font-light">
-                        {shareModal.url}
-                      </p>
-                    </div>
-                    <button
-                      onClick={copyToClipboard}
-                      className="text-sm text-yellow-500 hover:text-yellow-200 uppercase tracking-wider"
-                    >
-                      {copied ? "Copied" : "Copy"}
-                    </button>
-                  </div>
-                </div>
-
-                <a
-                  href={shareModal.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-4 bg-gradient-to-r from-yellow-600 to-yellow-500 text-black font-bold uppercase tracking-widest text-sm rounded hover:from-yellow-500 hover:to-yellow-400 transition-all shadow-lg shadow-yellow-500/20"
-                >
-                  <span>Visit Link</span>
-                  <ExternalLink size={14} />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Share handled by TemplateShare */}
     </>
   );
 }

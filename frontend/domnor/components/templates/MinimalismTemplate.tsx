@@ -1,9 +1,9 @@
 import { ProfileData } from "@/types/profileData";
 import { themes } from "@/config/theme";
 import Image from "next/image";
-import { Share2, X, Copy, Check, ExternalLink } from "lucide-react";
+import { Share2, ExternalLink } from "lucide-react";
+import TemplateShare from "./TemplateShare";
 import { toast } from "react-toastify";
-import { useState } from "react";
 import {
   SiTiktok,
   SiX,
@@ -37,32 +37,6 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
     telegram: <SiTelegram className="w-5 h-5" />,
     youtube: <SiYoutube className="w-5 h-5" />,
     github: <SiGithub className="w-5 h-5" />,
-  };
-
-  const [shareModal, setShareModal] = useState<{
-    isOpen: boolean;
-    url: string;
-    title: string;
-  }>({ isOpen: false, url: "", title: "" });
-  const [copied, setCopied] = useState(false);
-
-  const handleShare = (e: React.MouseEvent, url: string, title: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setShareModal({ isOpen: true, url, title });
-    setCopied(false);
-  };
-
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(shareModal.url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-      toast.success("Copied");
-    } catch (err) {
-      console.error(err);
-      toast.error("Error");
-    }
   };
 
   const backgroundImage = backgroundImages.find(
@@ -192,14 +166,15 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
                   >
                     {link.title}
                   </a>
-                  <button
-                    onClick={(e) => handleShare(e, link.url, link.title)}
+                  <TemplateShare
+                    url={link.url}
+                    title={link.title}
                     className="absolute right-4 top-1/2 -translate-y-1/2 transition-colors opacity-100 lg:opacity-0 lg:group-hover:opacity-100 duration-300"
+                    ariaLabel="Share link"
                     style={{ color: activeTheme?.text }}
-                    aria-label="Share link"
                   >
                     <Share2 size={14} />
-                  </button>
+                  </TemplateShare>
                 </div>
               ))}
             </div>
@@ -211,60 +186,7 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
         </div>
       </div>
 
-      {/* Share Modal */}
-      {shareModal.isOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/80 backdrop-blur-sm"
-          onClick={() => setShareModal({ ...shareModal, isOpen: false })}
-        >
-          <div
-            className="bg-white w-full max-w-sm p-8 space-y-8 shadow-2xl rounded-2xl border border-zinc-100"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-medium text-zinc-900">Share</h3>
-              <button
-                onClick={() => setShareModal({ ...shareModal, isOpen: false })}
-                className="text-zinc-400 hover:text-zinc-900 transition-colors"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <div className="flex items-center gap-3 p-3 bg-zinc-50 rounded-lg border border-zinc-100">
-                  <div className="flex-1 min-w-0">
-                    <p className="truncate text-xs text-zinc-500">
-                      {shareModal.url}
-                    </p>
-                  </div>
-                  <button
-                    onClick={copyToClipboard}
-                    className={`text-xs font-medium transition-colors ${
-                      copied
-                        ? "text-green-600"
-                        : "text-zinc-900 hover:text-zinc-600"
-                    }`}
-                  >
-                    {copied ? "Copied" : "Copy"}
-                  </button>
-                </div>
-              </div>
-
-              <a
-                href={shareModal.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-lg bg-zinc-900 text-white text-sm font-medium hover:bg-zinc-800 transition-colors"
-              >
-                <span>Visit</span>
-                <ExternalLink size={14} />
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Share handled by TemplateShare */}
     </>
   );
 }

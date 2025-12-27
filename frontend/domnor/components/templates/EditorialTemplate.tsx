@@ -1,9 +1,10 @@
 import { ProfileData } from "@/types/profileData";
 import { themes } from "@/config/theme";
 import Image from "next/image";
-import { Share2, X, ExternalLink } from "lucide-react";
+import { Share2, ExternalLink } from "lucide-react";
+import TemplateShare from "./TemplateShare";
 import { toast } from "react-toastify";
-import { useState } from "react";
+
 import {
   SiTiktok,
   SiX,
@@ -39,31 +40,6 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
     github: <SiGithub className="w-5 h-5" />,
   };
 
-  const [shareModal, setShareModal] = useState<{
-    isOpen: boolean;
-    url: string;
-    title: string;
-  }>({ isOpen: false, url: "", title: "" });
-  const [copied, setCopied] = useState(false);
-
-  const handleShare = (e: React.MouseEvent, url: string, title: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setShareModal({ isOpen: true, url, title });
-    setCopied(false);
-  };
-
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(shareModal.url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-      toast.success("Copied");
-    } catch (err) {
-      console.error(err);
-      toast.error("Error");
-    }
-  };
 
   const backgroundImage = backgroundImages.find(
     (bg) => bg.name === data.backgroundImage
@@ -151,13 +127,14 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
                       ↗
                     </span>
                   </a>
-                  <button
-                    onClick={(e) => handleShare(e, link.url, link.title)}
+                  <TemplateShare
+                    url={link.url}
+                    title={link.title}
                     className="absolute right-4 lg:right-12 top-1/2 -translate-y-1/2 opacity-100 lg:opacity-0 lg:group-hover:opacity-50 hover:!opacity-100 transition-all"
-                    aria-label="Share link"
+                    ariaLabel="Share link"
                   >
                     <Share2 size={18} />
-                  </button>
+                  </TemplateShare>
                 </div>
               ))}
               <div
@@ -192,57 +169,7 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
         </div>
       </div>
 
-      {/* Share Modal */}
-      {shareModal.isOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/90 backdrop-blur-sm font-serif"
-          onClick={() => setShareModal({ ...shareModal, isOpen: false })}
-        >
-          <div
-            className="bg-white w-full max-w-md p-12 shadow-2xl border border-black"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-bold italic">Share</h3>
-              <button
-                onClick={() => setShareModal({ ...shareModal, isOpen: false })}
-                className="hover:opacity-50 transition-opacity"
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            <div className="space-y-8">
-              <div className="space-y-2">
-                <p className="text-xs uppercase tracking-widest opacity-50 font-sans">
-                  Link
-                </p>
-                <div className="flex items-center gap-4 border-b border-black pb-2">
-                  <div className="flex-1 min-w-0">
-                    <p className="truncate text-lg">{shareModal.url}</p>
-                  </div>
-                  <button
-                    onClick={copyToClipboard}
-                    className="text-sm font-sans uppercase tracking-wider hover:underline"
-                  >
-                    {copied ? "Copied" : "Copy"}
-                  </button>
-                </div>
-              </div>
-
-              <a
-                href={shareModal.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-4 bg-black text-white hover:bg-zinc-800 transition-colors font-sans uppercase tracking-widest text-sm"
-              >
-                <span>Visit Link</span>
-                <ExternalLink size={14} />
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Share handled by TemplateShare */}
     </>
   );
 }
