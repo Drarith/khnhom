@@ -6,10 +6,8 @@ import { getJSON } from "@/https/https";
 import type { ProfileData } from "@/types/profileData";
 import ProfileEditor from "@/components/profileEditor/ProfileEditor";
 import ErrorBoundary from "@/errorBoundary";
-import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
-  const router = useRouter();
   const { isPending, data } = useQuery<{ data: ProfileData }>({
     queryKey: ["profile"],
     queryFn: () => getJSON("/me"),

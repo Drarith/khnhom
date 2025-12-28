@@ -9,9 +9,9 @@ import { routing } from "@/i18n/routing";
 import { Bounce, ToastContainer } from "react-toastify";
 
 import ReactQueryProvider from "@/providers/reactQueryProvider";
-import Nav from "@/components/nav/Nav";
 
 import type { Props } from "@/types/rootLayout";
+import MaybeNav from "@/components/nav/ConditionalNav";
 
 export const metadata: Metadata = {
   title: "Domnor",
@@ -37,7 +37,7 @@ export default async function RootLayout({ children, params }: Props) {
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ReactQueryProvider>
-            <Nav />
+            <MaybeNav locale={locale} />
             {/* <SmoothScrollProvider>{children}</SmoothScrollProvider> */}
             {children}
             <ToastContainer

@@ -1,4 +1,4 @@
 export type Props = {
   children: React.ReactNode;
-  params: { locale: string };
+  params: { locale: string, pathName: string };
 };

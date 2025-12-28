@@ -38,7 +38,7 @@
   height: 100vh;
   padding: 4em;
   background: linear-gradient(to right, #003973, #e5e5be);
-  z-index: 11;
+  z-index: 60;
   clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
 }
 
