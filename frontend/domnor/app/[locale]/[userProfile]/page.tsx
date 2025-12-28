@@ -9,8 +9,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 // 1. Memoized fetch function
 const getProfile = cache(async (username: string) => {
   const res = await fetch(`${API_URL}/${username.toLowerCase()}`, {
-    next: { revalidate: 60, tags: [`user-${username.toLowerCase()}`] },
-    // cache: "no-cache",
+    // next: { revalidate: 60, tags: [`user-${username.toLowerCase()}`] },
+    cache: "no-cache",
   });
   if (!res.ok) return null;
   return res.json() as Promise<ProfileData>;

@@ -28,8 +28,11 @@ const processQueue = (error: Error | unknown, token: string | null = null) => {
 
 // run on every response
 apiClient.interceptors.response.use(
+  // first function handles successful responses
   (response) => response,
+  // second function handles errors
   async (error) => {
+    // save original request for each request
     const originalRequest = error.config;
 
     // Handle rate limit
@@ -39,8 +42,15 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if(error.response?.status === 403 && error.response?.data?.code === "TOKEN_INVALID") {
-      await axios.post(PUBLIC_API_BASE_URL + "/logout", {}, { withCredentials: true });
+    if (
+      error.response?.status === 403 &&
+      error.response?.data?.code === "TOKEN_INVALID"
+    ) {
+      await axios.post(
+        PUBLIC_API_BASE_URL + "/logout",
+        {},
+        { withCredentials: true }
+      );
       window.location.href = "/";
       return Promise.reject(error);
     }
@@ -50,10 +60,15 @@ apiClient.interceptors.response.use(
       error.response?.data?.code === "TOKEN_EXPIRED" &&
       !originalRequest._retry
     ) {
+      // avoid multiple refresh attempts
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
+          // queue the requests that arrive while refreshing
+          // remember that this promise only resolves once processQueue is called
+          // that's when we return the apiClient(originalRequest) below
           failedQueue.push({ resolve, reject });
         })
+        // this only runs once the promise is resolved in processQueue
           .then(() => {
             return apiClient(originalRequest);
           })
@@ -67,7 +82,7 @@ apiClient.interceptors.response.use(
 
       try {
         await apiClient.post("/auth/refresh-token");
-
+        // retry all the requests in the queue
         processQueue(null, "token");
         return apiClient(originalRequest);
       } catch (refreshError) {
