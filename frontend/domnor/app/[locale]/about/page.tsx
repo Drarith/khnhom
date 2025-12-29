@@ -121,7 +121,7 @@ export default function AboutPage() {
         </section>
 
         {/* Story Section - Creative Layout */}
-        <section className="line relative rounded-3xl overflow-hidden bg-zinc-900 text-white below-element min-h-screen">
+        <section className=" relative rounded-3xl overflow-hidden bg-zinc-900 text-white below-element min-h-screen">
           {/* Decorative background pattern */}
           <div className="absolute top-0 left-0 w-full h-full opacity-10">
             <svg width="100%" height="100%">
@@ -141,27 +141,27 @@ export default function AboutPage() {
 
           <div className="relative z-10 flex flex-col md:flex-row">
             {/* Left Content */}
-            <div className="line p-10 md:p-16 md:w-2/3 space-y-6">
-              <div className="inline-block px-3 py-1 bg-white/10 rounded-full text-xs tracking-widest uppercase font-semibold text-accent mb-2">
+            <div className=" p-10 md:p-16 md:w-2/3 space-y-6">
+              <div className="line inline-block px-3 py-1 bg-white/10 rounded-full text-xs tracking-widest uppercase font-semibold text-accent mb-2">
                 My Journey
               </div>
-              <h2 className=" text-3xl md:text-4xl font-serif">
+              <h2 className="line text-3xl md:text-4xl font-serif">
                 Why I Built Domnor
               </h2>
 
               <div className="line space-y-4 text-zinc-300 leading-relaxed">
-                <p className="">
+                <p className="line">
                   I’m a self-taught developer, and Domnor started as a personal
                   portfolio project born out of a desire to solve a real
                   problem. I noticed that many people in Cambodia still share
                   their links manually or in a scattered way.
                 </p>
-                <p className="">
+                <p className="line">
                   Unlike other link-sharing platforms, my approach is tailored
                   for Cambodia: safe QR payment generation, controlled content,
                   and a focus on one link to share your entire online life.
                 </p>
-                <p className="">
+                <p className="line">
                   Sed ut perspiciatis unde omnis iste natus error sit voluptatem
                   accusantium doloremque laudantium, totam rem aperiam, eaque
                   ipsa quae ab illo inventore veritatis et quasi architecto
