@@ -7,7 +7,7 @@ export default function AboutPage() {
   return (
     <ClientAbout>
       <div
-        className=" backdrop-blur-sm text-zinc-800 dark:text-zinc-100 min-h-[80vh] mt-24 max-w-6xl mx-auto px-6 py-6 md:py-12 rounded-3xl shadow-xl overflow-visible"
+        className=" backdrop-blur-sm text-zinc-800 dark:text-zinc-100 min-h-[80vh] mt-24 max-w-6xl mx-auto px-6 py-6 md:py-12 rounded-3xl shadow-xl"
       >
         {/* Hero Section */}
         <section className=" flex flex-col lg:flex-row items-center justify-between gap-12 mb-24">
@@ -121,7 +121,7 @@ export default function AboutPage() {
         </section>
 
         {/* Story Section - Creative Layout */}
-        <section className="line relative rounded-3xl overflow-hidden bg-zinc-900 text-white below-element">
+        <section className="line relative rounded-3xl overflow-hidden bg-zinc-900 text-white below-element min-h-screen">
           {/* Decorative background pattern */}
           <div className="absolute top-0 left-0 w-full h-full opacity-10">
             <svg width="100%" height="100%">
@@ -145,23 +145,23 @@ export default function AboutPage() {
               <div className="inline-block px-3 py-1 bg-white/10 rounded-full text-xs tracking-widest uppercase font-semibold text-accent mb-2">
                 My Journey
               </div>
-              <h2 className="line text-3xl md:text-4xl font-serif">
+              <h2 className=" text-3xl md:text-4xl font-serif">
                 Why I Built Domnor
               </h2>
 
-              <div className="space-y-4 text-zinc-300 leading-relaxed">
-                <p className="line">
+              <div className="line space-y-4 text-zinc-300 leading-relaxed">
+                <p className="">
                   I’m a self-taught developer, and Domnor started as a personal
                   portfolio project born out of a desire to solve a real
                   problem. I noticed that many people in Cambodia still share
                   their links manually or in a scattered way.
                 </p>
-                <p className="line">
+                <p className="">
                   Unlike other link-sharing platforms, my approach is tailored
                   for Cambodia: safe QR payment generation, controlled content,
                   and a focus on one link to share your entire online life.
                 </p>
-                <p className="line">
+                <p className="">
                   Sed ut perspiciatis unde omnis iste natus error sit voluptatem
                   accusantium doloremque laudantium, totam rem aperiam, eaque
                   ipsa quae ab illo inventore veritatis et quasi architecto
@@ -169,7 +169,7 @@ export default function AboutPage() {
                 </p>
               </div>
 
-              <div className="line pt-8">
+              <div className=" pt-8">
                 <p className="font-handwriting text-2xl text-accent opacity-90">
                   Sarin Dararith
                 </p>
