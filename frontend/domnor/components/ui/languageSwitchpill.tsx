@@ -19,7 +19,7 @@ export const LanguageToggle = () => {
   };
 
   return (
-    <div className="relative flex w-56 h-11 bg-zinc-100 dark:bg-zinc-800 rounded-full p-1 cursor-pointer select-none">
+    <div className="relative flex w-40 md:w-56 md:h-11 bg-zinc-100 dark:bg-zinc-800 rounded-full p-1 cursor-pointer select-none">
       {/* Animated Sliding Background */}
       <div
         className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white dark:bg-zinc-600 rounded-full shadow-sm transition-transform duration-300 ease-out will-change-transform ${
