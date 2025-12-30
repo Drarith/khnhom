@@ -4,7 +4,9 @@ import ErrorBoundary from "@/errorBoundary";
 export default function Page() {
   return (
     <ErrorBoundary>
-      <Home />
+      <div className="min-h-screen overflow-hidden">
+        <Home />
+      </div>
     </ErrorBoundary>
   );
 }

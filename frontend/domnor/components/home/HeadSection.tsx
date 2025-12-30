@@ -1,25 +1,28 @@
 "use client";
 import { useGSAP, SplitText, gsap } from "@/utils/gsap";
+import { useRef } from "react";
 
 export default function HeadSection() {
+  const containerRef = useRef(null);
   useGSAP(() => {
     let tl: any;
     let inSplit: any;
     let outSplit: any;
 
-    if (typeof document !== "undefined") {
-      const init = () => {
-        inSplit = SplitText.create(".in-word", { type: "chars, words" });
-        outSplit = SplitText.create(".out-word", { type: "chars, words" });
+    const ctx = gsap.context(() => {
+      const q = gsap.utils.selector(containerRef); // q('.in-word') only searches inside the section
 
-        // remove initial invisibility so GSAP can reveal the chars
-        document.querySelectorAll(".out-word, .in-word").forEach((el) => {
-          el.classList.remove("invisible");
-        });
+      const init = () => {
+        // create SplitText from the scoped elements
+        inSplit = SplitText.create(q(".in-word"), { type: "chars, words" });
+        outSplit = SplitText.create(q(".out-word"), { type: "chars, words" });
+
+        // reveal only the scoped elements
+        q(".out-word, .in-word").forEach((el: Element) =>
+          el.classList.remove("invisible")
+        );
 
         tl = gsap.timeline({ repeat: -1, repeatDelay: 0.5 });
-
-        // make the created char spans visible but initially transparent/off-screen
         gsap.set([...outSplit.chars, ...inSplit.chars], {
           visibility: "visible",
           x: -200,
@@ -74,18 +77,19 @@ export default function HeadSection() {
       };
 
       document.fonts?.ready?.then(init).catch(init);
-    }
+    }, containerRef); 
 
     return () => {
       tl?.kill();
       inSplit?.revert();
       outSplit?.revert();
+      ctx.revert(); // cleanup all scoped GSAP effects
     };
   });
   return (
     <section
-      //   ref={container}
-      className="flex flex-col gap-6 items-center p-12 text-center text-white justify-center rounded-xl"
+      ref={containerRef}
+      className="head-container flex flex-col gap-6 items-center p-12 text-center text-white justify-center rounded-xl"
     >
       <h1 className="text-6xl font-black tracking-tighter uppercase leading-none text-start">
         ONE LINK. ALL
