@@ -18,7 +18,7 @@ export default function AboutPage() {
 
             <h1 className="line text-4xl md:text-6xl font-bold leading-tight">
               Share Your World, <br />
-              <span className="line text-transparent bg-clip-text bg-gradient-to-r from-accent to-blue-500">
+              <span className="line text-transparent bg-clip-text bg-linear-to-r from-accent to-blue-500">
                 One Link at a Time.
               </span>
             </h1>
@@ -48,7 +48,7 @@ export default function AboutPage() {
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/20 rounded-full blur-3xl translate-y-12 -translate-x-12"></div>
 
               {/* Main Image Container */}
-              <div className="line end-line relative w-full h-full rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white dark:border-zinc-800 rotate-2 hover:rotate-0 transition-all duration-700 ease-out">
+              <div className="line end-line relative w-full h-full rounded-4xl overflow-hidden shadow-2xl border-4 border-white dark:border-zinc-800 rotate-2 hover:rotate-0 transition-all duration-700 ease-out">
                 <Image
                   src="https://res.cloudinary.com/dosj9q3zb/image/upload/v1766906599/photo_2025-09-14_12-48-24_nigh7z.jpg"
                   alt="Our Story"
@@ -56,9 +56,9 @@ export default function AboutPage() {
                   className="object-cover"
                 />
                 {/* Overlay Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent flex items-end p-8">
                   <p className="text-white font-medium italic">
-                    "Connecting Cambodia, simply."
+                    &quot;Connecting Cambodia, simply.&quot;
                   </p>
                 </div>
               </div>
@@ -73,7 +73,7 @@ export default function AboutPage() {
               Why Creators Choose Domnor
             </h2>
             <p className="line opacity-70">
-              We've stripped away the complexity, leaving you with a platform
+              We&apos;ve stripped away the complexity, leaving you with a platform
               that just works—beautifully and securely.
             </p>
           </div>
@@ -86,7 +86,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-bold mb-3">Truly Localized</h3>
               <p className="opacity-80 leading-relaxed">
-                Technology shouldn't have a language barrier. Domnor is built
+                Technology shouldn&apos;t have a language barrier. Domnor is built
                 from the ground up to feel native to Cambodian users, with full
                 Khmer language support in every corner of the app.
               </p>
@@ -180,14 +180,14 @@ export default function AboutPage() {
             </div>
 
             {/* Right Image/Visual */}
-            <div className="md:w-1/3 min-h-[300px] relative bg-gradient-to-br from-zinc-800 to-zinc-900">
+            <div className="md:w-1/3 min-h-[300px] relative bg-linear-to-br from-zinc-800 to-zinc-900">
               <Image
                 src="https://res.cloudinary.com/dosj9q3zb/image/upload/v1766906599/photo_2025-09-14_12-48-24_nigh7z.jpg"
                 alt="Our Story"
                 fill
                 className="object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-l from-transparent to-zinc-900/90 md:bg-gradient-to-r"></div>
+              <div className="absolute inset-0 bg-linear-to-l from-transparent to-zinc-900/90 md:bg-linear-to-r"></div>
             </div>
           </div>
         </section>
