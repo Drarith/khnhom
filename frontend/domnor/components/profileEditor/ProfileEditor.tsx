@@ -9,6 +9,7 @@ import {
   QrCode,
   Shield,
   Heart,
+  Share2,
 } from "lucide-react";
 import type { ProfileData } from "@/types/profileData";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,6 +44,7 @@ import AppearanceTab from "./components/AppearanceTab";
 import GenerateQrTab from "./components/GenerateQr";
 import AdminTab from "./components/AdminTab";
 import DonationTab from "./components/DonationTab";
+import { SocialShare } from "../shareSocial/ShareSocial";
 
 import UserProfile from "../userProfile/UserProfile";
 import { useTabAnimation } from "@/gsap/tab";
@@ -69,6 +71,7 @@ export default function ProfileEditor({
     throw error;
   }
   const [activeTab, setActiveTab] = useState<Tab>(Tab.PROFILE);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   const [qrError, setQrError] = useState<string>("");
   const [notPreviewing, setNotPreviewing] = useState<boolean>(true);
@@ -428,7 +431,7 @@ export default function ProfileEditor({
         <div className="max-w-5xl mx-auto p-4 md:p-6 text-primary">
           {/* Header */}
           <div className="bg-foreground rounded-lg shadow-sm p-6 mb-6 border border-primary/10">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
                 <h1 className="text-2xl font-bold">
                   {t("welcomeBack", { username: initialData?.username || "" })}
@@ -437,6 +440,13 @@ export default function ProfileEditor({
                   {t("customizeProfile")}
                 </p>
               </div>
+              <Button
+                onClick={() => setShowShareModal(true)}
+                className="flex items-center gap-2"
+              >
+                <Share2 size={18} />
+                {/* {t("buttons.share", { defaultValue: "Share" })} */}
+              </Button>
             </div>
           </div>
 
@@ -544,7 +554,11 @@ export default function ProfileEditor({
                     />
                   )}
 
-                  {activeTab === "donation" && <DonationTab currentDonationAmount={initialData?.donationAmount || 0} />}
+                  {activeTab === "donation" && (
+                    <DonationTab
+                      currentDonationAmount={initialData?.donationAmount || 0}
+                    />
+                  )}
 
                   {activeTab === "admin" && isAdmin && (
                     <AdminTab
@@ -606,6 +620,15 @@ export default function ProfileEditor({
               <span className="font-semibold">{t("buttons.backToEditor")}</span>
             </Button>
           </div>
+        </div>
+      )}
+
+      {showShareModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <SocialShare
+            url={`${window.location.origin}/${initialData?.username}`}
+            onClose={() => setShowShareModal(false)}
+          />
         </div>
       )}
     </div>

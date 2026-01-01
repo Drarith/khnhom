@@ -38,6 +38,16 @@ export default function GenerateQrTab({
             {t("title")}
           </h2>
           <p className="text-sm text-primary/60">{t("description")}</p>
+          <br />
+          <p className="text-sm text-primary/60">
+            Don't have Bakong account? Check out{" "}
+            <a
+              className="text-red-600 underline"
+              href="https://bakong.nbc.gov.kh/"
+            >
+              Bakong
+            </a>
+          </p>
         </div>
       </div>
 
@@ -152,7 +162,9 @@ export default function GenerateQrTab({
             <Select
               value={currency || "KHR"}
               onChange={(val) =>
-                setValue("currency", val as "KHR" | "USD", { shouldValidate: true })
+                setValue("currency", val as "KHR" | "USD", {
+                  shouldValidate: true,
+                })
               }
               options={[
                 { value: "KHR", label: "KHR (Riel)" },

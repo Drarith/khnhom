@@ -12,6 +12,7 @@ import ReactQueryProvider from "@/providers/reactQueryProvider";
 
 import type { Props } from "@/types/rootLayout";
 import MaybeNav from "@/components/nav/ConditionalNav";
+import ConditionalFooter from "@/components/footer/ConditionalFooter";
 
 export const metadata: Metadata = {
   title: "Domnor",
@@ -37,9 +38,12 @@ export default async function RootLayout({ children, params }: Props) {
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ReactQueryProvider>
-            <MaybeNav locale={locale} />
-            {/* <SmoothScrollProvider>{children}</SmoothScrollProvider> */}
-            {children}
+            <div className="flex flex-col min-h-screen">
+              <MaybeNav locale={locale} />
+              {/* <SmoothScrollProvider>{children}</SmoothScrollProvider> */}
+              <main className="flex-grow">{children}</main>
+              <ConditionalFooter locale={locale} />
+            </div>
             <ToastContainer
               position="top-right"
               autoClose={10000}
