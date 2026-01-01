@@ -77,7 +77,7 @@ export default function HeadSection() {
       };
 
       document.fonts?.ready?.then(init).catch(init);
-    }, containerRef); 
+    }, containerRef);
 
     return () => {
       tl?.kill();
@@ -89,9 +89,9 @@ export default function HeadSection() {
   return (
     <section
       ref={containerRef}
-      className="head-container flex flex-col gap-6 items-center p-12 text-center text-white justify-center rounded-xl"
+      className="head-container flex flex-col gap-4 md:gap-6 items-start p-6 md:p-12 text-start text-white justify-start rounded-xl"
     >
-      <h1 className="text-6xl font-black tracking-tighter uppercase leading-none text-start">
+      <h1 className="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-none text-start">
         ONE LINK. ALL
         <span className="relative inline-grid h-[1.1em] overflow-hidden">
           <span
@@ -108,7 +108,7 @@ export default function HeadSection() {
           </span>
         </span>
       </h1>
-      <h2 className="text-foreground max-w-md text-balance text-md font-medium opacity-80 text-start">
+      <h2 className="text-foreground max-w-md text-md font-medium opacity-80 text-start md:text-start">
         Focus on creating, we’ll handle the rest. Share your work, curate your
         world, and accept KHQR payments, all through a single link.
       </h2>

@@ -94,19 +94,19 @@ export default function VerticalCarousel() {
   return (
     <div
       ref={containerRef}
-      className="grid grid-cols-[auto_1fr_auto] gap-8 w-full max-w-4xl mx-auto h-[60vh] items-center"
+      className="grid grid-cols-[auto_1fr_auto] gap-2 md:gap-8 w-full max-w-4xl mx-auto h-[50vh] md:h-[60vh] items-center"
     >
       {/* Up Arrow - Brings cards back */}
       <button
         onClick={handlePrev}
         disabled={activeIndex >= images.length - 1}
-        className="p-4 rounded-full hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity chevron-up invisible"
+        className="p-2 md:p-4 rounded-full hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity chevron-up invisible"
       >
-        <ChevronUp size={32} />
+        <ChevronUp className="w-6 h-6 md:w-8 md:h-8" />
       </button>
 
       {/* Card Stack */}
-      <div className="relative h-[500px] w-full flex items-start justify-center perspective-1000">
+      <div className="relative h-[300px] md:h-[500px] w-full flex items-start justify-center perspective-1000">
         {images.map((image, i) => (
           <div
             // Callback Ref: This is the React way to handle lists of refs
@@ -114,7 +114,7 @@ export default function VerticalCarousel() {
               cardRefs.current[i] = el;
             }}
             key={i}
-            className={`absolute h-[400px] md:h-[500px] md:w-[350px] w-[250px] origin-bottom img-container-${i} invisible`}
+            className={`absolute h-[280px] md:h-[500px] w-[200px] md:w-[350px] origin-bottom img-container-${i} invisible`}
             style={{ zIndex: i }} // Explicit Z-Index ensures correct stacking
           >
             <Image
@@ -132,9 +132,9 @@ export default function VerticalCarousel() {
       <button
         onClick={handleNext}
         disabled={activeIndex < 0}
-        className="p-4 rounded-full hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity chevron-down invisible"
+        className="p-2 md:p-4 rounded-full hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity chevron-down invisible"
       >
-        <ChevronDown size={32} />
+        <ChevronDown className="w-6 h-6 md:w-8 md:h-8" />
       </button>
     </div>
   );
