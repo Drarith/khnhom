@@ -1,3 +1,5 @@
 get error translation working in links etc
 
 work on caching. now still showing old data - just cache no store lol
+
+catch error when server not available
