@@ -54,7 +54,6 @@ apiClient.interceptors.response.use(
     //   window.location.href = "/";
     //   return Promise.reject(error);
     // }
-    console.log(originalRequest);
 
     if (
       error.response?.status === 401 &&
@@ -63,7 +62,7 @@ apiClient.interceptors.response.use(
     ) {
       // avoid multiple refresh attempts
       if (isRefreshing) {
-        console.log("refresgubg");
+     
         return (
           new Promise((resolve, reject) => {
             // queue the requests that arrive while refreshing
@@ -80,7 +79,7 @@ apiClient.interceptors.response.use(
             })
         );
       }
-      console.log("refresgubg udfaskjbfaslkjgflaukdsf");
+  
 
       originalRequest._retry = true;
       isRefreshing = true;

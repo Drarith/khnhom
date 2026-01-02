@@ -156,17 +156,16 @@ export const logoutUser = async (req: Request, res: Response) => {
       httpOnly: true,
       secure: secureCookie,
       sameSite: "lax",
+      path: "/api/auth/refresh-token",
     })
-    .clearCookie("auth_token", {
-      httpOnly: true,
+    .clearCookie("logged_in", {
+      httpOnly: false,
       secure: secureCookie,
       sameSite: "lax",
+      path: "/",
     })
     .status(200)
-    .json({
-      success: true,
-      message: "Logged out. Cookies cleared.",
-    });
+    .json({ message: "Logged out successfully" });
 };
 
 export const deactivateAccountByUsername = async (
