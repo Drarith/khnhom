@@ -24,7 +24,7 @@ export default function HeadSection() {
           el.classList.remove("invisible")
         );
 
-        tl = gsap.timeline({ repeat: -1, repeatDelay: 0.5 });
+        tl = gsap.timeline({ repeat: -1 });
         gsap.set([...outSplit.chars, ...inSplit.chars], {
           visibility: "visible",
           x: -200,

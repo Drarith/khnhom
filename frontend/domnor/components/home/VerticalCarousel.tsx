@@ -32,7 +32,7 @@ export default function VerticalCarousel() {
     const tl = gsap.timeline();
 
     // Reset positions initially
-    tl.set(cardRefs.current, { y: 1000 });
+    tl.set(cardRefs.current, { y: 1500 });
     tl.set(".chevron-up", { y: 1000 });
     tl.set(".chevron-down", { y: -1000 });
 
@@ -56,7 +56,7 @@ export default function VerticalCarousel() {
       .to(".chevron-up", {
         y: 0,
         ease: "power4.out",
-        duration: 1,
+        duration: 0.8,
       })
       .to(".chevron-down", { y: 0, ease: "power4.out", duration: 1 }, "<");
   }, []);
@@ -66,7 +66,7 @@ export default function VerticalCarousel() {
   // "Discard" the top card (Move Down)
   const handleNext = contextSafe(() => {
     gsap.to(`.img-container-${activeIndex}`, {
-      y: "200%", // Move completely out of view
+      y: "250%", // Move completely out of view
       rotation: (i) => (i % 2 === 0 ? -4 : 4),
       duration: 0.8,
       ease: "power3.in",
