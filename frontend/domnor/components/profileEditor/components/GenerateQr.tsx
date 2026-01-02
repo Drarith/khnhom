@@ -40,7 +40,7 @@ export default function GenerateQrTab({
           <p className="text-sm text-primary/60">{t("description")}</p>
           <br />
           <p className="text-sm text-primary/60">
-            Don't have Bakong account? Check out{" "}
+            Don&apos;t have Bakong account? Check out{" "}
             <a
               className="text-red-600 underline"
               href="https://bakong.nbc.gov.kh/"

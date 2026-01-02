@@ -31,8 +31,6 @@ export const AboutMeAnimation = () => {
           // reverse: run animation backward
           toggleActions: "play reverse play reverse",
           // scrub:true,
-
-          markers: true // Uncomment this to see the trigger points for debugging
         },
       });
     });
