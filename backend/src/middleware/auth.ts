@@ -35,14 +35,16 @@ export const authenticateToken = async (
   next: NextFunction
 ) => {
   const token = getTokenFromRequest(req);
+ 
 
   if (!token) {
+   
     return res.status(401).json({
       message: "No token provided",
       code: "TOKEN_EXPIRED",
     });
   }
-
+  
   try {
     // decode token with jwt.verify from jwt.sign
     const userPayload = verifyAccessToken(token);

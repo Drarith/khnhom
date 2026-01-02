@@ -101,9 +101,9 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
               />
             </div>
 
-            <div className="flex flex-col justify-between h-full space-y-4">
+            <div className="flex flex-col justify-between h-full space-y-4 min-w-0">
               <div>
-                <h1 className="text-4xl md:text-5xl font-black leading-none tracking-tighter break-words">
+                <h1 className="wrap-break-words text-4xl md:text-5xl font-black leading-none tracking-tighter ">
                   {data.displayName}
                 </h1>
                 <div className="inline-block bg-black text-white px-2 py-1 mt-2 font-bold text-lg">

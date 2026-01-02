@@ -60,7 +60,7 @@ app.use(express.json());
 app.use(express.json({ limit: "100kb" }));
 
 // rate limit middleware
-app.use(rateLimit);
+// app.use(rateLimit);
 
 // User routes
 app.use(userRouter);

@@ -54,6 +54,7 @@ apiClient.interceptors.response.use(
     //   window.location.href = "/";
     //   return Promise.reject(error);
     // }
+    console.log(originalRequest);
 
     if (
       error.response?.status === 401 &&
@@ -62,27 +63,31 @@ apiClient.interceptors.response.use(
     ) {
       // avoid multiple refresh attempts
       if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          // queue the requests that arrive while refreshing
-          // remember that this promise only resolves once processQueue is called
-          // that's when we return the apiClient(originalRequest) below
-          failedQueue.push({ resolve, reject });
-        })
-        // this only runs once the promise is resolved in processQueue
-          .then(() => {
-            return apiClient(originalRequest);
+        console.log("refresgubg");
+        return (
+          new Promise((resolve, reject) => {
+            // queue the requests that arrive while refreshing
+            // remember that this promise only resolves once processQueue is called
+            // that's when we return the apiClient(originalRequest) below
+            failedQueue.push({ resolve, reject });
           })
-          .catch((err) => {
-            return Promise.reject(err);
-          });
+            // this only runs once the promise is resolved in processQueue
+            .then(() => {
+              return apiClient(originalRequest);
+            })
+            .catch((err) => {
+              return Promise.reject(err);
+            })
+        );
       }
+      console.log("refresgubg udfaskjbfaslkjgflaukdsf");
 
       originalRequest._retry = true;
       isRefreshing = true;
 
       try {
         await apiClient.post("/auth/refresh-token");
-        
+
         // retry all the requests in the queue
         processQueue(null, "token");
         return apiClient(originalRequest);
@@ -141,17 +146,18 @@ export async function putJSON<TRequest = unknown, TResponse = unknown>(
 export async function getJSON<TResponse = unknown>(
   url: string
 ): Promise<TResponse> {
-  const full = PUBLIC_API_BASE_URL + url;
-  const res = await fetch(full, {
-    method: "GET",
-    credentials: "include",
-    next: { revalidate: 60 },
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Fetch ${res.status}: ${text}`);
+  try {
+    const response = await apiClient.get<TResponse>(url);
+    return response.data;
+  } catch (err) {
+    const axiosError = err as AxiosError;
+    console.error(`[API Error] GET ${url}`, {
+      status: axiosError.response?.status,
+      message: axiosError.message,
+      errorData: axiosError.response?.data,
+    });
+    throw err;
   }
-  return res.json() as Promise<TResponse>;
 }
 
 export async function patchJSON<TRequest = unknown, TResponse = unknown>(

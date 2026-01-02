@@ -94,19 +94,19 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
                 priority
               />
             </div>
-            <div className="text-center md:text-left space-y-2 w-full">
+            <div className="text-center md:text-left space-y-2 min-w-0">
               <h1
                 className="text-3xl md:text-4xl font-bold uppercase tracking-widest glitch-text break-words"
                 style={{ color: primaryColor }}
               >
                 {data.displayName}
               </h1>
-              <h4 className="font-bold" style={{ color: secondaryColor }}>
+              <h4 className="font-bold wrap-break-word" style={{ color: secondaryColor }}>
                 @{data.username}
               </h4>
               {data.bio && (
                 <p
-                  className="text-sm leading-relaxed border-t pt-2 mt-2 break-words"
+                  className="text-sm leading-relaxed border-t pt-2 mt-2 wrap-break-word"
                   style={{
                     color: primaryColor,
                     opacity: 0.8,

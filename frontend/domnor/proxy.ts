@@ -9,7 +9,7 @@ const protectedRoutes = ["/dashboard", "/create-profile"];
 // Create the next-intl middleware
 const intlMiddleware = createMiddleware(routing);
 
-export default async function proxy(request: NextRequest) {
+export default async function proxy(request: NextRequest, res: Response) {
   const { pathname } = request.nextUrl;
 
   // Always run intlMiddleware first to handle locale redirection
@@ -21,15 +21,17 @@ export default async function proxy(request: NextRequest) {
 
   // extract the path without locale
   const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, "") || "/";
-  const token = request.cookies.get("access_token")?.value || 
-                request.cookies.get("auth_token")?.value; // fallback for backward compatibility
-
+  const token = request.cookies.get("access_token")?.value
   const isProtectedRoute = protectedRoutes.includes(pathWithoutLocale);
 
   // Auth redirect logic
   if (!token && isProtectedRoute) {
+
     return NextResponse.redirect(new URL("/", request.url));
   }
+
+
+  console.log(res)
 
   if (token && (pathWithoutLocale === "/" || pathWithoutLocale === "")) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
