@@ -272,18 +272,20 @@ export const getUserRole = async (req: Request, res: Response) => {
  */
 export const refreshAccessToken = async (req: Request, res: Response) => {
   const refreshToken = req.cookies?.refresh_token;
-
   if (!refreshToken) {
     return res.status(401).json({ message: "Refresh token not provided" });
   }
-
   try {
     // Verify the refresh token
     const decoded = verifyRefreshToken(refreshToken);
-
     // Find the user and verify the refresh token matches
     const user = await User.findById(decoded.id);
-    if (!user || user.refreshToken !== refreshToken) {
+
+    if (!user) {
+      return res.status(403).json({ message: "User not found" });
+    }
+
+    if (user.refreshToken !== refreshToken) {
       return res.status(403).json({ message: "Invalid refresh token" });
     }
 

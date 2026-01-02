@@ -50,7 +50,7 @@ export const sendAuthTokens = (
     sameSite: "lax",
     // this way jwt will expire in 15 minutes but cookie will be valid for 7 days we can refresh token within that time
     // jwt sign at tokenUtils.ts
-    // maxAge: 15 * 60 * 1000,  // 15 minutes
+    // maxAge: 3 * 1000,  // 10 seconds test
     maxAge: 15 * 60 * 1000, // 15 minutes
   });
 
@@ -59,7 +59,9 @@ export const sendAuthTokens = (
     httpOnly: true,
     secure,
     sameSite: "lax",
-    // path: "/api/auth/refresh-token",
+    // without path it was causing bug where we would only get old token
+    // setting path we are telling the browser where to send this cookie
+    path: "/api/auth/refresh-token",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
