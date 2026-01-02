@@ -104,12 +104,12 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
 
         <div className="relative -mt-20 px-4 pb-12 flex-1 flex flex-col items-center w-full space-y-6 z-10">
           <div className="text-center space-y-3">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight drop-shadow-sm">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight drop-shadow-sm break-words">
               {data.displayName}
             </h1>
             <h4 className="font-bold">@{data.username}</h4>
             {data.bio && (
-              <p className="text-lg opacity-90 max-w-lg mx-auto leading-relaxed font-medium">
+              <p className="text-lg opacity-90 max-w-lg mx-auto leading-relaxed font-medium break-words px-6">
                 {data.bio}
               </p>
             )}

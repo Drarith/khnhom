@@ -97,7 +97,7 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
                 </div>
               </div>
               <div className="space-y-2">
-                <h1 className="text-3xl md:text-4xl font-bold tracking-tight drop-shadow-md">
+                <h1 className="text-3xl md:text-4xl font-bold tracking-tight drop-shadow-md break-words">
                   {data.displayName}
                 </h1>
                 <h4 className="opacity-70 font-medium tracking-wide">
@@ -105,7 +105,7 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
                 </h4>
               </div>
               {data.bio && (
-                <p className="opacity-90 max-w-md leading-relaxed font-light text-lg">
+                <p className="opacity-90 max-w-md leading-relaxed font-light text-lg break-words">
                   {data.bio}
                 </p>
               )}

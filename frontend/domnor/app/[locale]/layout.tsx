@@ -45,7 +45,7 @@ export default async function RootLayout({ children, params }: Props) {
             <div className="flex flex-col min-h-screen">
               <MaybeNav locale={locale} />
               {/* <SmoothScrollProvider>{children}</SmoothScrollProvider> */}
-              <main className="flex-grow">{children}</main>
+              <main className="grow">{children}</main>
               <ConditionalFooter locale={locale} />
             </div>
             <ToastContainer

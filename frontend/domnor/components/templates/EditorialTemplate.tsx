@@ -40,7 +40,6 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
     github: <SiGithub className="w-5 h-5" />,
   };
 
-
   const backgroundImage = backgroundImages.find(
     (bg) => bg.name === data.backgroundImage
   )?.url;
@@ -78,7 +77,7 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
             style={{ borderColor: activeTheme?.text || "#000000" }}
           >
             <div className="space-y-4">
-              <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-none">
+              <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-none break-words">
                 {data.displayName}
               </h1>
               <p className="text-xl italic opacity-70">@{data.username}</p>
@@ -98,7 +97,9 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
           {/* Bio Section */}
           {data.bio && (
             <section className="mb-20 max-w-xl">
-              <p className="text-2xl leading-relaxed font-light">{data.bio}</p>
+              <p className="text-2xl leading-relaxed font-light break-words">
+                {data.bio}
+              </p>
             </section>
           )}
 

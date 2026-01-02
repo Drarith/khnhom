@@ -86,7 +86,7 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
             </div>
             <div className="space-y-2">
               <h1
-                className="text-2xl font-medium tracking-tight"
+                className="text-2xl font-medium tracking-tight break-words"
                 style={{ color: activeTheme?.text }}
               >
                 {data.displayName}
@@ -100,7 +100,7 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
             </div>
             {data.bio && (
               <p
-                className="text-sm max-w-sm leading-relaxed font-light"
+                className="text-sm max-w-sm leading-relaxed font-light break-words"
                 style={{ color: activeTheme?.text, opacity: 0.7 }}
               >
                 {data.bio}

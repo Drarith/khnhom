@@ -100,7 +100,7 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
                 />
               </div>
               <div className="space-y-2">
-                <h1 className="text-4xl text-black font-black uppercase tracking-tight bg-white border-2 border-black px-4 py-1 inline-block shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <h1 className="text-4xl text-black font-black uppercase tracking-tight bg-white border-2 border-black px-4 py-1 inline-block shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] break-words">
                   {data.displayName}
                 </h1>
                 <div className="block pt-2">
@@ -114,7 +114,7 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
                 </div>
               </div>
               {data.bio && (
-                <p className="text-lg font-medium border-2 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full">
+                <p className="text-lg font-medium border-2 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full break-words">
                   {data.bio}
                 </p>
               )}

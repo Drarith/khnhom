@@ -39,7 +39,6 @@ export default function KhmerRoyalTemplate({ data }: { data: ProfileData }) {
     github: <SiGithub className="w-6 h-6" />,
   };
 
-
   const backgroundImage = backgroundImages.find(
     (bg) => bg.name === data.backgroundImage
   )?.url;
@@ -110,7 +109,7 @@ export default function KhmerRoyalTemplate({ data }: { data: ProfileData }) {
               />
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold tracking-wide mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-500 to-yellow-200 drop-shadow-sm">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-wide mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-500 to-yellow-200 drop-shadow-sm break-words">
               {data.displayName}
             </h1>
             <p className="text-lg opacity-80 font-light tracking-widest uppercase text-yellow-100">
@@ -125,7 +124,7 @@ export default function KhmerRoyalTemplate({ data }: { data: ProfileData }) {
               <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-yellow-500/50"></div>
               <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-yellow-500/50"></div>
               <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-yellow-500/50"></div>
-              <p className="text-lg leading-relaxed italic text-yellow-50">
+              <p className="text-lg leading-relaxed italic text-yellow-50p break-words">
                 {data.bio}
               </p>
             </div>

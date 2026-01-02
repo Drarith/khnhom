@@ -103,7 +103,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
 
             <div className="flex flex-col justify-between h-full space-y-4">
               <div>
-                <h1 className="text-4xl md:text-5xl font-black leading-none tracking-tighter wrap-break-words">
+                <h1 className="text-4xl md:text-5xl font-black leading-none tracking-tighter break-words">
                   {data.displayName}
                 </h1>
                 <div className="inline-block bg-black text-white px-2 py-1 mt-2 font-bold text-lg">
@@ -112,7 +112,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
               </div>
 
               {data.bio && (
-                <p className="text-sm md:text-base font-bold leading-tight border-l-4 border-black pl-4 py-1">
+                <p className="text-sm md:text-base font-bold leading-tight border-l-4 border-black pl-4 py-1 break-words">
                   {data.bio}
                 </p>
               )}
