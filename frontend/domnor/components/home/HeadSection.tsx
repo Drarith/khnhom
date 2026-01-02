@@ -1,13 +1,15 @@
 "use client";
 import { useGSAP, SplitText, gsap } from "@/utils/gsap";
+import { useTranslations } from "next-intl";
 import { useRef } from "react";
 
 export default function HeadSection() {
+  const t = useTranslations("homepage.headSection");
   const containerRef = useRef(null);
   useGSAP(() => {
-    let tl: any;
-    let inSplit: any;
-    let outSplit: any;
+    let tl: GSAPTimeline;
+    let inSplit: SplitText;
+    let outSplit: SplitText;
 
     const ctx = gsap.context(() => {
       const q = gsap.utils.selector(containerRef); // q('.in-word') only searches inside the section
@@ -92,25 +94,24 @@ export default function HeadSection() {
       className="head-container flex flex-col gap-4 md:gap-6 items-start p-6 md:p-12 text-start text-white justify-start rounded-xl"
     >
       <h1 className="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-none text-start">
-        ONE LINK. ALL
+        {t("titlePrefix")}
         <span className="relative inline-grid h-[1.1em] overflow-hidden">
           <span
             // ref={word1Ref}
             className="out-word col-start-1 row-start-1 text-blue-400 invisible ml-1"
           >
-            YOU.
+            {t("word1")}
           </span>
           <span
             // ref={word2Ref}
             className="in-word col-start-1 row-start-1 text-green-400 invisible ml-1"
           >
-            FREE.
+            {t("word2")}
           </span>
         </span>
       </h1>
       <h2 className="text-foreground max-w-md text-md font-medium opacity-80 text-start md:text-start">
-        Focus on creating, we’ll handle the rest. Share your work, curate your
-        world, and accept KHQR payments, all through a single link.
+        {t("description")}
       </h2>
     </section>
   );

@@ -2,7 +2,17 @@
   "homepage": {
     "title": "Domnor",
     "slogan": "Just Connect",
-    "googleLabel": "Continue with Google"
+    "googleLabel": "Continue with Google",
+    "headSection": {
+      "titlePrefix": "ONE LINK. ALL",
+      "word1": "YOU.",
+      "word2": "FREE.",
+      "description": "Focus on creating, we’ll handle the rest. Share your work, curate your world, and accept KHQR payments, all through a single link."
+    }
+  },
+  "metadata": {
+    "title": "Domnor",
+    "description": "A home for all your social media links. Made especially for Cambodians."
   },
   "profileSetupPage": {
     "common": {
@@ -163,6 +173,27 @@
       "reactivatePlaceholder": "Enter username",
       "warning": "Warning:",
       "warningText": "Make sure you have the correct username before proceeding."
+    },
+    "donationTab": {
+      "title": "Donation",
+      "description": "Domnor is a free platform and will forever remain so. Your support will make it better over time.",
+      "totalReceived": "Total Donations Received: ${amount}",
+      "unlockBadge5": "Unlock supporter badge at $5",
+      "unlockBadge20": "Unlock supporter badge at $20",
+      "unlocked": "Unlocked",
+      "supporterBadgeAlt": "Supporter Badge",
+      "contactSupport": "If you have any problem with payment feel to",
+      "contactLink": "Contact",
+      "amountLabel": "Amount (USD)",
+      "amountPlaceholder": "Enter amount",
+      "tryAgain": "Try Again",
+      "generateQR": "Generate QR",
+      "thankYou": "Thank You!",
+      "donationReceived": "Your donation of ${amount} was received. Your support will help make our platform better!",
+      "qrAlt": "Donation QR Code",
+      "scanPrompt": "Scan with your banking app",
+      "expiresIn": "Expires in:",
+      "expired": "The QR Code has expired."
     }
   },
   "nav": {
@@ -214,5 +245,65 @@
   },
   "about": {
     "title": "About Page"
+  },
+  "aboutPage": {
+    "hero": {
+      "badge": "The Digital Home for Cambodia",
+      "titleLine1": "Your World,",
+      "titleLine2": "One Link Away.",
+      "description": "Domnor simplifies your digital presence. A single, elegant page to showcase who you are, what you create, and how to support you."
+    },
+    "features": {
+      "localized": {
+        "title": "Truly Localized",
+        "description": "Built from the ground up for the Khmer community. Domnor feels native, with full Khmer language support and an interface designed for how we connect."
+      },
+      "khqr": {
+        "title": "KHQR Integrated",
+        "description": "Seamless support. Receive payments directly through your favorite banking apps with zero friction."
+      },
+      "privacy": {
+        "title": "Privacy First",
+        "description": "We prioritize your privacy. Your data is yours, and we do not share your emails or personal information with third parties."
+      },
+      "creator": {
+        "title": "Creator Focused",
+        "description": "Tools designed to help you connect with your audience more simply and effectively."
+      }
+    },
+    "story": {
+      "badge": "The Developer",
+      "title": "Built with Purpose.",
+      "p1": "Hi. My name is Sarin Dararith, I'm a self-taught developer. Domnor began as a personal challenge, a desire to solve a simple but persistent problem I saw around me.",
+      "p2": "In Cambodia, we have a unique digital landscape. I wanted to build something that didn't just copy existing platforms, but respected our local context. Our online presence is growing exponentially, but many of us still manually share our socials presence in a scatter way. Many of us still go to our banking app each time we need to share our QR code.",
+      "p3": "Domnor is more than just a link-in-bio tool. It's a commitment to building better digital infrastructure for our community.",
+      "founderName": "Sarin Dararith",
+      "founderRole": "Founder & Developer"
+    }
+  },
+  "contactPage": {
+    "title": "Get in Touch",
+    "description": "Have a question, a project in mind, or just want to say hello? I'd love to hear from you.",
+    "email": {
+      "title": "Email",
+      "description": "Drop me a line anytime."
+    },
+    "telegram": {
+      "title": "Telegram",
+      "description": "Chat with me directly."
+    }
+  },
+  "footer": {
+    "brandDescription": "A home for all your social media links. Made especially for Cambodians.",
+    "quickLinks": "Quick Links",
+    "home": "Home",
+    "aboutUs": "About Us",
+    "contact": "Contact",
+    "legal": "Legal",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "contactTitle": "Contact",
+    "createdBy": "Created by",
+    "allRightsReserved": "All rights reserved."
   }
 }

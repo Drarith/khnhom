@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { inter, dancingScript, notoSansKhmer, bokor } from "@/lib/font";
 import "./globals.css";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 
@@ -14,11 +14,15 @@ import type { Props } from "@/types/rootLayout";
 import MaybeNav from "@/components/nav/ConditionalNav";
 import ConditionalFooter from "@/components/footer/ConditionalFooter";
 
-export const metadata: Metadata = {
-  title: "Domnor",
-  description:
-    "A home for all your social media links. Made especially for Cambodians.",
-};
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "metadata" });
+
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
 
 export function generateStaticParams() {
   return [{ locale: "en" }, { locale: "kh" }];

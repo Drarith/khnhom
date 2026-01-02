@@ -1,18 +1,18 @@
 import { Mail, Send } from "lucide-react";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const t = await getTranslations("contactPage");
+
   return (
     <div className="min-h-screen w-full  text-foreground/90 flex items-center justify-center p-6">
       <div className="max-w-2xl w-full space-y-12">
         <div className="text-center space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
-            Get in Touch
+            {t("title")}
           </h1>
-          <p className="text-lg  max-w-lg mx-auto">
-            Have a question, a project in mind, or just want to say hello?
-            I&apos;d love to hear from you.
-          </p>
+          <p className="text-lg  max-w-lg mx-auto">{t("description")}</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
@@ -24,8 +24,10 @@ export default function ContactPage() {
             <div className="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center mb-6 text-blue-400 group-hover:scale-110 transition-transform">
               <Mail size={24} />
             </div>
-            <h3 className="text-xl font-bold mb-2 text-foreground">Email</h3>
-            <p className=" text-sm mb-4">Drop me a line anytime.</p>
+            <h3 className="text-xl font-bold mb-2 text-foreground">
+              {t("email.title")}
+            </h3>
+            <p className=" text-sm mb-4">{t("email.description")}</p>
             <div className="text-sm font-medium text-foreground group-hover:text-blue-400 transition-colors">
               sarindararith5540@gmail.com
             </div>
@@ -41,8 +43,10 @@ export default function ContactPage() {
             <div className="w-12 h-12 bg-sky-500/10 rounded-2xl flex items-center justify-center mb-6 text-sky-400 group-hover:scale-110 transition-transform">
               <Send size={24} />
             </div>
-            <h3 className="text-xl font-bold mb-2 text-foreground">Telegram</h3>
-            <p className=" text-sm mb-4">Chat with me directly.</p>
+            <h3 className="text-xl font-bold mb-2 text-foreground">
+              {t("telegram.title")}
+            </h3>
+            <p className=" text-sm mb-4">{t("telegram.description")}</p>
             <div className="text-sm font-medium text-foreground group-hover:text-sky-400 transition-colors">
               @drarith
             </div>

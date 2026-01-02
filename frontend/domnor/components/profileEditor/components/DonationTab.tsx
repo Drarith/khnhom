@@ -3,14 +3,16 @@ import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { useDonation } from "@/hooks/useDonation";
 import Button from "../../ui/Button";
 import { badges } from "@/config/supporterBadge";
-import { ProfileData } from "@/types/profileData";
 import { CheckCheck } from "lucide-react";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function DonationTab({
   currentDonationAmount,
 }: {
   currentDonationAmount: number;
 }) {
+  const t = useTranslations("profileEditor.donationTab");
   const {
     amount,
     setAmount,
@@ -30,21 +32,20 @@ export default function DonationTab({
   return (
     <div className="p-6 space-y-6 bg-white rounded-lg shadow-sm">
       <div>
-        <h2 className="text-xl font-semibold mb-2 text-primary">Donation</h2>
+        <h2 className="text-xl font-semibold mb-2 text-primary">
+          {t("title")}
+        </h2>
+        <p className="text-sm text-primary/60">{t("description")}</p>
         <p className="text-sm text-primary/60">
-          Domnor is a free platform and will forever remain so. Your support
-          will make it better over time.
-        </p>
-        <p className="text-sm text-primary/60">
-          Total Donations Received: ${currentDonationAmount}
+          {t("totalReceived", { amount: currentDonationAmount })}
         </p>
         <div className="flex flex-col gap-2 mt-2 text-primary/60">
           {currentDonationAmount < 5 ? (
             <div className="flex flex-row items-center gap-2">
-              <p>Unlock supporter badge at $5 </p>
+              <p>{t("unlockBadge5")} </p>
               <Image
                 src={badges.firstTierSupporterBadge}
-                alt="Supporter Badge"
+                alt={t("supporterBadgeAlt")}
                 width={24}
                 height={24}
               />
@@ -52,11 +53,12 @@ export default function DonationTab({
           ) : (
             <div className="flex flex-row items-center gap-2">
               <p className="inline-flex gap-2">
-                Unlocked{<CheckCheck color="green" />}
+                {t("unlocked")}
+                {<CheckCheck color="green" />}
               </p>
               <Image
                 src={badges.firstTierSupporterBadge}
-                alt="Supporter Badge"
+                alt={t("supporterBadgeAlt")}
                 width={24}
                 height={24}
               />
@@ -65,10 +67,10 @@ export default function DonationTab({
 
           {currentDonationAmount < 20 ? (
             <div className="flex flex-row items-center gap-2">
-              <p>Unlock supporter badge at $20 </p>
+              <p>{t("unlockBadge20")} </p>
               <Image
                 src={badges.goldTierSupporterBadge}
-                alt="Supporter Badge"
+                alt={t("supporterBadgeAlt")}
                 width={24}
                 height={24}
               />
@@ -76,17 +78,24 @@ export default function DonationTab({
           ) : (
             <div className="flex flex-row items-center gap-2">
               <p className="inline-flex gap-2">
-                Unlocked{<CheckCheck color="green" />}
+                {t("unlocked")}
+                {<CheckCheck color="green" />}
               </p>
               <Image
                 src={badges.goldTierSupporterBadge}
-                alt="Supporter Badge"
+                alt={t("supporterBadgeAlt")}
                 width={24}
                 height={24}
               />
             </div>
           )}
         </div>
+        <p className="mt-2 text-primary/60">
+          {t("contactSupport")}{" "}
+          <Link href="/contact" className="underline text-primary">
+            {t("contactLink")}
+          </Link>
+        </p>
       </div>
 
       {/* Input Section - Hide if paid to prevent confusion */}
@@ -94,14 +103,14 @@ export default function DonationTab({
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-primary mb-2">
-              Amount (USD)
+              {t("amountLabel")}
             </label>
             <input
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               className="w-full p-2 rounded-md border border-primary/20 bg-foreground text-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
-              placeholder="Enter amount"
+              placeholder={t("amountPlaceholder")}
               min="0"
               step="0.01"
               disabled={isPending || paymentStatus === "pending"}
@@ -116,7 +125,7 @@ export default function DonationTab({
               className="w-full flex justify-center items-center gap-2"
             >
               {isPending && <Loader2 className="animate-spin" size={16} />}
-              {paymentStatus === "expired" ? "Try Again" : "Generate QR"}
+              {paymentStatus === "expired" ? t("tryAgain") : t("generateQR")}
             </Button>
           )}
         </div>
@@ -126,11 +135,8 @@ export default function DonationTab({
       {paymentStatus === "paid" && (
         <div className="flex flex-col items-center space-y-4 p-8 bg-green-50 rounded-lg animate-in fade-in zoom-in duration-300">
           <CheckCircle className="text-green-500 w-16 h-16" />
-          <h3 className="text-2xl font-bold text-green-700">Thank You!</h3>
-          <p className="text-green-600">
-            Your donation of ${amount} was received. Your support will help make
-            our platform better!
-          </p>
+          <h3 className="text-2xl font-bold text-green-700">{t("thankYou")}</h3>
+          <p className="text-green-600">{t("donationReceived", { amount })}</p>
         </div>
       )}
 
@@ -140,7 +146,7 @@ export default function DonationTab({
           <div className="relative w-64 h-64">
             <Image
               src={qrData}
-              alt="Donation QR Code"
+              alt={t("qrAlt")}
               fill
               className="object-contain"
             />
@@ -154,13 +160,13 @@ export default function DonationTab({
           </div>
 
           <div className="text-center space-y-1">
-            <p className="text-sm text-gray-500">Scan with your banking app</p>
+            <p className="text-sm text-gray-500">{t("scanPrompt")}</p>
             <div
               className={`text-lg font-bold font-mono ${
                 timeLeft < 60 ? "text-red-500" : "text-primary"
               }`}
             >
-              Expires in: {formatTime(timeLeft)}
+              {t("expiresIn")} {formatTime(timeLeft)}
             </div>
           </div>
 
@@ -178,7 +184,7 @@ export default function DonationTab({
       {paymentStatus === "expired" && (
         <div className="flex flex-col items-center p-4 text-center">
           <AlertCircle className="text-gray-400 w-10 h-10 mb-2" />
-          <p className="text-gray-500">The QR Code has expired.</p>
+          <p className="text-gray-500">{t("expired")}</p>
         </div>
       )}
     </div>

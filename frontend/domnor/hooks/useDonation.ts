@@ -157,7 +157,7 @@ export function useDonation() {
 
   const handleGenerate = () => {
     const numAmount = parseFloat(amount);
-    if (isNaN(numAmount) || numAmount <= 0) {
+    if (isNaN(numAmount) || numAmount < 0.1) {
       toast.error("Please enter a valid amount");
       return;
     }

@@ -9,8 +9,11 @@ import {
 } from "lucide-react";
 import ClientAbout from "@/providers/AboutMeClient";
 import { LanguageToggle } from "@/components/ui/languageSwitchpill";
+import { getTranslations } from "next-intl/server";
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const t = await getTranslations("aboutPage");
+
   return (
     <ClientAbout>
       <div className="min-h-screen w-full">
@@ -19,19 +22,18 @@ export default function AboutPage() {
           <section className="flex flex-col items-center text-center mb-32 space-y-8">
             <div className="line inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/30 border border-secondary/50 text-sm font-medium text-foreground/80">
               <Sparkles className="w-4 h-4 text-accent" />
-              <span>The Digital Home for Cambodia</span>
+              <span>{t("hero.badge")}</span>
             </div>
 
             <h1 className="line text-5xl md:text-7xl font-bold tracking-tight leading-[1.1]">
-              Your World, <br />
+              {t("hero.titleLine1")} <br />
               <span className="text-transparent bg-clip-text bg-linear-to-r from-foreground to-secondary">
-                One Link Away.
+                {t("hero.titleLine2")}
               </span>
             </h1>
 
             <p className="line text-lg md:text-xl text-foreground/90 max-w-2xl leading-relaxed">
-              Domnor simplifies your digital presence. A single, elegant page to
-              showcase who you are, what you create, and how to support you.
+              {t("hero.description")}
             </p>
           </section>
 
@@ -44,12 +46,10 @@ export default function AboutPage() {
                   <Globe size={24} color="white" />
                 </div>
                 <h3 className="text-2xl font-bold text-foreground">
-                  Truly Localized
+                  {t("features.localized.title")}
                 </h3>
                 <p className="text-foreground/90 leading-relaxed">
-                  Built from the ground up for the Khmer community. Domnor feels
-                  native, with full Khmer language support and an interface
-                  designed for how we connect.
+                  {t("features.localized.description")}
                 </p>
               </div>
 
@@ -62,10 +62,11 @@ export default function AboutPage() {
                 <div className="w-12 h-12 bg-foreground/10 rounded-2xl flex items-center justify-center mb-6">
                   <QrCode size={24} className="text-foreground" />
                 </div>
-                <h3 className="text-2xl font-bold mb-3">KHQR Integrated</h3>
+                <h3 className="text-2xl font-bold mb-3">
+                  {t("features.khqr.title")}
+                </h3>
                 <p className="opacity-80 leading-relaxed mb-8">
-                  Seamless support. Receive payments directly through your
-                  favorite banking apps with zero friction.
+                  {t("features.khqr.description")}
                 </p>
                 <div className="mt-auto relative w-full aspect-square bg-foreground/5 rounded-2xl flex items-center justify-center border border-foreground/10">
                   <QrCode size={64} className="opacity-20" />
@@ -80,11 +81,10 @@ export default function AboutPage() {
               </div>
               <div>
                 <h3 className="text-xl font-bold mb-2 text-foreground">
-                  Privacy First
+                  {t("features.privacy.title")}
                 </h3>
                 <p className="text-foreground/90 text-sm leading-relaxed">
-                  We prioritize your privacy. Your data is yours, and we do not
-                  share your emails or personal information with third parties.
+                  {t("features.privacy.description")}
                 </p>
               </div>
             </div>
@@ -96,11 +96,10 @@ export default function AboutPage() {
               </div>
               <div>
                 <h3 className="text-xl font-bold mb-2 text-foreground">
-                  Creator Focused
+                  {t("features.creator.title")}
                 </h3>
                 <p className="text-foreground/90 text-sm leading-relaxed">
-                  Tools designed to help you connect with your audience more
-                  simply and effectively.
+                  {t("features.creator.description")}
                 </p>
               </div>
             </div>
@@ -120,39 +119,24 @@ export default function AboutPage() {
             <div className="space-y-8">
               <div className="line inline-flex items-center gap-2 text-accent font-medium tracking-wide uppercase text-sm">
                 <Code size={16} />
-                <span>The Developer</span>
+                <span>{t("story.badge")}</span>
               </div>
 
               <h2 className="line text-3xl md:text-4xl font-bold text-foreground">
-                Built with Purpose.
+                {t("story.title")}
               </h2>
 
               <div className="line space-y-6 text-foreground/90 leading-relaxed text-lg">
-                <p>
-                  Hi. My name is Sarin Dararith, I&apos;m a self-taught
-                  developer. Domnor began as a personal challenge, a desire to
-                  solve a simple but persistent problem I saw around me.
-                </p>
-                <p>
-                  In Cambodia, we have a unique digital landscape. I wanted to
-                  build something that didn&apos;t just copy existing platforms,
-                  but respected our local context. Our online presence is
-                  growing exponentially, but many of us still manually share our
-                  socials presence in a scatter way. Many of us still go to our
-                  banking app each time we need to share our QR code.
-                </p>
-                <p>
-                  Domnor is more than just a link-in-bio tool. It&apos;s a
-                  commitment to building better digital infrastructure for our
-                  community.
-                </p>
+                <p>{t("story.p1")}</p>
+                <p>{t("story.p2")}</p>
+                <p>{t("story.p3")}</p>
               </div>
 
               <div className="line pt-4">
                 <div className="text-foreground font-semibold text-xl">
-                  Sarin Dararith
+                  {t("story.founderName")}
                 </div>
-                <div className="text-foreground">Founder & Developer</div>
+                <div className="text-foreground">{t("story.founderRole")}</div>
               </div>
             </div>
           </section>

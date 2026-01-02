@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { Mail, Github, Linkedin, Twitter } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const Footer = () => {
+  const t = useTranslations("footer");
+
   return (
     <footer className="bg-gray-900 text-gray-300 py-8 mt-auto">
       <div className="container mx-auto px-4">
@@ -10,18 +13,19 @@ const Footer = () => {
           <div className="col-span-2 md:col-span-1 space-y-3">
             <h3 className="text-xl font-bold text-white">Domnor</h3>
             <p className="text-sm leading-relaxed max-w-xs">
-              A home for all your social media links. Made especially for
-              Cambodians.
+              {t("brandDescription")}
             </p>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-3">
-            <h4 className="text-base font-semibold text-white">Quick Links</h4>
+            <h4 className="text-base font-semibold text-white">
+              {t("quickLinks")}
+            </h4>
             <ul className="space-y-1.5 text-sm">
               <li>
                 <Link href="/" className="hover:text-white transition-colors">
-                  Home
+                  {t("home")}
                 </Link>
               </li>
               <li>
@@ -29,7 +33,7 @@ const Footer = () => {
                   href="/about"
                   className="hover:text-white transition-colors"
                 >
-                  About Us
+                  {t("aboutUs")}
                 </Link>
               </li>
               <li>
@@ -37,7 +41,7 @@ const Footer = () => {
                   href="/contact"
                   className="hover:text-white transition-colors"
                 >
-                  Contact
+                  {t("contact")}
                 </Link>
               </li>
             </ul>
@@ -45,14 +49,14 @@ const Footer = () => {
 
           {/* Legal */}
           <div className="space-y-3">
-            <h4 className="text-base font-semibold text-white">Legal</h4>
+            <h4 className="text-base font-semibold text-white">{t("legal")}</h4>
             <ul className="space-y-1.5 text-sm">
               <li>
                 <Link
                   href="/privacy"
                   className="hover:text-white transition-colors"
                 >
-                  Privacy Policy
+                  {t("privacyPolicy")}
                 </Link>
               </li>
               <li>
@@ -60,7 +64,7 @@ const Footer = () => {
                   href="/terms"
                   className="hover:text-white transition-colors"
                 >
-                  Terms of Service
+                  {t("termsOfService")}
                 </Link>
               </li>
             </ul>
@@ -68,10 +72,12 @@ const Footer = () => {
 
           {/* Contact / Credits */}
           <div className="col-span-2 md:col-span-1 space-y-3">
-            <h4 className="text-base font-semibold text-white">Contact</h4>
+            <h4 className="text-base font-semibold text-white">
+              {t("contactTitle")}
+            </h4>
             <div className="space-y-2 text-sm">
               <p>
-                Created by{" "}
+                {t("createdBy")}{" "}
                 <span className="font-medium text-white">Sarin Dararith</span>
               </p>
               <a
@@ -111,7 +117,9 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-6 text-center text-xs text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Domnor. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()} Domnor. {t("allRightsReserved")}
+          </p>
         </div>
       </div>
     </footer>
