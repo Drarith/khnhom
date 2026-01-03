@@ -14,6 +14,7 @@ import {
 } from "@icons-pack/react-simple-icons";
 import Footer from "../userProfile/Footer";
 import { backgroundImages } from "@/config/background";
+import Badge from "../badge/Badge";
 
 type SocialPlatform =
   | "facebook"
@@ -101,9 +102,15 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
               >
                 {data.displayName}
               </h1>
-              <h4 className="font-bold wrap-break-word" style={{ color: secondaryColor }}>
-                @{data.username}
-              </h4>
+              <div className="block pt-2">
+                <Badge
+                  username={data.username}
+                  isSupporter={data.isSupporter}
+                  isGoldSupporter={data.isGoldSupporter}
+                  isVerified={data.isVerified}
+                  isDev={data.isDev}
+                />
+              </div>
               {data.bio && (
                 <p
                   className="text-sm leading-relaxed border-t pt-2 mt-2 wrap-break-word"

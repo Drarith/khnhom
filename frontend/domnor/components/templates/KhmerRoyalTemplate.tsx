@@ -15,6 +15,7 @@ import {
 } from "@icons-pack/react-simple-icons";
 import Footer from "../userProfile/Footer";
 import { backgroundImages } from "@/config/background";
+import Badge from "../badge/Badge";
 
 type SocialPlatform =
   | "facebook"
@@ -112,9 +113,15 @@ export default function KhmerRoyalTemplate({ data }: { data: ProfileData }) {
             <h1 className="text-4xl md:text-5xl font-bold tracking-wide mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-500 to-yellow-200 drop-shadow-sm break-words">
               {data.displayName}
             </h1>
-            <p className="text-lg opacity-80 font-light tracking-widest uppercase text-yellow-100">
-              @{data.username}
-            </p>
+            <div className="block pt-2">
+              <Badge
+                username={data.username}
+                isSupporter={data.isSupporter}
+                isGoldSupporter={data.isGoldSupporter}
+                isVerified={data.isVerified}
+                isDev={data.isDev}
+              />
+            </div>
           </div>
 
           {/* Bio */}

@@ -16,6 +16,7 @@ import {
 } from "@icons-pack/react-simple-icons";
 import Footer from "../userProfile/Footer";
 import { backgroundImages } from "@/config/background";
+import Badge from "../badge/Badge";
 
 type SocialPlatform =
   | "facebook"
@@ -80,7 +81,15 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
               <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-none break-words">
                 {data.displayName}
               </h1>
-              <p className="text-xl italic opacity-70">@{data.username}</p>
+              <div className="block pt-2">
+                <Badge
+                  username={data.username}
+                  isSupporter={data.isSupporter}
+                  isGoldSupporter={data.isGoldSupporter}
+                  isVerified={data.isVerified}
+                  isDev={data.isDev}
+                />
+              </div>
             </div>
 
             <div className="relative w-32 h-32 md:w-40 md:h-40 shrink-0 grayscale-0 lg:grayscale lg:hover:grayscale-0 transition-all duration-500">

@@ -15,6 +15,7 @@ import {
 } from "@icons-pack/react-simple-icons";
 import Footer from "../userProfile/Footer";
 import { backgroundImages } from "@/config/background";
+import Badge from "../badge/Badge";
 
 type SocialPlatform =
   | "facebook"
@@ -91,12 +92,15 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
               >
                 {data.displayName}
               </h1>
-              <h4
-                className="text-sm font-normal"
-                style={{ color: activeTheme?.text, opacity: 0.6 }}
-              >
-                @{data.username}
-              </h4>
+              <div className="block pt-2">
+                <Badge
+                  username={data.username}
+                  isSupporter={data.isSupporter}
+                  isGoldSupporter={data.isGoldSupporter}
+                  isVerified={data.isVerified}
+                  isDev={data.isDev}
+                />
+              </div>
             </div>
             {data.bio && (
               <p

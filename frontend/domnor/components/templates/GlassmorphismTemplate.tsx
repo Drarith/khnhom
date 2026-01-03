@@ -15,6 +15,7 @@ import {
 } from "@icons-pack/react-simple-icons";
 import Footer from "../userProfile/Footer";
 import { backgroundImages } from "@/config/background";
+import Badge from "../badge/Badge";
 
 type SocialPlatform =
   | "facebook"
@@ -100,9 +101,15 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
                 <h1 className="text-3xl md:text-4xl font-bold tracking-tight drop-shadow-md break-words">
                   {data.displayName}
                 </h1>
-                <h4 className="opacity-70 font-medium tracking-wide">
-                  @{data.username}
-                </h4>
+                <div className="block pt-2">
+                  <Badge
+                    username={data.username}
+                    isSupporter={data.isSupporter}
+                    isGoldSupporter={data.isGoldSupporter}
+                    isVerified={data.isVerified}
+                    isDev={data.isDev}
+                  />
+                </div>
               </div>
               {data.bio && (
                 <p className="opacity-90 max-w-md leading-relaxed font-light text-lg break-words">

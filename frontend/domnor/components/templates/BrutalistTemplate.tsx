@@ -16,6 +16,7 @@ import {
 } from "@icons-pack/react-simple-icons";
 import Footer from "../userProfile/Footer";
 import { backgroundImages } from "@/config/background";
+import Badge from "../badge/Badge";
 
 type SocialPlatform =
   | "facebook"
@@ -106,8 +107,14 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
                 <h1 className="wrap-break-words text-4xl md:text-5xl font-black leading-none tracking-tighter ">
                   {data.displayName}
                 </h1>
-                <div className="inline-block bg-black text-white px-2 py-1 mt-2 font-bold text-lg">
-                  @{data.username}
+                <div className="block pt-2">
+                  <Badge
+                    username={data.username}
+                    isSupporter={data.isSupporter}
+                    isGoldSupporter={data.isGoldSupporter}
+                    isVerified={data.isVerified}
+                    isDev={data.isDev}
+                  />
                 </div>
               </div>
 
