@@ -98,7 +98,7 @@ export default function Nav() {
       <div className="menu-overlay">
         <div className="menu-overlay-bar ">
           <div className="menu-logo">
-            <Link href={"/"}>DOMNOR</Link>
+            <Link href={"/"}>KHNHOM</Link>
           </div>
           <div className="menu-close" onClick={toggleMenu}>
             <p>{t("close")}</p>

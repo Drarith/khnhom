@@ -146,12 +146,6 @@ async function pollBakong(md5: string, startTime = Date.now()) {
   const job = activeJobs.get(md5);
   if (!job) return;
 
-  // Timeout: Stop polling after 5 minutes
-  // if (Date.now() - startTime > 5 * 60 * 1000) {
-  //   notifyAndCleanup(md5, { status: "EXPIRED" });
-  //   return;
-  // }
-
   if (Date.now() - startTime > 3 * 60 * 1000) {
     notifyAndCleanup(md5, { status: "EXPIRED" });
     return;
@@ -222,7 +216,6 @@ export const createKHQRForDonation = async (req: Request, res: Response) => {
     const { amount } = req.body;
     if (!amount) return res.status(400).json({ message: "Amount is required" });
 
-    // Generate QR Logic (Same as yours)
     const individualInfo = new IndividualInfo(
       "dararith_sarin@aclb",
       "DararithSarin",
@@ -232,7 +225,7 @@ export const createKHQRForDonation = async (req: Request, res: Response) => {
     const KHQR = new BakongKHQR();
     const result = KHQR.generateIndividual(individualInfo);
 
-    // Safety check for library version differences
+
     const md5 = result.data?.md5 || (result as any).md5;
     const qrString = result.data?.qr || (result as any).qr;
 
