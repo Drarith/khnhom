@@ -113,7 +113,7 @@ export default function KhmerRoyalTemplate({ data }: { data: ProfileData }) {
             <h1 className="text-4xl md:text-5xl font-bold tracking-wide mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-500 to-yellow-200 drop-shadow-sm break-words">
               {data.displayName}
             </h1>
-            <div className="block pt-2">
+            <div className={`block pt-2 text-${primaryColor}`}>
               <Badge
                 username={data.username}
                 isSupporter={data.isSupporter}

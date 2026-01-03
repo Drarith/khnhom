@@ -66,6 +66,7 @@
       "links": "Links",
       "payment": "Generate QR",
       "appearance": "Appearance",
+      "support": "Contribution",
       "admin": "Admin"
     },
     "buttons": {
@@ -175,7 +176,7 @@
       "warningText": "Make sure you have the correct username before proceeding."
     },
     "donationTab": {
-      "title": "Donation",
+      "title": "Contribution",
       "description": "Domnor is a free platform and will forever remain so. Your support will make it better over time.",
       "totalReceived": "Total Donations Received: ${amount}",
       "unlockBadge5": "Unlock supporter badge at $5",

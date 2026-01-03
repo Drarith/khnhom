@@ -56,18 +56,15 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
       >
         {/* Background Image Layer */}
         {data.backgroundImage && (
-          <div className="fixed inset-0 z-0 opacity-30">
+          <div className="absolute inset-0 z-0">
             <Image
               src={backgroundImage!}
               alt="background"
               fill
-              className="object-cover grayscale-0 lg:grayscale lg:hover:grayscale-0 transition-all duration-700"
+              className="object-cover opacity-20 contrast-125"
               priority
             />
-            <div
-              className="absolute inset-0 bg-linear-to-b from-transparent via-white/50 to-white/90"
-              style={{ mixBlendMode: "overlay" }}
-            ></div>
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
           </div>
         )}
 
@@ -81,7 +78,7 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
               <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-none break-words">
                 {data.displayName}
               </h1>
-              <div className="block pt-2">
+              <div className={`block pt-2 text-${activeTheme?.text}`}>
                 <Badge
                   username={data.username}
                   isSupporter={data.isSupporter}

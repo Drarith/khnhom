@@ -287,7 +287,7 @@ export default function ProfileEditor({
     { id: Tab.SOCIALS, label: t("tabs.socials"), icon: LinkIcon },
     { id: Tab.LINKS, label: t("tabs.links"), icon: LinkIcon },
     { id: Tab.PAYMENT, label: t("tabs.payment"), icon: QrCode },
-    { id: Tab.DONATION, label: "Donation", icon: Heart },
+    { id: Tab.DONATION, label: t("tabs.support"), icon: Heart },
     { id: Tab.APPEARANCE, label: t("tabs.appearance"), icon: Palette },
     ...(isAdmin
       ? [{ id: Tab.ADMIN, label: t("tabs.admin"), icon: Shield }]

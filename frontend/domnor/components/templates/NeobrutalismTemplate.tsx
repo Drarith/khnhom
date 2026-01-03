@@ -65,7 +65,7 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
         <div
           className="absolute inset-0 opacity-10 pointer-events-none z-0"
           style={{
-            backgroundImage: `radial-gradient(${textColor} 1px, transparent 1px)`,
+            backgroundImage: `radial-gradient(${accentColor} 1px, transparent 1px)`,
             backgroundSize: "20px 20px",
           }}
         ></div>
@@ -86,11 +86,28 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
         <div className="relative z-10 w-full max-w-2xl mx-auto p-6 flex flex-col items-center min-h-screen space-y-8">
           {/* Profile Card */}
           <div
-            className="w-full bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] mt-10 transform hover:-translate-y-1 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] transition-all duration-200"
-            style={{ backgroundColor: primaryColor }}
+            className="w-full border-4 p-8 mt-10 transform hover:-translate-y-1 transition-all duration-200"
+            style={{
+              backgroundColor: primaryColor,
+              borderColor: accentColor,
+              boxShadow: `8px 8px 0px 0px ${accentColor}`,
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = `12px 12px 0px 0px ${accentColor}`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = `8px 8px 0px 0px ${accentColor}`;
+            }}
           >
             <div className="flex flex-col items-center text-center space-y-6">
-              <div className="relative w-32 h-32 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
+              <div
+                className="relative w-32 h-32 border-4"
+                style={{
+                  borderColor: accentColor,
+                  boxShadow: `4px 4px 0px 0px ${accentColor}`,
+                  backgroundColor: secondaryColor,
+                }}
+              >
                 <Image
                   src={data.profilePictureUrl}
                   alt="profile picture"
@@ -100,10 +117,18 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
                 />
               </div>
               <div className="space-y-2">
-                <h1 className="text-4xl text-black font-black uppercase tracking-tight bg-white border-2 border-black px-4 py-1 inline-block shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] break-words">
+                <h1
+                  className="text-4xl font-black uppercase tracking-tight border-2 px-4 py-1 inline-block break-words"
+                  style={{
+                    color: textColor,
+                    backgroundColor: secondaryColor,
+                    borderColor: accentColor,
+                    boxShadow: `4px 4px 0px 0px ${accentColor}`,
+                  }}
+                >
                   {data.displayName}
                 </h1>
-                <div className="block pt-2">
+                <div className="block pt-2" style={{ color: textColor }}>
                   <Badge
                     username={data.username}
                     isSupporter={data.isSupporter}
@@ -114,7 +139,15 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
                 </div>
               </div>
               {data.bio && (
-                <p className="text-lg font-medium border-2 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] w-full break-words">
+                <p
+                  className="text-lg font-medium border-2 p-4 w-full break-words"
+                  style={{
+                    borderColor: accentColor,
+                    backgroundColor: secondaryColor,
+                    boxShadow: `4px 4px 0px 0px ${accentColor}`,
+                    color: textColor,
+                  }}
+                >
                   {data.bio}
                 </p>
               )}
@@ -131,7 +164,19 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+                  className="p-3 border-2 hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+                  style={{
+                    backgroundColor: secondaryColor,
+                    borderColor: accentColor,
+                    boxShadow: `4px 4px 0px 0px ${accentColor}`,
+                    color: textColor,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = `2px 2px 0px 0px ${accentColor}`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = `4px 4px 0px 0px ${accentColor}`;
+                  }}
                   aria-label={key}
                 >
                   {icons[key as SocialPlatform]}
@@ -141,21 +186,39 @@ export default function NeobrutalismTemplate({ data }: { data: ProfileData }) {
 
           {/* Links */}
           {data.links && data.links.length > 0 && (
-            <div className="w-full space-y-5 text-black">
+            <div className="w-full space-y-5" style={{ color: textColor }}>
               {data.links.map((link) => (
                 <div key={link._id} className="relative group">
                   <a
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-full py-4 px-8 text-center text-xl font-bold border-4 border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[4px] hover:translate-y-[4px] transition-all active:shadow-none active:translate-x-[8px] active:translate-y-[8px]"
+                    className="block w-full py-4 px-8 text-center text-xl font-bold border-4 hover:translate-x-[4px] hover:translate-y-[4px] transition-all active:shadow-none active:translate-x-[8px] active:translate-y-[8px]"
+                    style={{
+                      borderColor: accentColor,
+                      backgroundColor: secondaryColor,
+                      boxShadow: `8px 8px 0px 0px ${accentColor}`,
+                      color: textColor,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = `4px 4px 0px 0px ${accentColor}`;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.boxShadow = `8px 8px 0px 0px ${accentColor}`;
+                    }}
                   >
                     {link.title}
                   </a>
                   <TemplateShare
                     url={link.url}
                     title={link.title}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 border-2 border-black bg-yellow-300 hover:bg-yellow-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 border-2 transition-all"
+                    style={{
+                      borderColor: accentColor,
+                      backgroundColor: primaryColor,
+                      boxShadow: `2px 2px 0px 0px ${accentColor}`,
+                      color: textColor,
+                    }}
                     ariaLabel="Share link"
                   >
                     <Share2 size={18} />

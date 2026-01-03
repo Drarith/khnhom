@@ -48,8 +48,9 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
 
   const bgColor = activeTheme?.bg || "#ffffff";
   const textColor = activeTheme?.text || "#000000";
-  //   const buttonColor = activeTheme?.button || "#000000";
-  //   const buttonText = activeTheme?.buttonText || "#ffffff";
+  const buttonColor = activeTheme?.button || "#000000";
+  const buttonText = activeTheme?.buttonText || "#ffffff";
+  const borderColor = activeTheme?.border || "#000000";
 
   return (
     <>
@@ -74,9 +75,22 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
           </div>
         )}
 
-        <div className="relative z-10 flex flex-col min-h-screen md:border-x-4 border-black max-w-2xl  bg-white/50 backdrop-blur-sm">
+        <div
+          className="relative z-10 flex flex-col min-h-screen md:border-x-4 max-w-2xl backdrop-blur-sm"
+          style={{
+            borderColor: borderColor,
+            backgroundColor: `${bgColor}80`,
+          }}
+        >
           {/* Header Bar */}
-          <div className="border-b-4 border-black p-3 md:p-4 flex justify-between items-center bg-black text-white">
+          <div
+            className="border-b-4 p-3 md:p-4 flex justify-between items-center"
+            style={{
+              borderColor: borderColor,
+              backgroundColor: buttonColor,
+              color: buttonText,
+            }}
+          >
             <div className="flex items-center gap-2">
               <Terminal size={20} />
               <span className="font-bold tracking-widest">
@@ -84,15 +98,33 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
               </span>
             </div>
             <div className="flex gap-1">
-              <div className="w-3 h-3 bg-white rounded-full"></div>
-              <div className="w-3 h-3 bg-white rounded-full"></div>
-              <div className="w-3 h-3 bg-white rounded-full"></div>
+              <div
+                className="w-3 h-3 rounded-full"
+                style={{ backgroundColor: buttonText }}
+              ></div>
+              <div
+                className="w-3 h-3 rounded-full"
+                style={{ backgroundColor: buttonText }}
+              ></div>
+              <div
+                className="w-3 h-3 rounded-full"
+                style={{ backgroundColor: buttonText }}
+              ></div>
             </div>
           </div>
 
           {/* Profile Section */}
-          <div className="p-4 md:p-6 border-b-4 border-black grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 items-start">
-            <div className="relative w-32 h-32 md:w-40 md:h-40 shrink-0 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div
+            className="p-4 md:p-6 border-b-4 grid grid-cols-1 md:grid-cols-[auto_1fr] gap-6 items-start"
+            style={{ borderColor: borderColor }}
+          >
+            <div
+              className="relative w-32 h-32 md:w-40 md:h-40 shrink-0 border-4"
+              style={{
+                borderColor: borderColor,
+                boxShadow: `8px 8px 0px 0px ${borderColor}`,
+              }}
+            >
               <Image
                 src={data.profilePictureUrl}
                 alt="profile picture"
@@ -104,10 +136,10 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
 
             <div className="flex flex-col justify-between h-full space-y-4 min-w-0">
               <div>
-                <h1 className="wrap-break-words text-4xl md:text-5xl font-black leading-none tracking-tighter ">
+                <h1 className="wrap-break-words text-4xl md:text-5xl font-bold leading-none tracking-tighter ">
                   {data.displayName}
                 </h1>
-                <div className="block pt-2">
+                <div className={`block pt-2 text-${activeTheme?.text}`}>
                   <Badge
                     username={data.username}
                     isSupporter={data.isSupporter}
@@ -119,7 +151,13 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
               </div>
 
               {data.bio && (
-                <p className="text-sm md:text-base font-bold leading-tight border-l-4 border-black pl-4 py-1 break-words">
+                <p
+                  className="text-sm md:text-base font-bold leading-tight border-l-4 pl-4 py-1 wrap-break-word"
+                  style={{
+                    borderColor: textColor,
+                    color: textColor,
+                  }}
+                >
                   {data.bio}
                 </p>
               )}
@@ -140,7 +178,21 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full p-4 pr-14 lg:pr-4 border-4 border-black font-black text-lg md:text-xl transition-all duration-200 -translate-y-1 translate-x-1 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] lg:translate-y-0 lg:translate-x-0 lg:shadow-none lg:hover:-translate-y-1 lg:hover:translate-x-1 lg:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-none bg-white text-black flex justify-between items-center"
+                    className="w-full p-4 pr-14 lg:pr-4 border-4 font-black text-lg md:text-xl transition-all duration-200 -translate-y-1 translate-x-1 lg:translate-y-0 lg:translate-x-0 lg:shadow-none lg:hover:-translate-y-1 lg:hover:translate-x-1 active:translate-y-0 active:translate-x-0 active:shadow-none flex justify-between items-center"
+                    style={{
+                      borderColor: borderColor,
+                      backgroundColor: buttonColor,
+                      color: buttonText,
+                      boxShadow: `8px 8px 0px 0px ${borderColor}`,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.boxShadow = `8px 8px 0px 0px ${borderColor}`;
+                    }}
+                    onMouseLeave={(e) => {
+                      if (window.innerWidth >= 1024) {
+                        e.currentTarget.style.boxShadow = "none";
+                      }
+                    }}
                   >
                     <span className="truncate mr-4">{link.title}</span>
                     <ExternalLink size={20} className="shrink-0" />
@@ -148,7 +200,12 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
                   <TemplateShare
                     url={link.url}
                     title={link.title}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 lg:-right-3 lg:-top-3 lg:translate-y-0 lg:shadow-none lg:hover:-translate-y-1 lg:hover:translate-x-1 lg:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:translate-x-0 active:shadow-none bg-white text-black flex justify-between items-center"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 lg:-right-3 lg:-top-3 lg:translate-y-0 lg:shadow-none lg:hover:-translate-y-1 lg:hover:translate-x-1 active:translate-y-0 active:translate-x-0 active:shadow-none flex justify-between items-center"
+                    style={{
+                      backgroundColor: buttonColor,
+                      color: buttonText,
+                      boxShadow: `8px 8px 0px 0px ${borderColor}`,
+                    }}
                     ariaLabel="Share link"
                   >
                     <Share2 size={16} />
@@ -157,8 +214,11 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
               ))}
 
             {/* Socials & Footer */}
-            <div className="border-t-4 border-black">
-              <div className="flex flex-wrap justify-center border-b-4 border-black gap-3 p-4">
+            <div className="border-t-4" style={{ borderColor: borderColor }}>
+              <div
+                className="flex flex-wrap justify-center border-b-4 gap-3 p-4"
+                style={{ borderColor: borderColor }}
+              >
                 {Object.entries(data?.socials)
                   .filter(([_, v]) => v !== "")
                   .map(([key, url]) => (
@@ -167,15 +227,38 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="aspect-square flex items-center justify-center border-4 border-black bg-white text-black font-black uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 hover:-translate-y-1 hover:translate-x-1 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white active:translate-y-0 active:translate-x-0 active:shadow-none"
-                      style={{ width: "48px", height: "48px" }}
+                      className="aspect-square flex items-center justify-center border-4 font-black uppercase transition-all duration-200 hover:-translate-y-1 hover:translate-x-1 active:translate-y-0 active:translate-x-0 active:shadow-none"
+                      style={{
+                        width: "48px",
+                        height: "48px",
+                        borderColor: borderColor,
+                        backgroundColor: buttonColor,
+                        color: buttonText,
+                        boxShadow: `4px 4px 0px 0px ${borderColor}`,
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.boxShadow = `8px 8px 0px 0px ${borderColor}`;
+                        e.currentTarget.style.backgroundColor = borderColor;
+                        e.currentTarget.style.color = bgColor;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow = `4px 4px 0px 0px ${borderColor}`;
+                        e.currentTarget.style.backgroundColor = buttonColor;
+                        e.currentTarget.style.color = buttonText;
+                      }}
                       aria-label={key}
                     >
                       {icons[key as SocialPlatform]}
                     </a>
                   ))}
               </div>
-              <div className="p-4 text-center font-bold text-xs tracking-widest bg-gray-100">
+              <div
+                className="p-4 text-center font-bold text-xs tracking-widest"
+                style={{
+                  backgroundColor: `${bgColor}cc`,
+                  color: textColor,
+                }}
+              >
                 <Footer theme={activeTheme} username={data.username} />
               </div>
             </div>

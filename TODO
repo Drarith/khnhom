@@ -4,4 +4,4 @@ work on caching. now still showing old data - just cache no store lol
 
 catch error when server not available
 
-break word not working tempalte
+need to reenable rate limiting on server side

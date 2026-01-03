@@ -101,7 +101,7 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
                 <h1 className="text-3xl md:text-4xl font-bold tracking-tight drop-shadow-md break-words">
                   {data.displayName}
                 </h1>
-                <div className="block pt-2">
+                <div className={`block pt-2 text-${activeTheme?.text}`}>
                   <Badge
                     username={data.username}
                     isSupporter={data.isSupporter}

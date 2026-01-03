@@ -1,7 +1,7 @@
 import { ProfileData } from "@/types/profileData";
 import { themes } from "@/config/theme";
 import Image from "next/image";
-import { Share2, ExternalLink } from "lucide-react";
+import { Share2 } from "lucide-react";
 import TemplateShare from "./TemplateShare";
 
 import {
@@ -108,7 +108,7 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight drop-shadow-sm break-words">
               {data.displayName}
             </h1>
-            <div className="block pt-2">
+            <div className={`block pt-2 text-${activeTheme?.text}`}>
               <Badge
                 username={data.username}
                 isSupporter={data.isSupporter}

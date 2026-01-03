@@ -92,7 +92,7 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
               >
                 {data.displayName}
               </h1>
-              <div className="block pt-2">
+              <div className={`block pt-2 text-${activeTheme?.text}`}>
                 <Badge
                   username={data.username}
                   isSupporter={data.isSupporter}

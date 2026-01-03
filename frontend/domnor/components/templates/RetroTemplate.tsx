@@ -102,7 +102,7 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
               >
                 {data.displayName}
               </h1>
-              <div className="block pt-2">
+              <div className={`block pt-2 text-${primaryColor}`}>
                 <Badge
                   username={data.username}
                   isSupporter={data.isSupporter}

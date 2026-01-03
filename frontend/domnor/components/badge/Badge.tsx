@@ -105,9 +105,8 @@ export default function Badge({
   }, []);
   return (
     <>
-      {" "}
       <div className="block pt-2">
-        <h4 className="font-bold text-lg inline-flex bg-black text-white px-2 py-0.5 gap-1">
+        <h4 className="font-bold text-lg inline-flex px-2 py-0.5 gap-1">
           @{username}
           {isVerified && (
             <span
