@@ -90,7 +90,7 @@ export default function KhmerRoyalTemplate({ data }: { data: ProfileData }) {
         <div className="relative z-10 w-full max-w-2xl mx-auto p-6 flex flex-col items-center min-h-screen">
           {/* Top Ornament */}
           <div className="w-full h-16 mb-8 relative flex justify-center items-center">
-            <div className="w-32 h-1 bg-gradient-to-r from-transparent via-yellow-500 to-transparent"></div>
+            <div className="w-32 h-1 bg-linear-to-r from-transparent via-yellow-500 to-transparent"></div>
             <div className="absolute w-4 h-4 rotate-45 bg-yellow-500 border-2 border-white"></div>
           </div>
 
@@ -110,7 +110,7 @@ export default function KhmerRoyalTemplate({ data }: { data: ProfileData }) {
               />
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold tracking-wide mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-yellow-500 to-yellow-200 drop-shadow-sm break-words">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-wide mb-2 text-transparent bg-clip-text bg-linear-to-r from-yellow-200 via-yellow-500 to-yellow-200 drop-shadow-sm wrap-break-word">
               {data.displayName}
             </h1>
             <div className={`block pt-2 text-${primaryColor}`}>
