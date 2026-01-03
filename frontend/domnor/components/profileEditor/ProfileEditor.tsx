@@ -10,6 +10,8 @@ import {
   Shield,
   Heart,
   Share2,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import type { ProfileData } from "@/types/profileData";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -425,6 +427,43 @@ export default function ProfileEditor({
     isAdmin,
   ]);
 
+  // Tab Chevron
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+  const checkScroll = () => {
+    if (containerRef.current) {
+      // scrollLeft: is how far we have scrolled from the left
+      // clientWidth: how much the user see
+      // scrollWidth: How wide the content is including the hidden part
+      const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
+    }
+  };
+
+  useEffect(() => {
+    checkScroll();
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener("scroll", checkScroll);
+      window.addEventListener("resize", checkScroll);
+      return () => {
+        container.removeEventListener("scroll", checkScroll);
+        window.removeEventListener("resize", checkScroll);
+      };
+    }
+  }, [activeTab, notPreviewing, isAdmin, checkScroll]);
+
+  const scroll = (direction: "left" | "right") => {
+    if (containerRef.current) {
+      const scrollAmount = 150;
+      containerRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen">
       {notPreviewing ? (
@@ -450,14 +489,40 @@ export default function ProfileEditor({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative">
             {/* Sidebar Navigation */}
             <div className="lg:col-span-3">
-              <div className="bg-foreground rounded-lg shadow-sm p-2 border border-primary/10 relative">
+              <div className="bg-foreground rounded-lg shadow-sm p-2 border border-primary/10 relative group">
+                {/* Left Arrow */}
+                {canScrollLeft && (
+                  <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center bg-linear-to-r from-foreground via-foreground/90 to-transparent px-1 md:hidden rounded-l-lg">
+                    <button
+                      type="button"
+                      onClick={() => scroll("left")}
+                      className="p-1 hover:bg-primary/10 rounded-full transition-colors"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+                  </div>
+                )}
+
+                {/* Right Arrow */}
+                {canScrollRight && (
+                  <div className="absolute right-0 top-0 bottom-0 z-20 flex items-center bg-linear-to-l from-foreground via-foreground/90 to-transparent px-1 md:hidden rounded-r-lg">
+                    <button
+                      type="button"
+                      onClick={() => scroll("right")}
+                      className="p-1 hover:bg-primary/10 rounded-full transition-colors"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
+                )}
+
                 <nav id="nav-tab">
                   <div
                     ref={containerRef}
-                    className="tabs-container overflow-hidden relative space-y-1  md:grid md:grid-cols-1 lg:grid-cols-1 md:gap-2 flex overflow-x-auto no-scrollbar"
+                    className="tabs-container overflow-hidden relative space-y-1 md:grid md:grid-cols-1 lg:grid-cols-1 md:gap-2 flex overflow-x-auto no-scrollbar px-2 md:px-0"
                   >
                     <div
                       ref={highlighterRef}
@@ -482,8 +547,6 @@ export default function ProfileEditor({
                     })}
                   </div>
                 </nav>
-                {/* Fade indicator - only on mobile */}
-                <div className="absolute right-0 top-0 bottom-0 w-8 bg-linear-to-l from-foreground to-transparent pointer-events-none lg:hidden" />
               </div>
               <div className="bg-foreground p-2 mt-6 rounded-lg flex items-center justify-center">
                 <Button
