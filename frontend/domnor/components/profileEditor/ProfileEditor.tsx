@@ -485,6 +485,18 @@ export default function ProfileEditor({
                 {/* Fade indicator - only on mobile */}
                 <div className="absolute right-0 top-0 bottom-0 w-8 bg-linear-to-l from-foreground to-transparent pointer-events-none lg:hidden" />
               </div>
+              <div className="bg-foreground p-2 mt-6 rounded-lg flex items-center justify-center">
+                <Button
+                  type="button"
+                  className="flex items-center gap-2 shadow-xl hover:shadow-2xl transition-all duration-300 px-6 py-3 rounded-full"
+                  onClick={handlePreviewToggle}
+                >
+                  <Eye size={20} />
+                  <span className="font-semibold">
+                    {t("buttons.previewDrag")}
+                  </span>
+                </Button>
+              </div>
             </div>
 
             {/* Main Content */}
@@ -595,16 +607,6 @@ export default function ProfileEditor({
                 </div>
               </form>
             </div>
-          </div>
-          <div className="bg-foreground p-2 mt-6 rounded-lg flex items-center justify-center">
-            <Button
-              type="button"
-              className="flex items-center gap-2 shadow-xl hover:shadow-2xl transition-all duration-300 px-6 py-3 rounded-full"
-              onClick={handlePreviewToggle}
-            >
-              <Eye size={20} />
-              <span className="font-semibold">{t("buttons.previewDrag")}</span>
-            </Button>
           </div>
         </div>
       ) : (

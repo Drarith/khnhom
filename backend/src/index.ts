@@ -17,7 +17,7 @@ import cloudinaryRouter from "./routes/cloudinary.js";
 // import khqrRouter from "./routes/khqrRoute.js";
 import { env } from "../src/config/myEnv.js";
 
-import rateLimit from "./middleware/rateLimit.js";
+// import rateLimit from "./middleware/rateLimit.js";
 
 dotenv.config();
 
@@ -60,7 +60,7 @@ app.use(express.json());
 app.use(express.json({ limit: "100kb" }));
 
 // rate limit middleware
-app.use(rateLimit);
+// app.use(rateLimit);
 
 // User routes
 app.use(userRouter);
