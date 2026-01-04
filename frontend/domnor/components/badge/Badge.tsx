@@ -106,7 +106,7 @@ export default function Badge({
   return (
     <>
       <div className="block pt-2">
-        <h4 className="font-bold text-lg inline-flex px-2 py-0.5 gap-1">
+        <h4 className="font-bold text-lg inline-flex py-0.5 gap-1">
           @{username}
           {isVerified && (
             <span
@@ -124,7 +124,7 @@ export default function Badge({
         </h4>
         {isDev && (
           <span
-            className="cursor-pointer ml-2 inline-block align-middle relative sweep-container overflow-hidden"
+            className="cursor-pointer inline-block align-middle relative sweep-container overflow-hidden"
             onClick={handleToggleDevBadge}
           >
             <Image src={badges.dev} alt="Dev Badge" width={28} height={28} />
@@ -134,7 +134,7 @@ export default function Badge({
         {isSupporter && !isGoldSupporter && (
           <span
             onClick={handleToggleBadge}
-            className="cursor-pointer ml-2 inline-block align-middle relative sweep-container overflow-hidden "
+            className="cursor-pointer inline-block align-middle relative sweep-container overflow-hidden "
           >
             <Image
               src={badges.firstTierSupporterBadge}
@@ -148,7 +148,7 @@ export default function Badge({
         {isGoldSupporter && (
           <span
             onClick={handleToggleGoldBadge}
-            className="cursor-pointer ml-2 inline-block align-middle relative sweep-container overflow-hidden "
+            className="cursor-pointer inline-block align-middle relative sweep-container overflow-hidden "
           >
             <Image
               src={badges.goldTierSupporterBadge}
