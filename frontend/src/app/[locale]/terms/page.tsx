@@ -2,8 +2,8 @@ import React from "react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Domnor",
-  description: "Terms of Service for Domnor.",
+  title: "Terms of Service | Khnhom",
+  description: "Terms of Service for Khnhom.",
 };
 
 export default function TermsOfService() {
@@ -20,7 +20,7 @@ export default function TermsOfService() {
             1. Acceptance of Terms
           </h2>
           <p>
-            By accessing and using Domnor ("the Service"), you accept and agree
+            By accessing and using Khnhom (&quot;the Service&quot;), you accept and agree
             to be bound by the terms and provision of this agreement. In
             addition, when using these particular services, you shall be subject
             to any posted guidelines or rules applicable to such services.
@@ -32,9 +32,9 @@ export default function TermsOfService() {
             2. Description of Service
           </h2>
           <p>
-            Domnor is a platform that allows users to create a personalized page
-            to house all their important links ("Link-in-Bio"). The Service is
-            provided "as is" and is free to use, though we may accept voluntary
+            Khnhom is a platform that allows users to create a personalized page
+            to house all their important links (&quot;Link-in-Bio&quot;). The Service is
+            provided &quot;as is&quot; and is free to use, though we may accept voluntary
             donations to support the platform.
           </p>
         </section>
@@ -58,7 +58,7 @@ export default function TermsOfService() {
           </h2>
           <p>
             You retain all rights to the content (text, images, links) you post
-            on Domnor. However, by posting content, you grant us a worldwide,
+            on Khnhom. However, by posting content, you grant us a worldwide,
             non-exclusive, royalty-free license to use, reproduce, and display
             such content in connection with the Service.
           </p>
@@ -69,7 +69,7 @@ export default function TermsOfService() {
             <li>
               Upload or link to content that is unlawful, harmful, threatening,
               abusive, harassing, defamatory, vulgar, obscene, libelous,
-              invasive of another's privacy, hateful, or racially, ethnically,
+              invasive of another&apos;s privacy, hateful, or racially, ethnically,
               or otherwise objectionable.
             </li>
             <li>Harm minors in any way.</li>
@@ -77,7 +77,7 @@ export default function TermsOfService() {
             <li>
               Upload or link to malware, viruses, or any other malicious code.
             </li>
-            <li>Engage in "spamming" or sending unsolicited messages.</li>
+            <li>Engage in &quot;spamming&quot; or sending unsolicited messages.</li>
           </ul>
           <p className="mt-2">
             We reserve the right to remove any content or terminate any account
@@ -91,7 +91,7 @@ export default function TermsOfService() {
             5. Donations and Payments
           </h2>
           <p>
-            Domnor is free to use. We may provide mechanisms for users to
+            Khnhom is free to use. We may provide mechanisms for users to
             support the platform via donations (e.g., KHQR). Donations are
             voluntary and non-refundable. We are not responsible for any issues
             arising from third-party payment processors.
@@ -105,7 +105,7 @@ export default function TermsOfService() {
           <p>
             The Service and its original content (excluding Content provided by
             users), features, and functionality are and will remain the
-            exclusive property of Domnor and its licensors. The Service is
+            exclusive property of Khnhom and its licensors. The Service is
             protected by copyright, trademark, and other laws of both Cambodia
             and foreign countries.
           </p>
@@ -127,7 +127,7 @@ export default function TermsOfService() {
             8. Limitation of Liability
           </h2>
           <p>
-            In no event shall Domnor, nor its directors, employees, partners,
+            In no event shall Khnhom, nor its directors, employees, partners,
             agents, suppliers, or affiliates, be liable for any indirect,
             incidental, special, consequential or punitive damages, including
             without limitation, loss of profits, data, use, goodwill, or other

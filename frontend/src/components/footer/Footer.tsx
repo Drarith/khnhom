@@ -11,7 +11,7 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
           {/* Brand Section */}
           <div className="col-span-2 md:col-span-1 space-y-3">
-            <h3 className="text-xl font-bold text-white">Domnor</h3>
+            <h3 className="text-xl font-bold text-white">Khnhom</h3>
             <p className="text-sm leading-relaxed max-w-xs">
               {t("brandDescription")}
             </p>
@@ -118,7 +118,7 @@ const Footer = () => {
 
         <div className="border-t border-gray-800 mt-8 pt-6 text-center text-xs text-gray-500">
           <p>
-            &copy; {new Date().getFullYear()} Domnor. {t("allRightsReserved")}
+            &copy; {new Date().getFullYear()} Khnhom. {t("allRightsReserved")}
           </p>
         </div>
       </div>

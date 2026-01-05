@@ -2,8 +2,8 @@ import React from "react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Domnor",
-  description: "Privacy Policy for Domnor - How we handle your data.",
+  title: "Privacy Policy | Khnhom",
+  description: "Privacy Policy for Khnhom - How we handle your data.",
 };
 
 export default function PrivacyPolicy() {
@@ -20,7 +20,7 @@ export default function PrivacyPolicy() {
             1. Introduction
           </h2>
           <p>
-            Welcome to Domnor ("we," "our," or "us"). We are committed to
+            Welcome to Khnhom (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;). We are committed to
             protecting your privacy and ensuring you have a positive experience
             on our website and in using our services. This Privacy Policy
             explains how we collect, use, disclose, and safeguard your
@@ -54,7 +54,7 @@ export default function PrivacyPolicy() {
             </li>
             <li>
               <strong>User Content:</strong> The links, text, and images you
-              choose to display on your Domnor page.
+              choose to display on your Khnhom page.
             </li>
             <li>
               <strong>Usage Data:</strong> Information about how you access and
@@ -89,7 +89,7 @@ export default function PrivacyPolicy() {
           </h2>
           <p>
             We may employ third-party companies and services to facilitate our
-            Service ("Service Providers"), to provide the Service on our behalf,
+            Service (&quot;Service Providers&quot;), to provide the Service on our behalf,
             to perform Service-related services, or to assist us in analyzing
             how our Service is used.
           </p>
@@ -139,7 +139,7 @@ export default function PrivacyPolicy() {
 
         <section>
           <h2 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
-            7. Children's Privacy
+            7. Children&apos;s Privacy
           </h2>
           <p>
             Our Services are not intended for use by children under the age of

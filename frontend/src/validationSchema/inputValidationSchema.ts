@@ -107,7 +107,7 @@ export const SanitizedUrl = (errorMessage?: string) => {
     .refine((val) => val === "" || isValidHttpUrl(val), {
       message:
         errorMessage ||
-        "Must be a valid HTTPS URL. Example: https://domnor.com",
+        "Must be a valid HTTPS URL. Example: https://khnhom.com",
     })
     .transform((val) => (isValidHttpUrl(val) ? val : ""))
     .default("");

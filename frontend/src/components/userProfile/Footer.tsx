@@ -32,7 +32,7 @@ export default function Footer({ theme, username }: FooterProps) {
           className="font-bold text-base md:text-lg hover:opacity-80 transition-opacity"
           style={{ color: theme?.text }}
         >
-          Domnor
+          Khnhom
         </Link>
       </div>
     </footer>

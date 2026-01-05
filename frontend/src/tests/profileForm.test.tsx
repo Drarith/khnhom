@@ -46,7 +46,7 @@ const messages = {
       maxLength: "Must be at most {max} characters",
       usernamePattern:
         "Username can contain only letters, numbers and underscores",
-      invalidUrl: "Must be a valid HTTPS URL. Example: https://domnor.com",
+      invalidUrl: "Must be a valid HTTPS URL. Example: https://khnhom.com",
     },
   },
   socialMediaForm: {

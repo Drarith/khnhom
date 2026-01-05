@@ -109,7 +109,7 @@ export default function ProfileForm() {
     <section className="min-h-screen w-full bg-foreground px-4 py-8">
       <div className="mx-auto w-full max-w-4xl rounded-3xl border border-primary/10 bg-foreground px-6 py-8 shadow-2xl md:px-10 md:py-12">
         <header className="space-y-2 border-b border-primary/10 pb-6">
-          <h1 className="text-primary text-2xl">DOMNOR</h1>
+          <h1 className="text-primary text-2xl">Khnhom</h1>
           <p className="text-sm uppercase tracking-[0.2em] text-primary/70">
             {t("common.page")}
           </p>

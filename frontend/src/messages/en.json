@@ -1,6 +1,6 @@
 {
   "homepage": {
-    "title": "Domnor",
+    "title": "Khnhom",
     "slogan": "Just Connect",
     "googleLabel": "Continue with Google",
     "headSection": {
@@ -11,7 +11,7 @@
     }
   },
   "metadata": {
-    "title": "Domnor",
+    "title": "Khnhom",
     "description": "A home for all your social media links. Made especially for Cambodians."
   },
   "profileSetupPage": {
@@ -38,7 +38,7 @@
       "minLength": "Must be at least {min} characters",
       "maxLength": "Must be at most {max} characters",
       "usernamePattern": "Username can contain only letters, numbers and underscores",
-      "invalidUrl": "Must be a valid HTTPS URL. Example: https://domnor.com"
+      "invalidUrl": "Must be a valid HTTPS URL. Example: https://Khnhom.com"
     },
     "socialMediaInput": {
       "added": "Added",
@@ -177,7 +177,7 @@
     },
     "donationTab": {
       "title": "Contribution",
-      "description": "Domnor is a free platform and will forever remain so. Your support will make it better over time.",
+      "description": "Khnhom is a free platform and will forever remain so. Your support will make it better over time.",
       "totalReceived": "Total Donations Received: ${amount}",
       "unlockBadge5": "Unlock supporter badge at $5",
       "unlockBadge20": "Unlock supporter badge at $20",
@@ -252,12 +252,12 @@
       "badge": "The Digital Home for Cambodia",
       "titleLine1": "Your World,",
       "titleLine2": "One Link Away.",
-      "description": "Domnor simplifies your digital presence. A single, elegant page to showcase who you are, what you create, and how to support you."
+      "description": "Khnhom simplifies your digital presence. A single, elegant page to showcase who you are, what you create, and how to support you."
     },
     "features": {
       "localized": {
         "title": "Truly Localized",
-        "description": "Built from the ground up for the Khmer community. Domnor feels native, with full Khmer language support and an interface designed for how we connect."
+        "description": "Built from the ground up for the Khmer community. Khnhom feels native, with full Khmer language support and an interface designed for how we connect."
       },
       "khqr": {
         "title": "KHQR Integrated",
@@ -275,9 +275,9 @@
     "story": {
       "badge": "The Developer",
       "title": "Built with Purpose.",
-      "p1": "Hi. My name is Sarin Dararith, I'm a self-taught developer. Domnor began as a personal challenge, a desire to solve a simple but persistent problem I saw around me.",
+      "p1": "Hi. My name is Sarin Dararith, I'm a self-taught developer. Khnhom began as a personal challenge, a desire to solve a simple but persistent problem I saw around me.",
       "p2": "In Cambodia, we have a unique digital landscape. I wanted to build something that didn't just copy existing platforms, but respected our local context. Our online presence is growing exponentially, but many of us still manually share our socials presence in a scatter way. Many of us still go to our banking app each time we need to share our QR code.",
-      "p3": "Domnor is more than just a link-in-bio tool. It's a commitment to building better digital infrastructure for our community.",
+      "p3": "Khnhom is more than just a link-in-bio tool. It's a commitment to building better digital infrastructure for our community.",
       "founderName": "Sarin Dararith",
       "founderRole": "Founder & Developer"
     }

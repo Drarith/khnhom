@@ -184,7 +184,7 @@ export default function Badge({
                 </div>
                 <div className="text-xs text-gray-600 mt-1">
                   {username.charAt(0).toUpperCase() + username.slice(1)} ·
-                  Contributor to Domnor
+                  Contributor to Khnhom
                 </div>
               </div>
               <button
@@ -223,7 +223,7 @@ export default function Badge({
                 </div>
                 <div className="text-xs text-gray-600 mt-1">
                   {username.charAt(0).toUpperCase() + username.slice(1)} · Major
-                  contributor to Domnor
+                  contributor to Khnhom
                 </div>
               </div>
               <button
