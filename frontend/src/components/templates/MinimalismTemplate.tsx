@@ -122,14 +122,7 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-colors duration-300"
-                  style={{ color: activeTheme?.text, opacity: 0.4 }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.opacity = "1";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.opacity = "0.4";
-                  }}
+                  className="transition-opacity duration-300 md:hover:opacity-100 md:opacity-70"
                   aria-label={key}
                 >
                   {icons[key as SocialPlatform]}
@@ -184,7 +177,7 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
             </div>
           )}
 
-          <div className="mt-auto pt-12 opacity-50 hover:opacity-100 transition-opacity duration-500">
+          <div className="mt-auto pt-12 transition-opacity duration-500">
             <Footer theme={activeTheme} username={data.username} />
           </div>
         </div>

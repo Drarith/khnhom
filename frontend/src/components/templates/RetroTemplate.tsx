@@ -1,7 +1,7 @@
 import { ProfileData } from "@/types/profileData";
 import { themes } from "@/config/theme";
 import Image from "next/image";
-import { Share2, ExternalLink } from "lucide-react";
+import { Share2 } from "lucide-react";
 import TemplateShare from "./TemplateShare";
 import {
   SiTiktok,
@@ -12,7 +12,6 @@ import {
   SiGithub,
   SiFacebook,
 } from "@icons-pack/react-simple-icons";
-import Footer from "../userProfile/Footer";
 import { backgroundImages } from "@/config/background";
 import Badge from "../badge/Badge";
 
@@ -26,174 +25,202 @@ type SocialPlatform =
   | "github";
 
 export default function RetroTemplate({ data }: { data: ProfileData }) {
-  const activeTheme = themes.find((theme) => {
-    return theme.name === data.theme;
-  });
+  const activeTheme = themes.find((theme) => theme.name === data.theme);
+
+  // Fallbacks
+  const primaryColor = activeTheme?.text || "#4ade80"; // Phosphor color
+  const secondaryColor = activeTheme?.button || "#22c55e"; // Highlight
+  const bgColor = activeTheme?.bg || "#000000";
+  const buttonTextColor = activeTheme?.buttonText || "#000000";
+
   const icons: Record<SocialPlatform, React.ReactElement> = {
-    facebook: <SiFacebook className="w-6 h-6" />,
-    x: <SiX className="w-6 h-6" />,
-    instagram: <SiInstagram className="w-6 h-6" />,
-    tiktok: <SiTiktok className="w-6 h-6" />,
-    telegram: <SiTelegram className="w-6 h-6" />,
-    youtube: <SiYoutube className="w-6 h-6" />,
-    github: <SiGithub className="w-6 h-6" />,
+    facebook: <SiFacebook className="w-5 h-5" />,
+    x: <SiX className="w-5 h-5" />,
+    instagram: <SiInstagram className="w-5 h-5" />,
+    tiktok: <SiTiktok className="w-5 h-5" />,
+    telegram: <SiTelegram className="w-5 h-5" />,
+    youtube: <SiYoutube className="w-5 h-5" />,
+    github: <SiGithub className="w-5 h-5" />,
   };
 
   const backgroundImage = backgroundImages.find(
     (bg) => bg.name === data.backgroundImage
   )?.url;
 
-  const primaryColor = activeTheme?.text || "#4ade80";
-  const secondaryColor = activeTheme?.button || "#22c55e";
-
   return (
-    <div
-      className="w-full min-h-screen flex flex-col relative font-mono overflow-hidden"
-      style={{ backgroundColor: activeTheme?.bg }}
-    >
-      {/* Background Pattern */}
-      <div
-        className="absolute inset-0 opacity-10 pointer-events-none z-0"
-        style={{
-          backgroundImage: `radial-gradient(${primaryColor} 1px, transparent 1px)`,
-          backgroundSize: "20px 20px",
-        }}
-      />
-
-      {/* Background Image Layer */}
-      {data.backgroundImage && (
-        <div className="absolute inset-0 z-0 opacity-30 grayscale contrast-125">
-          <Image
-            src={backgroundImage!}
-            alt="background"
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
-      )}
-
-      <div className="relative z-10 flex flex-col items-center w-full max-w-2xl mx-auto p-6 space-y-8">
-        {/* Profile Header */}
+    <div className="min-h-screen w-full bg-neutral-900 flex items-center justify-center p-4 font-mono overflow-hidden relative">
+      {/* CRT Monitor Casing Effect */}
+      <div className="relative w-full  min-h-screen rounded-lg border-[16px] border-neutral-800 shadow-2xl overflow-hidden bg-black">
+        {/* Screen Content */}
         <div
-          className="w-full border-4 p-6 bg-black shadow-[8px_8px_0px_0px]"
-          style={{
-            borderColor: secondaryColor,
-            boxShadow: `8px 8px 0px 0px ${secondaryColor}`,
-          }}
+          className="absolute inset-0 overflow-y-auto overflow-x-hidden scrollbar-hide"
+          style={{ backgroundColor: bgColor }}
         >
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            <div
-              className="relative w-32 h-32 shrink-0 border-2"
-              style={{ borderColor: secondaryColor }}
-            >
+          {/* Background Image if exists */}
+          {data.backgroundImage && backgroundImage && (
+            <div className="absolute inset-0 opacity-20 z-0">
               <Image
-                src={data.profilePictureUrl}
-                alt="profile picture"
+                src={backgroundImage}
+                alt="bg"
                 fill
-                className="object-cover grayscale hover:grayscale-0 transition-all duration-300"
-                priority
+                className="object-cover grayscale"
               />
             </div>
-            <div className="text-center md:text-left space-y-2 min-w-0">
-              <h1
-                className="text-3xl md:text-4xl font-bold uppercase tracking-widest glitch-text break-words"
-                style={{ color: primaryColor }}
-              >
-                {data.displayName}
-              </h1>
-              <div className={`block pt-2 text-${primaryColor}`}>
-                <Badge
-                  username={data.username}
-                  isSupporter={data.isSupporter}
-                  isGoldSupporter={data.isGoldSupporter}
-                  isVerified={data.isVerified}
-                  isDev={data.isDev}
-                />
-              </div>
-              {data.bio && (
-                <p
-                  className="text-sm leading-relaxed border-t pt-2 mt-2 wrap-break-word"
+          )}
+
+          {/* Grid Pattern */}
+          <div
+            className="absolute inset-0 opacity-10 pointer-events-none z-0"
+            style={{
+              backgroundImage: `linear-gradient(${primaryColor} 1px, transparent 1px), linear-gradient(90deg, ${primaryColor} 1px, transparent 1px)`,
+              backgroundSize: "20px 20px",
+            }}
+          />
+
+          {/* Main Content Container */}
+          <div className="relative z-10 p-6 md:p-10 flex flex-col items-center gap-8 min-h-full">
+            {/* Header / Status Bar */}
+            <div
+              className="w-full flex justify-between text-xs uppercase tracking-widest border-b pb-2 mb-4"
+              style={{ borderColor: secondaryColor, color: secondaryColor }}
+            >
+              <span>SYS.PROFILE.V1</span>
+              <span className="animate-pulse">ONLINE</span>
+            </div>
+
+            {/* Profile Section */}
+            <div className="flex flex-col items-center gap-6 w-full">
+              <div className="relative group">
+                <div
+                  className="absolute -inset-2 border-2 border-dashed animate-[spin_10s_linear_infinite] rounded-full opacity-50"
+                  style={{ borderColor: secondaryColor }}
+                ></div>
+                <div
+                  className="relative w-32 h-32 border-4 overflow-hidden"
                   style={{
-                    color: primaryColor,
-                    opacity: 0.8,
-                    borderColor: `${secondaryColor}80`,
+                    borderColor: primaryColor,
+                    boxShadow: `0 0 15px ${primaryColor}40`,
                   }}
                 >
-                  {">"} {data.bio}
-                  <span className="animate-pulse">_</span>
-                </p>
+                  <Image
+                    src={data.profilePictureUrl}
+                    alt={data.displayName}
+                    fill
+                    className="object-cover grayscale contrast-125"
+                  />
+                  {/* Scanline on image */}
+                  <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.5)_50%)] bg-[length:100%_4px] pointer-events-none opacity-50"></div>
+                </div>
+              </div>
+
+              <div className="text-center space-y-2">
+                <h1
+                  className="text-3xl md:text-5xl font-bold uppercase tracking-tighter"
+                  style={{
+                    color: primaryColor,
+                    textShadow: `2px 2px 0px ${secondaryColor}`,
+                  }}
+                >
+                  {data.displayName}
+                </h1>
+                <div className="flex justify-center items-center gap-2">
+                  <Badge
+                    username={data.username}
+                    isSupporter={data.isSupporter}
+                    isGoldSupporter={data.isGoldSupporter}
+                    isVerified={data.isVerified}
+                    isDev={data.isDev}
+                  />
+                </div>
+              </div>
+
+              {data.bio && (
+                <div
+                  className="max-w-lg w-full border-l-4 pl-4 py-2 bg-black/20 backdrop-blur-sm"
+                  style={{ borderColor: secondaryColor }}
+                >
+                  <p
+                    className="text-sm md:text-base leading-relaxed"
+                    style={{ color: primaryColor }}
+                  >
+                    <span className="mr-2 opacity-50">{">"}</span>
+                    {data.bio}
+                    <span
+                      className="inline-block w-2 h-4 ml-1 align-middle animate-pulse"
+                      style={{ backgroundColor: primaryColor }}
+                    ></span>
+                  </p>
+                </div>
               )}
+            </div>
+
+            {/* Socials */}
+            <div className="flex flex-wrap justify-center gap-4 w-full max-w-xl">
+              {Object.entries(data?.socials || {})
+                .filter(([_, v]) => v)
+                .map(([key, url]) => (
+                  <a
+                    key={key}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 border hover:scale-110 transition-transform duration-200 bg-black/10"
+                    style={{
+                      borderColor: secondaryColor,
+                      color: secondaryColor,
+                      boxShadow: `4px 4px 0px ${secondaryColor}40`,
+                    }}
+                  >
+                    {icons[key as SocialPlatform]}
+                  </a>
+                ))}
+            </div>
+
+            {/* Links */}
+            <div className="w-full max-w-xl space-y-4 mt-4">
+              {data.links?.map((link) => (
+                <div key={link._id} className="relative group w-full">
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full p-4 border-2 text-center uppercase font-bold tracking-widest transition-all hover:-translate-y-1 hover:translate-x-1"
+                    style={{
+                      borderColor: primaryColor,
+                      color: buttonTextColor,
+                      backgroundColor: secondaryColor,
+                      boxShadow: `6px 6px 0px ${primaryColor}80`,
+                    }}
+                  >
+                    {link.title}
+                  </a>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <TemplateShare
+                      url={link.url}
+                      title={link.title}
+                      style={{ color: buttonTextColor }}
+                    >
+                      <Share2 size={16} />
+                    </TemplateShare>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Footer / System Info */}
+            <div
+              className="mt-auto pt-10 w-full text-center text-[10px] uppercase opacity-60"
+              style={{ color: primaryColor }}
+            >
+              MEM: 64KB OK • SYSTEM: DOMNOR-OS • {new Date().getFullYear()}
             </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-4 justify-center">
-          {Object.entries(data?.socials || {})
-            .filter(([_, v]) => v !== "")
-            .map(([key, url]) => (
-              <a
-                key={key}
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 transition-colors"
-                style={{ color: secondaryColor }}
-                aria-label={key}
-              >
-                {icons[key as SocialPlatform]}
-              </a>
-            ))}
-        </div>
-
-        {/* Links */}
-        {data.links && data.links.length > 0 && (
-          <div className="w-full space-y-4">
-            {data.links.map((link) => (
-              <div key={link._id} className="relative group">
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full block text-center border-2 bg-black py-4 pl-4 pr-14 font-bold text-lg uppercase tracking-wider transition-all hover:translate-x-[2px] hover:translate-y-[2px]"
-                  style={{
-                    borderColor: secondaryColor,
-                    color: primaryColor,
-                    boxShadow: `4px 4px 0px 0px ${secondaryColor}80`,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = secondaryColor;
-                    e.currentTarget.style.color = "black";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "black";
-                    e.currentTarget.style.color = primaryColor;
-                    e.currentTarget.style.boxShadow = `4px 4px 0px 0px ${secondaryColor}80`;
-                  }}
-                >
-                  [{link.title}]
-                </a>
-                <TemplateShare
-                  url={link.url}
-                  title={link.title}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 transition-colors z-10 bg-black border-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
-                  ariaLabel="Share link"
-                  style={{ color: secondaryColor, borderColor: secondaryColor }}
-                >
-                  <Share2 size={18} />
-                </TemplateShare>
-              </div>
-            ))}
-          </div>
-        )}
-
-        <div
-          className="mt-8 text-xs uppercase"
-          style={{ color: secondaryColor }}
-        >
-          SYSTEM READY...
-        </div>
+        {/* CRT Overlay Effects */}
+        <div className="absolute inset-0 pointer-events-none z-50 rounded-lg shadow-[inset_0_0_100px_rgba(0,0,0,0.9)]"></div>
+        <div className="absolute inset-0 pointer-events-none z-40 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] bg-repeat"></div>
+        <div className="absolute inset-0 pointer-events-none z-50 bg-[radial-gradient(circle,transparent_60%,rgba(0,0,0,0.4)_100%)]"></div>
       </div>
     </div>
   );

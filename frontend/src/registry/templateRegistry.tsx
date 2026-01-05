@@ -7,11 +7,16 @@ import GlassmorphismTemplate from "../components/templates/GlassmorphismTemplate
 import EditorialTemplate from "../components/templates/EditorialTemplate";
 import NeobrutalismTemplate from "../components/templates/NeobrutalismTemplate";
 import KhmerRoyalTemplate from "../components/templates/KhmerRoyalTemplate";
+import NeumorphismTemplate from "../components/templates/NeumorphismTemplate";
 
 export const templates: Record<string, TemplateConfig> = {
   default: {
     name: "Default",
     component: DefaultTemplate,
+  },
+  neumorphism: {
+    name: "Neumorphism",
+    component: NeumorphismTemplate,
   },
   brutalist: {
     name: "Brutalist",

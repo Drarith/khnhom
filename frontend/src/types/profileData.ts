@@ -39,4 +39,13 @@ export interface ProfileData {
   isDev: boolean;
 }
 
-export type TemplateType = "default" | "brutalist";
+export type TemplateType =
+  | "default"
+  | "brutalist"
+  | "retro"
+  | "minimalism"
+  | "glassmorphism"
+  | "editorial"
+  | "neobrutalism"
+  | "khmerroyal"
+  | "neumorphism";

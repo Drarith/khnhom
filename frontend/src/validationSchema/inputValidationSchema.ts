@@ -180,6 +180,8 @@ export const editProfileFormInputSchema = (
         "editorial",
         "neobrutalism",
         "khmerroyal",
+        "neumorphism",
+        
       ])
       .optional(),
     backgroundImage: z.string().optional(),
