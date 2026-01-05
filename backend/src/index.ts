@@ -14,17 +14,25 @@ import { v2 as cloudinary } from "cloudinary";
 import userRouter from "./routes/userRoute.js";
 import profileRouter from "./routes/profileRoute.js";
 import cloudinaryRouter from "./routes/cloudinary.js";
+import helmet from "helmet";
 // import khqrRouter from "./routes/khqrRoute.js";
 import { env } from "../src/config/myEnv.js";
 
-// import rateLimit from "./middleware/rateLimit.js";
+import rateLimit from "./middleware/rateLimit.js";
 
 dotenv.config();
 
 // Initialize the Express application
 const app = express();
-const port = env.PORT || 4000;
+const port = env.PORT;
 const FRONTEND_URL = process.env.FRONTEND_URL;
+
+const requiredEnvVars = ["MONGO_URI", "JWT_SECRET", "REFRESH_TOKEN_SECRET", "CLOUDINARY_CLOUD_NAME", "CLOUDINARY_API_KEY"];
+requiredEnvVars.forEach((varName) => {
+  if (!process.env[varName]) {
+    throw new Error(`Missing required environment variable: ${varName}`);
+  }
+});
 
 cloudinary.config({
   cloud_name: env.CLOUDINARY_CLOUD_NAME,
@@ -59,8 +67,19 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.json({ limit: "100kb" }));
 
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        imgSrc: ["'self'", "https://res.cloudinary.com"],
+      },
+    },
+  })
+);
+
 // rate limit middleware
-// app.use(rateLimit);
+app.use(rateLimit);
 
 // User routes
 app.use(userRouter);
@@ -70,10 +89,6 @@ app.use(cloudinaryRouter);
 
 // Profile routes
 app.use(profileRouter);
-
-
-
-
 
 app.get("/", async (req, res) => {
   res.send("Hello from Express + TypeScript!!!");

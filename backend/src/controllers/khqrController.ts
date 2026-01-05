@@ -276,6 +276,8 @@ export const paymentEventsHandler = (req: Request, res: Response) => {
   }
   pollBakong(md5);
 
+  // Turned Off because we let the timer run till the end.
+  
   // Clean up if user closes tab
   // req.on("close", () => {
   //   console.log(`[SSE] Connection closed for ${md5}`);
