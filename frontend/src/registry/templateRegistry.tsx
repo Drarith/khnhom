@@ -42,8 +42,4 @@ export const templates: Record<string, TemplateConfig> = {
     name: "Neobrutalism",
     component: NeobrutalismTemplate,
   },
-  khmerroyal: {
-    name: "Khmer Royal",
-    component: KhmerRoyalTemplate,
-  },
 };
