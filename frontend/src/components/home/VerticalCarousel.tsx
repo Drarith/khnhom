@@ -121,7 +121,7 @@ export default function VerticalCarousel() {
               alt={`image-${i}`}
               src={image.url}
               fill
-              className="rounded-2xl shadow-2xl object-cover border-4 border-white"
+              className="rounded-2xl shadow-2xl border-4 border-white object-contain"
               priority={i === images.length - 1} // Prioritize loading the top image
             />
           </div>
@@ -131,7 +131,7 @@ export default function VerticalCarousel() {
       {/* Down Arrow - Discards cards */}
       <button
         onClick={handleNext}
-        disabled={activeIndex < 0}
+        disabled={activeIndex < 1}
         className="p-2 md:p-4 rounded-full hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity chevron-down invisible"
       >
         <ChevronDown className="w-6 h-6 md:w-8 md:h-8" />
