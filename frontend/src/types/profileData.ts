@@ -47,5 +47,4 @@ export type TemplateType =
   | "glassmorphism"
   | "editorial"
   | "neobrutalism"
-  | "khmerroyal"
   | "neumorphism";

@@ -181,7 +181,6 @@ export const editProfileFormInputSchema = (
         "neobrutalism",
         "khmerroyal",
         "neumorphism",
-        
       ])
       .optional(),
     backgroundImage: z.string().optional(),
@@ -216,6 +215,7 @@ export const profileFormEditorInputSchema = z.object({
       "glassmorphism",
       "editorial",
       "neobrutalism",
+      "khmerroyal",
       "neumorphism",
     ])
     .optional(),

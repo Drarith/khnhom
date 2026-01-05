@@ -19,10 +19,10 @@ export const LanguageToggle = () => {
   };
 
   return (
-    <div className="relative flex w-40 md:w-56 md:h-11 bg-zinc-100 dark:bg-zinc-800 rounded-full p-1 cursor-pointer select-none">
+    <div className="relative flex w-40 md:w-56 md:h-11 bg-zinc-100 dark:bg-zinc-800 rounded-full p-1 select-none">
       {/* Animated Sliding Background */}
       <div
-        className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white dark:bg-zinc-600 rounded-full shadow-sm transition-transform duration-300 ease-out will-change-transform ${
+        className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white dark:bg-zinc-600 rounded-full shadow-sm transition-transform duration-300 ease-out will-change-transform  ${
           locale === "kh" ? "translate-x-0" : "translate-x-full"
         }`}
       />
@@ -31,7 +31,7 @@ export const LanguageToggle = () => {
       <button
         onClick={() => handleToggle("kh")}
         disabled={isPending}
-        className={`relative z-10 flex-1 text-sm font-semibold transition-colors duration-200 ${
+        className={`relative z-10 flex-1 text-sm font-semibold transition-colors duration-200 cursor-pointer  ${
           locale === "kh" ? "text-zinc-900 dark:text-white" : "text-zinc-500"
         } disabled:opacity-50`}
       >
@@ -41,7 +41,7 @@ export const LanguageToggle = () => {
       <button
         onClick={() => handleToggle("en")}
         disabled={isPending}
-        className={`relative z-10 flex-1 text-sm font-semibold transition-colors duration-200 ${
+        className={`relative z-10 flex-1 text-sm font-semibold transition-colors duration-200 cursor-pointer  ${
           locale === "en" ? "text-zinc-900 dark:text-white" : "text-zinc-500"
         } disabled:opacity-50`}
       >

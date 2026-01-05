@@ -481,7 +481,7 @@ export default function ProfileEditor({
               </div>
               <Button
                 onClick={() => setShowShareModal(true)}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 cursor-pointer"
               >
                 <Share2 size={18} />
                 {/* {t("buttons.share", { defaultValue: "Share" })} */}
@@ -499,7 +499,7 @@ export default function ProfileEditor({
                     <button
                       type="button"
                       onClick={() => scroll("left")}
-                      className="p-1 hover:bg-primary/10 rounded-full transition-colors"
+                      className="p-1 hover:bg-primary/10 rounded-full transition-colors cursor-pointer"
                     >
                       <ChevronLeft size={20} />
                     </button>
@@ -512,7 +512,7 @@ export default function ProfileEditor({
                     <button
                       type="button"
                       onClick={() => scroll("right")}
-                      className="p-1 hover:bg-primary/10 rounded-full transition-colors"
+                      className="p-1 hover:bg-primary/10 rounded-full transition-colors cursor-pointer"
                     >
                       <ChevronRight size={20} />
                     </button>
@@ -536,7 +536,7 @@ export default function ProfileEditor({
                           key={tab.id}
                           data-id={tab.id}
                           onClick={() => setActiveTab(tab.id)}
-                          className={`w-full flex flex-1 items-center gap-3 px-4 py-3 rounded-lg transition-colors relative z-10 whitespace-nowrap ${
+                          className={`w-full flex flex-1 items-center gap-3 px-4 py-3 rounded-lg transition-colors relative z-10 whitespace-nowrap cursor-pointer ${
                             activeTab === tab.id ? "text-foreground" : ""
                           }`}
                         >
@@ -551,7 +551,7 @@ export default function ProfileEditor({
               <div className="bg-foreground p-2 mt-6 rounded-lg flex items-center justify-center">
                 <Button
                   type="button"
-                  className="flex items-center gap-2 shadow-xl hover:shadow-2xl transition-all duration-300 px-6 py-3 rounded-full"
+                  className="flex items-center gap-2 shadow-xl hover:shadow-2xl transition-all duration-300 px-6 py-3 rounded-full cursor-pointer"
                   onClick={handlePreviewToggle}
                 >
                   <Eye size={20} />
@@ -601,7 +601,7 @@ export default function ProfileEditor({
                       theme={theme}
                       selectedTemplate={selectedTemplate || "default"}
                       backgroundImage={backgroundImage || ""}
-                      setValue={profileSetValue}
+                      setValue={profileSetValue }
                     />
                   )}
                   {/* Generate QR Code tab, will name later maybe ._. */}
@@ -654,6 +654,7 @@ export default function ProfileEditor({
                             data-button="cool"
                             type="button"
                             variant="secondary"
+                            className="cursor-pointer"
                           >
                             {t("buttons.cancel")}
                           </Button>
@@ -661,6 +662,7 @@ export default function ProfileEditor({
                             disabled={!profileIsValid}
                             type="submit"
                             isLoading={isProfilePending}
+                            className="cursor-pointer"
                           >
                             {t("buttons.saveChanges")}
                           </Button>
@@ -678,7 +680,7 @@ export default function ProfileEditor({
           <div className="fixed bottom-8 right-8 z-50">
             <Button
               type="button"
-              className="flex items-center gap-2 shadow-xl hover:shadow-2xl transition-all duration-300 px-6 py-3 rounded-full"
+              className="flex items-center gap-2 shadow-xl hover:shadow-2xl transition-all duration-300 px-6 py-3 rounded-full cursor-pointer"
               onClick={handlePreviewToggle}
             >
               <Palette size={20} />
@@ -689,7 +691,7 @@ export default function ProfileEditor({
       )}
 
       {showShareModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 cursor-pointer">
           <SocialShare
             url={`${window.location.origin}/${initialData?.username}`}
             onClose={() => setShowShareModal(false)}

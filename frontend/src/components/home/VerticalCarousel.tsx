@@ -100,7 +100,7 @@ export default function VerticalCarousel() {
       <button
         onClick={handlePrev}
         disabled={activeIndex >= images.length - 1}
-        className="p-2 md:p-4 rounded-full hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity chevron-up invisible"
+        className="p-2 md:p-4 cursor-pointer  rounded-full hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity chevron-up invisible"
       >
         <ChevronUp className="w-6 h-6 md:w-8 md:h-8" />
       </button>
@@ -134,7 +134,7 @@ export default function VerticalCarousel() {
       <button
         onClick={handleNext}
         disabled={activeIndex < 1}
-        className="p-2 md:p-4 rounded-full hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity chevron-down invisible"
+        className="p-2 md:p-4 cursor-pointer  rounded-full hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity chevron-down invisible"
       >
         <ChevronDown className="w-6 h-6 md:w-8 md:h-8" />
       </button>

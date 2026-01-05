@@ -5,15 +5,10 @@ import { themes } from "@/config/theme";
 import { templates } from "@/registry/templateRegistry";
 import { backgroundImages } from "@/config/background";
 import { UseFormSetValue } from "react-hook-form";
-import { profileFormEditorInputSchema } from "@/validationSchema/inputValidationSchema";
-import { z } from "zod";
+import type { ProfileFormEditorInputValues } from "@/types/profileFormInput";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ThemeButton } from "@/gsap/themeButton";
-
-type ProfileFormEditorInputValues = z.infer<
-  typeof profileFormEditorInputSchema
->;
 
 interface AppearanceTabProps {
   initialData?: ProfileData;
@@ -35,7 +30,9 @@ export default function AppearanceTab({
     setValue("theme", themeName, { shouldValidate: true });
   }
 
-  function onTemplateSelect(templateKey: ProfileFormEditorInputValues["selectedTemplate"]) {
+  function onTemplateSelect(
+    templateKey: ProfileFormEditorInputValues["selectedTemplate"]
+  ) {
     setValue("selectedTemplate", templateKey, { shouldValidate: true });
   }
 
@@ -74,10 +71,7 @@ export default function AppearanceTab({
       <div ref={buttonContainerRef}>
         <div>
           <h3 className="font-medium text-primary mb-4">{t("themeColor")}</h3>
-          <div
-            
-            className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3"
-          >
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
             {themes.map((t) => {
               return (
                 <ThemeCard
