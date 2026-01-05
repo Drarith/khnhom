@@ -17,10 +17,63 @@ import ConditionalFooter from "@/components/footer/ConditionalFooter";
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
+  const baseUrl =
+    process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
 
   return {
-    title: t("title"),
+    title: {
+      default: t("title"),
+      template: `%s | ${t("title")}`,
+    },
     description: t("description"),
+    keywords: [
+      "link in bio",
+      "social media",
+      "profile",
+      "cambodia",
+      "khnhom",
+      "links",
+    ],
+    authors: [{ name: "Khnhom" }],
+    creator: "Khnhom",
+    metadataBase: new URL(baseUrl),
+    alternates: {
+      canonical: `${baseUrl}/${locale}`,
+      languages: {
+        en: `${baseUrl}/en`,
+        kh: `${baseUrl}/kh`,
+      },
+    },
+    openGraph: {
+      title: t("title"),
+      description: t("description"),
+      url: `${baseUrl}/${locale}`,
+      siteName: "Khnhom",
+      locale: locale === "kh" ? "km_KH" : "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+    verification: {
+      // Add your verification codes when ready
+      // google: 'your-google-site-verification',
+      // yandex: 'your-yandex-verification',
+      // bing: 'your-bing-verification',
+    },
   };
 }
 

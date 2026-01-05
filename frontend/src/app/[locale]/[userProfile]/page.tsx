@@ -2,6 +2,7 @@ import { cache } from "react";
 import { Metadata } from "next";
 import UserProfile from "@/components/userProfile/UserProfile";
 import ProfileNotFound from "@/components/erro/ProfileNotFound";
+import StructuredData from "@/components/StructuredData";
 import { ProfileData } from "@/types/profileData";
 
 const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -47,18 +48,62 @@ const getProfile = cache(
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ userProfile: string }>;
+  params: Promise<{ userProfile: string; locale: string }>;
 }): Promise<Metadata> {
-  const { userProfile } = await params;
+  const { userProfile, locale } = await params;
   const result = await getProfile(userProfile);
+  const baseUrl =
+    process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
 
   if (result.status === "success") {
     const profile = result.data;
+    const title = profile.displayName || profile.username;
+    const description = profile.bio || `Check out ${title}'s profile`;
+    const imageUrl = profile.profilePictureUrl || "/default-profile.png";
+    const url = `${baseUrl}/${locale}/${userProfile}`;
+
     return {
-      title: profile.displayName || profile.username,
-      description: profile.bio || "Profile",
+      title,
+      description,
+      alternates: {
+        canonical: url,
+        languages: {
+          en: `${baseUrl}/en/${userProfile}`,
+          kh: `${baseUrl}/kh/${userProfile}`,
+        },
+      },
       openGraph: {
-        images: [profile.profilePictureUrl || "/default-profile.png"],
+        title,
+        description,
+        url,
+        siteName: "Khnhom",
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: `${title}'s profile picture`,
+          },
+        ],
+        locale: locale === "kh" ? "km_KH" : "en_US",
+        type: "profile",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: [imageUrl],
+      },
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          "max-video-preview": -1,
+          "max-image-preview": "large",
+          "max-snippet": -1,
+        },
       },
     };
   }
@@ -68,15 +113,19 @@ export async function generateMetadata({
       result.status === "not_found"
         ? "Profile Not Found"
         : "Error Loading Profile",
+    robots: {
+      index: false,
+      follow: false,
+    },
   };
 }
 
 export default async function UserProfilePage({
   params,
 }: {
-  params: Promise<{ userProfile: string }>;
+  params: Promise<{ userProfile: string; locale: string }>;
 }) {
-  const { userProfile } = await params;
+  const { userProfile, locale } = await params;
   const result = await getProfile(userProfile);
 
   if (result.status === "error") {
@@ -105,5 +154,10 @@ export default async function UserProfilePage({
     );
   }
 
-  return <UserProfile data={data} />;
+  return (
+    <>
+      <StructuredData data={data} locale={locale} />
+      <UserProfile data={data} />
+    </>
+  );
 }
