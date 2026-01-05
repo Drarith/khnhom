@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: `${baseUrl}/${locale}`,
       languages: {
         en: `${baseUrl}/en`,
-        kh: `${baseUrl}/kh`,
+        km: `${baseUrl}/kh`,
       },
     },
     openGraph: {
@@ -69,10 +69,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       },
     },
     verification: {
-      // Add your verification codes when ready
-      // google: 'your-google-site-verification',
-      // yandex: 'your-yandex-verification',
-      // bing: 'your-bing-verification',
+      // Add verification codes when ready
+      // google: "google-site-verification",
+
     },
   };
 }
