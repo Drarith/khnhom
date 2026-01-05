@@ -201,9 +201,9 @@ export const getProfileByUsername = async (req: Request, res: Response) => {
         .status(403)
         .json({ message: "This profile has been terminated." });
     }
-    const userId = profile.user
-    const user = await User.findOne({_id: userId})
-    console.log(user)
+    const userId = profile.user;
+    const user = await User.findOne({ _id: userId });
+    console.log(user);
     if (!user) {
       // If user not found (or was deleted), return 404 or a clear message
       return res
@@ -551,5 +551,33 @@ export const toggleStatus = async (req: Request, res: Response) => {
     return res
       .status(500)
       .json({ message: "Failed to toggle supporter status", error });
+  }
+};
+
+/**
+ * Get all public profiles for sitemap generation
+ * Returns username and updatedAt only
+ */
+export const getPublicProfiles = async (req: Request, res: Response) => {
+  try {
+    const profiles = await Profile.find(
+      { isDeactivated: { $ne: true } },
+      { username: 1, updatedAt: 1, _id: 0 }
+    )
+      .sort({ updatedAt: -1 })
+      .limit(50000) // Sitemap limit
+      .lean();
+
+    res.status(200).json({
+      status: "success",
+      data: profiles,
+    });
+  } catch (error) {
+    const errorMessage = getErrorMessage(error);
+    console.error("[getPublicProfiles] Error:", errorMessage);
+    res.status(500).json({
+      status: "error",
+      message: "Failed to fetch public profiles",
+    });
   }
 };

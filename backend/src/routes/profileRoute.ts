@@ -8,7 +8,8 @@ import {
   getProfileLinks,
   currentUserProfile,
   updateProfilePictureUrl,
-  toggleStatus
+  toggleStatus,
+  getPublicProfiles,
 } from "../controllers/profileController.js";
 import {
   createKHQR,
@@ -21,6 +22,9 @@ import { trackProfileView } from "../middleware/viewProfile.js";
 import { requireAdmin } from "../middleware/adminAuth.js";
 
 const profileRouter = express.Router();
+
+// Public endpoint for sitemap (no auth required)
+profileRouter.get("/profiles/public", getPublicProfiles);
 
 profileRouter.patch(
   "/api/user/toggle-status",

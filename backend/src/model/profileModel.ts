@@ -107,6 +107,7 @@ const profileSchema = new Schema(
     },
     views: { type: Number, default: 0 },
     isActive: { type: Boolean, default: true },
+    isDeactivated: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

@@ -6,7 +6,6 @@ import MinimalismTemplate from "../components/templates/MinimalismTemplate";
 import GlassmorphismTemplate from "../components/templates/GlassmorphismTemplate";
 import EditorialTemplate from "../components/templates/EditorialTemplate";
 import NeobrutalismTemplate from "../components/templates/NeobrutalismTemplate";
-import KhmerRoyalTemplate from "../components/templates/KhmerRoyalTemplate";
 import NeumorphismTemplate from "../components/templates/NeumorphismTemplate";
 
 export const templates: Record<string, TemplateConfig> = {
