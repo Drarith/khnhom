@@ -125,13 +125,15 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
                 boxShadow: `8px 8px 0px 0px ${borderColor}`,
               }}
             >
-              <Image
-                src={data.profilePictureUrl}
-                alt="profile picture"
-                fill
-                className="object-cover  transition-all duration-300"
-                priority
-              />
+              {data.profilePictureUrl && (
+                <Image
+                  src={data.profilePictureUrl}
+                  alt="profile picture"
+                  fill
+                  className="object-cover  transition-all duration-300"
+                  priority
+                />
+              )}
             </div>
 
             <div className="flex flex-col justify-between h-full space-y-4 min-w-0">

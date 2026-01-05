@@ -246,7 +246,7 @@
   "aboutPage": {
     "hero": {
       "badge": "The Digital Home for Cambodia",
-      "titleLine1": "Your World,",
+      "titleLine1": "YOUR WORLD,",
       "titleLine2": "One Link Away.",
       "description": "Khnhom simplifies your digital presence. A single, elegant page to showcase who you are, what you create, and how to support you."
     },
@@ -257,7 +257,8 @@
       },
       "khqr": {
         "title": "KHQR Integrated",
-        "description": "Seamless support. Receive payments directly through your favorite banking apps with zero friction."
+        "description": "Seamless support. Receive payments directly through your favorite banking apps with zero friction.",
+        "2ndDescription": "QR codes are generated securely using official Bakong KHQR services, ensuring safety and reliability."
       },
       "privacy": {
         "title": "Privacy First",

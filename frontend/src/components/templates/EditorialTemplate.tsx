@@ -90,13 +90,15 @@ export default function EditorialTemplate({ data }: { data: ProfileData }) {
             </div>
 
             <div className="relative w-32 h-32 md:w-40 md:h-40 shrink-0 grayscale-0 lg:grayscale lg:hover:grayscale-0 transition-all duration-500">
-              <Image
-                src={data.profilePictureUrl}
-                alt="profile picture"
-                fill
-                className="object-cover"
-                priority
-              />
+              {data.profilePictureUrl && (
+                <Image
+                  src={data.profilePictureUrl}
+                  alt="profile picture"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              )}
             </div>
           </header>
 

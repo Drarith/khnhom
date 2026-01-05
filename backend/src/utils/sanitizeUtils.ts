@@ -1,5 +1,5 @@
 import { z } from "zod";
-import {Filter} from "bad-words";
+import { Filter } from "bad-words";
 import type { ProfileCreationInput } from "../types/user-input.types.js";
 
 import { checkUrlSafe } from "./googleSafeBrowsing.js";
@@ -61,6 +61,18 @@ export const SanitizedString = (maxLength: number) =>
     .transform((s) => escapeHtml(s))
     .transform((s) => s.slice(0, maxLength));
 
+// Sanitized string for Unicode-rich text (display names, etc.) — no HTML escaping
+export const SanitizedUnicodeString = (maxLength: number) =>
+  z
+    .string()
+    .default("")
+    .transform((s) => normalizeWhitespace(s))
+    .transform((s) => s.trim())
+    .refine((s) => !containsBadWords(s), {
+      message: "Input contains inappropriate language",
+    })
+    .transform((s) => s.slice(0, maxLength));
+
 // Strictly valid HTTP/S URL (fails if invalid)
 export const ValidHttpUrl = () =>
   z
@@ -117,7 +129,9 @@ export const SocialsSchema = z
           // For non-URL socials, validate no bad words then escape and cap length
           const normalized = normalizeWhitespace(trimmed);
           if (containsBadWords(normalized)) {
-            throw new Error(`Social link for ${key} contains inappropriate language`);
+            throw new Error(
+              `Social link for ${key} contains inappropriate language`
+            );
           }
           out[key] = escapeHtml(normalized.slice(0, 100));
         }
@@ -130,8 +144,8 @@ export const SocialsSchema = z
 export const CreateProfileSchema = z.object({
   user: z.string(),
   username: SanitizedString(30),
-  displayName: SanitizedString(30),
-  bio: SanitizedString(1000),
+  displayName: SanitizedUnicodeString(50),
+  bio: SanitizedUnicodeString(1000),
   profilePictureUrl: SanitizedUrl(),
   paymentQrCodeUrl: SanitizedUrl(),
   socials: SocialsSchema,

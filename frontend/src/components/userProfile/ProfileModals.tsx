@@ -22,11 +22,11 @@ export default function ProfileModals({
 
   return (
     <>
-      <div className="absolute top-4 md:top-15 left-10 z-40">
+      <div className="absolute top-4 md:top-15 left-5 z-40 ">
         {data.paymentQrCodeUrl && (
           <button
             onClick={() => setShowQrModal(true)}
-            className="p-3 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95 backdrop-blur-sm"
+            className="p-3 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95 backdrop-blur-sm animate-pulse"
             style={{
               backgroundColor: activeTheme?.bg
                 ? `${activeTheme.bg}80`
@@ -36,7 +36,7 @@ export default function ProfileModals({
             }}
             aria-label="Show QR Code"
           >
-            <QrCode size={20} />
+            <QrCode size={25} />
           </button>
         )}
       </div>
@@ -54,7 +54,7 @@ export default function ProfileModals({
           }}
           aria-label="Share Profile"
         >
-          <Share2 size={20} />
+          <Share2 size={25} />
         </button>
       </div>
 

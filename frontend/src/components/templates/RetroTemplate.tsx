@@ -102,12 +102,14 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
                     boxShadow: `0 0 15px ${primaryColor}40`,
                   }}
                 >
-                  <Image
-                    src={data.profilePictureUrl}
-                    alt={data.displayName}
-                    fill
-                    className="object-cover grayscale contrast-125"
-                  />
+                  {data.profilePictureUrl && (
+                    <Image
+                      src={data.profilePictureUrl}
+                      alt={data.displayName}
+                      fill
+                      className="object-cover grayscale contrast-125"
+                    />
+                  )}
                   {/* Scanline on image */}
                   <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.5)_50%)] bg-[length:100%_4px] pointer-events-none opacity-50"></div>
                 </div>

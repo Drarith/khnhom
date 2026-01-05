@@ -1,3 +1,5 @@
+'use client';
+
 import { ProfileData } from "@/types/profileData";
 import { templates } from "@/registry/templateRegistry";
 import { themes } from "@/config/theme";

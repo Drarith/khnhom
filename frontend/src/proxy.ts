@@ -30,8 +30,6 @@ export default async function proxy(request: NextRequest, res: Response) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  console.log(res);
-
   if (token && (pathWithoutLocale === "/" || pathWithoutLocale === "")) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }

@@ -74,13 +74,13 @@ export default function NeumorphismTemplate({ data }: { data: ProfileData }) {
             className="relative w-36 h-36 rounded-full overflow-hidden border-4"
             style={{ borderColor: theme.bg }}
           >
-            <Image
+            {data.profilePictureUrl &&<Image
               src={data.profilePictureUrl}
               alt={data.username}
               fill
               className="object-cover"
               priority
-            />
+            />}
           </div>
         </div>
 

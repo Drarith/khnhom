@@ -8,13 +8,13 @@ import { useRef, useState } from "react";
 
 const images = [
   {
-    url: "https://res.cloudinary.com/dosj9q3zb/image/upload/v1766906599/photo_2025-09-14_12-48-24_nigh7z.jpg",
+    url: "https://res.cloudinary.com/dosj9q3zb/image/upload/v1767631754/vert1_qemjrs.png",
   },
   {
-    url: "https://res.cloudinary.com/dosj9q3zb/image/upload/v1766906599/photo_2025-09-14_12-48-24_nigh7z.jpg",
+    url: "https://res.cloudinary.com/dosj9q3zb/image/upload/v1767631754/vert2_s6di8m.png",
   },
   {
-    url: "https://res.cloudinary.com/dosj9q3zb/image/upload/v1766906599/photo_2025-09-14_12-48-24_nigh7z.jpg",
+    url: "https://res.cloudinary.com/dosj9q3zb/image/upload/v1767631754/vert3_mtjunm.png",
   },
 ];
 
@@ -106,7 +106,7 @@ export default function VerticalCarousel() {
       </button>
 
       {/* Card Stack */}
-      <div className="relative h-[300px] md:h-[500px] w-full flex items-start justify-center perspective-1000">
+      <div className="relative h-[400px] md:h-[500px] w-full flex items-start justify-center perspective-1000">
         {images.map((image, i) => (
           <div
             // Callback Ref: This is the React way to handle lists of refs
@@ -114,14 +114,16 @@ export default function VerticalCarousel() {
               cardRefs.current[i] = el;
             }}
             key={i}
-            className={`absolute h-[280px] md:h-[500px] w-[200px] md:w-[350px] origin-bottom img-container-${i} invisible`}
+            className={`absolute h-[400px] md:h-[500px] w-[280px] md:w-[350px] origin-bottom img-container-${i} invisible`}
             style={{ zIndex: i }} // Explicit Z-Index ensures correct stacking
           >
             <Image
               alt={`image-${i}`}
               src={image.url}
-              fill
-              className="rounded-2xl shadow-2xl border-4 border-white object-contain"
+              width={400}
+              height={400}
+              sizes="(max-width: 640px) 200px, 400px"
+              className="rounded-2xl shadow-2xl border-4 border-white object-cover"
               priority={i === images.length - 1} // Prioritize loading the top image
             />
           </div>

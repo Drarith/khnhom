@@ -69,21 +69,23 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
         )}
 
         <div className="relative w-full h-96 shrink-0 z-10">
-          <Image
-            src={data.profilePictureUrl}
-            alt="profile picture"
-            fill
-            className="object-cover"
-            priority
-            style={{
-              maskImage: backgroundImage
-                ? "linear-gradient(to bottom, black 0%, black 40%, transparent 100%)"
-                : "none",
-              WebkitMaskImage: backgroundImage
-                ? "linear-gradient(to bottom, black 0%, black 40%, transparent 100%)"
-                : "none",
-            }}
-          />
+          {data.profilePictureUrl && (
+            <Image
+              src={data.profilePictureUrl}
+              alt="profile picture"
+              fill
+              className="object-cover"
+              priority
+              style={{
+                maskImage: backgroundImage
+                  ? "linear-gradient(to bottom, black 0%, black 40%, transparent 100%)"
+                  : "none",
+                WebkitMaskImage: backgroundImage
+                  ? "linear-gradient(to bottom, black 0%, black 40%, transparent 100%)"
+                  : "none",
+              }}
+            />
+          )}
 
           {!backgroundImage && (
             <>

@@ -13,6 +13,7 @@ import Link from "../model/linkModel.js";
 import {
   sanitizeCreateProfile,
   SanitizedString,
+  SanitizedUnicodeString,
   SocialsSchema,
   type SanitizedCreateProfile,
 } from "../utils/sanitizeUtils.js";
@@ -340,13 +341,15 @@ export const updateProfile = async (req: Request, res: Response) => {
 
     // reject displayname if contains bad words
     if (profileData.displayName !== undefined) {
-      const safeDisplay = SanitizedString(50).parse(profileData.displayName);
+      const safeDisplay = SanitizedUnicodeString(50).parse(
+        profileData.displayName
+      );
 
       updates.displayName = safeDisplay;
     }
 
     if (profileData.bio !== undefined) {
-      const safeBio = SanitizedString(1000).parse(profileData.bio);
+      const safeBio = SanitizedUnicodeString(1000).parse(profileData.bio);
       updates.bio = safeBio;
     }
 

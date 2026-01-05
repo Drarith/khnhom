@@ -69,7 +69,7 @@ export async function generateMetadata({
         canonical: url,
         languages: {
           en: `${baseUrl}/en/${userProfile}`,
-          kh: `${baseUrl}/kh/${userProfile}`,
+          km: `${baseUrl}/kh/${userProfile}`,
         },
       },
       openGraph: {

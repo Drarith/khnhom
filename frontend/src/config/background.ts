@@ -17,11 +17,11 @@ export const backgroundImages = [
     },
     {
         name: "Deep Space Nebula",
-        url: "https://res.cloudinary.com/dosj9q3zb/image/upload/v1766079064/nebula_s0jlhh.png"
+        url: "https://res.cloudinary.com/dosj9q3zb/image/upload/v1767631202/galaxy_gwk4y5.jpg"
 
     },
     {
         name: "Cyberpunk",
-        url: "https://res.cloudinary.com/dosj9q3zb/image/upload/v1766079063/cyberpunk_gw2vwn.png"
+        url: "https://res.cloudinary.com/dosj9q3zb/image/upload/v1767631193/cyberpunk_mpxncr.jpg"
     }
 ]
