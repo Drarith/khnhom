@@ -20,12 +20,12 @@ export default function Footer({ theme, username }: FooterProps) {
       }}
     >
       <div className="flex flex-col items-center gap-1.5 md:gap-2 px-4">
-        <p className="text-xs md:text-sm opacity-70">
-          {t("join")}{" "}
+        <p className="text-xs md:text-sm opacity-70 gap-1 flex items-center">
+          Join
           <span className="font-semibold" style={{ color: theme?.text }}>
             {username}
-          </span>{" "}
-          {t("on")}
+          </span>
+          on
         </p>
         <Link
           href="/"
