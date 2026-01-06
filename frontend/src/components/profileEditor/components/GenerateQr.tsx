@@ -62,7 +62,7 @@ export default function GenerateQrTab({
           </label>
           <Select
             value={accountType}
-            onChange={(val) =>
+            onStringChange={(val) =>
               setValue("accountType", val as "individual" | "merchant", {
                 shouldValidate: true,
               })
@@ -161,7 +161,7 @@ export default function GenerateQrTab({
           <div className="flex">
             <Select
               value={currency || "KHR"}
-              onChange={(val) =>
+              onStringChange={(val) =>
                 setValue("currency", val as "KHR" | "USD", {
                   shouldValidate: true,
                 })

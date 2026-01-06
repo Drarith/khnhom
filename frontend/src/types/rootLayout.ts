@@ -1,4 +1,6 @@
 export type Props = {
   children: React.ReactNode;
-  params: { locale: string, pathName: string };
+  params: Promise<{ locale: string }>;
 };
+
+export type Locale = { locale: "en" | "kh" };

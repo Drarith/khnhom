@@ -35,7 +35,7 @@ const ProfileNotFound = ({ username = "wizard_of_oz" }) => {
           
           <p className="text-gray-500 text-lg mb-6 leading-relaxed max-w-sm">
             It looks like <span className="font-bold text-gray-800 bg-gray-100 px-2 py-0.5 rounded text-base mx-1">@{username}</span> 
-            hasn't been claimed yet.
+            hasn&apos;t been claimed yet.
           </p>
 
           {/* Availability Badge */}

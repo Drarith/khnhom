@@ -93,14 +93,15 @@ export default function AdminTab({
         break;
     }
     try {
-      const res = await patchJSON("/user/toggle-status", {
+      const res: { message: string } = await patchJSON("/user/toggle-status", {
         username,
         statusType,
       });
       setToggleMessage(res?.message || "success");
       setToggleUsernames((prev) => ({ ...prev, [type]: "" }));
     } catch (err) {
-      setToggleMessage(err?.response?.data?.message || "error");
+      const axiosError = err as AxiosError<{ message: string }>;
+      setToggleMessage(axiosError?.response?.data?.message || "error");
     } finally {
       setToggleLoading(null);
     }

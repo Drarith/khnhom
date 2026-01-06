@@ -1,9 +1,5 @@
 import Image from "next/image";
-import {
-  QrCode,
-
-  Code,
-} from "lucide-react";
+import { Code } from "lucide-react";
 import ClientAbout from "@/providers/AboutMeClient";
 import { LanguageToggle } from "@/components/ui/languageSwitchpill";
 import { getTranslations } from "next-intl/server";
@@ -58,8 +54,10 @@ export default async function AboutPage() {
                 <p className="opacity-80 leading-relaxed mb-8">
                   {t("features.khqr.description")}
                 </p>
-    
-                <p className="opacity-80 leading-relaxed mb-8">{t("features.khqr.2ndDescription")}</p>
+
+                <p className="opacity-80 leading-relaxed mb-8">
+                  {t("features.khqr.2ndDescription")}
+                </p>
               </div>
             </div>
 

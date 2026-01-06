@@ -17,8 +17,11 @@ import ConditionalFooter from "@/components/footer/ConditionalFooter";
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
-  const baseUrl =
-    process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_URL;
+
+  if (!baseUrl) {
+    throw new Error("NEXT_PUBLIC_FRONTEND_URL is not defined");
+  }
 
   return {
     title: {
@@ -71,7 +74,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     verification: {
       // Add verification codes when ready
       // google: "google-site-verification",
-
     },
   };
 }

@@ -1,9 +1,8 @@
 "use client";
 import { usePathname } from "next/navigation";
 import Nav from "@/components/nav/Nav";
-import type { Props } from "@/types/rootLayout";
+import type { Locale } from "@/types/rootLayout";
 
-type Locale = Pick<Props['params'], 'locale'>;
 
 export default function MaybeNav({locale}: Locale) {
   const pathname = usePathname() || "";

@@ -57,7 +57,7 @@ export default function AppearanceTab({
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 justify-items-center text-foreground">
           <Select
             value={selectedTemplate}
-            onChange={(val) => onTemplateSelect(val)}
+            onTemplateChange={(val: ProfileFormEditorInputValues["selectedTemplate"]) => onTemplateSelect(val)}
             options={Object.entries(templates).map(([key, template]) => ({
               value: key,
               label: template.name,

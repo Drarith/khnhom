@@ -1,5 +1,13 @@
-export type TemplateType = 'default' | 'brutalist' | 'retro' | 'minimalism' | 'glassmorphism' | 'editorial' | 'neobrutalism' | 'khmerroyal';
-
+export type TemplateType =
+  | "default"
+  | "brutalist"
+  | "retro"
+  | "minimalism"
+  | "glassmorphism"
+  | "editorial"
+  | "neobrutalism"
+  | "khmerroyal";
+import type { ProfileData } from "./profileData";
 export interface TemplateConfig {
   name: string;
   component: React.ComponentType<{ data: ProfileData }>;

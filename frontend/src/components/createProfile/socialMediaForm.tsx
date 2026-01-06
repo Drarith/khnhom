@@ -59,7 +59,7 @@ export default function SocialMediaForm<T extends FieldValues>({
 
           <Select
             value={selected}
-            onChange={(val) => setSelected(val)}
+            onStringChange={(val) => setSelected(val)}
             options={SOCIAL_PLATFORMS.map((platform) => ({
               value: platform.key,
               label: (

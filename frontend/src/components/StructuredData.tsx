@@ -6,13 +6,16 @@ interface StructuredDataProps {
 }
 
 export default function StructuredData({ data, locale }: StructuredDataProps) {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_URL;
 
   // Collect all social media URLs
   const sameAs = Object.entries(data.socials || {})
     .filter(([_, url]) => url && url.trim() !== "")
     .map(([_, url]) => url);
+
+  if (!baseUrl) {
+    throw new Error("NEXT_PUBLIC_FRONTEND_URL is not defined");
+  }
 
   const structuredData = {
     "@context": "https://schema.org",

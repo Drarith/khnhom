@@ -1,8 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
-import {
-  ProfileFormEditorInputValues,
-} from "@/types/profileFormInput";
+import type { ProfileFormEditorInputValues } from "@/types/profileFormInput";
+// import { ProfileFormEditorInputValues } from "@/types/profileFormInput";
 
 interface Option {
   value: string;
@@ -11,7 +10,8 @@ interface Option {
 
 interface SelectProps {
   value: string;
-  onChange: (value: ProfileFormEditorInputValues["selectedTemplate"]) => void;
+  onStringChange?: (value: string) => void;
+  onTemplateChange?: (value: ProfileFormEditorInputValues["selectedTemplate"]) => void;
   options: Option[];
   className?: string;
   placeholder?: string;
@@ -19,7 +19,8 @@ interface SelectProps {
 
 export default function Select({
   value,
-  onChange,
+  onStringChange,
+  onTemplateChange,
   options,
   className = "",
   placeholder = "Select an option",
@@ -74,9 +75,7 @@ export default function Select({
                     : "text-primary/80"
                 }`}
                 onClick={() => {
-                  onChange(
-                    option.value as ProfileFormEditorInputValues["selectedTemplate"]
-                  );
+                  onTemplateChange?.(option.value as ProfileFormEditorInputValues["selectedTemplate"]);
                   setIsOpen(false);
                 }}
               >
