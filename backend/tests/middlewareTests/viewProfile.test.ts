@@ -112,5 +112,66 @@ describe("trackProfileView middleware", () => {
       );
       expect(next).toHaveBeenCalled();
     });
+
+    it("should set cookie with correct max age (24 hours)", async () => {
+      await trackProfileView(req as Request, res as Response, next);
+
+      expect(res.cookie).toHaveBeenCalledWith(
+        "viewedProfile",
+        expect.any(String),
+        expect.objectContaining({
+          maxAge: 24 * 60 * 60 * 1000,
+        })
+      );
+    });
+
+    it("should set httpOnly cookie", async () => {
+      await trackProfileView(req as Request, res as Response, next);
+
+      expect(res.cookie).toHaveBeenCalledWith(
+        "viewedProfile",
+        expect.any(String),
+        expect.objectContaining({
+          httpOnly: true,
+        })
+      );
+    });
+
+    it("should track multiple unique profile views", async () => {
+      req.cookies = { viewedProfile: JSON.stringify(["user1", "user2"]) };
+
+      await trackProfileView(req as Request, res as Response, next);
+
+      expect(mockProfile.incrementViews).toHaveBeenCalled();
+      expect(res.cookie).toHaveBeenCalledWith(
+        "viewedProfile",
+        JSON.stringify(["user1", "user2", "testuser"]),
+        expect.any(Object)
+      );
+    });
+
+    it("should not add duplicate to cookie array", async () => {
+      req.cookies = {
+        viewedProfile: JSON.stringify(["testuser", "anotheruser"]),
+      };
+
+      await trackProfileView(req as Request, res as Response, next);
+
+      expect(mockProfile.incrementViews).not.toHaveBeenCalled();
+      expect(res.cookie).not.toHaveBeenCalled();
+    });
+
+    it("should handle empty cookie array", async () => {
+      req.cookies = { viewedProfile: JSON.stringify([]) };
+
+      await trackProfileView(req as Request, res as Response, next);
+
+      expect(mockProfile.incrementViews).toHaveBeenCalled();
+      expect(res.cookie).toHaveBeenCalledWith(
+        "viewedProfile",
+        JSON.stringify(["testuser"]),
+        expect.any(Object)
+      );
+    });
   });
 });

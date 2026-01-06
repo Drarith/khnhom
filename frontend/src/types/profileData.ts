@@ -48,3 +48,5 @@ export type TemplateType =
   | "editorial"
   | "neobrutalism"
   | "neumorphism";
+
+  

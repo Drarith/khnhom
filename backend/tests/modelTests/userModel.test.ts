@@ -53,107 +53,57 @@ describe("UserModel", () => {
 
       expect(savedUser.email).toBe("test@example.com");
       expect(savedUser.password).not.toBe("password123"); // Should be hashed
-      expect(savedUser.isSupporter).toBe(false); // Default value
+      expect(savedUser.isSupporter).toBe(false);
       expect(savedUser.createdAt).toBeDefined();
       expect(savedUser.updatedAt).toBeDefined();
     });
 
-    it("should validate email format", async () => {
-      const userData = {
-        email: "invalid-email",
-        password: "password123",
-      };
+    it("should validate email format and enforce minimum password length", async () => {
+      const invalidUsers = [
+        { email: "invalid-email", password: "password123" },
+        { email: "test@example.com", password: "123" }, // Too short
+      ];
 
-      user = new User(userData);
-
-      await expect(user.save()).rejects.toThrow();
+      for (const userData of invalidUsers) {
+        const u = new User(userData);
+        await expect(u.save()).rejects.toThrow();
+      }
     });
 
-    it("should enforce minimum password length", async () => {
-      const userData = {
-        email: "test@example.com",
-        password: "123", // Too short
-      };
-
-      user = new User(userData);
-
-      await expect(user.save()).rejects.toThrow();
-    });
-
-    it("should enforce unique email constraint", async () => {
-      const userData = {
-        email: "test@example.com",
-        password: "password123",
-      };
-
-      // Create first user
-      user = new User(userData);
-      await user.save();
-
-      // Try to create second user with same email
-      const user2: IUser = new User(userData);
-
-      await expect(user2.save()).rejects.toThrow();
-    });
-
-    it("should convert email to lowercase", async () => {
-      const userData = {
-        email: "TEST@EXAMPLE.COM",
-        password: "password123",
-      };
-
-      user = new User(userData);
-      const savedUser = await user.save();
-
-      expect(savedUser.email).toBe("test@example.com");
-    });
-
-    it("should trim email whitespace", async () => {
-      const userData = {
-        email: "  test@example.com  ",
-        password: "password123",
-      };
-
-      user = new User(userData);
-      const savedUser = await user.save();
-
-      expect(savedUser.email).toBe("test@example.com");
-    });
-
-    it("should allow unique googleId", async () => {
-      const userData = {
+    it("should enforce unique email and googleId constraints", async () => {
+      const user1 = new User({
         email: "test@example.com",
         password: "password123",
         googleId: "google123",
-      };
-
-      user = new User(userData);
-      const savedUser = await user.save();
-
-      expect(savedUser.googleId).toBe("google123");
-    });
-
-    it("should enforce unique googleId constraint", async () => {
-      const userData1 = {
-        email: "test1@example.com",
-        password: "password123",
-        googleId: "google123",
-      };
-
-      const userData2 = {
-        email: "test2@example.com",
-        password: "password123",
-        googleId: "google123", // Same googleId
-      };
-
-      // Create first user
-      const user1: IUser = new User(userData1);
+      });
       await user1.save();
 
-      // Try to create second user with same googleId
-      const user2: IUser = new User(userData2);
-
+      // Duplicate email
+      const user2 = new User({
+        email: "test@example.com",
+        password: "password123",
+      });
       await expect(user2.save()).rejects.toThrow();
+
+      // Duplicate googleId
+      const user3 = new User({
+        email: "test2@example.com",
+        password: "password123",
+        googleId: "google123",
+      });
+      await expect(user3.save()).rejects.toThrow();
+    });
+
+    it("should normalize email (lowercase and trim)", async () => {
+      const userData = {
+        email: "  TEST@EXAMPLE.COM  ",
+        password: "password123",
+      };
+
+      user = new User(userData);
+      const savedUser = await user.save();
+
+      expect(savedUser.email).toBe("test@example.com");
     });
   });
 

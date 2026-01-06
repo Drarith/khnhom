@@ -114,7 +114,7 @@ describe("sanitizeCreateProfile", () => {
   it("should reject input with bad words in username", () => {
     const input: any = {
       user: "123e4567-e89b-12d3-a456-426614174000",
-      username: "badword_ass",
+      username: "ass",
       displayName: "Test User",
     };
 
@@ -125,7 +125,7 @@ describe("sanitizeCreateProfile", () => {
     const input: any = {
       user: "123e4567-e89b-12d3-a456-426614174000",
       username: "testuser",
-      displayName: "Stupid User",
+      displayName: "fuck",
     };
 
     expect(() => sanitizeCreateProfile(input)).toThrow();

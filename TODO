@@ -1,7 +1,2 @@
-get error translation working in links etc
+tests
 
-work on caching. now still showing old data - just cache no store lol
-
-catch error when server not available
-
-need to reenable rate limiting on server side

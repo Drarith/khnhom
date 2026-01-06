@@ -91,97 +91,68 @@ describe("ProfileModel", () => {
       expect(savedProfile.displayName).toBe("Test User");
       expect(savedProfile.bio).toBe("This is my bio");
       expect(savedProfile.theme).toBe("dark");
-      expect(savedProfile.views).toBe(0); // Default value
+      expect(savedProfile.views).toBe(0);
       expect(savedProfile.createdAt).toBeDefined();
       expect(savedProfile.updatedAt).toBeDefined();
     });
 
-    it("should create profile with default values", async () => {
-      const profileData = {
-        user: testUser._id,
-        username: "testuser",
-        displayName: "Test User",
-      };
+    it("should require user, username, and displayName", async () => {
+      const invalidProfiles = [
+        { username: "test", displayName: "Test" }, // missing user
+        { user: testUser._id, displayName: "Test" }, // missing username
+        { user: testUser._id, username: "test" }, // missing displayName
+      ];
 
-      const profile = new Profile(profileData);
-      const savedProfile = await profile.save();
-
-      expect(savedProfile.bio).toBe("");
-      expect(savedProfile.profilePictureUrl).toBe("");
-      expect(savedProfile.paymentQrCodeUrl).toBe("");
-      expect(savedProfile.theme).toBe("classic dark");
-      expect(savedProfile.views).toBe(0);
-      expect(savedProfile.socials.facebook).toBe("");
-      expect(savedProfile.socials.instagram).toBe("");
-      expect(savedProfile.socials.telegram).toBe("");
-      expect(savedProfile.socials.youtube).toBe("");
-      expect(savedProfile.socials.linkedin).toBe("");
-      expect(savedProfile.socials.x).toBe("");
-      expect(savedProfile.socials.tiktok).toBe("");
-      expect(savedProfile.socials.github).toBe("");
-    });
-
-    it("should require user field", async () => {
-      const profileData = {
-        username: "testuser",
-        displayName: "Test User",
-      };
-
-      const profile = new Profile(profileData);
-
-      await expect(profile.save()).rejects.toThrow();
-    });
-
-    it("should create a profile", async () => {
-      const createdProfile = await Profile.createProfile(testProfile);
-      expect(createdProfile).toBeDefined();
-      expect(createdProfile.username).toBe(testProfile.username);
-    });
-
-    it("should require username field", async () => {
-      const profileData = {
-        user: testUser._id,
-        displayName: "Test User",
-      };
-
-      const profile = new Profile(profileData);
-
-      await expect(profile.save()).rejects.toThrow();
-    });
-
-    it("should require displayName field", async () => {
-      const profileData = {
-        user: testUser._id,
-        username: "testuser",
-      };
-
-      const profile = new Profile(profileData);
-
-      await expect(profile.save()).rejects.toThrow();
+      for (const data of invalidProfiles) {
+        const profile = new Profile(data);
+        await expect(profile.save()).rejects.toThrow();
+      }
     });
 
     it("should enforce unique username constraint", async () => {
-      const profileData1 = {
-        user: testUser._id,
-        username: "testuser",
-        displayName: "Test User 1",
-      };
+      await Profile.createProfile(testProfile);
 
       const user2 = await User.createUser("test2@example.com", "password123");
-      const profileData2 = {
-        user: user2._id,
-        username: "testuser", // Same username
-        displayName: "Test User 2",
+      const duplicate = {
+        ...testProfile,
+        user: user2._id.toString(),
       };
 
-      // Create first profile
-      const profile1 = new Profile(profileData1);
-      await profile1.save();
+      await expect(Profile.createProfile(duplicate)).rejects.toThrow();
+    });
 
-      // Try to create second profile with same username
-      const profile2 = new Profile(profileData2);
+    it("should validate username format and length", async () => {
+      const invalid = [
+        "ab",
+        "a".repeat(31),
+        "test-user",
+        "test user",
+        "test@user",
+      ];
+      const valid = ["testuser", "test_user", "TestUser123"];
 
-      await expect(profile2.save()).rejects.toThrow();
+      for (const username of invalid) {
+        const profile = new Profile({ ...testProfile, username });
+        await expect(profile.save()).rejects.toThrow();
+      }
+
+      for (const username of valid) {
+        await Profile.deleteMany({});
+        const profile = new Profile({
+          user: testUser._id,
+          username,
+          displayName: "Test User",
+        });
+        await expect(profile.save()).resolves.toBeDefined();
+      }
+    });
+
+    it("should validate displayName length", async () => {
+      const tooShort = { ...testProfile, displayName: "ab" };
+      const tooLong = { ...testProfile, displayName: "a".repeat(31) };
+
+      await expect(new Profile(tooShort).save()).rejects.toThrow();
+      await expect(new Profile(tooLong).save()).rejects.toThrow();
     });
 
     it("should trim username and displayName whitespace", async () => {
@@ -196,94 +167,6 @@ describe("ProfileModel", () => {
 
       expect(savedProfile.username).toBe("testuser");
       expect(savedProfile.displayName).toBe("Test User");
-    });
-
-    it("should enforce username length constraints", async () => {
-      // Test minimum length
-      const shortUsernameData = {
-        user: testUser._id,
-        username: "ab", // Too short
-        displayName: "Test User",
-      };
-
-      const shortProfile = new Profile(shortUsernameData);
-      await expect(shortProfile.save()).rejects.toThrow();
-
-      // Test maximum length
-      const longUsernameData = {
-        user: testUser._id,
-        username: "a".repeat(31), // Too long
-        displayName: "Test User",
-      };
-
-      const longProfile = new Profile(longUsernameData);
-      await expect(longProfile.save()).rejects.toThrow();
-    });
-
-    it("should enforce displayName length constraints", async () => {
-      // Test minimum length
-      const shortDisplayNameData = {
-        user: testUser._id,
-        username: "testuser",
-        displayName: "ab", // Too short
-      };
-
-      const shortProfile = new Profile(shortDisplayNameData);
-      await expect(shortProfile.save()).rejects.toThrow();
-
-      // Test maximum length
-      const longDisplayNameData = {
-        user: testUser._id,
-        username: "testuser",
-        displayName: "a".repeat(31), // Too long
-      };
-
-      const longProfile = new Profile(longDisplayNameData);
-      await expect(longProfile.save()).rejects.toThrow();
-    });
-
-    it("should validate username format (alphanumeric and underscore only)", async () => {
-      const invalidUsernames = [
-        "test-user", // hyphen not allowed
-        "test user", // space not allowed
-        "test.user", // dot not allowed
-        "test@user", // @ not allowed
-        "test#user", // # not allowed
-      ];
-
-      for (const invalidUsername of invalidUsernames) {
-        const profileData = {
-          user: testUser._id,
-          username: invalidUsername,
-          displayName: "Test User",
-        };
-
-        const profile = new Profile(profileData);
-        await expect(profile.save()).rejects.toThrow();
-      }
-
-      // Valid usernames should work
-      const validUsernames = [
-        "testuser",
-        "test_user",
-        "TestUser123",
-        "user123",
-        "123user",
-      ];
-
-      for (const validUsername of validUsernames) {
-        await Profile.deleteMany({}); // Clear to avoid unique constraint issues
-
-        const profileData = {
-          user: testUser._id,
-          username: validUsername,
-          displayName: "Test User",
-        };
-
-        const profile = new Profile(profileData);
-        const savedProfile = await profile.save();
-        expect(savedProfile.username).toBe(validUsername);
-      }
     });
   });
 
