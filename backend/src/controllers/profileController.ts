@@ -50,7 +50,12 @@ export const createProfile = async (req: Request, res: Response) => {
 
   const existingUser = req.profile?.id;
   if (existingUser)
-    return res.status(400).json({ message: "Profile already existed." });
+    return res
+      .status(400)
+      .json({
+        message: "Profile already existed.",
+        errorCode: "PROFILE_EXISTS",
+      });
 
   const profileData: ProfileCreationInput = {
     user: userId.toString(),
@@ -86,13 +91,17 @@ export const createProfile = async (req: Request, res: Response) => {
       });
 
       if (reservedUsernamesSet.has(cleanedProfileData.username.toLowerCase())) {
-        return res
-          .status(400)
-          .json({ message: "Invalid username, please choose another one." });
+        return res.status(400).json({
+          message: "Invalid username, please choose another one.",
+          errorCode: "USERNAME_INVALID",
+        });
       }
 
       if (existingProfile) {
-        return res.status(400).json({ message: "Username already taken." });
+        return res.status(400).json({
+          message: "Username already taken.",
+          errorCode: "USERNAME_TAKEN",
+        });
       }
     }
 
@@ -482,7 +491,7 @@ export const currentUserProfile = async (req: Request, res: Response) => {
     return res
       .status(400)
       .json({ message: "Something went wrong, profile not found." });
-      
+
   if (!req.profile) {
     return res
       .status(404)

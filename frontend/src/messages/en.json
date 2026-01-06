@@ -41,7 +41,10 @@
       "invalidUrl": "Must be a valid HTTPS URL. Example: https://Khnhom.com",
       "required": "This field is required",
       "invalidAmount": "Invalid amount format",
-      "linkRequired": "Must have both title and valid URL."
+      "linkRequired": "Must have both title and valid URL.",
+      "usernameTaken": "Username already taken",
+      "usernameInvalid": "Invalid username, please choose another one",
+      "profileExists": "Profile already exists. Redirecting..."
     },
     "socialMediaInput": {
       "added": "Added",

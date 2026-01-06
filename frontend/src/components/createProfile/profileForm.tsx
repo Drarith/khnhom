@@ -21,6 +21,7 @@ import getAxiosErrorMessage from "@/helpers/getAxiosErrorMessage";
 import { useRouter } from "next/navigation";
 
 import { normalizeValue } from "@/helpers/normalizeVal";
+import { LanguageToggle } from "../ui/languageSwitchpill";
 
 const DEFAULTTHEME = "Classic Dark";
 
@@ -82,16 +83,27 @@ export default function ProfileForm() {
       setIsSubmitting(false);
       router.push("/dashboard");
     },
-    onError: (error: AxiosError<{ message?: string }>) => {
+    onError: (error: AxiosError<{ message?: string; errorCode?: string }>) => {
       const errorMessage = getAxiosErrorMessage(error);
-      if (errorMessage?.includes("Profile already existed")) {
-        toast.error(errorMessage + " redirecting...", {
+      const errorCode = error.response?.data?.errorCode;
+
+      if (
+        errorCode === "PROFILE_EXISTS" ||
+        errorMessage?.includes("Profile already existed")
+      ) {
+        toast.error(t("validation.profileExists"), {
           autoClose: 3000,
         });
         setTimeout(() => {
           setIsSubmitting(false);
           router.push("/dashboard");
         }, 3000);
+      } else if (errorCode === "USERNAME_TAKEN") {
+        toast.error(t("validation.usernameTaken"));
+        setIsSubmitting(false);
+      } else if (errorCode === "USERNAME_INVALID") {
+        toast.error(t("validation.usernameInvalid"));
+        setIsSubmitting(false);
       } else {
         toast.error(errorMessage + " Please try again later.", {});
         setIsSubmitting(false);
@@ -107,6 +119,11 @@ export default function ProfileForm() {
 
   return (
     <section className="min-h-screen w-full bg-foreground px-4 py-8">
+      <div className="mb-5">
+        
+        <LanguageToggle />
+      </div>
+
       <div className="mx-auto w-full max-w-4xl rounded-3xl border border-primary/10 bg-foreground px-6 py-8 shadow-2xl md:px-10 md:py-12">
         <header className="space-y-2 border-b border-primary/10 pb-6">
           <h1 className="text-primary text-2xl">Khnhom</h1>
