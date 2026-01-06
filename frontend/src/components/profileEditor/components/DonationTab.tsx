@@ -40,7 +40,31 @@ export default function DonationTab({
           {t("totalReceived", { amount: currentDonationAmount })}
         </p>
         <div className="flex flex-col gap-2 mt-2 text-primary/60">
-          {currentDonationAmount < 5 ? (
+          {currentDonationAmount < 10 ? (
+            <div className="flex flex-row items-center gap-2">
+              <p>{t("unlockVerified10")} </p>
+              <Image
+                src={badges.verified}
+                alt="Verified Badge"
+                width={24}
+                height={24}
+              />
+            </div>
+          ) : (
+            <div className="flex flex-row items-center gap-2">
+              <p className="inline-flex gap-2">
+                {t("unlocked")}
+                {<CheckCheck color="green" />}
+              </p>
+              <Image
+                src={badges.verified}
+                alt="Verified Badge"
+                width={24}
+                height={24}
+              />
+            </div>
+          )}
+          {/* {currentDonationAmount < 5 ? (
             <div className="flex flex-row items-center gap-2">
               <p>{t("unlockBadge5")} </p>
               <Image
@@ -88,7 +112,7 @@ export default function DonationTab({
                 height={24}
               />
             </div>
-          )}
+          )} */}
         </div>
         <p className="mt-2 text-primary/60">
           {t("contactSupport")}{" "}

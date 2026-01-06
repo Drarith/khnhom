@@ -132,6 +132,7 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
                     isGoldSupporter={data.isGoldSupporter}
                     isVerified={data.isVerified}
                     isDev={data.isDev}
+                    isSpecial={data.isSpecial}
                   />
                 </div>
               </div>

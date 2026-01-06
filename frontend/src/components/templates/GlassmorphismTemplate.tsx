@@ -88,13 +88,15 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
             <div className="flex flex-col items-center text-center space-y-6 mb-8">
               <div className="relative w-32 h-32 rounded-full p-1 bg-linear-to-tr from-white/50 to-transparent">
                 <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white/20">
-                  {data.profilePictureUrl &&<Image
-                    src={data.profilePictureUrl}
-                    alt="profile picture"
-                    fill
-                    className="object-cover"
-                    priority
-                  />}
+                  {data.profilePictureUrl && (
+                    <Image
+                      src={data.profilePictureUrl}
+                      alt="profile picture"
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  )}
                 </div>
               </div>
               <div className="space-y-2">
@@ -108,6 +110,7 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
                     isGoldSupporter={data.isGoldSupporter}
                     isVerified={data.isVerified}
                     isDev={data.isDev}
+                    isSpecial={data.isSpecial}
                   />
                 </div>
               </div>

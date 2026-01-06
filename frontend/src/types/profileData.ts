@@ -37,6 +37,7 @@ export interface ProfileData {
   isGoldSupporter: boolean;
   isVerified: boolean;
   isDev: boolean;
+  isSpecial: boolean;
 }
 
 export type TemplateType =
@@ -48,5 +49,3 @@ export type TemplateType =
   | "editorial"
   | "neobrutalism"
   | "neumorphism";
-
-  

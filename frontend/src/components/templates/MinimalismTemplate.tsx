@@ -77,13 +77,15 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
                   activeTheme?.border || activeTheme?.button || "#e4e4e7",
               }}
             >
-              {data.profilePictureUrl &&<Image
-                src={data.profilePictureUrl}
-                alt="profile picture"
-                fill
-                className="object-cover"
-                priority
-              />}
+              {data.profilePictureUrl && (
+                <Image
+                  src={data.profilePictureUrl}
+                  alt="profile picture"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              )}
             </div>
             <div className="space-y-2">
               <h1
@@ -99,6 +101,7 @@ export default function MinimalismTemplate({ data }: { data: ProfileData }) {
                   isGoldSupporter={data.isGoldSupporter}
                   isVerified={data.isVerified}
                   isDev={data.isDev}
+                  isSpecial={data.isSpecial}
                 />
               </div>
             </div>

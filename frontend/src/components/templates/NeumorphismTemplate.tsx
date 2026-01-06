@@ -27,7 +27,6 @@ type SocialPlatform =
   | "github";
 
 export default function NeumorphismTemplate({ data }: { data: ProfileData }) {
-
   const theme = {
     bg: "#E0E5EC",
     text: "#4A5568",
@@ -59,7 +58,6 @@ export default function NeumorphismTemplate({ data }: { data: ProfileData }) {
       style={{ backgroundColor: theme.bg, color: theme.text }}
     >
       <div className="relative z-10 flex flex-col items-center w-full max-w-md mx-auto p-6 min-h-screen">
-
         {/* Profile Picture */}
         <div
           className="p-1 rounded-full mb-8 flex items-center justify-center"
@@ -74,13 +72,15 @@ export default function NeumorphismTemplate({ data }: { data: ProfileData }) {
             className="relative w-36 h-36 rounded-full overflow-hidden border-4"
             style={{ borderColor: theme.bg }}
           >
-            {data.profilePictureUrl &&<Image
-              src={data.profilePictureUrl}
-              alt={data.username}
-              fill
-              className="object-cover"
-              priority
-            />}
+            {data.profilePictureUrl && (
+              <Image
+                src={data.profilePictureUrl}
+                alt={data.username}
+                fill
+                className="object-cover"
+                priority
+              />
+            )}
           </div>
         </div>
 
@@ -96,6 +96,7 @@ export default function NeumorphismTemplate({ data }: { data: ProfileData }) {
               isGoldSupporter={data.isGoldSupporter}
               isVerified={data.isVerified}
               isDev={data.isDev}
+              isSpecial={data.isSpecial}
             />
           </div>
           {data.bio && (

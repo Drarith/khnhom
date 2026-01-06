@@ -151,8 +151,6 @@ async function pollBakong(md5: string, startTime = Date.now()) {
     return;
   }
 
-  
-
   try {
     const { data } = await axios.post(
       "https://api-bakong.nbc.gov.kh/v1/check_transaction_by_md5",
@@ -190,8 +188,9 @@ async function finalizeTransaction(
     if (profile) {
       profile.donationAmount =
         Math.round(((profile.donationAmount || 0) + job.amount) * 100) / 100;
-      profile.isSupporter = profile.donationAmount >= 5;
-      profile.isGoldSupporter = profile.donationAmount >= 20;
+      // profile.isSupporter = profile.donationAmount >= 5;
+      // profile.isGoldSupporter = profile.donationAmount >= 20;
+      profile.isVerified = profile.donationAmount >= 10;
       await profile.save();
     }
     notifyAndCleanup(md5, { status: "PAID", data: paymentData });
@@ -225,7 +224,6 @@ export const createKHQRForDonation = async (req: Request, res: Response) => {
     const KHQR = new BakongKHQR();
     const result = KHQR.generateIndividual(individualInfo);
 
-
     const md5 = result.data?.md5 || (result as any).md5;
     const qrString = result.data?.qr || (result as any).qr;
 
@@ -257,7 +255,6 @@ export const paymentEventsHandler = (req: Request, res: Response) => {
   if (!md5) {
     return res.status(400).json({ message: "MD5 is required" });
   }
-  
 
   // Mandatory headers for SSE
   res.writeHead(200, {
@@ -277,7 +274,7 @@ export const paymentEventsHandler = (req: Request, res: Response) => {
   pollBakong(md5);
 
   // Turned Off because we let the timer run till the end.
-  
+
   // Clean up if user closes tab
   // req.on("close", () => {
   //   console.log(`[SSE] Connection closed for ${md5}`);

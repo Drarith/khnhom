@@ -105,6 +105,10 @@ const profileSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    isSpecial: {
+      type: Boolean,
+      default: false,
+    },
     views: { type: Number, default: 0 },
     isActive: { type: Boolean, default: true },
     isDeactivated: { type: Boolean, default: false },

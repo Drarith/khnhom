@@ -10,22 +10,26 @@ export default function Badge({
   isGoldSupporter,
   isVerified,
   isDev,
+  isSpecial,
 }: {
   username: string;
   isSupporter: boolean;
   isGoldSupporter: boolean;
   isVerified: boolean;
   isDev: boolean;
+  isSpecial: boolean;
 }) {
   const [showBadgeText, setShowBadgeText] = useState(false);
   const [showGoldBadgeText, setShowGoldBadgeText] = useState(false);
   const [showVerifiedText, setShowVerifiedText] = useState(false);
   const [showDevText, setShowDevText] = useState(false);
+  const [showSpecialText, setShowSpecialText] = useState(false);
 
   const badgeTimerRef = useRef<number | null>(null);
   const goldBadgeTimerRef = useRef<number | null>(null);
   const verifiedTimerRef = useRef<number | null>(null);
   const devTimerRef = useRef<number | null>(null);
+  const specialTimerRef = useRef<number | null>(null);
 
   const handleToggleBadge = () => {
     if (showBadgeText) {
@@ -95,12 +99,30 @@ export default function Badge({
     }
   };
 
+  const handleToggleSpecialBadge = () => {
+    if (showSpecialText) {
+      setShowSpecialText(false);
+      if (specialTimerRef.current) {
+        clearTimeout(specialTimerRef.current);
+        specialTimerRef.current = null;
+      }
+    } else {
+      setShowSpecialText(true);
+      if (specialTimerRef.current) clearTimeout(specialTimerRef.current);
+      specialTimerRef.current = window.setTimeout(() => {
+        setShowSpecialText(false);
+        specialTimerRef.current = null;
+      }, 3000);
+    }
+  };
+
   useEffect(() => {
     return () => {
       if (badgeTimerRef.current) clearTimeout(badgeTimerRef.current);
       if (goldBadgeTimerRef.current) clearTimeout(goldBadgeTimerRef.current);
       if (verifiedTimerRef.current) clearTimeout(verifiedTimerRef.current);
       if (devTimerRef.current) clearTimeout(devTimerRef.current);
+      if (specialTimerRef.current) clearTimeout(specialTimerRef.current);
     };
   }, []);
   return (
@@ -128,6 +150,20 @@ export default function Badge({
             onClick={handleToggleDevBadge}
           >
             <Image src={badges.dev} alt="Dev Badge" width={28} height={28} />
+          </span>
+        )}
+
+        {isSpecial && (
+          <span
+            className="cursor-pointer inline-block align-middle relative sweep-container overflow-hidden"
+            onClick={handleToggleSpecialBadge}
+          >
+            <Image
+              src={badges.special}
+              alt="Special Badge"
+              width={28}
+              height={28}
+            />
           </span>
         )}
 
@@ -237,6 +273,7 @@ export default function Badge({
           </div>
         </div>
       )}
+
       {showVerifiedText && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
           <div
@@ -263,7 +300,7 @@ export default function Badge({
                 </div>
                 <div className="text-xs text-gray-600 mt-1">
                   {username.charAt(0).toUpperCase() + username.slice(1)} ·
-                  Verified account
+                  Verified contributor.
                 </div>
               </div>
               <button
@@ -308,6 +345,45 @@ export default function Badge({
               <button
                 aria-label="Close"
                 onClick={handleToggleDevBadge}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showSpecialText && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <div
+            role="dialog"
+            aria-modal="true"
+            onClick={handleToggleSpecialBadge}
+            className="absolute inset-0 bg-black/40"
+          />
+          <div
+            className="relative bg-white text-black border border-gray-200 rounded-lg shadow-lg w-full max-w-sm p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="text-sm font-semibold flex items-center">
+                  <span>Special</span>
+                  <Image
+                    src={badges.special}
+                    alt="Special Badge"
+                    width={28}
+                    height={28}
+                  />
+                </div>
+                <div className="text-xs text-gray-600 mt-1">
+                  {username.charAt(0).toUpperCase() + username.slice(1)} ·
+                  Someone Special.
+                </div>
+              </div>
+              <button
+                aria-label="Close"
+                onClick={handleToggleSpecialBadge}
                 className="text-gray-500 hover:text-gray-700"
               >
                 ×
