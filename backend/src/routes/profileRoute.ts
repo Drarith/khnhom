@@ -18,7 +18,6 @@ import {
 } from "../controllers/khqrController.js";
 import { authenticateToken } from "../middleware/auth.js";
 import "../config/passport.js";
-import { trackProfileView } from "../middleware/viewProfile.js";
 import { requireAdmin } from "../middleware/adminAuth.js";
 
 const profileRouter = express.Router();

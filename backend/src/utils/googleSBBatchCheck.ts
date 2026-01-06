@@ -1,5 +1,14 @@
 import { env } from "../config/myEnv.js";
 
+// --- Types ---
+interface SafeBrowsingResponse {
+  matches?: Array<{
+    threatType: string;
+    platformType: string;
+    threat: { url: string };
+  }>;
+}
+
 // --- Configuration ---
 // Note: GOOGLE_SB_API is retrieved from your .env file
 const GOOGLE_SB_API = env.GOOGLE_SB_API;
@@ -11,7 +20,7 @@ const GOOGLE_SAFE_BROWSING_ENDPOINT = `https://safebrowsing.googleapis.com/v4/th
  * * @param {string[]} urls - An array of URLs to check for threats.
  * @returns {Promise<boolean>} - Resolves to `true` if all URLs are safe, `false` if any URL is unsafe.
  */
-export async function checkUrlsSafe(urls:string[]) {
+export async function checkUrlsSafe(urls: string[]) {
   if (!urls || urls.length === 0) {
     return true; // No URLs to check, so considered safe.
   }
@@ -21,7 +30,7 @@ export async function checkUrlsSafe(urls:string[]) {
 
   const payload = {
     client: {
-      clientId: "innate-bucksaw-476711-t1", 
+      clientId: "innate-bucksaw-476711-t1",
       clientVersion: "1.0.0",
     },
     threatInfo: {
@@ -49,18 +58,19 @@ export async function checkUrlsSafe(urls:string[]) {
 
     // Check for API-level errors (e.g., 400, 500)
     if (!response.ok) {
-      console.error(`Safe Browsing API Request Failed: ${response.status} ${response.statusText}`);
+      console.error(
+        `Safe Browsing API Request Failed: ${response.status} ${response.statusText}`
+      );
       // As a security measure, fail to safe (return false) if the check itself fails.
-      return false; 
+      return false;
     }
 
-    const result = await response.json();
+    const result = (await response.json()) as SafeBrowsingResponse;
 
     // The 'matches' property is only present if one or more threats were found.
     const isSafe = !result.matches;
 
     return isSafe;
-
   } catch (error) {
     console.error("Critical error during Safe Browsing API call:", error);
     // Fail to safe if there's a network or parsing error

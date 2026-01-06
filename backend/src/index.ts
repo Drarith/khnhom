@@ -27,7 +27,13 @@ const app = express();
 const port = env.PORT;
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
-const requiredEnvVars = ["MONGO_URI", "JWT_SECRET", "REFRESH_TOKEN_SECRET", "CLOUDINARY_CLOUD_NAME", "CLOUDINARY_API_KEY"];
+const requiredEnvVars = [
+  "MONGO_URI",
+  "JWT_SECRET",
+  "REFRESH_TOKEN_SECRET",
+  "CLOUDINARY_CLOUD_NAME",
+  "CLOUDINARY_API_KEY",
+];
 requiredEnvVars.forEach((varName) => {
   if (!process.env[varName]) {
     throw new Error(`Missing required environment variable: ${varName}`);
@@ -89,10 +95,6 @@ app.use(cloudinaryRouter);
 
 // Profile routes
 app.use(profileRouter);
-
-app.get("/", async (req, res) => {
-  res.send("Hello from Express + TypeScript!!!");
-});
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

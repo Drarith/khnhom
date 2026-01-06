@@ -1,4 +1,4 @@
-import passport, { type Profile } from "passport";
+import passport from "passport";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
@@ -79,6 +79,7 @@ passport.use(
       clientSecret: GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:4000/api/auth/google/callback",
     },
+    // @ts-expect-error we are not utilizing access and refresh token but could come in handy later
     async (accessToken, refreshToken, profile, done) => {
       try {
         await User.findOrCreate(profile);

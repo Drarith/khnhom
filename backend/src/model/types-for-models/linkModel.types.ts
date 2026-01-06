@@ -1,6 +1,5 @@
 import { Document, Model, Types } from "mongoose";
 import type { LinkCreationInput } from "../../types/user-input.types.js";
-import type { deleteLinkFromProfile } from "../../controllers/profileController.js";
 
 // Interface for the Link document and model in case your dumbass forgets
 export interface ILink extends Document {

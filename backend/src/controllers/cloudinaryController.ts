@@ -34,7 +34,7 @@ export const cloudinaryUploadSignature = async (
       params_to_sign,
       env.CLOUDINARY_API_SECRET
     );
-    console.log("DONE")
+    console.log("DONE");
     return res.status(200).json({
       signature: signature,
       timestamp: timestamp,
@@ -42,7 +42,7 @@ export const cloudinaryUploadSignature = async (
     });
   } catch (error) {
     console.error("Signature generation error:", error);
-    res
+    return res
       .status(500)
       .json({ message: "Internal server error during signature generation." });
   }

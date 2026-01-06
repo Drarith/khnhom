@@ -1,11 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
 import Profile from "../model/profileModel.js";
-import { env } from "../config/myEnv.js";
 import { verifyAccessToken } from "../utils/tokenUtils.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
-
-const JWT_SECRET = env.JWT_SECRET;
 
 function getTokenFromRequest(req: Request): string | null {
   // Check for new access_token cookie first
@@ -62,7 +58,7 @@ export const authenticateToken = async (
       }
     }
 
-    next();
+    return next();
   } catch (err) {
     if ((err as any).name === "TokenExpiredError") {
       return res.status(401).json({

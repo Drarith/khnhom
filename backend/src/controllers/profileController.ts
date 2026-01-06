@@ -26,9 +26,7 @@ import type { IProfile } from "../model/types-for-models/profileModel.types.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 
 import { areLinkSafe, isLinkSafe } from "../helpers/checkLinkSafety.js";
-import { containsBadWords } from "../utils/sanitizeUtils.js";
 import { reservedUsernamesSet } from "../config/reservedNames.js";
-import { error, profileEnd } from "console";
 
 export const createProfile = async (req: Request, res: Response) => {
   if (!req.user) {
@@ -50,12 +48,10 @@ export const createProfile = async (req: Request, res: Response) => {
 
   const existingUser = req.profile?.id;
   if (existingUser)
-    return res
-      .status(400)
-      .json({
-        message: "Profile already existed.",
-        errorCode: "PROFILE_EXISTS",
-      });
+    return res.status(400).json({
+      message: "Profile already existed.",
+      errorCode: "PROFILE_EXISTS",
+    });
 
   const profileData: ProfileCreationInput = {
     user: userId.toString(),
@@ -576,7 +572,7 @@ export const toggleStatus = async (req: Request, res: Response) => {
  * Get all public profiles for sitemap generation
  * Returns username and updatedAt only
  */
-export const getPublicProfiles = async (req: Request, res: Response) => {
+export const getPublicProfiles = async (res: Response) => {
   try {
     const profiles = await Profile.find(
       { isDeactivated: { $ne: true } },

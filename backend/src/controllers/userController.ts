@@ -3,10 +3,7 @@ import passport from "passport";
 import jwt from "jsonwebtoken";
 import User from "../model/userModel.js";
 
-import {
-  sendAuthHttpOnlyCookie,
-  sendAuthTokens,
-} from "../helpers/httpOnlyCookie.js";
+import { sendAuthTokens } from "../helpers/httpOnlyCookie.js";
 import { generateTokens, verifyRefreshToken } from "../utils/tokenUtils.js";
 
 import type { IUser } from "../model/types-for-models/userModel.types.js";
@@ -15,7 +12,6 @@ import { env } from "../config/myEnv.js";
 import Profile from "../model/profileModel.js";
 import UserRole from "../model/roleModel.js";
 
-const JWT_SECRET = env.JWT_SECRET;
 const secureCookie = env.NODE_ENV === "production";
 
 // For when we implement user registration with email/password
@@ -41,11 +37,12 @@ export const createUser = async (req: Request, res: Response) => {
     const { accessToken, refreshToken } = generateTokens(user);
     await user.updateRefreshToken(refreshToken);
 
-    sendAuthTokens(res, accessToken, refreshToken, {
+    return sendAuthTokens(res, accessToken, refreshToken, {
       statusCode: 201,
       message: "User created successfully.",
       secure: secureCookie,
     });
+    
   } catch (error) {
     res.status(500).json({ message: "Unable to create user.", error: error });
   }
@@ -295,7 +292,7 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
     await user.updateRefreshToken(newRefreshToken);
 
     // Send new tokens
-    sendAuthTokens(res, accessToken, newRefreshToken, {
+    return sendAuthTokens(res, accessToken, newRefreshToken, {
       message: "Tokens refreshed successfully",
       secure: secureCookie,
     });
@@ -311,7 +308,7 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
   }
 };
 
-export const getAdminStats = async (req: Request, res: Response) => {
+export const getAdminStats = async ( res: Response) => {
   try {
     const totalUsers = await User.countDocuments();
     const totalProfiles = await Profile.countDocuments();

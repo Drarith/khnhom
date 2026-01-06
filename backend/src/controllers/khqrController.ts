@@ -106,7 +106,7 @@ export async function createKHQR(req: Request, res: Response) {
       const { data } = BakongKHQR.decode(individual.data.qr);
       const decodedQR = data;
 
-      const updatedProfile = await Profile.findOneAndUpdate(
+      await Profile.findOneAndUpdate(
         { user: (req.user as IUser).id },
         {
           $set: {
@@ -139,6 +139,12 @@ export async function createKHQR(req: Request, res: Response) {
         error: error instanceof Error ? error.message : String(error),
       });
     }
+  } else {
+    // Handle merchant account type
+    return res.status(501).json({
+      success: false,
+      message: "Merchant account type is not yet implemented",
+    });
   }
 }
 
@@ -250,10 +256,11 @@ export const createKHQRForDonation = async (req: Request, res: Response) => {
 };
 
 // 2. The SSE Endpoint (Frontend listens here)
-export const paymentEventsHandler = (req: Request, res: Response) => {
+export const paymentEventsHandler = (req: Request, res: Response): void => {
   const { md5 } = req.params;
   if (!md5) {
-    return res.status(400).json({ message: "MD5 is required" });
+    res.status(400).json({ message: "MD5 is required" });
+    return;
   }
 
   // Mandatory headers for SSE

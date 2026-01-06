@@ -23,7 +23,7 @@ export const requireAdmin = async (
         .json({ message: "Forbidden: Admin access required" });
     }
 
-    next();
+    return next();
   } catch (error) {
     console.error("Error checking admin role:", error);
     return res.status(500).json({ message: "Internal server error" });

@@ -2,6 +2,14 @@ import { env } from "../config/myEnv.js";
 
 const GOOGLE_SB_API = env.GOOGLE_SB_API;
 
+interface SafeBrowsingResponse {
+  matches?: Array<{
+    threatType: string;
+    platformType: string;
+    threat: { url: string };
+  }>;
+}
+
 const GOOGLE_SAFE_BROWSING_ENDPOINT = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${GOOGLE_SB_API}`;
 
 /**
@@ -47,7 +55,7 @@ export async function checkUrlSafe(url: string) {
       return false;
     }
 
-    const result = await response.json();
+    const result = (await response.json()) as SafeBrowsingResponse;
 
     // If 'matches' exists and is a non-empty array, the URL is unsafe.
     // If the response is an empty object {} or matches is empty/absent, it's safe.
