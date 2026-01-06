@@ -2,8 +2,6 @@ import { z } from "zod";
 import { Filter } from "bad-words";
 import type { ProfileCreationInput } from "../types/user-input.types.js";
 
-import { checkUrlSafe } from "./googleSafeBrowsing.js";
-
 const filter = new Filter();
 
 export function containsBadWords(str: string): boolean {

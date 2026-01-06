@@ -482,6 +482,12 @@ export const currentUserProfile = async (req: Request, res: Response) => {
     return res
       .status(400)
       .json({ message: "Something went wrong, profile not found." });
+      
+  if (!req.profile) {
+    return res
+      .status(404)
+      .json({ error: "Unauthorized", code: "PROFILE_NOT_FOUND" });
+  }
 
   try {
     await req.profile.populate({

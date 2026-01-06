@@ -38,7 +38,10 @@
       "minLength": "Must be at least {min} characters",
       "maxLength": "Must be at most {max} characters",
       "usernamePattern": "Username can contain only letters, numbers and underscores",
-      "invalidUrl": "Must be a valid HTTPS URL. Example: https://Khnhom.com"
+      "invalidUrl": "Must be a valid HTTPS URL. Example: https://Khnhom.com",
+      "required": "This field is required",
+      "invalidAmount": "Invalid amount format",
+      "linkRequired": "Must have both title and valid URL."
     },
     "socialMediaInput": {
       "added": "Added",

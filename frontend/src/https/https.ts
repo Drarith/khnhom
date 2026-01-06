@@ -54,6 +54,11 @@ apiClient.interceptors.response.use(
     //   window.location.href = "/";
     //   return Promise.reject(error);
     // }
+    if(error.response?.status === 404 && error.response?.data?.code === "PROFILE_NOT_FOUND"){
+      // Specific handling for profile not found
+      window.location.href = "/create-profile";
+      return Promise.reject(error);
+    }
 
     if (
       error.response?.status === 401 &&

@@ -22,8 +22,8 @@ import {
 } from "@/types/profileFormInput";
 import {
   editProfileFormInputSchema,
-  linkFormEditorInputSchema,
-  khqrFormEditorInputSchema,
+  createLinkFormEditorInputSchema,
+  createKhqrFormEditorInputSchema,
 } from "@/validationSchema/inputValidationSchema";
 import { normalizeValue } from "@/helpers/normalizeVal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -127,7 +127,7 @@ export default function ProfileEditor({
     formState: { errors: linkErrors, isValid: LinkIsValid },
   } = useForm<linkFormEditorInputValues>({
     resolver: zodResolver(
-      linkFormEditorInputSchema
+      createLinkFormEditorInputSchema(p)
     ) as Resolver<linkFormEditorInputValues>,
     mode: "onChange",
     reValidateMode: "onChange",
@@ -145,7 +145,7 @@ export default function ProfileEditor({
     formState: { errors: khqrErrors, isValid: khqrIsValid },
   } = useForm<khqrFormEditorInputValues>({
     resolver: zodResolver(
-      khqrFormEditorInputSchema
+      createKhqrFormEditorInputSchema(p)
     ) as Resolver<khqrFormEditorInputValues>,
     mode: "onChange",
     reValidateMode: "onChange",
@@ -601,7 +601,7 @@ export default function ProfileEditor({
                       theme={theme}
                       selectedTemplate={selectedTemplate || "default"}
                       backgroundImage={backgroundImage || ""}
-                      setValue={profileSetValue }
+                      setValue={profileSetValue}
                     />
                   )}
                   {/* Generate QR Code tab, will name later maybe ._. */}

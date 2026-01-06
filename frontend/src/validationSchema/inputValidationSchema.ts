@@ -222,6 +222,45 @@ export const profileFormEditorInputSchema = z.object({
   backgroundImage: z.string().optional(),
 });
 
+export const createProfileFormEditorInputSchema = (
+  t: (key: string, values?: Record<string, string | number>) => string
+) => {
+  return z.object({
+    displayName: SanitizedString(
+      30,
+      3,
+      undefined,
+      undefined,
+      t("validation.minLength", { min: 3 }),
+      t("validation.maxLength", { max: 30 })
+    ),
+    bio: SanitizedString(
+      1000,
+      0,
+      undefined,
+      undefined,
+      undefined,
+      t("validation.maxLength", { max: 1000 })
+    ),
+    socials: SocialsSchema,
+    theme: SanitizedString(50),
+    selectedTemplate: z
+      .enum([
+        "default",
+        "brutalist",
+        "retro",
+        "minimalism",
+        "glassmorphism",
+        "editorial",
+        "neobrutalism",
+        "khmerroyal",
+        "neumorphism",
+      ])
+      .optional(),
+    backgroundImage: z.string().optional(),
+  });
+};
+
 export const linkFormEditorInputSchema = z.object({
   link: z
     .object({
@@ -241,9 +280,54 @@ export const linkFormEditorInputSchema = z.object({
     ),
 });
 
+export const createLinkFormEditorInputSchema = (
+  t: (key: string, values?: Record<string, string | number>) => string
+) => {
+  return z.object({
+    link: z
+      .object({
+        title: SanitizedString(
+          30,
+          3,
+          undefined,
+          undefined,
+          t("validation.minLength", { min: 3 }),
+          t("validation.maxLength", { max: 30 })
+        ),
+        url: SanitizedUrl(t("validation.invalidUrl")),
+      })
+      .refine(
+        (data) => {
+          const hasTitle = data.title.length > 3;
+          const hasUrl = data.url.length > 8;
+          return hasTitle && hasUrl;
+        },
+        {
+          message: t("validation.linkRequired"),
+          path: ["link"],
+        }
+      ),
+  });
+};
+
 export const socialHandleInputSchema = z.object({
   socialHandle: SanitizedString(30, 3),
 });
+
+export const createSocialHandleInputSchema = (
+  t: (key: string, values?: Record<string, string | number>) => string
+) => {
+  return z.object({
+    socialHandle: SanitizedString(
+      30,
+      3,
+      undefined,
+      undefined,
+      t("validation.minLength", { min: 3 }),
+      t("validation.maxLength", { max: 30 })
+    ),
+  });
+};
 
 // Base KHQR Schema
 const baseKhqrSchema = z.object({
@@ -292,6 +376,66 @@ export const khqrFormEditorInputSchema = z.discriminatedUnion("accountType", [
   individualKhqrSchema,
   merchantKhqrSchema,
 ]);
+
+export const createKhqrFormEditorInputSchema = (
+  t: (key: string, values?: Record<string, string | number>) => string
+) => {
+  // Base KHQR Schema
+  const baseKhqrSchema = z.object({
+    accountType: z.enum(["individual", "merchant"]),
+    bakongAccountID: z
+      .string()
+      .min(1, t("validation.required"))
+      .max(32, t("validation.maxLength", { max: 32 })),
+    merchantName: z
+      .string()
+      .min(3, t("validation.minLength", { min: 3 }))
+      .max(25, t("validation.maxLength", { max: 25 })),
+    currency: z.enum(["KHR", "USD"]).optional(),
+    amount: z
+      .string()
+      .optional()
+      .refine(
+        (val) => !val || /^\d+(\.\d{1,2})?$/.test(val),
+        t("validation.invalidAmount")
+      ),
+    merchantCity: z
+      .string()
+      .max(15, t("validation.maxLength", { max: 15 }))
+      .optional(),
+  });
+
+  // Individual specific fields
+  const individualKhqrSchema = baseKhqrSchema.extend({
+    accountType: z.literal("individual"),
+    accountInformation: z
+      .string()
+      .max(32, t("validation.maxLength", { max: 32 }))
+      .optional(),
+    acquiringBank: z
+      .string()
+      .max(32, t("validation.maxLength", { max: 32 }))
+      .optional(),
+  });
+
+  // Merchant specific fields
+  const merchantKhqrSchema = baseKhqrSchema.extend({
+    accountType: z.literal("merchant"),
+    merchantID: z
+      .string()
+      .min(1, t("validation.required"))
+      .max(32, t("validation.maxLength", { max: 32 })),
+    acquiringBank: z
+      .string()
+      .min(1, t("validation.required"))
+      .max(32, t("validation.maxLength", { max: 32 })),
+  });
+
+  return z.discriminatedUnion("accountType", [
+    individualKhqrSchema,
+    merchantKhqrSchema,
+  ]);
+};
 
 // Individual KHQR Schema
 // export const khqrIndividualFormSchema = z.object({

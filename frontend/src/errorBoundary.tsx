@@ -51,11 +51,11 @@ const ErrorFallback: React.FC<FallbackProps> = ({ onReset }) => {
       <div className="max-w-md w-full bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.05)] p-10 border border-slate-100 text-center relative overflow-hidden">
         
         {/* Subtle decorative accent */}
-        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" />
+        <div className="absolute top-0 left-0 w-full h-1.5 bg-primary" />
 
         <div className="mb-8 flex justify-center">
           <div className="p-4 bg-indigo-50 rounded-2xl">
-            <ShieldAlert className="w-12 h-12 text-indigo-600" />
+            <ShieldAlert className="w-12 h-12 text-primary" />
           </div>
         </div>
 

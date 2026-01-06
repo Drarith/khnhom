@@ -43,7 +43,11 @@
     "socialMediaInput": {
       "added": "បានបន្ថែម",
       "addedSocialLink": "បានបន្ថែមតំណភ្ជាប់បណ្តាញសង្គមដោយជោគជ័យ",
-      "addSocialLink": "បន្ថែមតំណភ្ជាប់បណ្តាញសង្គម"
+      "addSocialLink": "បន្ថែមតំណភ្ជាប់បណ្តាញសង្គម",
+      "invalidUrl": "ត្រូវតែជា HTTPS URL ដែលត្រឹមត្រូវ។ ឧទាហរណ៍៖ https://Khnhom.com",
+      "required": "ចាំបាច់ត្រូវបំពេញវាលនេះ",
+      "invalidAmount": "ទម្រង់ចំនួនទឹកប្រាក់មិនត្រឹមត្រូវ",
+      "linkRequired": "ត្រូវតែមានទាំងចំណងជើង និង URL ដែលត្រឹមត្រូវ។"
     }
   },
   "profileEditorPage": {
