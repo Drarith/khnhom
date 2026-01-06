@@ -8,6 +8,7 @@ import {
   reactivateAccountByUsername,
   getUserRole,
   refreshAccessToken,
+  getAdminStats,
 } from "../controllers/userController.js";
 import passport from "passport";
 import "../config/passport.js";
@@ -50,6 +51,14 @@ userRouter.patch(
   authenticateToken,
   requireAdmin,
   reactivateAccountByUsername
+);
+
+// Admin route to get platform stats
+userRouter.get(
+  "/api/admin/stats",
+  authenticateToken,
+  requireAdmin,
+  getAdminStats
 );
 
 // Get current user's role

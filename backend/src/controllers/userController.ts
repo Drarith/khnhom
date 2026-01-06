@@ -310,3 +310,49 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const getAdminStats = async (req: Request, res: Response) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    const totalProfiles = await Profile.countDocuments();
+    const activeProfiles = await Profile.countDocuments({ isActive: true });
+
+    // Aggregation to sum up all views
+    const viewsResult = await Profile.aggregate([
+      { $group: { _id: null, totalViews: { $sum: "$views" } } },
+    ]);
+    const totalViews = viewsResult.length > 0 ? viewsResult[0].totalViews : 0;
+
+    // Count supporters
+    const supporterCount = await Profile.countDocuments({ isSupporter: true });
+
+    // Count gold supporters
+    const goldSupporterCount = await Profile.countDocuments({
+      isGoldSupporter: true,
+    });
+
+    // Count verified users
+    const verifiedCount = await Profile.countDocuments({ isVerified: true });
+
+    // Sum total donation amount
+    const donationResult = await Profile.aggregate([
+      { $group: { _id: null, totalDonation: { $sum: "$donationAmount" } } },
+    ]);
+    const totalDonationAmount =
+      donationResult.length > 0 ? donationResult[0].totalDonation : 0;
+
+    return res.status(200).json({
+      totalUsers,
+      totalProfiles,
+      activeProfiles,
+      totalViews,
+      supporterCount,
+      goldSupporterCount,
+      verifiedCount,
+      totalDonationAmount,
+    });
+  } catch (error) {
+    console.error("Error fetching admin stats:", error);
+    return res.status(500).json({ message: "Error fetching admin stats" });
+  }
+};
