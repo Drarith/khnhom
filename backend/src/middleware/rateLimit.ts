@@ -14,33 +14,37 @@ const client = createClient({
   password: PASSWORD,
   socket: {
     host: HOST,
-    port: PORT,},
+    port: PORT,
+  },
 });
 
 client.on("error", (err) => console.log("Redis Client Error", err));
 
+
 async function connectRedis() {
   if (!client.isOpen) {
-    try{
+    try {
       await client.connect();
       console.log("Connected to Redis successfully");
     } catch (error) {
       console.error("Error connecting to Redis:", error);
+      // Don't crash the app - just log the error
     }
   }
 }
 
-await connectRedis();
+
+connectRedis().catch((err) => {
+  console.error("Failed to connect to Redis:", err);
+});
 
 // Create and use the rate limiter
 const limiter = rateLimit({
-  // Rate limiter configuration
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
 
-  // Redis store configuration
   store: new RedisStore({
     sendCommand: (...args: string[]) => client.sendCommand(args),
   }),
