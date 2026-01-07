@@ -77,7 +77,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:4000/api/auth/google/callback",
+      callbackURL: `${env.BASE_URL}/api/auth/google/callback`,
     },
     // @ts-expect-error we are not utilizing access and refresh token but could come in handy later
     async (accessToken, refreshToken, profile, done) => {

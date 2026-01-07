@@ -53,7 +53,7 @@ export async function generateMetadata({
   const { userProfile, locale } = await params;
   const result = await getProfile(userProfile);
   const baseUrl =
-    process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
+    process.env.NEXT_PUBLIC_FRONTEND_URL || "";
 
   if (result.status === "success") {
     const profile = result.data;

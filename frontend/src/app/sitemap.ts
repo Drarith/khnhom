@@ -13,7 +13,7 @@ interface ProfilesResponse {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl =
-    process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
+    process.env.NEXT_PUBLIC_FRONTEND_URL || "";
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [

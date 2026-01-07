@@ -16,6 +16,7 @@ type Env = {
   CLOUDINARY_CLOUD_NAME: string;
   CLOUDINARY_URL: string;
   PUBLIC_CLOUDINARY_UPLOAD_ENDPOINT: string;
+  BASE_URL: string;
 };
 
 export const env: Env = {
@@ -35,4 +36,5 @@ export const env: Env = {
   CLOUDINARY_URL: process.env.CLOUDINARY_URL || "",
   PUBLIC_CLOUDINARY_UPLOAD_ENDPOINT:
     process.env.PUBLIC_CLOUDINARY_UPLOAD_ENDPOINT || "",
+  BASE_URL: process.env.BASE_URL || "",
 };

@@ -24,7 +24,7 @@ dotenv.config();
 
 // Initialize the Express application
 const app = express();
-const port = env.PORT;
+const PORT = env.PORT;
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
 const requiredEnvVars = [
@@ -96,6 +96,6 @@ app.use(cloudinaryRouter);
 // Profile routes
 app.use(profileRouter);
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });
