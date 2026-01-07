@@ -248,7 +248,7 @@ export const createKHQRForDonation = async (req: Request, res: Response) => {
       qrData: qrCodeDataURL,
       md5: md5,
       // Give frontend the URL to listen to
-      subscribeUrl: `/api/payment/events/${md5}`,
+      subscribeUrl: `/payment/events/${md5}`,
     });
   } catch (error) {
     return res.status(500).json({ error: String(error) });

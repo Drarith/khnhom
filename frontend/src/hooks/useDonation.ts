@@ -96,7 +96,7 @@ export function useDonation() {
     }
 
     const fullUrl = `${
-      process.env.NEXT_PUBLIC_API_URL || ""
+      process.env.NEXT_PUBLIC_API_BASE_URL || ""
     }${subscribeUrl}`;
 
     console.log("🔌 Tuning radio to:", fullUrl);
