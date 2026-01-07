@@ -17,6 +17,10 @@ type Env = {
   CLOUDINARY_URL: string;
   PUBLIC_CLOUDINARY_UPLOAD_ENDPOINT: string;
   BASE_URL: string;
+  REDIS_PORT?: string;
+  REDIS_HOST?: string;
+  REDIS_USERNAME?: string;
+  REDIS_PASSWORD?: string;
 };
 
 export const env: Env = {
@@ -37,4 +41,8 @@ export const env: Env = {
   PUBLIC_CLOUDINARY_UPLOAD_ENDPOINT:
     process.env.PUBLIC_CLOUDINARY_UPLOAD_ENDPOINT || "",
   BASE_URL: process.env.BASE_URL || "",
+  REDIS_PORT: process.env.REDIS_PORT || "",
+  REDIS_HOST: process.env.REDIS_SOCKET_HOST || "",
+  REDIS_USERNAME: process.env.REDIS_USERNAME || "",
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD || "",
 };

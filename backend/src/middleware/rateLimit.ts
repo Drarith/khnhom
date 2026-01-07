@@ -2,16 +2,18 @@ import { rateLimit } from "express-rate-limit";
 import { RedisStore } from "rate-limit-redis";
 import { createClient } from "redis";
 
-const USERNAME = process.env.USERNAME || "";
-const PASSWORD = process.env.PASSWORD || "";
-const SOCKET_HOST = process.env.SOCKET_HOST || "";
-const PORT = process.env.REDIS_PORT ? Number(process.env.REDIS_PORT) : 6379;
+import { env } from "../config/myEnv.js";
+
+const USERNAME = env.REDIS_USERNAME || "";
+const PASSWORD = env.REDIS_PASSWORD || "";
+const HOST = env.REDIS_HOST || "";
+const PORT = env.REDIS_PORT ? Number(env.REDIS_PORT) : 6379;
 
 const client = createClient({
   username: USERNAME,
   password: PASSWORD,
   socket: {
-    host: SOCKET_HOST,
+    host: HOST,
     port: PORT,},
 });
 

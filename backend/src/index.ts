@@ -16,7 +16,7 @@ import profileRouter from "./routes/profileRoute.js";
 import cloudinaryRouter from "./routes/cloudinary.js";
 import helmet from "helmet";
 // import khqrRouter from "./routes/khqrRoute.js";
-import { env } from "../src/config/myEnv.js";
+import { env } from "./config/myEnv.js";
 
 import rateLimit from "./middleware/rateLimit.js";
 
@@ -25,7 +25,7 @@ dotenv.config();
 // Initialize the Express application
 const app = express();
 const PORT = env.PORT;
-const FRONTEND_URL = process.env.FRONTEND_URL;
+const FRONTEND_URL = env.FRONTEND_URL;
 
 const requiredEnvVars = [
   "MONGO_URI",
@@ -96,6 +96,6 @@ app.use(cloudinaryRouter);
 // Profile routes
 app.use(profileRouter);
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });
