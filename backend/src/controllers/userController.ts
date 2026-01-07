@@ -3,7 +3,7 @@ import passport from "passport";
 import jwt from "jsonwebtoken";
 import User from "../model/userModel.js";
 
-import { sendAuthTokens } from "../helpers/httpOnlyCookie.js";
+import { sendAuthTokens, clearAuthCookies } from "../helpers/httpOnlyCookie.js";
 import { generateTokens, verifyRefreshToken } from "../utils/tokenUtils.js";
 
 import type { IUser } from "../model/types-for-models/userModel.types.js";
@@ -143,26 +143,9 @@ export const logoutUser = async (req: Request, res: Response) => {
     }
   }
 
-  res
-    .clearCookie("access_token", {
-      httpOnly: true,
-      secure: secureCookie,
-      sameSite: "lax",
-    })
-    .clearCookie("refresh_token", {
-      httpOnly: true,
-      secure: secureCookie,
-      sameSite: "lax",
-      path: "/api/auth/refresh-token",
-    })
-    .clearCookie("logged_in", {
-      httpOnly: false,
-      secure: secureCookie,
-      sameSite: "lax",
-      path: "/",
-    })
-    .status(200)
-    .json({ message: "Logged out successfully" });
+  clearAuthCookies(res, secureCookie);
+
+  res.status(200).json({ message: "Logged out successfully" });
 };
 
 export const deactivateAccountByUsername = async (

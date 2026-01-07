@@ -1,5 +1,23 @@
 import type { Response } from "express";
 import type { CookieOptions } from "../types/helpers.js";
+import { env } from "../config/myEnv.js";
+
+// Helper to determine cookie domain
+export const getCookieDomain = () => {
+  try {
+    if (!env.FRONTEND_URL) return undefined;
+    const { hostname } = new URL(env.FRONTEND_URL);
+    if (hostname === "localhost" || hostname === "127.0.0.1") return undefined;
+
+    // Check if it's an IP address, don't prepend dot for IPs
+    if (/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(hostname)) return undefined;
+
+    // Returns .khnhom.com for khnhom.com or api.khnhom.com
+    return hostname.startsWith(".") ? hostname : `.${hostname}`;
+  } catch (error) {
+    return undefined;
+  }
+};
 
 export const sendAuthHttpOnlyCookie = (
   res: Response,
@@ -16,8 +34,9 @@ export const sendAuthHttpOnlyCookie = (
   const cookieOptions = {
     httpOnly: true,
     secure,
-    sameSite: "none" as const,
+    sameSite: secure ? ("none" as const) : ("lax" as const),
     maxAge: maxAgeMs,
+    domain: secure ? getCookieDomain() : undefined,
   };
 
   res.cookie(name, token, cookieOptions);
@@ -43,13 +62,15 @@ export const sendAuthTokens = (
     redirectTo,
   }: Omit<CookieOptions, "name" | "maxAgeMs"> = {}
 ) => {
+  const domain = secure ? getCookieDomain() : undefined;
+
   // Access token - 15 minutes
   res.cookie("access_token", accessToken, {
     httpOnly: true,
     secure,
     sameSite: secure ? "none" : "lax",
     path: "/",
-    domain: secure ? "khnhom.com" : undefined,
+    domain,
     // this way jwt will expire in 15 minutes but cookie will be valid for 7 days we can refresh token within that time
     // jwt sign at tokenUtils.ts
     // maxAge: 3 * 1000, // 10 seconds test
@@ -64,7 +85,7 @@ export const sendAuthTokens = (
     // without path it was causing bug where we would only get old token
     // setting path we are telling the browser where to send this cookie
     path: "/api/auth/refresh-token",
-    domain: secure ? "khnhom.com" : undefined,
+    domain,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
@@ -74,7 +95,7 @@ export const sendAuthTokens = (
     secure,
     sameSite: secure ? "none" : "lax",
     path: "/",
-    domain: secure ? "khnhom.com" : undefined,
+    domain,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 
@@ -83,4 +104,33 @@ export const sendAuthTokens = (
   }
 
   return res.status(statusCode).json({ message });
+};
+
+export const clearAuthCookies = (res: Response, secure: boolean = true) => {
+  const domain = secure ? getCookieDomain() : undefined;
+  const sameSite = secure ? "none" : "lax";
+
+  res.clearCookie("access_token", {
+    httpOnly: true,
+    secure,
+    sameSite,
+    path: "/",
+    domain,
+  });
+
+  res.clearCookie("refresh_token", {
+    httpOnly: true,
+    secure,
+    sameSite,
+    path: "/api/auth/refresh-token",
+    domain,
+  });
+
+  res.clearCookie("logged_in", {
+    httpOnly: false,
+    secure,
+    sameSite,
+    path: "/",
+    domain,
+  });
 };
