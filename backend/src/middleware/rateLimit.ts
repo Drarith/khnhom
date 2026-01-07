@@ -19,7 +19,18 @@ const client = createClient({
 
 client.on("error", (err) => console.log("Redis Client Error", err));
 
-await client.connect();
+async function connectRedis() {
+  if (!client.isOpen) {
+    try{
+      await client.connect();
+      console.log("Connected to Redis successfully");
+    } catch (error) {
+      console.error("Error connecting to Redis:", error);
+    }
+  }
+}
+
+await connectRedis();
 
 // Create and use the rate limiter
 const limiter = rateLimit({
