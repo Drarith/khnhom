@@ -21,12 +21,13 @@ RUN npm run build
 
 RUN npm prune --production
 
+# Update this line to create the home directory
+RUN groupadd -r appuser && useradd -r -g appuser -m -d /home/appuser appuser
 
-RUN groupadd -r appuser && useradd -r -g appuser appuser
 # Change ownership of the entire app directory
 RUN chown -R appuser:appuser /app
 USER appuser
 
 EXPOSE 4000
 
-CMD ["npm", "run", "start"]
+CMD ["node", "dist/index.js"]
