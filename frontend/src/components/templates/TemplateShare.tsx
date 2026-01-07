@@ -46,6 +46,7 @@ export default function TemplateShare({
               url={url}
               title={title}
               onClose={() => setOpen(false)}
+              scenario="link"
             />
           </div>
         </div>

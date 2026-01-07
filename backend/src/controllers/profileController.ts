@@ -572,7 +572,7 @@ export const toggleStatus = async (req: Request, res: Response) => {
  * Get all public profiles for sitemap generation
  * Returns username and updatedAt only
  */
-export const getPublicProfiles = async (res: Response) => {
+export const getPublicProfiles = async (_req: Request, res: Response) => {
   try {
     const profiles = await Profile.find(
       { isDeactivated: { $ne: true } },

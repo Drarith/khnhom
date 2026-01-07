@@ -234,6 +234,16 @@
     "pageLink": "Page Link",
     "continueToSite": "Continue to site"
   },
+  "shareSocial": {
+    "title": {
+      "profile": "Share profile",
+      "link": "Share this link",
+      "default": "Share with friends"
+    },
+    "copied": "COPIED",
+    "copy": "COPY",
+    "moreOptions": "More Options"
+  },
   "socialMediaForm": {
     "minChars": "Minimum 3 characters",
     "preview": "Preview:",

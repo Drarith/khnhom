@@ -42,7 +42,6 @@ export const createUser = async (req: Request, res: Response) => {
       message: "User created successfully.",
       secure: secureCookie,
     });
-    
   } catch (error) {
     res.status(500).json({ message: "Unable to create user.", error: error });
   }
@@ -308,7 +307,7 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
   }
 };
 
-export const getAdminStats = async ( res: Response) => {
+export const getAdminStats = async (_req: Request, res: Response) => {
   try {
     const totalUsers = await User.countDocuments();
     const totalProfiles = await Profile.countDocuments();

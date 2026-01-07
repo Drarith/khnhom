@@ -9,7 +9,7 @@ const protectedRoutes = ["/dashboard", "/create-profile"];
 // Create the next-intl middleware
 const intlMiddleware = createMiddleware(routing);
 
-export default async function proxy(request: NextRequest, res: Response) {
+export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Always run intlMiddleware first to handle locale redirection

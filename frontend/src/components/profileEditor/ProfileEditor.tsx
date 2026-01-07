@@ -695,6 +695,7 @@ export default function ProfileEditor({
           <SocialShare
             url={`${window.location.origin}/${initialData?.username}`}
             onClose={() => setShowShareModal(false)}
+            scenario="profile"
           />
         </div>
       )}

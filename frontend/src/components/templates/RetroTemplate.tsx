@@ -215,7 +215,7 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
               className="mt-auto pt-10 w-full text-center text-[10px] uppercase opacity-60"
               style={{ color: primaryColor }}
             >
-              MEM: 64KB OK • SYSTEM: DOMNOR-OS • {new Date().getFullYear()}
+              MEM: 64KB OK • SYSTEM: KHNHOM-OS • {new Date().getFullYear()}
             </div>
           </div>
         </div>

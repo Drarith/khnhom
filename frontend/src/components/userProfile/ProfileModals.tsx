@@ -167,6 +167,7 @@ export default function ProfileModals({
           <SocialShare
             url={`${DOMAIN}/${data.username}`}
             onClose={() => setShowShareModal(false)}
+            scenario="profile"
           />
         </div>
       )}

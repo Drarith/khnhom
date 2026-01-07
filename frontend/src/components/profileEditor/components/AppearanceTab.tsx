@@ -124,11 +124,11 @@ export default function AppearanceTab({
             <h3 className="font-medium text-primary mb-4">
               {t("backgroundImage")}
             </h3>
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3 ">
               <button
                 type="button"
                 onClick={() => onBackgroundSelect("")}
-                className={`relative h-32 rounded-lg border-2 transition-all overflow-hidden ${
+                className={`relative h-32 rounded-lg border-2 transition-all overflow-hidden cursor-pointer ${
                   backgroundImage === ""
                     ? "border-primary shadow-lg scale-105"
                     : "border-primary/20 hover:border-primary/40"
@@ -145,7 +145,7 @@ export default function AppearanceTab({
                   type="button"
                   key={bg.url}
                   onClick={() => onBackgroundSelect(bg.name)}
-                  className={`theme-btn relative h-32 rounded-lg border-2 transition-all  ${
+                  className={`theme-btn relative h-32 rounded-lg border-2 transition-all cursor-pointer ${
                     backgroundImage === bg.name
                       ? "shadow-lg selected-spin "
                       : "border-primary/20 hover:border-primary/40"

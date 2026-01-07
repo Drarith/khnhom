@@ -11,6 +11,7 @@ import {
   Facebook,
   Linkedin,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const XIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
@@ -34,11 +35,15 @@ function checkNativeShareSupport() {
   return false;
 }
 
+type ShareScenario = "profile" | "link" | "default";
+
 export const SocialShare = ({
   url = window.location.href,
   title = "Check out my profile!",
   onClose = () => {},
+  scenario = "default" as ShareScenario,
 }) => {
+  const t = useTranslations("shareSocial");
   const [copied, setCopied] = useState(false);
   const [canNativeShare, setCanNativeShare] = useState(false);
   const isNavtiveShareSupported = checkNativeShareSupport();
@@ -110,7 +115,7 @@ export const SocialShare = ({
         </div>
 
         <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 dark:from-white dark:to-slate-400 bg-clip-text text-transparent">
-          Share with friends
+          {t(`title.${scenario}`)}
         </h2>
       </div>
 
@@ -154,7 +159,7 @@ export const SocialShare = ({
                 : "bg-white dark:bg-slate-600 text-slate-900 dark:text-white shadow-sm"
             }`}
           >
-            {copied ? "COPIED" : "COPY"}
+            {copied ? t("copied") : t("copy")}
           </div>
         </button>
 
@@ -163,7 +168,7 @@ export const SocialShare = ({
             onClick={handleNativeShare}
             className="w-full py-4 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-lg shadow-blue-500/30 transition-all active:scale-[0.98]"
           >
-            More Options
+            {t("moreOptions")}
           </button>
         )}
       </div>
