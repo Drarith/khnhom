@@ -47,7 +47,8 @@ export const sendAuthTokens = (
   res.cookie("access_token", accessToken, {
     httpOnly: true,
     secure,
-    sameSite: "none",
+    sameSite: secure ? "none" : "lax",
+    path: "/",
     // this way jwt will expire in 15 minutes but cookie will be valid for 7 days we can refresh token within that time
     // jwt sign at tokenUtils.ts
     // maxAge: 3 * 1000, // 10 seconds test
@@ -58,7 +59,7 @@ export const sendAuthTokens = (
   res.cookie("refresh_token", refreshToken, {
     httpOnly: true,
     secure,
-    sameSite: "none",
+    sameSite: secure ? "none" : "lax",
     // without path it was causing bug where we would only get old token
     // setting path we are telling the browser where to send this cookie
     path: "/api/auth/refresh-token",
@@ -69,7 +70,7 @@ export const sendAuthTokens = (
   res.cookie("logged_in", "true", {
     httpOnly: false,
     secure,
-    sameSite: "none",
+    sameSite: secure ? "none" : "lax",
     path: "/",
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
