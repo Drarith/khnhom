@@ -23,5 +23,9 @@ export const backgroundImages = [
     {
         name: "Cyberpunk",
         url: "https://res.cloudinary.com/dosj9q3zb/image/upload/v1767631193/cyberpunk_mpxncr.jpg"
+    },
+    {
+        name: "Glass",
+        url: "https://res.cloudinary.com/dosj9q3zb/image/upload/v1767774911/glass_1_xduler.jpg"
     }
 ]

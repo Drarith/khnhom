@@ -91,10 +91,10 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
             {/* Profile Section */}
             <div className="flex flex-col items-center gap-6 w-full">
               <div className="relative group">
-                <div
+                {/* <div
                   className="absolute -inset-2 border-2 border-dashed animate-[spin_10s_linear_infinite] rounded-full opacity-50"
                   style={{ borderColor: secondaryColor }}
-                ></div>
+                ></div> */}
                 <div
                   className="relative w-32 h-32 border-4 overflow-hidden"
                   style={{
