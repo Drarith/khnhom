@@ -9,6 +9,7 @@ import type { ProfileFormEditorInputValues } from "@/types/profileFormInput";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ThemeButton } from "@/gsap/themeButton";
+import { useState } from "react";
 
 interface AppearanceTabProps {
   initialData?: ProfileData;
@@ -18,6 +19,8 @@ interface AppearanceTabProps {
   setValue: UseFormSetValue<ProfileFormEditorInputValues>;
 }
 
+type Appearance = "theme color" | "background image";
+
 export default function AppearanceTab({
   theme,
   selectedTemplate,
@@ -25,6 +28,8 @@ export default function AppearanceTab({
   setValue,
 }: AppearanceTabProps) {
   const t = useTranslations("profileEditor.appearanceTab");
+
+  const [appearance, setAppearance] = useState<Appearance>("theme color");
 
   function onThemeSelect(themeName: string) {
     setValue("theme", themeName, { shouldValidate: true });
@@ -57,7 +62,9 @@ export default function AppearanceTab({
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 justify-items-center text-foreground">
           <Select
             value={selectedTemplate}
-            onTemplateChange={(val: ProfileFormEditorInputValues["selectedTemplate"]) => onTemplateSelect(val)}
+            onTemplateChange={(
+              val: ProfileFormEditorInputValues["selectedTemplate"]
+            ) => onTemplateSelect(val)}
             options={Object.entries(templates).map(([key, template]) => ({
               value: key,
               label: template.name,
@@ -67,70 +74,99 @@ export default function AppearanceTab({
         </div>
       </div>
 
+      <div className="border-t border-primary/10 pt-6 flex gap-4">
+        <button
+          onClick={() => setAppearance("theme color")}
+          className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+            appearance === "theme color"
+              ? "bg-primary text-primary-foreground shadow-md text-foreground"
+              : "border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 cursor-pointer"
+          }`}
+          type="button"
+        >
+          {t("themeColor")}
+        </button>
+        <button
+          onClick={() => setAppearance("background image")}
+          className={`flex-1 py-3 px-6 rounded-lg font-medium transition-all ${
+            appearance === "background image"
+              ? "bg-primary text-primary-foreground shadow-md text-foreground"
+              : "border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 cursor-pointer"
+          }`}
+          type="button"
+        >
+          {t("backgroundImage")}
+        </button>
+      </div>
+
       {/* Theme Color */}
       <div ref={buttonContainerRef}>
-        <div>
-          <h3 className="font-medium text-primary mb-4">{t("themeColor")}</h3>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
-            {themes.map((t) => {
-              return (
-                <ThemeCard
-                  key={t.name}
-                  theme={t}
-                  onThemeSelect={onThemeSelect}
-                  isSelected={theme === t.name}
-                />
-              );
-            })}
+        {appearance === "theme color" && (
+          <div>
+            <h3 className="font-medium text-primary mb-4">{t("themeColor")}</h3>
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
+              {themes.map((t) => {
+                return (
+                  <ThemeCard
+                    key={t.name}
+                    theme={t}
+                    onThemeSelect={onThemeSelect}
+                    isSelected={theme === t.name}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
         {/* Background Image */}
-        <div className="mt-8 ">
-          <h3 className="font-medium text-primary mb-4">
-            {t("backgroundImage")}
-          </h3>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
-            <button
-              type="button"
-              onClick={() => onBackgroundSelect("")}
-              className={`relative h-32 rounded-lg border-2 transition-all overflow-hidden ${
-                backgroundImage === ""
-                  ? "border-primary shadow-lg scale-105"
-                  : "border-primary/20 hover:border-primary/40"
-              }`}
-            >
-              <div className="absolute inset-0 flex items-center justify-center bg-primary/5">
-                <span className="text-sm font-medium text-primary">
-                  {t("none")}
-                </span>
-              </div>
-            </button>
-            {backgroundImages.map((bg) => (
+        {appearance === "background image" && (
+          <div className="mt-8 ">
+            <h3 className="font-medium text-primary mb-4">
+              {t("backgroundImage")}
+            </h3>
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-3">
               <button
                 type="button"
-                key={bg.url}
-                onClick={() => onBackgroundSelect(bg.name)}
-                className={`theme-btn relative h-32 rounded-lg border-2 transition-all  ${
-                  backgroundImage === bg.name
-                    ? "shadow-lg selected-spin "
+                onClick={() => onBackgroundSelect("")}
+                className={`relative h-32 rounded-lg border-2 transition-all overflow-hidden ${
+                  backgroundImage === ""
+                    ? "border-primary shadow-lg scale-105"
                     : "border-primary/20 hover:border-primary/40"
                 }`}
               >
-                <Image
-                  src={bg.url}
-                  alt={bg.name}
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-black/20 flex items-end p-2">
-                  <span className="text-xs font-medium text-white drop-shadow">
-                    {bg.name}
+                <div className="absolute inset-0 flex items-center justify-center bg-primary/5">
+                  <span className="text-sm font-medium text-primary">
+                    {t("none")}
                   </span>
                 </div>
               </button>
-            ))}
+              {backgroundImages.map((bg) => (
+                <button
+                  type="button"
+                  key={bg.url}
+                  onClick={() => onBackgroundSelect(bg.name)}
+                  className={`theme-btn relative h-32 rounded-lg border-2 transition-all  ${
+                    backgroundImage === bg.name
+                      ? "shadow-lg selected-spin "
+                      : "border-primary/20 hover:border-primary/40"
+                  }`}
+                >
+                  <Image
+                    src={bg.url}
+                    alt={bg.name}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/20 flex items-end p-2">
+                    <span className="text-xs font-medium text-white drop-shadow">
+                      {bg.name}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Profile Status */}
