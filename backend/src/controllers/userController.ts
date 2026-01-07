@@ -12,7 +12,8 @@ import { env } from "../config/myEnv.js";
 import Profile from "../model/profileModel.js";
 import UserRole from "../model/roleModel.js";
 
-const secureCookie = env.NODE_ENV === "production";
+const secureCookie =
+  env.NODE_ENV === "production" || env.FRONTEND_URL.startsWith("https");
 
 // For when we implement user registration with email/password
 export const createUser = async (req: Request, res: Response) => {
