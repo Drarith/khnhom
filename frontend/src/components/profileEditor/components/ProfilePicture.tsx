@@ -100,7 +100,7 @@ export default function ProfilePicture({
 
       <div className="flex items-start gap-6">
         <div className="relative">
-          <div className=" w-24 h-24 rounded-full overflow-hidden bg-linear-to-br from-purple-400 to-pink-600 flex items-center justify-center text-foreground text-3xl font-bold">
+          <div className=" w-24 h-24 rounded-full overflow-hidden bg-linear-to-br from-foreground to-primary flex items-center justify-center text-foreground text-3xl font-bold">
             {croppedImageUrl ? (
               <Image
                 src={croppedImageUrl}
@@ -116,7 +116,7 @@ export default function ProfilePicture({
           </div>
           {isUploading && (
             <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
-              <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"/>
+              <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin" />
             </div>
           )}
           <button
