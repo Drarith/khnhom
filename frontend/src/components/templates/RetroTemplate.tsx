@@ -50,7 +50,7 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
   return (
     <div className="min-h-screen w-full bg-neutral-900 flex items-center justify-center p-4 font-mono overflow-hidden relative">
       {/* CRT Monitor Casing Effect */}
-      <div className="relative w-full  min-h-screen rounded-lg border-[16px] border-neutral-800 shadow-2xl overflow-hidden bg-black">
+      <div className="relative w-full  min-h-screen rounded-lg border-[8px] md:border-[16px] border-neutral-800 shadow-2xl overflow-hidden bg-black">
         {/* Screen Content */}
         <div
           className="absolute inset-0 overflow-y-auto overflow-x-hidden scrollbar-hide"
@@ -197,15 +197,15 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
                   >
                     {link.title}
                   </a>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <TemplateShare
-                      url={link.url}
-                      title={link.title}
-                      style={{ color: buttonTextColor }}
-                    >
-                      <Share2 size={16} />
-                    </TemplateShare>
-                  </div>
+
+                  <TemplateShare
+                    url={link.url}
+                    title={link.title}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-black/5 transition-colors"
+                    ariaLabel="Share link"
+                  >
+                    <Share2 size={18} className="opacity-60" />
+                  </TemplateShare>
                 </div>
               ))}
             </div>
