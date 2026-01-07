@@ -14,7 +14,7 @@ import {
 import {
   createKHQR,
   createKHQRForDonation,
-  paymentEventsHandler,
+  checkPaymentStatus,
 } from "../controllers/khqrController.js";
 import { authenticateToken } from "../middleware/auth.js";
 import "../config/passport.js";
@@ -40,7 +40,7 @@ profileRouter.post(
 
 profileRouter.post("/api/create-profile", authenticateToken, createProfile);
 
-profileRouter.get("/api/payment/events/:md5", paymentEventsHandler);
+profileRouter.get("/api/payment/status/:md5", checkPaymentStatus);
 
 profileRouter.post(
   "/api/create-link",

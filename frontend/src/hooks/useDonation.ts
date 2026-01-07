@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+export const runtime = "edge";
+
+import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { postJSON } from "@/https/https";
 import { toast } from "react-toastify";
@@ -9,7 +11,6 @@ import { useQueryClient } from "@tanstack/react-query";
 interface GenerateQRResponse {
   qrData: string;
   md5: string;
-  subscribeUrl: string;
 }
 
 type PaymentStatus = "idle" | "pending" | "paid" | "expired";
@@ -29,7 +30,7 @@ const getSavedDonation = () => {
       };
     }
     localStorage.removeItem("donationState");
-  } catch (e) {
+  } catch {
     localStorage.removeItem("donationState");
   }
   return null;
@@ -48,9 +49,7 @@ export function useDonation() {
   const [qrData, setQrData] = useState(saved?.qrData || "");
   const [timeLeft, setTimeLeft] = useState(saved?.remaining || 0);
 
-  const [subscribeUrl, setSubscribeUrl] = useState(saved?.subscribeUrl);
-
-  const eventSourceRef = useRef<EventSource | null>(null);
+  const [md5, setMd5] = useState(saved?.md5);
 
   const { mutate, isPending } = useMutation({
     mutationFn: (amount: number) =>
@@ -59,7 +58,7 @@ export function useDonation() {
       }) as Promise<GenerateQRResponse>,
     onSuccess: (data) => {
       setQrData(data.qrData);
-      setSubscribeUrl(data.subscribeUrl);
+      setMd5(data.md5);
       setPaymentStatus("pending");
       const duration = DURATION;
       setTimeLeft(duration);
@@ -71,7 +70,7 @@ export function useDonation() {
         JSON.stringify({
           paymentStatus: "pending",
           qrData: data.qrData,
-          subscribeUrl: data.subscribeUrl,
+          md5: data.md5,
           timerEndTime,
           amount,
         })
@@ -85,54 +84,46 @@ export function useDonation() {
     },
   });
 
-  // SSE for listening to payment status
+  // Polling for payment status
   useEffect(() => {
-    if (!subscribeUrl || paymentStatus !== "pending") {
-      if (eventSourceRef.current) {
-        eventSourceRef.current.close();
-        eventSourceRef.current = null;
-      }
+    console.log("Payment status effect triggered:", { md5, paymentStatus });
+    if (!md5 || paymentStatus !== "pending") {
       return;
     }
 
-    const fullUrl = `${
-      process.env.NEXT_PUBLIC_API_BASE_URL || ""
-    }${subscribeUrl}`;
+    const checkStatus = async () => {
+      try {
+        console.log("Checking payment status for md5:", md5);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL || ""}/payment/status/${md5}`
+        );
+        const data = await response.json();
 
-    console.log("🔌 Tuning radio to:", fullUrl);
-    const eventSource = new EventSource(fullUrl);
-    eventSourceRef.current = eventSource;
-
-    eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-
-      if (data.status === "PAID") {
-        setPaymentStatus("paid");
-        setQrData(null);
-        toast.success("Donation received! Thank you.");
-        localStorage.removeItem("donationState");
-        eventSource.close();
-        queryClient.invalidateQueries({ queryKey: ["profile"] });
-      } else if (data.status === "EXPIRED") {
-        setPaymentStatus("expired");
-        toast.info("QR Code expired");
-        localStorage.removeItem("donationState");
-        eventSource.close();
+        if (data.status === "PAID") {
+          setPaymentStatus("paid");
+          setQrData("");
+          setMd5(null); 
+          toast.success("Donation received! Thank you.");
+          localStorage.removeItem("donationState");
+          queryClient.invalidateQueries({ queryKey: ["profile"] });
+        } else if (data.status === "EXPIRED") {
+          setPaymentStatus("expired");
+          setMd5(null); 
+          toast.info("QR Code expired");
+          localStorage.removeItem("donationState");
+        }
+      } catch (error) {
+        console.error("Error checking payment status:", error);
       }
     };
 
-    eventSource.onerror = (err) => {
-      console.error("Radio interference (SSE Error):", err);
-      // Optional: Don't close on all errors, some might be temporary
-    };
+    // Poll every 6 seconds
+    const pollInterval = setInterval(checkStatus, 6000);
 
     return () => {
-      if (eventSource && eventSource.readyState !== EventSource.CLOSED) {
-        console.log("🔌 Disconnecting radio on cleanup");
-        eventSource.close();
-      }
+      clearInterval(pollInterval);
     };
-  }, [subscribeUrl, paymentStatus, queryClient]);
+  }, [md5, paymentStatus, queryClient]);
 
   // Timer countdown effect
   useEffect(() => {
@@ -142,8 +133,8 @@ export function useDonation() {
           if (prev <= 1) {
             clearInterval(timer);
             setPaymentStatus("expired");
-            setQrData(null);
-            setSubscribeUrl(null);
+            setQrData("");
+            setMd5(null);
             localStorage.removeItem("donationState");
             return 0;
           }
@@ -164,10 +155,7 @@ export function useDonation() {
 
     // Reset state before generating a new QR
     setPaymentStatus("idle");
-    setSubscribeUrl(null);
-    if (eventSourceRef.current) {
-      eventSourceRef.current.close();
-    }
+    setMd5(null);
     localStorage.removeItem("donationState");
 
     mutate(numAmount);
@@ -175,11 +163,8 @@ export function useDonation() {
 
   const handleIdle = () => {
     setPaymentStatus("idle");
-    setQrData(null);
-    setSubscribeUrl(null);
-    if (eventSourceRef.current) {
-      eventSourceRef.current.close();
-    }
+    setQrData("");
+    setMd5(null);
     localStorage.removeItem("donationState");
   };
 

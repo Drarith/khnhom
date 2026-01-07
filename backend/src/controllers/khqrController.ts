@@ -2,21 +2,13 @@ import type { Request, Response } from "express";
 import QRCode from "qrcode";
 // @ts-expect-error For some reason when I install types the package breaks
 import { BakongKHQR, khqrData, IndividualInfo } from "bakong-khqr";
+import { connectRedis } from "../config/redisClient.js";
 import { uploadBase64ToCloudinary } from "../https/uploadToCloudinary.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 import Profile from "../model/profileModel.js";
 import axios from "axios";
 
-interface PollingJob {
-  res: Response | null;
-  profileId: string;
-  amount: number;
-  attempts: number;
-  status: "PENDING" | "PAID" | "EXPIRED";
-  paymentData?: any;
-}
-
-const activeJobs = new Map<string, PollingJob>();
+const redisClient = await connectRedis();
 
 export async function createKHQR(req: Request, res: Response) {
   if (!req.user) {
@@ -150,90 +142,6 @@ export async function createKHQR(req: Request, res: Response) {
   }
 }
 
-async function pollBakong(md5: string, startTime = Date.now()) {
-  const job = activeJobs.get(md5);
-  if (!job) return;
-
-  // Stop polling if status is not PENDING
-  if (job.status !== "PENDING") return;
-
-  if (Date.now() - startTime > 3 * 60 * 1000) {
-    notifyAndCleanup(md5, { status: "EXPIRED" });
-    return;
-  }
-
-  try {
-    const { data } = await axios.post(
-      "https://api-bakong.nbc.gov.kh/v1/check_transaction_by_md5",
-      { md5 },
-      { headers: { Authorization: `Bearer ${process.env.BAKONG_TOKEN}` } }
-    );
-
-    if (data?.responseCode === 0) {
-      await finalizeTransaction(md5, job, data.data);
-      return;
-    }
-
-    // Successive attempt tracking
-    job.attempts++;
-
-    // Exponential Backoff: Starts at 3s, slows down as time passes
-    const nextDelay = Math.min(
-      3000 + Math.floor(job.attempts / 5) * 2000,
-      15000
-    );
-    setTimeout(() => pollBakong(md5, startTime), nextDelay);
-  } catch (error) {
-    // Error backoff: Wait 10s if the Bakong API is down or errors out
-    setTimeout(() => pollBakong(md5, startTime), 10000);
-  }
-}
-
-async function finalizeTransaction(
-  md5: string,
-  job: PollingJob,
-  paymentData: any
-) {
-  try {
-    const profile = await Profile.findById(job.profileId);
-    if (profile) {
-      profile.donationAmount =
-        Math.round(((profile.donationAmount || 0) + job.amount) * 100) / 100;
-      // profile.isSupporter = profile.donationAmount >= 5;
-      // profile.isGoldSupporter = profile.donationAmount >= 20;
-      profile.isVerified = profile.donationAmount >= 10;
-      await profile.save();
-    }
-    notifyAndCleanup(md5, { status: "PAID", data: paymentData });
-  } catch (err) {
-    console.error("Database update failed:", err);
-    // You might want to retry the DB update here
-  }
-}
-
-function notifyAndCleanup(md5: string, payload: any) {
-  const job = activeJobs.get(md5);
-  if (job) {
-    job.status = payload.status;
-    job.paymentData = payload.data;
-
-    // Try to send immediately if connected
-    if (job.res) {
-      job.res.write(`data: ${JSON.stringify(payload)}\n\n`);
-    }
-
-    console.log(
-      `[SSE] Job ${md5} marked as ${payload.status}. Keeping in memory for 5 mins.`
-    );
-
-    // Keep the job in memory for 5 minutes to handle reconnections
-    setTimeout(() => {
-      activeJobs.delete(md5);
-      console.log(`[SSE] Job ${md5} fully removed.`);
-    }, 5 * 60 * 1000);
-  }
-}
-
 export const createKHQRForDonation = async (req: Request, res: Response) => {
   try {
     const { amount } = req.body;
@@ -253,74 +161,100 @@ export const createKHQRForDonation = async (req: Request, res: Response) => {
 
     if (!md5) throw new Error("MD5 generation failed");
 
-    // Register this client
-    activeJobs.set(md5, {
-      res: null,
+    // Save donation context to Redis (TTL: 4 minutes)
+    const donationContext = {
       profileId: req.profile.id,
       amount: parseFloat(amount),
-      attempts: 0,
-      status: "PENDING",
-    });
+      createdAt: Date.now(),
+    };
+    await redisClient.setEx(
+      `donation_context:${md5}`,
+      240,
+      JSON.stringify(donationContext)
+    );
 
     const qrCodeDataURL = await QRCode.toDataURL(qrString);
+    console.log("Generated KHQR for donation:", { md5, qrString });
     return res.status(200).json({
       qrData: qrCodeDataURL,
       md5: md5,
-      // Give frontend the URL to listen to
-      subscribeUrl: `/payment/events/${md5}`,
     });
   } catch (error) {
     return res.status(500).json({ error: String(error) });
   }
 };
 
-// 2. The SSE Endpoint (Frontend listens here)
-export const paymentEventsHandler = (req: Request, res: Response): void => {
+// Check payment status endpoint (for polling)
+export const checkPaymentStatus = async (req: Request, res: Response) => {
+  console.log("checkPaymentStatus called with params:", req.params);
   const { md5 } = req.params;
   if (!md5) {
-    res.status(400).json({ message: "MD5 is required" });
-    return;
+    return res.status(400).json({ message: "MD5 is required" });
   }
 
-  // Mandatory headers for SSE
-  res.writeHead(200, {
-    "Content-Type": "text/event-stream",
-    "Cache-Control": "no-cache",
-    Connection: "keep-alive",
-  });
-  console.log(
-    `[SSE] Connection established for ${md5}, length: ${activeJobs.size}`
-  );
-  // Send initial heartbeat so frontend knows it's working
-  res.write(`data: ${JSON.stringify({ status: "CONNECTED" })}\n\n`);
-  const activeJob = activeJobs.get(md5);
-  if (activeJob) {
-    activeJob.res = res;
-
-    // Direct fix for mobile: If user returns after payment is done
-    if (activeJob.status === "PAID" || activeJob.status === "EXPIRED") {
-      console.log(`[SSE] Reconnected to ${activeJob.status} job ${md5}`);
-      res.write(
-        `data: ${JSON.stringify({
-          status: activeJob.status,
-          data: activeJob.paymentData,
-        })}\n\n`
-      );
-      // No need to poll anymore
-      return;
+  try {
+    // Check if already completed (cached in Redis)
+    console.log("Checking cached result for MD5:", md5);
+    const cachedResult = await redisClient.get(`khqr_job:${md5}`);
+    if (cachedResult) {
+      const result = JSON.parse(cachedResult);
+      return res.status(200).json(result);
     }
+
+    // Get donation context from Redis
+    const contextStr = await redisClient.get(`donation_context:${md5}`);
+    if (!contextStr) {
+      return res.status(404).json({ status: "NOT_FOUND" });
+    }
+
+    const context = JSON.parse(contextStr);
+    const elapsed = Date.now() - context.createdAt;
+
+    // Check if expired (3 minutes)
+    if (elapsed > 3 * 60 * 1000) {
+      await redisClient.del(`donation_context:${md5}`);
+      await redisClient.setEx(
+        `khqr_job:${md5}`,
+        600,
+        JSON.stringify({ status: "EXPIRED" })
+      );
+      return res.status(200).json({ status: "EXPIRED" });
+    }
+
+    // Check Bakong API
+    const { data } = await axios.post(
+      "https://api-bakong.nbc.gov.kh/v1/check_transaction_by_md5",
+      { md5 },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.BAKONG_TOKEN}`,
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        },
+      }
+    );
+
+    if (data?.responseCode === 0) {
+      // Payment confirmed!
+      const profile = await Profile.findById(context.profileId);
+      if (profile) {
+        profile.donationAmount =
+          Math.round(((profile.donationAmount || 0) + context.amount) * 100) /
+          100;
+        profile.isVerified = profile.donationAmount >= 10;
+        await profile.save();
+      }
+
+      const result = { status: "PAID", data: data.data };
+      await redisClient.del(`donation_context:${md5}`); // ADD THIS - cleanup
+      await redisClient.setEx(`khqr_job:${md5}`, 600, JSON.stringify(result));
+      return res.status(200).json(result);
+    }
+
+    // Still pending
+    return res.status(200).json({ status: "PENDING" });
+  } catch (error) {
+    console.error("Error checking payment status:", error);
+    return res.status(500).json({ status: "ERROR", error: String(error) });
   }
-
-  // Only start a new poll loop if one isn't seemingly active (approximated by assuming caller knows)
-  // For now, let's just call it. If it's already running, it's inefficient but functional.
-  // Ideally, adds an 'isPolling' flag.
-  pollBakong(md5);
-
-  // Turned Off because we let the timer run till the end.
-
-  // Clean up if user closes tab
-  // req.on("close", () => {
-  //   console.log(`[SSE] Connection closed for ${md5}`);
-  //   activeJobs.delete(md5);
-  // });
 };

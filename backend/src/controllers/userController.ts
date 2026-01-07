@@ -8,12 +8,10 @@ import { generateTokens, verifyRefreshToken } from "../utils/tokenUtils.js";
 
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 
-import { env } from "../config/myEnv.js";
 import Profile from "../model/profileModel.js";
 import UserRole from "../model/roleModel.js";
 
-const secureCookie =
-  env.NODE_ENV === "production" || env.FRONTEND_URL.startsWith("https");
+const secureCookie = true;
 
 // For when we implement user registration with email/password
 export const createUser = async (req: Request, res: Response) => {
@@ -265,7 +263,17 @@ export const refreshAccessToken = async (req: Request, res: Response) => {
     }
 
     if (user.refreshToken !== refreshToken) {
-      return res.status(403).json({ message: "Invalid refresh token" });
+      if (
+        user.previousRefreshTokenExpiry &&
+        user.previousRefreshTokenExpiry === refreshToken &&
+        user.previousRefreshTokenExpiry &&
+        user.previousRefreshTokenExpiry > new Date()
+      ) {
+        // Token matches previous token and is within grace period.
+        // Proceed with rotation.
+      } else {
+        return res.status(403).json({ message: "Invalid refresh token" });
+      }
     }
 
     // Generate new tokens

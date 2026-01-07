@@ -5,7 +5,8 @@ import ProfileNotFound from "@/components/erro/ProfileNotFound";
 import StructuredData from "@/components/StructuredData";
 import { ProfileData } from "@/types/profileData";
 
-const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_URL =
+  process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_BASE_URL;
 
 type ProfileFetchResult =
   | { status: "success"; data: ProfileData }
@@ -52,14 +53,23 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { userProfile, locale } = await params;
   const result = await getProfile(userProfile);
-  const baseUrl =
-    process.env.NEXT_PUBLIC_FRONTEND_URL || "";
+  const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || "";
 
   if (result.status === "success") {
     const profile = result.data;
     const title = profile.displayName || profile.username;
     const description = profile.bio || `Check out ${title}'s profile`;
-    const imageUrl = profile.profilePictureUrl || "/default-profile.png";
+
+ 
+    const uniqueVersion = new Date().getTime();
+
+
+    const originalImageUrl =
+      profile.profilePictureUrl || "/default-profile.png";
+    const imageUrl = `${originalImageUrl}${
+      originalImageUrl.includes("?") ? "&" : "?"
+    }v=${uniqueVersion}`;
+
     const url = `${baseUrl}/${locale}/${userProfile}`;
 
     return {
@@ -79,7 +89,7 @@ export async function generateMetadata({
         siteName: "Khnhom",
         images: [
           {
-            url: imageUrl,
+            url: imageUrl, // Use the versioned URL here
             width: 1200,
             height: 630,
             alt: `${title}'s profile picture`,
@@ -92,7 +102,7 @@ export async function generateMetadata({
         card: "summary_large_image",
         title,
         description,
-        images: [imageUrl],
+        images: [imageUrl], // And here
       },
       robots: {
         index: true,

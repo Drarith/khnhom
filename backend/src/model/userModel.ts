@@ -30,6 +30,14 @@ const userSchema = new Schema(
       type: String,
       required: false,
     },
+    previousRefreshToken: {
+      type: String,
+      required: false,
+    },
+    previousRefreshTokenExpiry: {
+      type: Date,
+      required: false,
+    },
     isSupporter: {
       type: Boolean,
       default: false,
@@ -125,13 +133,21 @@ userSchema.methods.updatePassword = async function (newPassword: string) {
   await this.save();
 };
 
-userSchema.methods.updateRefreshToken = async function (refreshToken: string) {
-  this.refreshToken = refreshToken;
+userSchema.methods.updateRefreshToken = async function (
+  newRefreshToken: string
+) {
+  if (this.refreshToken) {
+    this.previousRefreshToken = this.refreshToken;
+    this.previousRefreshTokenExpiry = new Date(Date.now() + 60 * 1000); // 1 minute grace period
+  }
+  this.refreshToken = newRefreshToken;
   await this.save();
 };
 
 userSchema.methods.clearRefreshToken = async function () {
   this.refreshToken = undefined;
+  this.previousRefreshToken = undefined;
+  this.previousRefreshTokenExpiry = undefined;
   await this.save();
 };
 

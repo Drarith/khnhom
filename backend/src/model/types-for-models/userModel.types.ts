@@ -9,9 +9,10 @@ export interface IUser extends Document {
   googleId?: string;
   isSupporter: boolean;
   refreshToken?: string;
+  previousRefreshTokenExpiry?: Date;
   createdAt: Date;
   updatedAt: Date;
-  isActive:boolean;
+  isActive: boolean;
 
   // Instance methods
   comparePassword(candidatePassword: string): Promise<boolean>;
