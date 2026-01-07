@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { ProfileData } from "@/types/profileData";
 import { Share2 } from "lucide-react";
@@ -16,6 +15,7 @@ import {
   SiGithub,
   SiFacebook,
 } from "@icons-pack/react-simple-icons";
+import { LinkedInIcon } from "../shareSocial/LinkedInIcon";
 
 type SocialPlatform =
   | "facebook"
@@ -24,7 +24,8 @@ type SocialPlatform =
   | "tiktok"
   | "telegram"
   | "youtube"
-  | "github";
+  | "github"
+  | "linkedin";
 
 export default function NeumorphismTemplate({ data }: { data: ProfileData }) {
   const theme = {
@@ -50,6 +51,7 @@ export default function NeumorphismTemplate({ data }: { data: ProfileData }) {
     telegram: <SiTelegram className="w-6 h-6" />,
     youtube: <SiYoutube className="w-6 h-6" />,
     github: <SiGithub className="w-6 h-6" />,
+    linkedin: <LinkedInIcon className="w-6 h-6" size={24} />,
   };
 
   return (

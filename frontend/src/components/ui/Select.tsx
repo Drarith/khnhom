@@ -11,7 +11,9 @@ interface Option {
 interface SelectProps {
   value: string;
   onStringChange?: (value: string) => void;
-  onTemplateChange?: (value: ProfileFormEditorInputValues["selectedTemplate"]) => void;
+  onTemplateChange?: (
+    value: ProfileFormEditorInputValues["selectedTemplate"]
+  ) => void;
   options: Option[];
   className?: string;
   placeholder?: string;
@@ -75,7 +77,10 @@ export default function Select({
                     : "text-primary/80"
                 }`}
                 onClick={() => {
-                  onTemplateChange?.(option.value as ProfileFormEditorInputValues["selectedTemplate"]);
+                  onStringChange?.(option.value);
+                  onTemplateChange?.(
+                    option.value as ProfileFormEditorInputValues["selectedTemplate"]
+                  );
                   setIsOpen(false);
                 }}
               >

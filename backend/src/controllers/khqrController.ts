@@ -8,10 +8,12 @@ import Profile from "../model/profileModel.js";
 import axios from "axios";
 
 interface PollingJob {
-  res: Response;
+  res: Response | null;
   profileId: string;
   amount: number;
   attempts: number;
+  status: "PENDING" | "PAID" | "EXPIRED";
+  paymentData?: any;
 }
 
 const activeJobs = new Map<string, PollingJob>();
@@ -152,6 +154,9 @@ async function pollBakong(md5: string, startTime = Date.now()) {
   const job = activeJobs.get(md5);
   if (!job) return;
 
+  // Stop polling if status is not PENDING
+  if (job.status !== "PENDING") return;
+
   if (Date.now() - startTime > 3 * 60 * 1000) {
     notifyAndCleanup(md5, { status: "EXPIRED" });
     return;
@@ -209,10 +214,23 @@ async function finalizeTransaction(
 function notifyAndCleanup(md5: string, payload: any) {
   const job = activeJobs.get(md5);
   if (job) {
-    job.res.write(`data: ${JSON.stringify(payload)}\n\n`);
-    job.res.end();
-    activeJobs.delete(md5);
-    console.log(`[SSE] Job ${md5} completed and cleaned up.`);
+    job.status = payload.status;
+    job.paymentData = payload.data;
+
+    // Try to send immediately if connected
+    if (job.res) {
+      job.res.write(`data: ${JSON.stringify(payload)}\n\n`);
+    }
+
+    console.log(
+      `[SSE] Job ${md5} marked as ${payload.status}. Keeping in memory for 5 mins.`
+    );
+
+    // Keep the job in memory for 5 minutes to handle reconnections
+    setTimeout(() => {
+      activeJobs.delete(md5);
+      console.log(`[SSE] Job ${md5} fully removed.`);
+    }, 5 * 60 * 1000);
   }
 }
 
@@ -237,10 +255,11 @@ export const createKHQRForDonation = async (req: Request, res: Response) => {
 
     // Register this client
     activeJobs.set(md5, {
-      res: null as unknown as Response,
+      res: null,
       profileId: req.profile.id,
       amount: parseFloat(amount),
       attempts: 0,
+      status: "PENDING",
     });
 
     const qrCodeDataURL = await QRCode.toDataURL(qrString);
@@ -277,7 +296,24 @@ export const paymentEventsHandler = (req: Request, res: Response): void => {
   const activeJob = activeJobs.get(md5);
   if (activeJob) {
     activeJob.res = res;
+
+    // Direct fix for mobile: If user returns after payment is done
+    if (activeJob.status === "PAID" || activeJob.status === "EXPIRED") {
+      console.log(`[SSE] Reconnected to ${activeJob.status} job ${md5}`);
+      res.write(
+        `data: ${JSON.stringify({
+          status: activeJob.status,
+          data: activeJob.paymentData,
+        })}\n\n`
+      );
+      // No need to poll anymore
+      return;
+    }
   }
+
+  // Only start a new poll loop if one isn't seemingly active (approximated by assuming caller knows)
+  // For now, let's just call it. If it's already running, it's inefficient but functional.
+  // Ideally, adds an 'isPolling' flag.
   pollBakong(md5);
 
   // Turned Off because we let the timer run till the end.

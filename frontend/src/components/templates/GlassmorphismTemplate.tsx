@@ -1,9 +1,8 @@
 import { ProfileData } from "@/types/profileData";
 import { themes } from "@/config/theme";
 import Image from "next/image";
-import { Share2, ExternalLink } from "lucide-react";
+import { Share2 } from "lucide-react";
 import TemplateShare from "./TemplateShare";
-import { toast } from "react-toastify";
 import {
   SiTiktok,
   SiX,
@@ -13,6 +12,8 @@ import {
   SiGithub,
   SiFacebook,
 } from "@icons-pack/react-simple-icons";
+import { LinkedInIcon } from "../shareSocial/LinkedInIcon";
+
 import Footer from "../userProfile/Footer";
 import { backgroundImages } from "@/config/background";
 import Badge from "../badge/Badge";
@@ -24,7 +25,8 @@ type SocialPlatform =
   | "tiktok"
   | "telegram"
   | "youtube"
-  | "github";
+  | "github"
+  | "linkedin";
 
 export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
   const activeTheme = themes.find((theme) => {
@@ -38,6 +40,7 @@ export default function GlassmorphismTemplate({ data }: { data: ProfileData }) {
     telegram: <SiTelegram className="w-6 h-6" />,
     youtube: <SiYoutube className="w-6 h-6" />,
     github: <SiGithub className="w-6 h-6" />,
+    linkedin: <LinkedInIcon className="w-6 h-6" size={24} />,
   };
 
   const backgroundImage = backgroundImages.find(

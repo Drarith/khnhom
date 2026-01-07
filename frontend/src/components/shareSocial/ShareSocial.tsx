@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState, useEffect } from "react";
 import {
@@ -9,9 +9,9 @@ import {
   Send,
   Instagram,
   Facebook,
-  Linkedin,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { LinkedInIcon } from "./LinkedInIcon";
 
 const XIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
@@ -84,7 +84,7 @@ export const SocialShare = ({
     },
     {
       name: "LinkedIn",
-      icon: <Linkedin size={20} />,
+      icon: <LinkedInIcon />,
       color: "bg-[#0077b5]",
       url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
     },

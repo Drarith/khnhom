@@ -13,6 +13,7 @@ import {
   SiGithub,
   SiFacebook,
 } from "@icons-pack/react-simple-icons";
+import { LinkedInIcon } from "../shareSocial/LinkedInIcon"; // Check path
 import Footer from "../userProfile/Footer";
 import { backgroundImages } from "@/config/background";
 import Badge from "../badge/Badge";
@@ -24,7 +25,8 @@ type SocialPlatform =
   | "tiktok"
   | "telegram"
   | "youtube"
-  | "github";
+  | "github"
+  | "linkedin";
 
 export default function DefaultTemplate({ data }: { data: ProfileData }) {
   const activeTheme = themes.find((theme) => {
@@ -38,6 +40,7 @@ export default function DefaultTemplate({ data }: { data: ProfileData }) {
     telegram: <SiTelegram className="w-7 h-7" color={activeTheme?.text} />,
     youtube: <SiYoutube className="w-7 h-7" color={activeTheme?.text} />,
     github: <SiGithub className="w-7 h-7" color={activeTheme?.text} />,
+    linkedin: <LinkedInIcon size={28} className="w-7 h-7" />,
   };
 
   const backgroundImage = backgroundImages.find(

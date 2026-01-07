@@ -12,6 +12,7 @@ import {
   SiGithub,
   SiFacebook,
 } from "@icons-pack/react-simple-icons";
+import { LinkedInIcon } from "../shareSocial/LinkedInIcon";
 import { backgroundImages } from "@/config/background";
 import Badge from "../badge/Badge";
 
@@ -22,7 +23,8 @@ type SocialPlatform =
   | "tiktok"
   | "telegram"
   | "youtube"
-  | "github";
+  | "github"
+  | "linkedin";
 
 export default function RetroTemplate({ data }: { data: ProfileData }) {
   const activeTheme = themes.find((theme) => theme.name === data.theme);
@@ -41,6 +43,7 @@ export default function RetroTemplate({ data }: { data: ProfileData }) {
     telegram: <SiTelegram className="w-5 h-5" />,
     youtube: <SiYoutube className="w-5 h-5" />,
     github: <SiGithub className="w-5 h-5" />,
+    linkedin: <LinkedInIcon className="w-5 h-5" size={20} />,
   };
 
   const backgroundImage = backgroundImages.find(
