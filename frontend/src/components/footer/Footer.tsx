@@ -91,13 +91,13 @@ const Footer = () => {
               {/* Social Placeholders */}
               <div className="flex gap-4 pt-1">
                 <a
-                  href="#"
+                  href="https://github.com/Drarith"
                   className="hover:text-white transition-colors"
                   aria-label="Github"
                 >
                   <Github size={18} />
                 </a>
-                <a
+                {/* <a
                   href="#"
                   className="hover:text-white transition-colors"
                   aria-label="LinkedIn"
@@ -110,7 +110,7 @@ const Footer = () => {
                   aria-label="Twitter"
                 >
                   <Twitter size={18} />
-                </a>
+                </a> */}
               </div>
             </div>
           </div>

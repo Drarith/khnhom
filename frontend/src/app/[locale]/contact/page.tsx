@@ -7,7 +7,7 @@ export default async function ContactPage() {
 
   return (
     <div className="min-h-screen w-full  text-foreground/90 flex items-center justify-center p-6">
-      <div className="max-w-2xl w-full space-y-12">
+      <div className="max-w-2xl w-full space-y-12 py-24">
         <div className="text-center space-y-4">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground">
             {t("title")}

@@ -10,12 +10,9 @@ export default async function AboutPage() {
   return (
     <ClientAbout>
       <div className="min-h-screen w-full">
-        <div className="max-w-5xl mx-auto px-6 py-24 md:py-32">
+        <div className="max-w-5xl mx-auto px-6 py-28 md:py-32">
           {/* Hero Section */}
           <section className="flex flex-col items-center text-center mb-32 space-y-8">
-            <div className="line inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/30 border border-secondary/50 text-sm font-medium text-foreground/80">
-              <span>{t("hero.badge")}</span>
-            </div>
 
             <h1 className="line text-5xl md:text-7xl font-bold tracking-tight leading-[1.1]">
               {t("hero.titleLine1")} <br />

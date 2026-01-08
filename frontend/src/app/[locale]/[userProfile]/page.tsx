@@ -57,18 +57,10 @@ export async function generateMetadata({
 
   if (result.status === "success") {
     const profile = result.data;
-    const title = profile.displayName || profile.username;
+    const title =
+      profile.displayName + " Telegram, Instagram & Facebook Links | Khnhom" ||
+      profile.username;
     const description = profile.bio || `Check out ${title}'s profile`;
-
- 
-    const uniqueVersion = new Date().getTime();
-
-
-    const originalImageUrl =
-      profile.profilePictureUrl || "/default-profile.png";
-    const imageUrl = `${originalImageUrl}${
-      originalImageUrl.includes("?") ? "&" : "?"
-    }v=${uniqueVersion}`;
 
     const url = `${baseUrl}/${locale}/${userProfile}`;
 
@@ -87,14 +79,6 @@ export async function generateMetadata({
         description,
         url,
         siteName: "Khnhom",
-        images: [
-          {
-            url: imageUrl, // Use the versioned URL here
-            width: 1200,
-            height: 630,
-            alt: `${title}'s profile picture`,
-          },
-        ],
         locale: locale === "kh" ? "km_KH" : "en_US",
         type: "profile",
       },
@@ -102,7 +86,6 @@ export async function generateMetadata({
         card: "summary_large_image",
         title,
         description,
-        images: [imageUrl], // And here
       },
       robots: {
         index: true,
