@@ -1,5 +1,6 @@
 .selected-spin {
   transform-style: preserve-3d;
+  isolation: isolate;
 }
 
 @property --angle {
@@ -22,7 +23,7 @@
   inset: -4px;
   border-radius: inherit;
 
-  transform: translateZ(-1px);
+  z-index: -1;
   padding: 10px;
   animation: 3s spin-angle infinite linear;
 }

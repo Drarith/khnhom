@@ -14,44 +14,54 @@ export default function ThemeCard({
     <button
       type="button"
       onClick={() => onThemeSelect(theme.name)}
-      className={`cursor-pointer theme-btn for-background relative rounded-lg p-4 flex flex-col items-center justify-center gap-3 transition-all border-2 h-52 w-full${
-        isSelected
-          ? " shadow-lg selected-spin"
-          : "border-primary/20 hover:border-primary/40 hover:scale-[1.02]"
+      className={`group cursor-pointer theme-btn for-background relative rounded-lg h-52 w-full transition-all ${
+        isSelected ? "shadow-lg selected-spin" : "hover:scale-[1.02]"
       }`}
-      style={{ background: theme.bg }}
     >
-      {/* Profile Circle */}
+      {/* Background & Border Layer - Sits above glow (z-index: -1) but below content */}
       <div
-        className="w-16 h-16 rounded-full mb-2"
-        style={{ background: theme.button }}
-      ></div>
+        className={`absolute inset-0 rounded-lg border-2 ${
+          isSelected
+            ? "border-transparent"
+            : "border-primary/20 group-hover:border-primary/40"
+        }`}
+        style={{ background: theme.bg }}
+      />
 
-      {/* Profile Name Placeholder */}
-      <div
-        className="w-24 h-4 rounded-full opacity-80"
-        style={{ background: theme.text }}
-      ></div>
+      {/* Content Layer */}
+      <div className="relative z-10 w-full h-full p-4 flex flex-col items-center justify-center gap-3">
+        {/* Profile Circle */}
+        <div
+          className="w-16 h-16 rounded-full mb-2"
+          style={{ background: theme.button }}
+        ></div>
 
-      {/* Bio Placeholder */}
-      <div
-        className="w-32 h-2 rounded-full opacity-60 mb-2"
-        style={{ background: theme.text }}
-      ></div>
+        {/* Profile Name Placeholder */}
+        <div
+          className="w-24 h-4 rounded-full opacity-80"
+          style={{ background: theme.text }}
+        ></div>
 
-      {/* Button Preview */}
-      <div
-        className="w-full h-8 rounded-lg flex items-center justify-center text-xs font-semibold shadow-sm"
-        style={{
-          background: theme.button,
-          color: theme.buttonText,
-        }}
-      >
-        LINK
+        {/* Bio Placeholder */}
+        <div
+          className="w-32 h-2 rounded-full opacity-60 mb-2"
+          style={{ background: theme.text }}
+        ></div>
+
+        {/* Button Preview */}
+        <div
+          className="w-full h-8 rounded-lg flex items-center justify-center text-xs font-semibold shadow-sm"
+          style={{
+            background: theme.button,
+            color: theme.buttonText,
+          }}
+        >
+          LINK
+        </div>
       </div>
 
       {/* Theme Name Label */}
-      <div className="absolute bottom-2 left-2 right-2">
+      <div className="absolute z-20 bottom-2 left-2 right-2">
         <span
           className="text-xs font-medium drop-shadow px-2 py-1 rounded"
           style={{
