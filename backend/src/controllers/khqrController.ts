@@ -7,8 +7,22 @@ import { uploadBase64ToCloudinary } from "../https/uploadToCloudinary.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 import Profile from "../model/profileModel.js";
 import axios from "axios";
+import { HttpsProxyAgent } from "https-proxy-agent";
+import { env } from "../config/myEnv.js";
 
 const redisClient = await connectRedis();
+
+/*
+const proxyConfig = {
+  protocol: "https" as const,
+  host: env.PROXY_HOST || "",
+  port: env.PROXY_PORT || 0,
+  auth: {
+    username: env.PROXY_USERNAME || "",
+    password: env.PROXY_PASSWORD || "",
+  },
+};
+*/
 
 export async function createKHQR(req: Request, res: Response) {
   if (!req.user) {
@@ -221,15 +235,20 @@ export const checkPaymentStatus = async (req: Request, res: Response) => {
       return res.status(200).json({ status: "EXPIRED" });
     }
 
+    const username = encodeURIComponent(env.PROXY_USERNAME || "");
+    const password = encodeURIComponent(env.PROXY_PASSWORD || "");
+    const proxyUrl = `http://${username}:${password}@${env.PROXY_HOST}:${env.PROXY_PORT}`;
+    const httpsAgent = new HttpsProxyAgent(proxyUrl);
+
     // Check Bakong API
     const { data } = await axios.post(
       "https://api-bakong.nbc.gov.kh/v1/check_transaction_by_md5",
       { md5 },
       {
+        httpsAgent,
+        proxy: false,
         headers: {
-          Authorization: `Bearer ${process.env.BAKONG_TOKEN}`,
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+          Authorization: `Bearer ${env.BAKONG_TOKEN}`,
         },
       }
     );

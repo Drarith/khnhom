@@ -21,6 +21,11 @@ type Env = {
   REDIS_HOST?: string;
   REDIS_USERNAME?: string;
   REDIS_PASSWORD?: string;
+  PROXY_HOST?: string;
+  PROXY_PORT?: number;
+  PROXY_USERNAME?: string;
+  PROXY_PASSWORD?: string;
+  BAKONG_TOKEN?: string;
 };
 
 export const env: Env = {
@@ -45,4 +50,9 @@ export const env: Env = {
   REDIS_HOST: process.env.REDIS_SOCKET_HOST || "",
   REDIS_USERNAME: process.env.REDIS_USERNAME || "",
   REDIS_PASSWORD: process.env.REDIS_PASSWORD || "",
+  PROXY_HOST: process.env.PROXY_HOST || "",
+  PROXY_PORT: Number(process.env.PROXY_PORT) || 0,
+  PROXY_USERNAME: process.env.PROXY_USERNAME || "",
+  BAKONG_TOKEN: process.env.BAKONG_TOKEN || "",
+  PROXY_PASSWORD: process.env.PROXY_PASSWORD || "",
 };

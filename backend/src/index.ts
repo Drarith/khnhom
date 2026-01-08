@@ -1,4 +1,5 @@
 import express from "express";
+import { env } from "./config/myEnv.js";
 import mongoose from "mongoose";
 
 import passport from "passport";
@@ -16,7 +17,6 @@ import profileRouter from "./routes/profileRoute.js";
 import cloudinaryRouter from "./routes/cloudinary.js";
 import helmet from "helmet";
 // import khqrRouter from "./routes/khqrRoute.js";
-import { env } from "./config/myEnv.js";
 
 import rateLimit from "./middleware/rateLimit.js";
 
