@@ -12,7 +12,10 @@ export const contentType = "image/png";
 
 const API_URL =
   process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_BASE_URL;
-const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL || "";
+
+// Ensure we have a valid base URL for local development or production
+const FRONTEND_URL =
+  process.env.NEXT_PUBLIC_FRONTEND_URL;
 
 export default async function Image({
   params,
@@ -61,11 +64,13 @@ export default async function Image({
 
 
   let imageSrc = profilePictureUrl;
+
   if (!imageSrc) {
     // Fallback to default
     imageSrc = `${FRONTEND_URL}/default-profile.png`;
-  } else if (imageSrc.startsWith("/")) {
-    imageSrc = `${FRONTEND_URL}${imageSrc}`;
+  } else if (!imageSrc.startsWith("http")) {
+    const path = imageSrc.startsWith("/") ? imageSrc : `/${imageSrc}`;
+    imageSrc = `${FRONTEND_URL}${path}`;
   }
 
   const background = "linear-gradient(to bottom right, #ffffff, #f3f4f6)";
@@ -81,7 +86,7 @@ export default async function Image({
           alignItems: "center",
           justifyContent: "center",
           backgroundImage: background,
-          fontFamily: '"Geist", sans-serif', // Assuming generic sans-serif
+          fontFamily: "sans-serif",
         }}
       >
         {/* Main content container */}
