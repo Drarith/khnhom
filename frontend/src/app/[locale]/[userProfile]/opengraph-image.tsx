@@ -145,14 +145,20 @@ export default async function Image({
                 fontWeight: "bold",
                 color: "#111827",
                 lineHeight: 1,
+                display: "flex",
               }}
             >
               {displayName}
             </div>
             <div
-              style={{ fontSize: "32px", color: "#6B7280", marginTop: "10px" }}
+              style={{
+                fontSize: "32px",
+                color: "#6B7280",
+                marginTop: "10px",
+                display: "flex",
+              }}
             >
-              @{username}
+              {`@${username}`}
             </div>
           </div>
 
@@ -184,7 +190,14 @@ export default async function Image({
             gap: "10px",
           }}
         >
-          <div style={{ fontSize: "24px", fontWeight: 600, color: "#000" }}>
+          <div
+            style={{
+              fontSize: "24px",
+              fontWeight: 600,
+              color: "#000",
+              display: "flex",
+            }}
+          >
             Khnhom
           </div>
         </div>
