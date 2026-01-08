@@ -25,7 +25,7 @@ export default async function Image({
 
   try {
     const res = await fetch(`${API_URL}/${userProfile.toLowerCase()}`, {
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
 
     if (res.ok) {
