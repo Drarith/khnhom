@@ -34,7 +34,6 @@ export const cloudinaryUploadSignature = async (
       params_to_sign,
       env.CLOUDINARY_API_SECRET
     );
-    console.log("DONE");
     return res.status(200).json({
       signature: signature,
       timestamp: timestamp,

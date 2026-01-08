@@ -86,14 +86,12 @@ export function useDonation() {
 
   // Polling for payment status
   useEffect(() => {
-    console.log("Payment status effect triggered:", { md5, paymentStatus });
     if (!md5 || paymentStatus !== "pending") {
       return;
     }
 
     const checkStatus = async () => {
       try {
-        console.log("Checking payment status for md5:", md5);
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_BASE_URL || ""}/payment/status/${md5}`
         );
