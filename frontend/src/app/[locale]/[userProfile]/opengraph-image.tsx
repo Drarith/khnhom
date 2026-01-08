@@ -13,9 +13,7 @@ export const contentType = "image/png";
 const API_URL =
   process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_BASE_URL;
 
-// Ensure we have a valid base URL for local development or production
-const FRONTEND_URL =
-  process.env.NEXT_PUBLIC_FRONTEND_URL;
+const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL;
 
 export default async function Image({
   params,
@@ -39,6 +37,9 @@ export default async function Image({
   }
 
   if (!profile || !profile.isActive) {
+    console.log(
+      `OG Image: Profile not found or inactive for user: ${userProfile}`
+    );
     return new ImageResponse(
       (
         <div
@@ -61,8 +62,12 @@ export default async function Image({
   }
 
   const { displayName, username, bio, profilePictureUrl } = profile;
+  console.log(
+    `OG Image: Generating for ${username}, Pic: ${profilePictureUrl}`
+  );
 
-
+  // Ensure we have a valid absolute URL for the image
+  // Satori (OG image generation) requires absolute URLs for images
   let imageSrc = profilePictureUrl;
 
   if (!imageSrc) {
@@ -71,6 +76,12 @@ export default async function Image({
   } else if (!imageSrc.startsWith("http")) {
     const path = imageSrc.startsWith("/") ? imageSrc : `/${imageSrc}`;
     imageSrc = `${FRONTEND_URL}${path}`;
+  } else {
+    if (imageSrc.includes("cloudinary.com")) {
+      if (imageSrc.endsWith(".webp")) {
+        imageSrc = imageSrc.replace(".webp", ".png");
+      }
+    }
   }
 
   const background = "linear-gradient(to bottom right, #ffffff, #f3f4f6)";
@@ -101,7 +112,7 @@ export default async function Image({
             textAlign: "center",
           }}
         >
-          {/* Profile Picture with Ring */}
+        
           <div style={{ display: "flex" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -119,7 +130,7 @@ export default async function Image({
             />
           </div>
 
-          {/* Name */}
+        
           <div
             style={{
               marginTop: "30px",
