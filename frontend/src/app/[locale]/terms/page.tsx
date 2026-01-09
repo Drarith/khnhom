@@ -168,12 +168,12 @@ export default function TermsOfService() {
             11. Contact Us
           </h2>
           <p>
-            If you have any questions about these Terms, please contact us at{" "}
+            If you have any questions about these Terms, please contact us at
             <a
-              href="mailto:sarindararith5540@gmail.com"
+              href="mailto:khnhomofficial@gmail.com@gmail.com"
               className="text-blue-600 hover:underline"
             >
-              sarindararith5540@gmail.com
+              khnhomofficial@gmail.com
             </a>
             .
           </p>

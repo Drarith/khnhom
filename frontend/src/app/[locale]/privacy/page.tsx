@@ -170,12 +170,12 @@ export default function PrivacyPolicy() {
           </p>
           <ul className="list-disc pl-6 mt-2">
             <li>
-              By email:{" "}
+              By email:
               <a
-                href="mailto:sarindararith5540@gmail.com"
+                href="mailto:khnhomofficial@gmail.com@gmail.com"
                 className="text-blue-600 hover:underline"
               >
-                sarindararith5540@gmail.com
+                khnhomofficial@gmail.com
               </a>
             </li>
           </ul>

@@ -29,7 +29,7 @@ export default async function ContactPage() {
             </h3>
             <p className=" text-sm mb-4">{t("email.description")}</p>
             <div className="text-sm font-medium text-foreground group-hover:text-blue-400 transition-colors">
-              sarindararith5540@gmail.com
+              khnhomofficial@gmail.com
             </div>
           </Link>
 
