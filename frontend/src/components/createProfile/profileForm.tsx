@@ -207,7 +207,7 @@ export default function ProfileForm() {
             </div>
             <div className="grid gap-6 md:grid-cols-2">
               {/* link input */}
-              <ProfileFormInput
+              {/* <ProfileFormInput
                 register={register}
                 fieldId="link"
                 fieldInput="link"
@@ -216,7 +216,7 @@ export default function ProfileForm() {
                 label={t("profileInputLabel.link")}
                 maxLength={200}
                 hasInput={hasValue(link)}
-              />
+              /> */}
             </div>
             {/* social media tab */}
             <SocialMediaForm socials={socials} setValue={setValue} />
