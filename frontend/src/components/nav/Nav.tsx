@@ -131,11 +131,11 @@ export default function Nav() {
             </div>
             <div className="menu-info">
               <div className="menu-info-col">
-                <a href="https://github.com/Drarith">{t("github")} &#8599;</a>
+                <a href="https://github.com/Drarith">{t("github")}</a>
               </div>
               <div className="menu-info-col">
-                <p>sarindararith@gmail.com</p>
-                <p>070 35 70 71</p>
+                <p>khnhomofficial@gmail.com</p>
+                
               </div>
             </div>
           </div>
