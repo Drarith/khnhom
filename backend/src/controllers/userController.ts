@@ -14,69 +14,69 @@ import UserRole from "../model/roleModel.js";
 const secureCookie = true;
 
 // For when we implement user registration with email/password
-export const createUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ message: "Email and password are required" });
-  }
+// export const createUser = async (req: Request, res: Response) => {
+//   const { email, password } = req.body;
+//   if (!email || !password) {
+//     return res.status(400).json({ message: "Email and password are required" });
+//   }
 
-  try {
-    const userExists = await User.emailExists(email);
-    if (userExists) {
-      return res
-        .status(400)
-        .json({ error: "Email already exists, please log in instead." });
-    }
-    const user: IUser = await User.createUser(email, password);
-    const userData = {
-      user: user._id,
-    };
-    await UserRole.createUserRole(userData);
+//   try {
+//     const userExists = await User.emailExists(email);
+//     if (userExists) {
+//       return res
+//         .status(400)
+//         .json({ error: "Email already exists, please log in instead." });
+//     }
+//     const user: IUser = await User.createUser(email, password);
+//     const userData = {
+//       user: user._id,
+//     };
+//     await UserRole.createUserRole(userData);
 
-    const { accessToken, refreshToken } = generateTokens(user);
-    await user.updateRefreshToken(refreshToken);
+//     const { accessToken, refreshToken } = generateTokens(user);
+//     await user.updateRefreshToken(refreshToken);
 
-    return sendAuthTokens(res, accessToken, refreshToken, {
-      statusCode: 201,
-      message: "User created successfully.",
-      secure: secureCookie,
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Unable to create user.", error: error });
-  }
-};
+//     return sendAuthTokens(res, accessToken, refreshToken, {
+//       statusCode: 201,
+//       message: "User created successfully.",
+//       secure: secureCookie,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ message: "Unable to create user.", error: error });
+//   }
+// };
 
-export const loginUser = (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate(
-    "local",
-    { session: false },
-    // executing our strategy from passport config
-    // this is the returned function
-    async (err: Error, user: IUser | false, info?: { message: string }) => {
-      if (err) {
-        return next(err);
-      }
-      if (!user) {
-        return res
-          .status(401)
-          .json({ message: info?.message || "Login failed" });
-      }
+// export const loginUser = (req: Request, res: Response, next: NextFunction) => {
+//   passport.authenticate(
+//     "local",
+//     { session: false },
+//     // executing our strategy from passport config
+//     // this is the returned function
+//     async (err: Error, user: IUser | false, info?: { message: string }) => {
+//       if (err) {
+//         return next(err);
+//       }
+//       if (!user) {
+//         return res
+//           .status(401)
+//           .json({ message: info?.message || "Login failed" });
+//       }
 
-      const { accessToken, refreshToken } = generateTokens(user);
-      await user.updateRefreshToken(refreshToken);
+//       const { accessToken, refreshToken } = generateTokens(user);
+//       await user.updateRefreshToken(refreshToken);
 
-      sendAuthTokens(res, accessToken, refreshToken, {
-        message: "Logged in successfully.",
-        secure: secureCookie,
-      });
-    }
-  )(
-    // invoke the returned function immediately with req, res, next
-    req,
-    res,
-    next
-  );
-};
+//       sendAuthTokens(res, accessToken, refreshToken, {
+//         message: "Logged in successfully.",
+//         secure: secureCookie,
+//       });
+//     }
+//   )(
+//     // invoke the returned function immediately with req, res, next
+//     req,
+//     res,
+//     next
+//   );
+// };
 
 export const googleCallback = (
   req: Request,

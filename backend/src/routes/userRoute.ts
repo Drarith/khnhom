@@ -1,8 +1,8 @@
 import express from "express";
 import {
-  createUser,
+  // createUser,
   googleCallback,
-  loginUser,
+  // loginUser,
   logoutUser,
   deactivateAccountByUsername,
   reactivateAccountByUsername,
@@ -17,9 +17,10 @@ import { requireAdmin } from "../middleware/adminAuth.js";
 
 const userRouter = express.Router();
 
-userRouter.post("/api/create-user", createUser);
+// For when we implement local user creation
+// userRouter.post("/api/create-user", createUser);
 
-userRouter.post("/api/login", loginUser);
+// userRouter.post("/api/login", loginUser);
 
 userRouter.get(
   "/api/auth/google",
