@@ -12,18 +12,6 @@ import { env } from "../config/myEnv.js";
 
 const redisClient = await connectRedis();
 
-/*
-const proxyConfig = {
-  protocol: "https" as const,
-  host: env.PROXY_HOST || "",
-  port: env.PROXY_PORT || 0,
-  auth: {
-    username: env.PROXY_USERNAME || "",
-    password: env.PROXY_PASSWORD || "",
-  },
-};
-*/
-
 export async function createKHQR(req: Request, res: Response) {
   if (!req.user) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -265,7 +253,7 @@ export const checkPaymentStatus = async (req: Request, res: Response) => {
       }
 
       const result = { status: "PAID", data: data.data };
-      await redisClient.del(`donation_context:${md5}`); // ADD THIS - cleanup
+      await redisClient.del(`donation_context:${md5}`); 
       await redisClient.setEx(`khqr_job:${md5}`, 600, JSON.stringify(result));
       return res.status(200).json(result);
     }

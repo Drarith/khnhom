@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import UploadImageModal from "./UploadImageModal";
 import { getJSON, patchJSON, uploadToCloudinary } from "@/https/https";
 import { toast } from "react-toastify";
-import { SignatureResponse } from "@/types/PDResponse";
+import { SignatureResponse } from "@/types/api.types";
 import Image from "next/image";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";

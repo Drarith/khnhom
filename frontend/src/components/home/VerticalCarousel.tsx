@@ -2,7 +2,7 @@
 
 import { ChevronUp, ChevronDown } from "lucide-react";
 import Image from "next/image";
-import { useGSAP } from "@gsap/react"; // Assuming you have the official react wrapper, if not use your utils
+import { useGSAP } from "@/utils/gsap"; 
 import gsap from "gsap";
 import { useRef, useState } from "react";
 

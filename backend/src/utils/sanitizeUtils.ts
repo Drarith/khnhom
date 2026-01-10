@@ -59,7 +59,7 @@ export const SanitizedString = (maxLength: number) =>
     .transform((s) => escapeHtml(s))
     .transform((s) => s.slice(0, maxLength));
 
-// Sanitized string for Unicode-rich text (display names, etc.) — no HTML escaping
+// Sanitized string no HTML escaping, depending on frontend otherwise we will try to escape khmer characters.
 export const SanitizedUnicodeString = (maxLength: number) =>
   z
     .string()
@@ -80,7 +80,7 @@ export const ValidHttpUrl = () =>
     .optional()
     .default("");
 
-// Safe URL — replaces invalid URLs with empty string
+// Safe URL. replaces invalid URLs with empty string
 export const SanitizedUrl = () =>
   z
     .string()

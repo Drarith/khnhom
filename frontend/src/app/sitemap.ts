@@ -1,19 +1,9 @@
 import { MetadataRoute } from "next";
 import { getJSON } from "@/https/https";
-
-interface PublicProfile {
-  username: string;
-  updatedAt: string;
-}
-
-interface ProfilesResponse {
-  status: string;
-  data: PublicProfile[];
-}
+import type { ProfilesResponse } from "@/types/api.types";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_FRONTEND_URL || "";
+  const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || "";
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [

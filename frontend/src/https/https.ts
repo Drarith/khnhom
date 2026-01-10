@@ -42,18 +42,6 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // if (
-    //   error.response?.status === 403 &&
-    //   error.response?.data?.code === "TOKEN_INVALID"
-    // ) {
-    //   await axios.post(
-    //     PUBLIC_API_BASE_URL + "/logout",
-    //     {},
-    //     { withCredentials: true }
-    //   );
-    //   window.location.href = "/";
-    //   return Promise.reject(error);
-    // }
     if(error.response?.status === 404 && error.response?.data?.code === "PROFILE_NOT_FOUND"){
       // Specific handling for profile not found
       window.location.href = "/create-profile";

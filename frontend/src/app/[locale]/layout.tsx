@@ -10,11 +10,13 @@ import { Bounce, ToastContainer } from "react-toastify";
 
 import ReactQueryProvider from "@/providers/reactQueryProvider";
 
-import type { Props } from "@/types/rootLayout";
+import type { RootLayoutProps } from "@/types/layout.types";
 import MaybeNav from "@/components/nav/ConditionalNav";
 import ConditionalFooter from "@/components/footer/ConditionalFooter";
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: RootLayoutProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
   const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_URL;
@@ -90,7 +92,10 @@ export function generateStaticParams() {
   return [{ locale: "en" }, { locale: "kh" }];
 }
 
-export default async function RootLayout({ children, params }: Props) {
+export default async function RootLayout({
+  children,
+  params,
+}: RootLayoutProps) {
   // actually break if we remove this await
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();

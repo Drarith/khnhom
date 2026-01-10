@@ -97,13 +97,11 @@ export default function HeadSection() {
         {t("titlePrefix")}
         <span className="relative inline-grid h-[1.1em] overflow-hidden">
           <span
-            // ref={word1Ref}
             className="out-word col-start-1 row-start-1 text-blue-400 invisible ml-1"
           >
             {t("word1")}
           </span>
           <span
-            // ref={word2Ref}
             className="in-word col-start-1 row-start-1 text-green-400 invisible ml-1"
           >
             {t("word2")}

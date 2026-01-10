@@ -19,7 +19,7 @@ const ProfileNotFound = ({ username = "wizard_of_oz" }) => {
           {/* Icon Composition */}
           <div className="relative mb-6 group">
             <div className="absolute inset-0 bg-primary-100 rounded-full blur-md opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
-            <div className="relative flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-50 to-white border border-primary-100 rounded-full shadow-sm">
+            <div className="relative flex items-center justify-center w-20 h-20 bg-linear-to-br from-primary-50 to-white border border-primary-100 rounded-full shadow-sm">
               <Search className="w-8 h-8 text-primary-300 absolute -left-1 top-2" strokeWidth={2.5} />
               <div className="bg-white p-2 rounded-full border border-gray-100 shadow-sm z-10">
                 <UserPlus className="w-8 h-8 text-primary-600" strokeWidth={2} />

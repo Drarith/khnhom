@@ -66,9 +66,9 @@ export default function ProfileForm() {
     useWatch({ control, name: "bio", defaultValue: "" })
   );
 
-  const link = normalizeValue(
-    useWatch({ control, name: "link", defaultValue: "" })
-  );
+  // const link = normalizeValue(
+  //   useWatch({ control, name: "link", defaultValue: "" })
+  // );
 
   const socials = useWatch({ control, name: "socials", defaultValue: {} });
 

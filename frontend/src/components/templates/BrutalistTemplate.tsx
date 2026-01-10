@@ -179,7 +179,7 @@ export default function BrutalistTemplate({ data }: { data: ProfileData }) {
             </div>
 
             {data.links &&
-              data.links.map((link, index) => (
+              data.links.map((link, _index) => (
                 <div key={link._id} className="relative group">
                   <a
                     href={link.url}

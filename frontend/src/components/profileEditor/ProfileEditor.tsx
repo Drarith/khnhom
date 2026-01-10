@@ -387,7 +387,6 @@ export default function ProfileEditor({
   };
 
   const onSubmit = (values: ProfileFormEditorInputValues) => {
-    // console.log("Submitting profile values:", values);
     profileMutation(values);
   };
 

@@ -1,13 +1,5 @@
 import { env } from "../config/myEnv.js";
-
-// --- Types ---
-interface SafeBrowsingResponse {
-  matches?: Array<{
-    threatType: string;
-    platformType: string;
-    threat: { url: string };
-  }>;
-}
+import type { SafeBrowsingResponse } from "../types/safebrowsing.types.js";
 
 // --- Configuration ---
 // Note: GOOGLE_SB_API is retrieved from your .env file

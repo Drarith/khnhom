@@ -1,1 +1,1 @@
-export const locales = ["en", "kh"] as const;
+export { locales, type LocaleCode } from "./types/locale.types";

@@ -1,14 +1,7 @@
 import { env } from "../config/myEnv.js";
+import type { SafeBrowsingResponse } from "../types/safebrowsing.types.js";
 
 const GOOGLE_SB_API = env.GOOGLE_SB_API;
-
-interface SafeBrowsingResponse {
-  matches?: Array<{
-    threatType: string;
-    platformType: string;
-    threat: { url: string };
-  }>;
-}
 
 const GOOGLE_SAFE_BROWSING_ENDPOINT = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${GOOGLE_SB_API}`;
 

@@ -25,7 +25,6 @@ dotenv.config();
 // Initialize the Express application
 const app = express();
 
-// Trust proxy is required for cookies (secure: true) to work behind a reverse proxy (like Render, Heroku, etc.)
 app.set("trust proxy", 1);
 const PORT = env.PORT;
 const FRONTEND_URL = env.FRONTEND_URL;

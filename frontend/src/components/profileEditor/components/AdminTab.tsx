@@ -17,7 +17,7 @@ import Button from "@/components/ui/Button";
 import { useTranslations } from "next-intl";
 
 import { patchJSON, getJSON } from "@/https/https";
-import { Axios, AxiosError } from "axios";
+import { AxiosError } from "axios";
 
 interface Stats {
   totalUsers: number;

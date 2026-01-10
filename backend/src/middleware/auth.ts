@@ -4,23 +4,9 @@ import { verifyAccessToken } from "../utils/tokenUtils.js";
 import type { IUser } from "../model/types-for-models/userModel.types.js";
 
 function getTokenFromRequest(req: Request): string | null {
-  // Check for new access_token cookie first
   const accessToken = (req as any).cookies?.access_token;
   if (accessToken) return accessToken;
 
-  // const refreshToken = (req as any).cookies?.refresh_token;
-  // if (refreshToken) return refreshToken;
-
-  // Fallback to old auth_token for backward compatibility
-  // const cookieToken = (req as any).cookies?.auth_token;
-  // if (cookieToken) return cookieToken;
-
-  // Check Authorization header
-  // For testing with postman
-  // const authHeader = req.headers["authorization"];
-  // if (authHeader?.startsWith("Bearer ")) {
-  //   return authHeader.slice("Bearer ".length);
-  // }
   return null;
 }
 
