@@ -14,7 +14,7 @@ const linkSchema = new Schema<ILink>(
       required: true,
     },
     title: { type: String, required: true, max: 50 },
-    url: { type: String, required: true },
+    url: { type: String, required: true, max: 2000 },
     description: { type: String, default: "", max: 300 },
     imageUrl: { type: String, default: "" },
   },
@@ -23,7 +23,7 @@ const linkSchema = new Schema<ILink>(
 
 linkSchema.statics.findByProfile = function (profileId: string) {
   try {
-    return this.find({ profile: profileId });
+    return this.find({ profile: profileId }).lean();
   } catch (err) {
     throw err;
   }

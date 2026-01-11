@@ -101,7 +101,9 @@ export const googleCallback = (
         const { accessToken, refreshToken } = generateTokens(user);
         await user.updateRefreshToken(refreshToken);
 
-        const existingProfile = await Profile.findOne({ user: user._id });
+        const existingProfile = await Profile.findOne({
+          user: user._id,
+        }).lean();
 
         const base = process.env.FRONTEND_URL;
         const redirectTo = existingProfile
@@ -231,7 +233,7 @@ export const getUserRole = async (req: Request, res: Response) => {
 
   try {
     const userId = (req.user as IUser).id;
-    const userRole = await UserRole.findOne({ user: userId });
+    const userRole = await UserRole.findOne({ user: userId }).lean();
 
     if (!userRole) {
       return res.status(404).json({ message: "Role not found" });

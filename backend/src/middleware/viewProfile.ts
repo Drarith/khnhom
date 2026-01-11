@@ -13,7 +13,7 @@ export const trackProfileView = async (
       return next();
     }
 
-    const userProfile = await Profile.findOne({ username });
+    const userProfile = await Profile.findOne({ username }).lean();
     if (!userProfile) {
       return next();
     }

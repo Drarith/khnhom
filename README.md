@@ -46,7 +46,7 @@ So I built Khnhom to solve these problems:
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 ### 🔗 Link Management
 
@@ -94,7 +94,7 @@ So I built Khnhom to solve these problems:
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Frontend
 
@@ -127,7 +127,7 @@ So I built Khnhom to solve these problems:
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 khnhom/

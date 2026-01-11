@@ -17,16 +17,14 @@ export const authenticateToken = async (
   next: NextFunction
 ) => {
   const token = getTokenFromRequest(req);
- 
 
   if (!token) {
-   
     return res.status(401).json({
       message: "No token provided",
       code: "TOKEN_EXPIRED",
     });
   }
-  
+
   try {
     // decode token with jwt.verify from jwt.sign
     const userPayload = verifyAccessToken(token);
@@ -35,7 +33,7 @@ export const authenticateToken = async (
     // Fetch profile if user ID exists
     if (userPayload && userPayload.id && !req.profile) {
       try {
-        const profile = await Profile.findOne({ user: userPayload.id });
+        const profile = await Profile.findOne({ user: userPayload.id }).lean();
         if (profile) {
           req.profile = profile;
         }

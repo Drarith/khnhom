@@ -15,7 +15,7 @@ export const requireAdmin = async (
 
   try {
     const userId = (req.user as IUser).id;
-    const userRole = await UserRole.findOne({ user: userId });
+    const userRole = await UserRole.findOne({ user: userId }).lean();
 
     if (!userRole || userRole.role !== Role.Admin) {
       return res

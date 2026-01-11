@@ -85,6 +85,7 @@ export const SanitizedUrl = () =>
   z
     .string()
     .trim()
+    .max(2000, { message: "URL must be at most 2000 characters" })
     .transform((val) => (isValidHttpUrl(val) ? val : ""))
     .default("");
 

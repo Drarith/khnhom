@@ -25,9 +25,7 @@ export default function LinksTab({
           <h2 className="text-xl font-semibold mb-2 text-primary">
             {t("linksTab.title")}
           </h2>
-          <p className="text-sm text-primary/60">
-            {t("linksTab.description")}
-          </p>
+          <p className="text-sm text-primary/60">{t("linksTab.description")}</p>
         </div>
       </div>
 
@@ -49,7 +47,7 @@ export default function LinksTab({
           fieldStateError={errors.link?.url}
           fieldWatchValue={linkUrl}
           label={t("linksTab.linkUrl")}
-          maxLength={200}
+          maxLength={2000}
           hasInput={!!linkUrl}
         />
         <Button

@@ -120,7 +120,6 @@ export default function ProfileForm() {
   return (
     <section className="min-h-screen w-full bg-foreground px-4 py-8">
       <div className="mb-5">
-        
         <LanguageToggle />
       </div>
 
@@ -214,7 +213,7 @@ export default function ProfileForm() {
                 fieldStateError={errors.link}
                 fieldWatchValue={link}
                 label={t("profileInputLabel.link")}
-                maxLength={200}
+                maxLength={2000}
                 hasInput={hasValue(link)}
               /> */}
             </div>

@@ -191,10 +191,12 @@ export const getProfileByUsername = async (req: Request, res: Response) => {
   try {
     const profile = (await Profile.findOne({
       username: username.toLowerCase(),
-    }).populate({
-      path: "links",
-      select: "title url",
-    })) as IProfile | null;
+    })
+      .populate({
+        path: "links",
+        select: "title url",
+      })
+      .lean()) as IProfile | null;
 
     if (!profile) {
       return res
@@ -208,7 +210,7 @@ export const getProfileByUsername = async (req: Request, res: Response) => {
         .json({ message: "This profile has been terminated." });
     }
     const userId = profile.user;
-    const user = await User.findOne({ _id: userId });
+    const user = await User.findOne({ _id: userId }).lean();
     console.log(user);
     if (!user) {
       // If user not found (or was deleted), return 404 or a clear message
@@ -231,7 +233,9 @@ export const getProfileLinks = async (req: Request, res: Response) => {
   const username = req.params.username;
   if (!username) return res.status(400).json({ error: "Username is required" });
   try {
-    const profile = (await Profile.findOne({ username })) as IProfile | null;
+    const profile = (await Profile.findOne({
+      username,
+    }).lean()) as IProfile | null;
     if (!profile)
       return res
         .status(404)

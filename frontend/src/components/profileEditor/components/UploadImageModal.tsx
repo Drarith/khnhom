@@ -167,7 +167,7 @@ export default function UploadImageModal({
             lastModified: Date.now(),
           }
         );
-
+        // temporary URL for image preview
         const url = URL.createObjectURL(blob);
         onSave(url, croppedFile);
 
