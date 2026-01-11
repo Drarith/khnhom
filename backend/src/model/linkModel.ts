@@ -21,6 +21,9 @@ const linkSchema = new Schema<ILink>(
   { timestamps: true }
 );
 
+linkSchema.index({ profile: 1 }); 
+linkSchema.index({ profile: 1, title: 1 }); 
+
 linkSchema.statics.findByProfile = function (profileId: string) {
   try {
     return this.find({ profile: profileId }).lean();

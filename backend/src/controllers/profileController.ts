@@ -219,7 +219,7 @@ export const getProfileByUsername = async (req: Request, res: Response) => {
         .json({ message: "User account not found for this profile" });
     }
 
-    if (!(user as IUser).isActive) {
+    if (!(user).isActive) {
       return res.status(403).json({ message: "User has been terminated." });
     }
 

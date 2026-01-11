@@ -116,6 +116,12 @@ const profileSchema = new Schema(
   { timestamps: true }
 );
 
+profileSchema.index({ username: 1 }); 
+profileSchema.index({ user: 1 }); 
+profileSchema.index({ isActive: 1, isDeactivated: 1 }); 
+profileSchema.index({ updatedAt: -1 });
+profileSchema.index({ isDeactivated: 1, updatedAt: -1 }); 
+
 profileSchema.methods.incrementViews = async function () {
   this.views += 1;
   await this.save();

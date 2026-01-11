@@ -55,6 +55,10 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
+userSchema.index({ email: 1 }); 
+userSchema.index({ googleId: 1 }); 
+userSchema.index({ isActive: 1 }); 
+
 userSchema.pre("save", async function (next) {
   // Check if the password field has been modified
   // if not we return and go next

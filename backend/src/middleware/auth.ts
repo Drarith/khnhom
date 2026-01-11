@@ -33,7 +33,7 @@ export const authenticateToken = async (
     // Fetch profile if user ID exists
     if (userPayload && userPayload.id && !req.profile) {
       try {
-        const profile = await Profile.findOne({ user: userPayload.id }).lean();
+        const profile = await Profile.findOne({ user: userPayload.id });
         if (profile) {
           req.profile = profile;
         }

@@ -14,11 +14,14 @@ const roleSchema = new Schema({
   role: { type: String, enum: Object.values(Role), default: Role.User },
 });
 
+
+roleSchema.index({ user: 1 });
+
 roleSchema.statics.createUserRole = async function (userData) {
   try {
     const userRole = new this(userData);
     const savedUser = await userRole.save();
-    return savedUser
+    return savedUser;
   } catch (error) {
     throw new Error("Error creating role for user, " + error);
   }
