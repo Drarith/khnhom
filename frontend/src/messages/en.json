@@ -85,7 +85,8 @@
       "generateQR": "Generate QR Code",
       "processing": "Processing...",
       "deactivateAccount": "Deactivate Account",
-      "reactivateAccount": "Reactivate Account"
+      "reactivateAccount": "Reactivate Account",
+      "share": "Share"
     },
     "toasts": {
       "profileUpdated": "Profile updated successfully!",

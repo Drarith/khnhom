@@ -286,9 +286,10 @@ export default function ProfileEditor({
     { id: Tab.PROFILE, label: t("tabs.profile"), icon: User },
     { id: Tab.SOCIALS, label: t("tabs.socials"), icon: LinkIcon },
     { id: Tab.LINKS, label: t("tabs.links"), icon: LinkIcon },
+    { id: Tab.APPEARANCE, label: t("tabs.appearance"), icon: Palette },
     { id: Tab.PAYMENT, label: t("tabs.payment"), icon: QrCode },
     { id: Tab.DONATION, label: t("tabs.support"), icon: Heart },
-    { id: Tab.APPEARANCE, label: t("tabs.appearance"), icon: Palette },
+
     ...(isAdmin
       ? [{ id: Tab.ADMIN, label: t("tabs.admin"), icon: Shield }]
       : []),
@@ -483,7 +484,7 @@ export default function ProfileEditor({
                 className="flex items-center gap-2 cursor-pointer"
               >
                 <Share2 size={18} />
-                {/* {t("buttons.share", { defaultValue: "Share" })} */}
+                {t("buttons.share", { defaultValue: "Share" })}
               </Button>
             </div>
           </div>
@@ -521,7 +522,7 @@ export default function ProfileEditor({
                 <nav id="nav-tab">
                   <div
                     ref={containerRef}
-                    className="tabs-container overflow-hidden relative space-y-1 md:grid md:grid-cols-1 lg:grid-cols-1 md:gap-2 flex overflow-x-auto no-scrollbar px-2 md:px-0"
+                    className="tabs-container overflow-hidden relative space-y-1 md:grid md:grid-cols-1 lg:grid-cols-1 md:gap-2 flex overflow-x-auto px-2 pb-2 md:px-0 md:pb-0"
                   >
                     <div
                       ref={highlighterRef}
@@ -534,7 +535,14 @@ export default function ProfileEditor({
                           type="button"
                           key={tab.id}
                           data-id={tab.id}
-                          onClick={() => setActiveTab(tab.id)}
+                          onClick={(e) => {
+                            setActiveTab(tab.id);
+                            e.currentTarget.scrollIntoView({
+                              behavior: "smooth",
+                              block: "nearest",
+                              inline: "center",
+                            });
+                          }}
                           className={`w-full flex flex-1 items-center gap-3 px-4 py-3 rounded-lg transition-colors relative z-10 whitespace-nowrap cursor-pointer ${
                             activeTab === tab.id ? "text-foreground" : ""
                           }`}

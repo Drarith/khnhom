@@ -88,7 +88,8 @@
       "generateQR": "បង្កើត QR កូដ",
       "processing": "កំពុងដំណើរការ...",
       "deactivateAccount": "បិទគណនី",
-      "reactivateAccount": "បើកគណនីឡើងវិញ"
+      "reactivateAccount": "បើកគណនីឡើងវិញ",
+      "share": "ចែករំលែក"
     },
     "toasts": {
       "profileUpdated": "បានធ្វើបច្ចុប្បន្នភាពប្រវត្តិរូបដោយជោគជ័យ!",
