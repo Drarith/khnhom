@@ -74,7 +74,7 @@ export default function SocialMediaForm<T extends FieldValues>({
         </div>
 
         <div className="relative">
-          <div className="flex w-full rounded-lg border border-primary/20 bg-foreground transition focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/20">
+          <div className="flex w-full rounded-lg border border-primary/20 bg-foreground transition focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/20 overflow-hidden">
             <span className="flex items-center border-r border-primary/10 bg-primary/5 px-3 py-2.5 text-sm text-primary/60">
               {currentPlatform?.prefix}
             </span>
@@ -91,11 +91,11 @@ export default function SocialMediaForm<T extends FieldValues>({
                 }
               }}
               placeholder="username"
-              className="flex-1 rounded-r-lg bg-transparent px-4 py-2.5 text-sm text-primary placeholder:text-primary/40 focus:outline-none"
+              className="flex-1 rounded-r-lg bg-transparent px-4 py-2.5 text-sm text-primary placeholder:text-primary/40 focus:outline-none min-w-0 box-border "
             />
           </div>
 
-          <div className="mt-1.5 flex items-center justify-between text-xs">
+          <div className="mt-1.5 flex items-center justify-between text-xs overflow-hidden">
             <span className="text-primary/50">
               {inputValue.trim().length < 3 && inputValue.length > 0
                 ? "Minimum 3 characters"

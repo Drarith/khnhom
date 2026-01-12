@@ -522,7 +522,7 @@ export default function ProfileEditor({
                 <nav id="nav-tab">
                   <div
                     ref={containerRef}
-                    className="tabs-container overflow-hidden relative space-y-1 md:grid md:grid-cols-1 lg:grid-cols-1 md:gap-2 flex overflow-x-auto px-2 pb-2 md:px-0 md:pb-0"
+                    className="tabs-container overflow-hidden relative space-y-1 md:grid md:grid-cols-1 lg:grid-cols-1 md:gap-2 flex overflow-x-auto no-scrollbar px-2 md:px-0 md:pb-0"
                   >
                     <div
                       ref={highlighterRef}
