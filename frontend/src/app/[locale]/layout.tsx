@@ -82,6 +82,7 @@ export async function generateMetadata({
       },
     },
     verification: {
+      // Note to self:
       // Add verification codes when ready
       // google: "google-site-verification",
     },
